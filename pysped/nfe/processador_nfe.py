@@ -120,9 +120,6 @@ class ProcessadorNFe(object):
                 self._url      = webservices_2.ESTADO_WS[self.estado][self.ambiente][servico]
             
             
-        print self._soap_envio.xml
-        print self._servidor
-        print self._url    
         try:
             self.certificado.separa_certificado()
             
@@ -139,11 +136,6 @@ class ProcessadorNFe(object):
             resp = con.getresponse()
         
             t = resp.read()
-            print
-            print
-            print(t)
-            print
-            print
             # Tudo certo!
             if resp.status == 200:
                 self._soap_retorno.xml = t
