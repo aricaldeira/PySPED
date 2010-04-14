@@ -2596,6 +2596,7 @@ class Ide(XMLNFe):
         self.finNFe  = TagInteiro(nome=u'finNFe'  , codigo=u'B25', tamanho=[ 1,  1, 1], raiz=u'//NFe/infNFe/ide', valor=1)
         self.procEmi = TagInteiro(nome=u'procEmi' , codigo=u'B26', tamanho=[ 1,  1, 1], raiz=u'//NFe/infNFe/ide')
         self.verProc = TagCaracter(nome=u'verProc', codigo=u'B27', tamanho=[ 1, 20]   , raiz=u'//NFe/infNFe/ide')
+        self.hSaiEnt = TagHora(nome=u'hSaiEnt'    , codigo=u''   ,                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
         
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -3016,3 +3017,30 @@ class NFe(XMLNFe):
         formatado += u'-' + self.infNFe.entrega.UF.valor
         return formatado
     
+    def cnpj_transportadora_formatado(self):
+        if self.infNFe.transp.transporta.CPF.valor:
+            return self._formata_cpf(self.infNFe.transp.transporta.CPF.valor)
+        else:
+            return self._formata_cnpj(self.infNFe.transp.transporta.CNPJ.valor)
+            
+    def placa_veiculo_formatada(self):
+        if not self.infNFe.transp.veicTransp.placa.valor:
+            return u''
+            
+        placa = self.infNFe.transp.veicTransp.placa.valor
+        placa = placa[:-4] + u'-' + placa[-4:]
+        return placa
+        
+    def dados_adicionais(self):
+        da = u''
+        
+        if self.infNFe.infAdic.infAdFisco.valor:
+            da = self.infNFe.infAdic.infAdFisco.valor.replace(u'|', u'<br />')
+            
+        if self.infNFe.infAdic.infCpl.valor:
+            if len(da) > 0:
+                da += u'<br />'
+                
+            da += self.infNFe.infAdic.infCpl.valor.replace(u'|', u'<br />')
+            
+        return da
