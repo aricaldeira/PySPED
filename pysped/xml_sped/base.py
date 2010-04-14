@@ -300,7 +300,10 @@ class TagData(TagCaracter):
     valor = property(get_valor, set_valor)
     
     def formato_danfe(self):
-        return self._valor_data.strftime(u'%d/%m/%Y')
+        if self._valor_data is None:
+            return u''
+        else:
+            return self._valor_data.strftime(u'%d/%m/%Y')
 
 class TagHora(TagData):
     def set_valor(self, novo_valor):
@@ -327,7 +330,10 @@ class TagHora(TagData):
     valor = property(get_valor, set_valor)
 
     def formato_danfe(self):
-        return self._valor_data.strftime(u'%H:%M:%S')
+        if self._valor_data is None:
+            return u''
+        else:
+            return self._valor_data.strftime(u'%H:%M:%S')
 
 
 class TagDataHora(TagData):
@@ -356,7 +362,10 @@ class TagDataHora(TagData):
     valor = property(get_valor, set_valor)
 
     def formato_danfe(self):
-        return self._valor_data.strftime(u'%d/%m/%Y %H:%M:%S')
+        if self._valor_data is None:
+            return u''
+        else:
+            return self._valor_data.strftime(u'%d/%m/%Y %H:%M:%S')
 
 
 class TagInteiro(TagCaracter):
