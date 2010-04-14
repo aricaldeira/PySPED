@@ -165,7 +165,7 @@ class DestinatarioRetrato(BandaDANFE):
         self.inclui_campo(nome='remetente_fone', titulo=u'FONE', conteudo=u'NFe.fone_destinatario_formatado', top=1.82*cm, left=10.4*cm, width=2.8*cm)
         self.inclui_campo(nome='remetente_uf', titulo=u'UF', conteudo='NFe.infNFe.dest.enderDest.UF.valor', top=1.82*cm, left=13.2*cm, width=0.8*cm)
         self.inclui_campo(nome='remetente_ie', titulo=u'INSCRIÇÃO ESTADUAL', conteudo=u'NFe.infNFe.dest.IE.valor', top=1.82*cm, left=14*cm, width=3.2*cm)
-        self.inclui_texto(nome='remetente_hora_entradasaida', titulo=u'HORA DA ENTRADA/SAÍDA', texto=u'', top=1.82*cm, left=17.2*cm, width=2.2*cm, margem_direita=True)
+        self.inclui_campo(nome='remetente_hora_entradasaida', titulo=u'HORA DA ENTRADA/SAÍDA', conteudo=u'NFe.infNFe.ide.hSaiEnt.formato_danfe', top=1.82*cm, left=17.2*cm, width=2.2*cm, margem_direita=True)
         
         self.height = 2.52*cm
         
@@ -240,7 +240,7 @@ class TransporteRetrato(BandaDANFE):
         self.inclui_descritivo(nome='clc', titulo=u'TRANSPORTADOR/VOLUMES TRANSPORTADOS', top=0*cm, left=0*cm, width=19.4*cm)
 
         # 1ª linha
-        self.inclui_texto_numerico(nome='trn_bip', titulo=u'NOME/RAZÃO SOCIAL', texto='', top=0.42*cm, left=0*cm, width=9.7*cm)
+        self.inclui_campo(nome='trn_nome', titulo=u'NOME/RAZÃO SOCIAL', conteudo='NFe.infNFe.transp.transporta.xNome.valor', top=0.42*cm, left=0*cm, width=9.7*cm)
         
         self.inclui_texto(nome='trn_placa', titulo=u'FRETE POR CONTA', texto='', top=0.42*cm, left=9.7*cm, width=1.9*cm)
         txt = self.inclui_texto_sem_borda(nome='', texto='0 - EMITENTE', top=0.62*cm, left=9.7*cm, width=1.9*cm)
@@ -259,16 +259,16 @@ class TransporteRetrato(BandaDANFE):
         txt.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
         
         
-        self.inclui_texto(nome='trn_placa', titulo=u'CÓDIGO ANTT', texto='', top=0.42*cm, left=11.6*cm, width=1.9*cm)
-        self.inclui_texto(nome='trn_placa', titulo=u'PLACA DO VEÍCULO', texto=u'MMM-9999', top=0.42*cm, left=13.5*cm, width=1.9*cm)
-        self.inclui_texto(nome='trn_vei_uf', titulo=u'UF', texto='MM', top=0.42*cm, left=15.4*cm, width=0.8*cm)
-        self.inclui_texto(nome='trn_cnpj', titulo=u'CNPJ/CPF', texto=u'02.544.208/0001-05', top=0.42*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+        self.inclui_campo(nome='trn_placa', titulo=u'CÓDIGO ANTT', conteudo='NFe.infNFe.transp.veicTransp.RNTC.valor', top=0.42*cm, left=11.6*cm, width=1.9*cm)
+        self.inclui_campo(nome='trn_placa', titulo=u'PLACA DO VEÍCULO', conteudo=u'NFe.placa_veiculo_formatada', top=0.42*cm, left=13.5*cm, width=1.9*cm)
+        self.inclui_campo(nome='trn_vei_uf', titulo=u'UF', conteudo='NFe.infNFe.transp.veicTransp.UF.valor', top=0.42*cm, left=15.4*cm, width=0.8*cm)
+        self.inclui_campo(nome='trn_cnpj', titulo=u'CNPJ/CPF', conteudo=u'NFe.cnpj_transportadora_formatado', top=0.42*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
 
         # 2ª linha
-        self.inclui_texto_numerico(nome='trn_end', titulo=u'ENDEREÇO', texto='', top=1.12*cm, left=0*cm, width=9.7*cm)
-        self.inclui_texto_numerico(nome='trn_mun', titulo=u'MUNICÍPIO', texto='', top=1.12*cm, left=9.7*cm, width=5.7*cm)
-        self.inclui_texto(nome='trn_uf', titulo=u'UF', texto='MM', top=1.12*cm, left=15.4*cm, width=0.8*cm)
-        self.inclui_texto(nome='trn_ie', titulo=u'INSCRIÇÃO ESTADUAL', texto=u'MM999999999999', top=1.12*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+        self.inclui_campo(nome='trn_end', titulo=u'ENDEREÇO', conteudo='NFe.infNFe.transp.transporta.xEnder.valor', top=1.12*cm, left=0*cm, width=9.7*cm)
+        self.inclui_campo(nome='trn_mun', titulo=u'MUNICÍPIO', conteudo='NFe.infNFe.transp.transporta.xMun.valor', top=1.12*cm, left=9.7*cm, width=5.7*cm)
+        self.inclui_campo(nome='trn_uf', titulo=u'UF', conteudo='NFe.infNFe.transp.transporta.UF.valor', top=1.12*cm, left=15.4*cm, width=0.8*cm)
+        self.inclui_campo(nome='trn_ie', titulo=u'INSCRIÇÃO ESTADUAL', conteudo=u'NFe.infNFe.transp.transporta.IE.valor', top=1.12*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
         
         # 3ª linha
         self.inclui_texto_numerico(nome='trn_qtd', titulo=u'QUANTIDADE', texto='9.999.999.999', top=1.82*cm, left=0*cm, width=3.2*cm)
@@ -381,7 +381,7 @@ class DadosAdicionaisRetrato(BandaDANFE):
         self.elements = []
         self.inclui_descritivo(nome='clc', titulo=u'DADOS ADICIONAIS', top=0*cm, left=0*cm, width=19.4*cm)
         
-        lbl, txt = self.inclui_texto(nome='', titulo='INFORMAÇÕES COMPLEMENTARES', texto='MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MMMMMMMMMM1234567890MM<br />', top=0.42*cm, left=0*cm, width=11.7*cm, height=4*cm)
+        lbl, txt = self.inclui_campo(nome='', titulo='INFORMAÇÕES COMPLEMENTARES', conteudo='NFe.dados_adicionais', top=0.42*cm, left=0*cm, width=11.7*cm, height=4*cm)
         txt.style = DADO_COMPLEMENTAR
         self.inclui_texto(nome='', titulo='RESERVADO AO FISCO', texto='', top=0.42*cm, left=11.7*cm, width=7.7*cm, height=4*cm, margem_direita=True)
         self.inclui_texto_sem_borda(nome='', texto='Impresso no dia ', top=4.1*cm, left=0.1*cm, width=5*cm, height=0.2*cm)
