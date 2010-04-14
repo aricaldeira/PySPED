@@ -4,6 +4,7 @@ from lxml import etree
 from StringIO import StringIO
 from datetime import datetime
 from decimal import Decimal
+import locale
 
 
 NAMESPACE_NFE = u'http://www.portalfiscal.inf.br/nfe'
@@ -12,6 +13,9 @@ ABERTURA = u'<?xml version="1.0" encoding="utf-8"?>'
 
 CAMINHO_ESQUEMA_110 = u'schema/pl_005d/'
 CAMINHO_ESQUEMA_200 = u'schema/pl_006e/'
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+locale.setlocale(locale.LC_COLLATE, 'pt_BR.UTF-8')
 
 
 class NohXML(object):
@@ -43,6 +47,17 @@ class NohXML(object):
         return tag
 
     def _le_nohs(self, tag, ns=None):
+        #
+        # Tenta ler a tag sem os namespaces
+        # Necessário para ler corretamente as tags de grupo reenraizadas
+        #
+        nohs = self._xml.xpath(tag)
+        if len(nohs) >= 1:
+            return nohs
+            
+        #
+        # Não deu certo, tem que botar mesmo os namespaces
+        #
         namespaces = {u'nfe': NAMESPACE_NFE, u'sig': NAMESPACE_SIG}
         
         if ns is not None:
@@ -283,6 +298,9 @@ class TagData(TagCaracter):
         return self._valor_data
         
     valor = property(get_valor, set_valor)
+    
+    def formato_danfe(self):
+        return self._valor_data.strftime(u'%d/%m/%Y')
 
 class TagHora(TagData):
     def set_valor(self, novo_valor):
@@ -307,6 +325,9 @@ class TagHora(TagData):
         return self._valor_data
         
     valor = property(get_valor, set_valor)
+
+    def formato_danfe(self):
+        return self._valor_data.strftime(u'%H:%M:%S')
 
 
 class TagDataHora(TagData):
@@ -333,6 +354,9 @@ class TagDataHora(TagData):
         return self._valor_data
         
     valor = property(get_valor, set_valor)
+
+    def formato_danfe(self):
+        return self._valor_data.strftime(u'%d/%m/%Y %H:%M:%S')
 
 
 class TagInteiro(TagCaracter):
@@ -372,6 +396,9 @@ class TagInteiro(TagCaracter):
         
     valor = property(get_valor, set_valor)
 
+    def formato_danfe(self):
+        return locale.format(u'%d', self._valor_inteiro, grouping=True)
+
 
 class TagDecimal(TagCaracter):
     def __init__(self, *args, **kwargs):
@@ -389,7 +416,10 @@ class TagDecimal(TagCaracter):
         for k, v in kwargs.items():
             setattr(self, k, v)
     
-    def _parte_inteira(self, valor):
+    def _parte_inteira(self, valor=None):
+        if valor is None:
+            valor = self._valor_decimal
+
         valor = unicode(valor).strip()
         
         if u'.' in valor:
@@ -397,7 +427,10 @@ class TagDecimal(TagCaracter):
             
         return valor
     
-    def _parte_decimal(self, valor):
+    def _parte_decimal(self, valor=None):
+        if valor is None:
+            valor = self._valor_decimal
+        
         valor = unicode(valor).strip()
         
         if u'.' in valor:
@@ -474,6 +507,19 @@ class TagDecimal(TagCaracter):
         
     valor = property(get_valor, set_valor)
 
+    def formato_danfe(self):
+        
+        # Tamanho mínimo das casas decimais
+        if (len(self.decimais) >= 3) and self.decimais[2]:
+            if len(self._parte_decimal()) <= self.decimais[2]:
+                formato = u'%.' + unicode(self.decimais[2]) + u'f'
+            else:
+                formato = u'%.' + unicode(len(self._parte_decimal())) + u'f'
+        else:
+            formato = u'%.2f'
+            
+        return locale.format(formato, self._valor_decimal, grouping=True)
+
 
 class XMLNFe(NohXML):
     def __init__(self, *args, **kwargs):
@@ -527,7 +573,7 @@ def tirar_acentos(texto):
     # Trocar ENTER e TAB
     #
     texto = texto.replace(u'\t', u' ')
-    texto = texto.replace(u'\n', u'; ')
+    texto = texto.replace(u'\n', u'| ')
     
     # Remove espaços seguidos
     # Nem pergunte...

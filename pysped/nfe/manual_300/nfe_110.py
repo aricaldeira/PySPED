@@ -1382,6 +1382,7 @@ class Prod(XMLNFe):
         self.uTrib    = TagCaracter(nome=u'uTrib'   , codigo=u'I13' , tamanho=[1,   6]                       , raiz=u'//det/prod')
         self.qTrib    = TagDecimal(nome=u'qTrib'    , codigo=u'I14' , tamanho=[1,  12, 1], decimais=[0, 4, 4], raiz=u'//det/prod')
         self.vUnTrib  = TagDecimal(nome=u'vUnTrib'  , codigo=u'I14a', tamanho=[1,  16, 1], decimais=[0, 4, 4], raiz=u'//det/prod')
+        self.vTrib    = TagDecimal(nome=u'vTrib'    , codigo=u''    , tamanho=[1,  15, 1], decimais=[0, 2, 2], raiz=u'//det/prod', obrigatorio=False)
         self.vFrete   = TagDecimal(nome=u'vFrete'   , codigo=u'I15' , tamanho=[1,  15, 1], decimais=[0, 2, 2], raiz=u'//det/prod', obrigatorio=False)
         self.vSeg     = TagDecimal(nome=u'vSeg'     , codigo=u'I16' , tamanho=[1,  15, 1], decimais=[0, 2, 2], raiz=u'//det/prod', obrigatorio=False)
         self.vDesc    = TagDecimal(nome=u'vDesc'    , codigo=u'I17' , tamanho=[1,  15, 1], decimais=[0, 2, 2], raiz=u'//det/prod', obrigatorio=False)
@@ -1498,7 +1499,20 @@ class Det(XMLNFe):
             self.infAdProd.xml = arquivo
             
     xml = property(get_xml, set_xml)
+    
+    def descricao_produto_formatada(self):
+        formatado = self.prod.xProd.valor.replace(u'|', u'<br />')
+        
+        if len(self.infAdProd.valor):
+            formatado += u'<br />'
+            formatado += self.infAdProd.valor.replace(u'|', u'<br />')
 
+        return formatado
+        
+    def cst_formatado(self):
+        formatado = unicode(self.imposto.ICMS.orig.valor).zfill(1)
+        formatado += unicode(self.imposto.ICMS.CST.valor).zfill(2)
+        return formatado
 
 class Compra(XMLNFe):
     def __init__(self):
@@ -2273,7 +2287,7 @@ class EnderDest(XMLNFe):
         self.cMun    = TagInteiro(nome=u'cMun'    , codigo=u'E10', tamanho=[ 7,  7, 7], raiz=u'//NFe/infNFe/dest/enderDest')
         self.xMun    = TagCaracter(nome=u'xMun'   , codigo=u'E11', tamanho=[ 2, 60]   , raiz=u'//NFe/infNFe/dest/enderDest')
         self.UF      = TagCaracter(nome=u'UF'     , codigo=u'E12', tamanho=[ 2,  2]   , raiz=u'//NFe/infNFe/dest/enderDest')
-        self.CEP     = TagInteiro(nome=u'CEP'     , codigo=u'E13', tamanho=[ 8,  8, 8], raiz=u'//NFe/infNFe/dest/enderDest', obrigatorio=False)
+        self.CEP     = TagCaracter(nome=u'CEP'    , codigo=u'E13', tamanho=[ 8,  8, 8], raiz=u'//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.cPais   = TagInteiro(nome=u'cPais'   , codigo=u'E14', tamanho=[ 4,  4, 4], raiz=u'//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.xPais   = TagCaracter(nome=u'xPais'  , codigo=u'E15', tamanho=[ 1, 60]   , raiz=u'//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.fone    = TagInteiro(nome=u'fone'    , codigo=u'E16', tamanho=[ 1, 10]   , raiz=u'//NFe/infNFe/dest/enderDest', obrigatorio=False)
@@ -2412,7 +2426,7 @@ class EnderEmit(XMLNFe):
         self.cMun    = TagInteiro(nome=u'cMun'    , codigo=u'C10', tamanho=[ 7,  7, 7], raiz=u'//NFe/infNFe/emit/enderEmit')
         self.xMun    = TagCaracter(nome=u'xMun'   , codigo=u'C11', tamanho=[ 2, 60]   , raiz=u'//NFe/infNFe/emit/enderEmit')
         self.UF      = TagCaracter(nome=u'UF'     , codigo=u'C12', tamanho=[ 2,  2]   , raiz=u'//NFe/infNFe/emit/enderEmit')
-        self.CEP     = TagInteiro(nome=u'CEP'     , codigo=u'C13', tamanho=[ 8,  8, 8], raiz=u'//NFe/infNFe/emit/enderEmit', obrigatorio=False)
+        self.CEP     = TagCaracter(nome=u'CEP'    , codigo=u'C13', tamanho=[ 8,  8, 8], raiz=u'//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.cPais   = TagInteiro(nome=u'cPais'   , codigo=u'C14', tamanho=[ 4,  4, 4], raiz=u'//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.xPais   = TagCaracter(nome=u'xPais'  , codigo=u'C15', tamanho=[ 1, 60]   , raiz=u'//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.fone    = TagInteiro(nome=u'fone'    , codigo=u'C16', tamanho=[ 1, 10]   , raiz=u'//NFe/infNFe/emit/enderEmit', obrigatorio=False)
@@ -2722,6 +2736,7 @@ class NFe(XMLNFe):
         self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/') 
         self.arquivo_esquema = u'nfe_v1.10.xsd'
         self.chave = u''
+        self.dados_contingencia_fsda = u''
     
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -2745,19 +2760,35 @@ class NFe(XMLNFe):
             
     xml = property(get_xml, set_xml)
     
+    def _calcula_dv(self, valor):
+        soma = 0
+        m = 2
+        for i in range(len(valor)-1, -1, -1):
+            c = valor[i]
+            soma += int(c) * m
+            m += 1
+            if m > 9:
+                m = 2
+
+        digito = 11 - (soma % 11)
+        if digito > 9:
+            digito = 0
+            
+        return digito
+    
     def gera_nova_chave(self):
-        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, u'0')
-        chave += unicode(self.infNFe.ide.dEmi.valor.strftime(u'%y%m')).strip().rjust(4, u'0')
-        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, u'0')
-        chave += u'55'
-        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, u'0')
-        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, u'0')
+        chave = unicode(self.infNFe.ide.cUF.valor).zfill(2)
+        chave += unicode(self.infNFe.ide.dEmi.valor.strftime(u'%y%m')).zfill(4)
+        chave += unicode(self.infNFe.emit.CNPJ.valor).zfill(14)
+        chave += unicode(self.infNFe.ide.mod.valor).zfill(2)
+        chave += unicode(self.infNFe.ide.serie.valor).zfill(3)
+        chave += unicode(self.infNFe.ide.nNF.valor).zfill(9)
         
         #
         # A inclusão do tipo de emissão na chave já torna a chave válida também
         # para a versão 2.00 da NF-e
         #
-        chave += unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, u'0')
+        chave += unicode(self.infNFe.ide.tpEmis.valor).zfill(1)
         
         #
         # O código numério é um número aleatório
@@ -2782,22 +2813,12 @@ class NFe(XMLNFe):
         #
         # Define na estrutura do XML o campo cNF
         #
-        self.infNFe.ide.cNF.valor = unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, u'0') + codigo
+        self.infNFe.ide.cNF.valor = unicode(self.infNFe.ide.tpEmis.valor).zfill(1) + codigo
         
         #
         # Gera o dígito verificador
         #
-        m = 4
-        soma = 0
-        for c in chave:
-            soma += int(c) * m
-            m -= 1
-            if m < 2:
-                m = 9
-                
-        digito = 11 - (soma % 11)
-        if digito > 9:
-            digito = 0
+        digito = self._calcula_dv(chave)
             
         #
         # Define na estrutura do XML o campo cDV
@@ -2813,13 +2834,185 @@ class NFe(XMLNFe):
         self.infNFe.Id.valor = u'NFe' + chave
 
     def monta_chave(self):
-        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, u'0')
-        chave += unicode(self.infNFe.ide.dEmi.valor.strftime(u'%y%m')).strip().rjust(4, u'0')
-        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, u'0')
-        chave += u'55'
-        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, u'0')
-        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, u'0')
-        chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(9, u'0')
-        chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, u'0')
+        chave = unicode(self.infNFe.ide.cUF.valor).zfill(2)
+        chave += unicode(self.infNFe.ide.dEmi.valor.strftime(u'%y%m')).zfill(4)
+        chave += unicode(self.infNFe.emit.CNPJ.valor).zfill(14)
+        chave += unicode(self.infNFe.ide.mod.valor).zfill(2)
+        chave += unicode(self.infNFe.ide.serie.valor).zfill(3)
+        chave += unicode(self.infNFe.ide.nNF.valor).zfill(9)
+        chave += unicode(self.infNFe.ide.cNF.valor).zfill(9)
+        chave += unicode(self.infNFe.ide.cDV.valor).zfill(1)
         self.chave = chave
+
+    def chave_para_codigo_barras(self):
+        #
+        # As funções do reportlabs para geração de códigos de barras não estão
+        # aceitando strings unicode
+        #
+        return self.chave.encode(u'utf-8')
+
+    def monta_dados_contingencia_fsda(self):
+        dados = unicode(self.infNFe.ide.cUF.valor).zfill(2)
+        dados += unicode(self.infNFe.ide.tpEmis.valor).zfill(1)
+        dados += unicode(self.infNFe.emit.CNPJ.valor).zfill(14)
+        dados += unicode(int(self.infNFe.total.ICMSTot.vNF.valor * 100)).zfill(14)
         
+        #
+        # Há ICMS próprio?
+        #
+        if self.infNFe.total.ICMSTot.vICMS.valor:
+            dados += u'1'
+        else:
+            dados += u'2'
+            
+        #
+        # Há ICMS ST?
+        #
+        if self.infNFe.total.ICMSTot.vST.valor:
+            dados += u'1'
+        else:
+            dados += u'2'
+        
+        dados += self.infNFe.ide.dEmi.valor.strftime(u'%d').zfill(2)
+        
+        digito = self._calcula_dv(dados)
+        dados += unicode(digito)
+        self.dados_contingencia_fsda = dados
+
+    def dados_contingencia_fsda_para_codigo_barras(self):
+        #
+        # As funções do reportlabs para geração de códigos de barras não estão
+        # aceitando strings unicode
+        #
+        self.monta_dados_contingencia_fsda()
+        return self.dados_contingencia_fsda.encode(u'utf-8')
+        
+    #
+    # Funções para formatar campos para o DANFE
+    #    
+    
+    def chave_formatada(self):
+        chave = self.chave
+        chave_formatada = u' '.join((chave[0:4], chave[4:8], chave[8:12], chave[12:16], chave[16:20], chave[20:24], chave[24:28], chave[28:32], chave[32:36], chave[36:40], chave[40:44]))
+        return chave_formatada
+
+    def dados_contingencia_fsda_formatados(self):
+        self.monta_dados_contingencia_fsda()
+        dados = self.dados_contingencia_fsda
+        dados_formatados = u' '.join((dados[0:4], dados[4:8], dados[8:12], dados[12:16], dados[16:20], dados[20:24], dados[24:28], dados[28:32], dados[32:36]))
+        return dados_formatados
+        
+    def numero_formatado(self):
+        num = unicode(self.infNFe.ide.nNF.valor).zfill(9)
+        num_formatado = u'.'.join((num[0:3], num[3:6], num[6:9]))
+        return u'Nº ' + num_formatado
+        
+    def serie_formatada(self):
+        return u'SÉRIE ' + unicode(self.infNFe.ide.serie.valor).zfill(3)
+        
+       
+    def _formata_cpf(self, cpf):
+        if not len(cpf.strip()):
+            return u''
+        
+        formatado = cpf[0:3] + u'.' + cpf[3:6] + u'.' + cpf[6:9] + u'-' + cpf[9:11]
+        return formatado
+        
+    def _formata_cnpj(self, cnpj):
+        if not len(cnpj.strip()):
+            return u''
+            
+        formatado = cnpj[0:2] + u'.' + cnpj[2:5] + u'.' + cnpj[5:8] + u'/' + cnpj[8:12] + u'-' + cnpj[12:14]
+        return formatado
+        
+    def cnpj_emitente_formatado(self):
+        if len(self.infNFe.emit.CPF.valor):
+            return self._formata_cpf(unicode(self.infNFe.emit.CPF.valor))
+        else:
+            return self._formata_cnpj(unicode(self.infNFe.emit.CNPJ.valor))
+        
+    def endereco_emitente_formatado(self):
+        formatado = self.infNFe.emit.enderEmit.xLgr.valor
+        formatado += u', ' + self.infNFe.emit.enderEmit.nro.valor
+        
+        if len(self.infNFe.emit.enderEmit.xCpl.valor.strip()):
+            formatado += u' - ' + self.infNFe.emit.enderEmit.xCpl.valor
+        
+        return formatado
+        
+    def _formata_cep(self, cep):
+        if not len(cep.strip()):
+            return u''
+            
+        return cep[0:2] + u'.' + cep[2:5] + u'-' + cep[5:8]
+        
+    def cep_emitente_formatado(self):
+        return self._formata_cep(self.infNFe.emit.enderEmit.CEP.valor)
+        
+    def _formata_fone(self, fone):
+        if not len(fone.strip()):
+            return u''
+        
+        if len(fone) <= 8:
+            formatado = fone[:-4] + u'-' + fone[-4:]
+        elif len(fone) <= 10:
+            ddd = fone[0:2]
+            fone = fone[2:]
+            formatado = u'(' + ddd + u') ' + fone[:-4] + u'-' + fone[-4:]
+            
+        return formatado
+        
+    def fone_emitente_formatado(self):
+        return self._formata_fone(unicode(self.infNFe.emit.enderEmit.fone.valor))
+        
+    def cnpj_destinatario_formatado(self):
+        if len(self.infNFe.dest.CPF.valor):
+            return self._formata_cpf(unicode(self.infNFe.dest.CPF.valor))
+        else:
+            return self._formata_cnpj(unicode(self.infNFe.dest.CNPJ.valor))
+    
+    def endereco_destinatario_formatado(self):
+        formatado = self.infNFe.dest.enderDest.xLgr.valor
+        formatado += u', ' + self.infNFe.dest.enderDest.nro.valor
+        
+        if len(self.infNFe.dest.enderDest.xCpl.valor.strip()):
+            formatado += u' - ' + self.infNFe.dest.enderDest.xCpl.valor
+        
+        return formatado
+    
+    def cep_destinatario_formatado(self):
+        return self._formata_cep(self.infNFe.dest.enderDest.CEP.valor)
+
+    def fone_destinatario_formatado(self):
+        return self._formata_fone(unicode(self.infNFe.dest.enderDest.fone.valor))
+    
+    def cnpj_retirada_formatado(self):
+        return self._formata_cnpj(self.infNFe.retirada.CNPJ.valor)
+        
+    def endereco_retirada_formatado(self):
+        formatado = self.infNFe.retirada.xLgr.valor
+        formatado += u', ' + self.infNFe.retirada.nro.valor
+        
+        if len(self.infNFe.retirada.xCpl.valor.strip()):
+            formatado += u' - ' + self.infNFe.retirada.xCpl.valor
+
+        formatado += u' - ' + self.infNFe.retirada.xBairro.valor
+        formatado += u' - ' + self.infNFe.retirada.xMun.valor
+        formatado += u'-' + self.infNFe.retirada.UF.valor
+        return formatado
+        
+    def cnpj_entrega_formatado(self):
+        return self._formata_cnpj(self.infNFe.entrega.CNPJ.valor)
+
+    def endereco_entrega_formatado(self):
+        formatado = self.infNFe.entrega.xLgr.valor
+        formatado += u', ' + self.infNFe.entrega.nro.valor
+        
+        if len(self.infNFe.entrega.xCpl.valor.strip()):
+            formatado += u' - ' + self.infNFe.entrega.xCpl.valor
+
+        formatado += u' - ' + self.infNFe.entrega.xBairro.valor
+        formatado += u' - ' + self.infNFe.entrega.xMun.valor
+        formatado += u'-' + self.infNFe.entrega.UF.valor
+        return formatado
+    

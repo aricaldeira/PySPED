@@ -38,25 +38,6 @@ from manual_401 import ConsStatServ_200, RetConsStatServ_200
 #from manual_401 import ConsCad_200, RetConsCad_200
 
 
-
-class Certificado(object):
-    def __init__(self):
-        self.arquivo      = u''
-        self.senha        = u''
-        self._chave       = u''
-        self._certificado = u''
-        
-    def separa_certificado(self):
-        # Lendo o arquivo pfx no formato pkcs12 como binario
-        pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
-        
-        # Retorna a string decodificada da chave privada
-        self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
-        
-        # Retorna a string decodificada do certificado
-        self._certificado = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
-
-
 class ProcessadorNFe(object):
     def __init__(self):
         self.ambiente          = 2
@@ -691,5 +672,33 @@ class ProcessadorNFe(object):
             pass
         
         return caminho
+
     
+class Certificado(object):
+    def __init__(self):
+        self.arquivo      = u''
+        self.senha        = u''
+        self._chave       = u''
+        self._certificado = u''
         
+    def separa_certificado(self):
+        # Lendo o arquivo pfx no formato pkcs12 como binario
+        pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
+        
+        # Retorna a string decodificada da chave privada
+        self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
+        
+        # Retorna a string decodificada do certificado
+        self._certificado = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
+
+
+class DANFE(object):
+    def __init__(self):
+        self.formato = 1
+        self.imprime_canhoto        = True
+        self.imprime_local_retirada = True
+        self.imprime_local_entrega  = True
+        self.imprime_fatura         = True
+        self.imprime_duplicata      = True
+        
+        self.imprime_issqn          = False

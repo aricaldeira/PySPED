@@ -252,15 +252,27 @@ class TagCSOSN(TagCaracter):
         # redefinimos a raiz e a obrigatoriedade das
         # tags do grupo de ICMS
         #
+        # Definimos também o valor da tag CST do ICMS 
+        # tradicional para mapear os novos valores
+        # na impressão do DANFE
+        #
+        # Mapeamento de acordo com a Nota Técnica 2009.004
+        #
+        #
+        # Usamos a propriedade privada, para evitar 
+        # o processamento do set_valor da classe TagCSTICMS
+        #
         if self.valor == u'101':
             self.grupo_icms.nome_tag = u'ICMSSN101'
             self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN101'
             self.grupo_icms.pCredSN.obrigatorio     = True
             self.grupo_icms.vCredICMSSN.obrigatorio = True
+            self.grupo_icms.CST._valor_string       = u'41'
             
         elif self.valor in (u'102', u'103', u'300', u'400'):
             self.grupo_icms.nome_tag = u'ICMSSN102'
             self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN102'
+            self.grupo_icms.CST._valor_string       = u'41'
 
         elif self.valor == u'201':
             self.grupo_icms.nome_tag = u'ICMSSN201'
@@ -271,7 +283,8 @@ class TagCSOSN(TagCaracter):
             self.grupo_icms.vICMSST.obrigatorio     = True
             self.grupo_icms.pCredSN.obrigatorio     = True
             self.grupo_icms.vCredICMSSN.obrigatorio = True
-
+            self.grupo_icms.CST._valor_string       = u'30'
+            
         elif self.valor in (u'202', u'203'):
             self.grupo_icms.nome_tag = u'ICMSSN202'
             self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN202'
@@ -279,12 +292,14 @@ class TagCSOSN(TagCaracter):
             self.grupo_icms.vBCST.obrigatorio       = True
             self.grupo_icms.pICMSST.obrigatorio     = True
             self.grupo_icms.vICMSST.obrigatorio     = True
+            self.grupo_icms.CST._valor_string       = u'30'
             
         elif self.valor == u'500':
             self.grupo_icms.nome_tag = u'ICMSSN500'
             self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN500'
             self.grupo_icms.vBCSTRet.obrigatorio    = True
             self.grupo_icms.vICMSSTRet.obrigatorio  = True
+            self.grupo_icms.CST._valor_string       = u'60'
                
         elif self.valor == u'900':
             self.grupo_icms.nome_tag = u'ICMSSN900'
@@ -299,6 +314,7 @@ class TagCSOSN(TagCaracter):
             self.grupo_icms.vICMSST.obrigatorio     = True
             self.grupo_icms.pCredSN.obrigatorio     = True
             self.grupo_icms.vCredICMSSN.obrigatorio = True
+            self.grupo_icms.CST._valor_string       = u'90'
 
         #
         # Redefine a raiz para todas as tags do grupo ICMS
@@ -813,6 +829,7 @@ class ICMS(nfe_110.ICMS):
             self.vICMSSTRet.xml = arquivo
             
             if self.regime_tributario == 1:
+                self.CSOSN.xml       = arquivo
                 self.pCredSN.xml     = arquivo
                 self.vCredICMSSN.xml = arquivo
             else:    
@@ -993,9 +1010,9 @@ class Prod(nfe_110.Prod):
         super(Prod, self).__init__()
         self.NCM      = TagCaracter(nome=u'NCM'     , codigo=u'I05' , tamanho=[2,  8]                        , raiz=u'//det/prod')
         self.qCom     = TagDecimal(nome=u'qCom'     , codigo=u'I10' , tamanho=[1, 15, 1], decimais=[0,  4, 4], raiz=u'//det/prod')
-        self.vUnCom   = TagDecimal(nome=u'vUnCom'   , codigo=u'I10a', tamanho=[1, 21, 1], decimais=[0, 10, 0], raiz=u'//det/prod')
+        self.vUnCom   = TagDecimal(nome=u'vUnCom'   , codigo=u'I10a', tamanho=[1, 21, 1], decimais=[0, 10, 4], raiz=u'//det/prod')
         self.qTrib    = TagDecimal(nome=u'qTrib'    , codigo=u'I14' , tamanho=[1, 15, 1], decimais=[0,  4, 4], raiz=u'//det/prod')
-        self.vUnTrib  = TagDecimal(nome=u'vUnTrib'  , codigo=u'I14a', tamanho=[1, 21, 1], decimais=[0, 10, 0], raiz=u'//det/prod')
+        self.vUnTrib  = TagDecimal(nome=u'vUnTrib'  , codigo=u'I14a', tamanho=[1, 21, 1], decimais=[0, 10, 4], raiz=u'//det/prod')
         self.vOutro   = TagDecimal(nome=u'vOutro'   , codigo=u'I17a', tamanho=[1, 15, 1], decimais=[0,  2, 2], raiz=u'//det/prod', obrigatorio=False)
         self.indTot   = TagInteiro(nome=u'indTot'   , codigo=u'I17b', tamanho=[1,  1, 1],                      raiz=u'//det/prod', valor=1)
         self.xPed     = TagCaracter(nome=u'xPed'    , codigo=u'I30' , tamanho=[1, 15],                         raiz=u'//det/prod', obrigatorio=False)

@@ -29,10 +29,10 @@ LARGURA_PAISAGEM = PAISAGEM[0] - MARGEM_ESQUERDA - MARGEM_DIREITA
 # Fontes adicionais
 #
 FONTES_ADICIONAIS = {
-    u'Gentium Book Basic'            : DIRNAME + u'/fonts/genbasr.ttf',
-    u'Gentium Book Basic Bold'       : DIRNAME + u'/fonts/genbasb.ttf',
-    u'Gentium Book Basic Italic'     : DIRNAME + u'/fonts/genbasi.ttf',
-    u'Gentium Book Basic Bold Italic': DIRNAME + u'/fonts/genbasbi.ttf',
+    u'Gentium Book Basic'            : DIRNAME + u'/fonts/genbkbasr.ttf',
+    u'Gentium Book Basic Bold'       : DIRNAME + u'/fonts/genbkbasb.ttf',
+    u'Gentium Book Basic Italic'     : DIRNAME + u'/fonts/genbkbasi.ttf',
+    u'Gentium Book Basic Bold Italic': DIRNAME + u'/fonts/genbkbasbi.ttf',
 
 }
 #FONTES_ADICIONAIS = {
@@ -86,8 +86,10 @@ DADO_PRODUTO_CENTRALIZADO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO
 
 DADO_COMPLEMENTAR = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_6, 'leading': FONTE_TAMANHO_8}
 
-DESCRITIVO_DANFE = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_12, 'alignment': TA_CENTER}
-DESCRITIVO_NUMERO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_10, 'alignment': TA_CENTER}
+DESCRITIVO_DANFE = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_12, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_12}
+DESCRITIVO_NUMERO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_10, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_10}
+DESCRITIVO_DANFE_GERAL = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_7, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_7}
+DESCRITIVO_DANFE_ES = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_7, 'alignment': TA_LEFT, 'leading': FONTE_TAMANHO_7}
 
 OBS_CONTINGENCIA = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_18, 'alignment': TA_CENTER, 'textColor': HexColor(0xc3c3c3)}
 OBS_HOMOLOGACAO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_40, 'alignment': TA_CENTER, 'textColor': HexColor(0xc3c3c3)}
@@ -98,10 +100,10 @@ class LabelMargemEsquerda(Label):
         super(LabelMargemEsquerda, self).__init__()
         #self.borders_stroke_width = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
         self.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': False}
-        self.margin_top = 0.08*cm
-        self.margin_left = 0.08*cm
-        self.margin_bottom = 0.08*cm
-        self.margin_right = 0.08*cm
+        self.padding_top = 0.08*cm
+        self.padding_left = 0.08*cm
+        self.padding_bottom = 0.08*cm
+        self.padding_right = 0.08*cm
         self.style = DESCRITIVO_CAMPO
         self.height = 0.70*cm
 
@@ -115,10 +117,10 @@ class LabelMargemDireita(LabelMargemEsquerda):
 class Campo(ObjectValue):
     def __init__(self):
         super(Campo, self).__init__()
-        self.margin_top = 0.1*cm
-        self.margin_left = 0.1*cm
-        self.margin_bottom = 0.1*cm
-        self.margin_right = 0.1*cm
+        self.padding_top = 0.1*cm
+        self.padding_left = 0.1*cm
+        self.padding_bottom = 0.1*cm
+        self.padding_right = 0.1*cm
         self.style = DADO_CAMPO
         self.height = 0.70*cm
 
@@ -126,10 +128,10 @@ class Campo(ObjectValue):
 class Texto(Label):
     def __init__(self):
         super(Texto, self).__init__()
-        self.margin_top = 0.1*cm
-        self.margin_left = 0.1*cm
-        self.margin_bottom = 0.1*cm
-        self.margin_right = 0.1*cm
+        self.padding_top = 0.1*cm
+        self.padding_left = 0.1*cm
+        self.padding_bottom = 0.1*cm
+        self.padding_right = 0.1*cm
         self.style = DADO_CAMPO
         self.height = 0.70*cm
         
@@ -139,10 +141,10 @@ class Descritivo(Label):
         super(Descritivo, self).__init__()
         #self.borders_stroke_width = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
         self.borders = {'top': 0.1, 'right': False, 'bottom': 0.1, 'left': False}
-        self.margin_top = 0.08*cm
-        self.margin_left = 0.1*cm
-        self.margin_bottom = 0.1*cm
-        self.margin_right = 0.1*cm
+        self.padding_top = 0.03*cm
+        self.padding_left = 0.1*cm
+        #self.padding_bottom = 0.05*cm
+        self.padding_right = 0.1*cm
         self.style = DESCRITIVO_BLOCO
         self.height = 0.42*cm
 
@@ -172,6 +174,7 @@ class BandaDANFE(ReportBand):
     def _inclui_campo(self, nome, conteudo, top, left, width, height=None):
         fld = Campo()
         fld.name = 'fld_' + nome
+        fld.attribute_name = conteudo
         fld.top = top
         fld.left = left
         fld.width = width
@@ -199,7 +202,7 @@ class BandaDANFE(ReportBand):
         self.elements.append(lbl)
         
         fld = self._inclui_campo(nome, conteudo, top, left, width, height)
-        fld.margin_top = 0.32*cm
+        fld.padding_top = 0.25*cm
         self.elements.append(fld)
         
         return lbl, fld
@@ -216,7 +219,7 @@ class BandaDANFE(ReportBand):
 
         if texto:
             txt = self._inclui_texto(nome, texto, top, left, width, height)
-            txt.margin_top = 0.32*cm
+            txt.padding_top = 0.25*cm
             self.elements.append(txt)
         else:
             txt = None
@@ -249,18 +252,25 @@ class BandaDANFE(ReportBand):
         
     def inclui_texto_sem_borda(self, nome, texto, top, left, width, height=None, margem_direita=False):
         txt = self._inclui_texto(nome, texto, top, left, width, height)
-        txt.margin_top = 0.1*cm
+        txt.padding_top = 0.1*cm
         self.elements.append(txt)
         
         return txt
         
+    def inclui_campo_sem_borda(self, nome, conteudo, top, left, width, height=None, margem_direita=False):
+        fld = self._inclui_campo(nome, conteudo, top, left, width, height)
+        fld.padding_top = 0.1*cm
+        self.elements.append(fld)
+        
+        return fld
+        
     def inclui_descritivo_produto(self, nome, titulo, top, left, width, height=None, margem_direita=False):
         lbl = self._inclui_titulo(nome, titulo, top, left, width, height, margem_direita)
         lbl.style = DESCRITIVO_PRODUTO
-        lbl.margin_top = 0.05*cm
-        lbl.margin_left = 0.05*cm
-        lbl.margin_bottom = 0.05*cm
-        lbl.margin_right = 0.05*cm
+        lbl.padding_top = 0.05*cm
+        lbl.padding_left = 0.05*cm
+        lbl.padding_bottom = 0.05*cm
+        lbl.padding_right = 0.05*cm
         
         if height:
             lbl.height = height
@@ -271,8 +281,7 @@ class BandaDANFE(ReportBand):
         return lbl
         
     def inclui_campo_produto(self, nome, conteudo, top, left, width, height=None, margem_direita=False):
-        fld = self._inclui_campo(nome, conteudo, top, left, width, height, margem_direita)
-        fld.borders_stroke_width = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
+        fld = self._inclui_campo(nome, conteudo, top, left, width, height)
         
         if margem_direita:
             fld.borders = {'top': 0.1, 'right': False, 'bottom': 0.1, 'left': 0.1}
@@ -280,10 +289,10 @@ class BandaDANFE(ReportBand):
             fld.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': False}
             
         fld.style = DADO_PRODUTO
-        fld.margin_top = 0.05*cm
-        fld.margin_left = 0.05*cm
-        fld.margin_bottom = 0.05*cm
-        fld.margin_right = 0.05*cm
+        fld.padding_top = 0.05*cm
+        fld.padding_left = 0.05*cm
+        fld.padding_bottom = 0.05*cm
+        fld.padding_right = 0.05*cm
         fld.auto_expand_height = True
 
         if height:
@@ -314,15 +323,15 @@ class BandaDANFE(ReportBand):
         txt.borders_stroke_width = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
         
         if margem_direita:
-            txt.borders = {'top': True, 'right': False, 'bottom': True, 'left': True}
+            txt.borders = {'top': 0.1, 'right': False, 'bottom': 0.1, 'left': 0.1}
         else:
-            txt.borders = {'top': True, 'right': True, 'bottom': True, 'left': False}
+            txt.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': False}
             
         txt.style = DADO_PRODUTO
-        txt.margin_top = 0.05*cm
-        txt.margin_left = 0.05*cm
-        txt.margin_bottom = 0.05*cm
-        txt.margin_right = 0.05*cm
+        txt.padding_top = 0.05*cm
+        txt.padding_left = 0.05*cm
+        txt.padding_bottom = 0.05*cm
+        txt.padding_right = 0.05*cm
         txt.auto_expand_height = True
         
         if height:
