@@ -6,11 +6,12 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 
-from geraldo import Report, ReportBand
+from geraldo import Report, ReportBand, SubReport
 from geraldo import ObjectValue, SystemField, Label, Line, BarCode
 from geraldo.generators import PDFGenerator
 
 from pysped.relato_sped import *
+from pysped.nfe.manual_401 import Vol_200
 
 
 class DANFERetrato(Report):
@@ -259,27 +260,45 @@ class TransporteRetrato(BandaDANFE):
         txt.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
         
         
-        self.inclui_campo(nome='trn_placa', titulo=u'CÓDIGO ANTT', conteudo='NFe.infNFe.transp.veicTransp.RNTC.valor', top=0.42*cm, left=11.6*cm, width=1.9*cm)
-        self.inclui_campo(nome='trn_placa', titulo=u'PLACA DO VEÍCULO', conteudo=u'NFe.placa_veiculo_formatada', top=0.42*cm, left=13.5*cm, width=1.9*cm)
-        self.inclui_campo(nome='trn_vei_uf', titulo=u'UF', conteudo='NFe.infNFe.transp.veicTransp.UF.valor', top=0.42*cm, left=15.4*cm, width=0.8*cm)
-        self.inclui_campo(nome='trn_cnpj', titulo=u'CNPJ/CPF', conteudo=u'NFe.cnpj_transportadora_formatado', top=0.42*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+        lbl, fld = self.inclui_campo(nome='trn_placa', titulo=u'CÓDIGO ANTT', conteudo='NFe.infNFe.transp.veicTransp.RNTC.valor', top=0.42*cm, left=11.6*cm, width=1.9*cm)
+        lbl, fld = self.inclui_campo(nome='trn_placa', titulo=u'PLACA DO VEÍCULO', conteudo=u'NFe.placa_veiculo_formatada', top=0.42*cm, left=13.5*cm, width=1.9*cm)
+        lbl, fld = self.inclui_campo(nome='trn_vei_uf', titulo=u'UF', conteudo='NFe.infNFe.transp.veicTransp.UF.valor', top=0.42*cm, left=15.4*cm, width=0.8*cm)
+        lbl, fld = self.inclui_campo(nome='trn_cnpj', titulo=u'CNPJ/CPF', conteudo=u'NFe.cnpj_transportadora_formatado', top=0.42*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
 
         # 2ª linha
-        self.inclui_campo(nome='trn_end', titulo=u'ENDEREÇO', conteudo='NFe.infNFe.transp.transporta.xEnder.valor', top=1.12*cm, left=0*cm, width=9.7*cm)
-        self.inclui_campo(nome='trn_mun', titulo=u'MUNICÍPIO', conteudo='NFe.infNFe.transp.transporta.xMun.valor', top=1.12*cm, left=9.7*cm, width=5.7*cm)
-        self.inclui_campo(nome='trn_uf', titulo=u'UF', conteudo='NFe.infNFe.transp.transporta.UF.valor', top=1.12*cm, left=15.4*cm, width=0.8*cm)
-        self.inclui_campo(nome='trn_ie', titulo=u'INSCRIÇÃO ESTADUAL', conteudo=u'NFe.infNFe.transp.transporta.IE.valor', top=1.12*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+        lbl, fld = self.inclui_campo(nome='trn_end', titulo=u'ENDEREÇO', conteudo='NFe.infNFe.transp.transporta.xEnder.valor', top=1.12*cm, left=0*cm, width=9.7*cm)
+        lbl, fld = self.inclui_campo(nome='trn_mun', titulo=u'MUNICÍPIO', conteudo='NFe.infNFe.transp.transporta.xMun.valor', top=1.12*cm, left=9.7*cm, width=5.7*cm)
+        lbl, fld = self.inclui_campo(nome='trn_uf', titulo=u'UF', conteudo='NFe.infNFe.transp.transporta.UF.valor', top=1.12*cm, left=15.4*cm, width=0.8*cm)
+        lbl, fld = self.inclui_campo(nome='trn_ie', titulo=u'INSCRIÇÃO ESTADUAL', conteudo=u'NFe.infNFe.transp.transporta.IE.valor', top=1.12*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
         
         # 3ª linha
-        self.inclui_texto_numerico(nome='trn_qtd', titulo=u'QUANTIDADE', texto='9.999.999.999', top=1.82*cm, left=0*cm, width=3.2*cm)
-        self.inclui_texto(nome='trn_esp', titulo=u'ESPÉCIE', texto='', top=1.82*cm, left=3.2*cm, width=3.2*cm)
-        self.inclui_texto(nome='trn_esp', titulo=u'MARCA', texto='', top=1.82*cm, left=6.4*cm, width=3.4*cm)
-        self.inclui_texto(nome='trn_esp', titulo=u'NÚMERO', texto='', top=1.82*cm, left=9.8*cm, width=3.2*cm)
-        self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO BRUTO', texto='9.999.999.999,999', top=1.82*cm, left=13*cm, width=3.2*cm)
-        self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO LÍQUIDO', texto='9.999.999.999,999', top=1.82*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+        #self.inclui_texto_numerico(nome='trn_qtd', titulo=u'QUANTIDADE', texto='9.999.999.999', top=1.82*cm, left=0*cm, width=3.2*cm)
+        #self.inclui_texto(nome='trn_esp', titulo=u'ESPÉCIE', texto='', top=1.82*cm, left=3.2*cm, width=3.2*cm)
+        #self.inclui_texto(nome='trn_esp', titulo=u'MARCA', texto='', top=1.82*cm, left=6.4*cm, width=3.4*cm)
+        #self.inclui_texto(nome='trn_esp', titulo=u'NÚMERO', texto='', top=1.82*cm, left=9.8*cm, width=3.2*cm)
+        #self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO BRUTO', texto='9.999.999.999,999', top=1.82*cm, left=13*cm, width=3.2*cm)
+        #self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO LÍQUIDO', texto='9.999.999.999,999', top=1.82*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
         
-        self.height = 2.52*cm
+        self.height = (2.52*cm) - fld.height
+        self.elements.append(VolumesRetrato())
 
+class VolumesRetrato(SubReport):
+    def __init__(self):
+        super(VolumesRetrato, self).__init__()
+        self.get_queryset = lambda self, parent_object: parent_object.NFe.infNFe.transp.vol or [Vol_200()]
+    
+    class band_detail(BandaDANFE):
+        def __init__(self):
+            super(VolumesRetrato.band_detail, self).__init__()
+            self.elements = []
+            lbl, txt = self.inclui_texto_numerico(nome='trn_qtd', titulo=u'QUANTIDADE', texto='9.999.999.999', top=1.82*cm, left=0*cm, width=3.2*cm)
+            self.inclui_texto(nome='trn_esp', titulo=u'ESPÉCIE', texto='', top=1.82*cm, left=3.2*cm, width=3.2*cm)
+            self.inclui_texto(nome='trn_esp', titulo=u'MARCA', texto='', top=1.82*cm, left=6.4*cm, width=3.4*cm)
+            self.inclui_texto(nome='trn_esp', titulo=u'NÚMERO', texto='', top=1.82*cm, left=9.8*cm, width=3.2*cm)
+            self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO BRUTO', texto='9.999.999.999,999', top=1.82*cm, left=13*cm, width=3.2*cm)
+            self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO LÍQUIDO', texto='9.999.999.999,999', top=1.82*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+            
+            self.height = txt.height
 
 class CabProdutoRetrato(BandaDANFE):
     def __init__(self):
