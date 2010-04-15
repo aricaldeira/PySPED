@@ -1805,14 +1805,35 @@ class Lacres(XMLNFe):
         
 
 class Vol(XMLNFe):
+    #
+    # No caso dos volumes, se o valor da quantidade, peso bruto ou líquido for zero ou inexistente
+    # não imprime os valores no DANFE
+    #
+    class TagInteiroVolume(TagInteiro):
+        def formato_danfe(self):
+            if not self._valor_inteiro:
+                return u''
+            else:
+                return super(Vol.TagInteiroVolume, self).formato_danfe()
+
+    class TagDecimalVolume(TagDecimal):
+        def formato_danfe(self):
+            if not self._valor_decimal:
+                return u''
+            else:
+                return super(Vol.TagDecimalVolume, self).formato_danfe()
+    
     def __init__(self, xml=None):
         super(Vol, self).__init__()
-        self.qVol   = TagInteiro(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
+        #self.qVol   = TagInteiro(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
+        self.qVol   = self.TagInteiroVolume(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
         self.esp    = TagCaracter(nome=u'esp'  , codigo=u'X28', tamanho=[1, 60], raiz=u'//vol', obrigatorio=False)
         self.marca  = TagCaracter(nome=u'marca', codigo=u'X29', tamanho=[1, 60], raiz=u'//vol', obrigatorio=False)
         self.nVol   = TagCaracter(nome=u'nVol' , codigo=u'X30', tamanho=[1, 60], raiz=u'//vol', obrigatorio=False)
-        self.pesoL  = TagDecimal(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
-        self.pesoB  = TagDecimal(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        #self.pesoL  = TagDecimal(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        #self.pesoB  = TagDecimal(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        self.pesoL  = self.TagDecimalVolume(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        self.pesoB  = self.TagDecimalVolume(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
         self.lacres = []
     
     def get_xml(self):
