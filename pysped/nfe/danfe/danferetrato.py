@@ -209,6 +209,59 @@ class FaturaAVistaRetrato(BandaDANFE):
 
         self.height = 1.12*cm
 
+class FaturaAPrazoRetrato(BandaDANFE):
+    def __init__(self):
+        super(FaturaAPrazoRetrato, self).__init__()
+        #self.auto_expand_height = True
+        self.elements = []
+        self.inclui_descritivo(nome='fat', titulo=u'FATURA', top=0*cm, left=0*cm, width=19.4*cm)
+
+        # 1ª linha
+        lbl, txt = self.inclui_texto(nome='fat_texto', titulo='', texto=u'PAGAMENTO A PRAZO', top=0.42*cm, left=0*cm, width=19.4*cm)
+        lbl.borders['right'] = False
+
+        lbl, fld = self.inclui_campo(nome='fat_numero', titulo=u'NÚMERO DA FATURA', conteudo=u'NFe.infNFe.cobr.fat.nFat.valor', top=0.42*cm, left=3.7*cm, width=9.7*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR ORIGINAL', conteudo=u'NFe.infNFe.cobr.fat.vOrig.formato_danfe', top=0.42*cm, left=13.4*cm, width=2*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'DESCONTO', conteudo=u'NFe.infNFe.cobr.fat.vDesc.formato_danfe', top=0.42*cm, left=15.4*cm, width=2*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='fat_vorig', titulo=u'VALOR LÍQUIDO', conteudo=u'NFe.infNFe.cobr.fat.vLiq.formato_danfe', top=0.42*cm, left=17.4*cm, width=2*cm, margem_direita=True)
+
+        self.elements.append(DuplicatasRetrato())
+
+        self.height = 1.12*cm
+    
+
+class DuplicatasRetrato(SubReport):
+    def __init__(self):
+        super(DuplicatasRetrato, self).__init__()
+        self.get_queryset = lambda self, parent_object: parent_object.NFe.infNFe.cobr.dup or []
+    
+    class band_header(BandaDANFE):
+        def __init__(self):
+            super(DuplicatasRetrato.band_header, self).__init__()
+            self.elements = []
+            self.inclui_descritivo(nome='dup', titulo=u'DUPLICATAS', top=1.12*cm, left=0*cm, width=19.4*cm)
+            self.height = 0.42*cm
+            
+    class band_detail(BandaDANFE):
+        def __init__(self):
+            super(DuplicatasRetrato.band_detail, self).__init__()
+            self.width = 6.4*cm
+            self.display_inline = True
+            self.margin_right = 0.08*cm
+            
+            self.elements = []
+            lbl, fld = self.inclui_campo(nome='dup_numero', titulo=u'NÚMERO', conteudo=u'nDup.valor', top=1.12*cm, left=0*cm, width=2.8*cm)
+            lbl, fld = self.inclui_campo(nome='dup_venc'  , titulo=u'VENCIMENTO', conteudo=u'dVenc.formato_danfe', top=1.12*cm, left=2.8*cm, width=1.9*cm)
+            lbl, fld = self.inclui_campo_numerico(nome='dup_valor', titulo=u'VALOR', conteudo=u'vDup.formato_danfe', top=1.12*cm, left=4.7*cm, width=1.7*cm, margem_direita=True)
+            #lbl, txt = self.inclui_texto_numerico(nome='trn_qtd', titulo=u'QUANTIDADE', texto='9.999.999,99', top=1.12*cm, left=0*cm, width=2*cm)
+            #self.inclui_texto(nome='trn_esp', titulo=u'ESPÉCIE', texto='', top=1.82*cm, left=3.2*cm, width=3.2*cm)
+            #self.inclui_texto(nome='trn_esp', titulo=u'MARCA', texto='', top=1.82*cm, left=6.4*cm, width=3.4*cm)
+            #self.inclui_texto(nome='trn_esp', titulo=u'NÚMERO', texto='', top=1.82*cm, left=9.8*cm, width=3.2*cm)
+            #self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO BRUTO', texto='9.999.999.999,999', top=1.82*cm, left=13*cm, width=3.2*cm)
+            #self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO LÍQUIDO', texto='9.999.999.999,999', top=1.82*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+            
+            self.height = fld.height
+    
 
 class CalculoImpostoRetrato(BandaDANFE):
     def __init__(self):
@@ -291,14 +344,14 @@ class VolumesRetrato(SubReport):
         def __init__(self):
             super(VolumesRetrato.band_detail, self).__init__()
             self.elements = []
-            lbl, txt = self.inclui_texto_numerico(nome='trn_qtd', titulo=u'QUANTIDADE', texto='9.999.999.999', top=1.82*cm, left=0*cm, width=3.2*cm)
-            self.inclui_texto(nome='trn_esp', titulo=u'ESPÉCIE', texto='', top=1.82*cm, left=3.2*cm, width=3.2*cm)
-            self.inclui_texto(nome='trn_esp', titulo=u'MARCA', texto='', top=1.82*cm, left=6.4*cm, width=3.4*cm)
-            self.inclui_texto(nome='trn_esp', titulo=u'NÚMERO', texto='', top=1.82*cm, left=9.8*cm, width=3.2*cm)
-            self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO BRUTO', texto='9.999.999.999,999', top=1.82*cm, left=13*cm, width=3.2*cm)
-            self.inclui_texto_numerico(nome='trn_qtd', titulo=u'PESO LÍQUIDO', texto='9.999.999.999,999', top=1.82*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
+            lbl, fld = self.inclui_campo_numerico(nome='vol_qtd', titulo=u'QUANTIDADE', conteudo=u'qVol.formato_danfe', top=1.82*cm, left=0*cm, width=3.2*cm)
+            lbl, fld = self.inclui_campo(nome='vol_esp', titulo=u'ESPÉCIE', conteudo=u'esp.valor', top=1.82*cm, left=3.2*cm, width=3.2*cm)
+            lbl, fld = self.inclui_campo(nome='vol_marca', titulo=u'MARCA', conteudo=u'marca.valor', top=1.82*cm, left=6.4*cm, width=3.4*cm)
+            lbl, fld = self.inclui_campo(nome='vol_numero', titulo=u'NÚMERO', conteudo=u'nVol.valor', top=1.82*cm, left=9.8*cm, width=3.2*cm)
+            lbl, fld = self.inclui_campo_numerico(nome='vol_peso_bruto', titulo=u'PESO BRUTO', conteudo=u'pesoB.formato_danfe', top=1.82*cm, left=13*cm, width=3.2*cm)
+            lbl, fld = self.inclui_campo_numerico(nome='vol_peso_liquido', titulo=u'PESO LÍQUIDO', conteudo=u'pesoL.formato_danfe', top=1.82*cm, left=16.2*cm, width=3.2*cm, margem_direita=True)
             
-            self.height = txt.height
+            self.height = fld.height
 
 class CabProdutoRetrato(BandaDANFE):
     def __init__(self):
