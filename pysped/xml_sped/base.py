@@ -458,7 +458,7 @@ class TagDecimal(TagCaracter):
 
         # Tamanho mínimo das casas decimais
         if (len(self.decimais) >= 3) and self.decimais[2] and (len(dec) < self.decimais[2]):
-            dec = dec.rjust(self.decimais[2], u'0')
+            dec = dec.ljust(self.decimais[2], u'0')
             
         texto += u'.' + dec
         return texto
