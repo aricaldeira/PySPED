@@ -37,6 +37,11 @@ from manual_401 import ConsSitNFe_200, RetConsSitNFe_200
 from manual_401 import ConsStatServ_200, RetConsStatServ_200
 #from manual_401 import ConsCad_200, RetConsCad_200
 
+#
+# DANFE
+#
+from danfe.danferetrato import *
+
 
 class ProcessadorNFe(object):
     def __init__(self):
@@ -694,11 +699,116 @@ class Certificado(object):
 
 class DANFE(object):
     def __init__(self):
-        self.formato = 1
         self.imprime_canhoto        = True
         self.imprime_local_retirada = True
         self.imprime_local_entrega  = True
         self.imprime_fatura         = True
-        self.imprime_duplicata      = True
+        self.imprime_duplicatas     = True
+        self.imprime_issqn          = True
+
+        self.caminho           = u''
+        self.salvar_arquivo    = True
         
-        self.imprime_issqn          = False
+        self.NFe     = None
+        self.protNFe = None
+        self.danfe   = None
+
+    def gerar_danfe(self):
+        if self.NFe is None:
+            raise ValueError(u'Não é possível gerar um DANFE sem a informação de uma NF-e')
+        
+        if self.protNFe is None:
+            self.protNFe = ProtNFe_200()
+        
+        #
+        # Prepara o queryset para impressão
+        #
+        self.NFe.monta_chave()
+        self.NFe.monta_dados_contingencia_fsda()
+        
+        for detalhe in self.NFe.infNFe.det:
+            detalhe.NFe = self.NFe
+            detalhe.protNFe = self.protNFe
+
+        #
+        # Prepara as bandas de impressão para cada formato
+        #
+        if self.NFe.infNFe.ide.tpImp.valor == 2:
+            raise ValueError(u'DANFE em formato paisagem ainda não implementado')
+        else:
+            self.danfe = DANFERetrato()
+            self.danfe.queryset = self.NFe.infNFe.det
+            
+            remetente = RemetenteRetrato()
+            
+            # Emissão para simples conferência / sem protocolo de autorização
+            if not self.protNFe.infProt.nProt.valor:
+                remetente.campo_variavel_conferencia()
+                
+            # Emissão em contingência com FS ou FSDA
+            elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):
+                remetente.campo_variavel_contingencia_fsda()
+                remetente.elements.append(ObsContingenciaNormalRetrato())
+                
+            # Emissão em contingência com DPEC    
+            elif self.NFe.infNFe.ide.tpEmis.valor == 4:
+                remetente.campo_variavel_contingencia_dpec()
+                remetente.elements.append(ObsContingenciaDPECRetrato())
+                
+            # Emissão normal ou contingência SCAN
+            else:
+                remetente.campo_variavel_normal()
+            
+            if self.imprime_canhoto:
+                self.danfe.band_page_header = CanhotoRetrato()
+                self.danfe.band_page_header.child_bands = []
+                self.danfe.band_page_header.child_bands.append(remetente)
+            else:
+                self.danfe.band_page_header = remetente
+                self.danfe.band_page_header.child_bands = []
+
+            self.danfe.band_page_header.child_bands.append(DestinatarioRetrato())
+    
+            if self.imprime_local_retirada and len(self.NFe.infNFe.retirada.xml):
+                self.danfe.band_page_header.child_bands.append(LocalRetiradaRetrato())
+                
+            if self.imprime_local_entrega and len(self.NFe.infNFe.entrega.xml):
+                self.danfe.band_page_header.child_bands.append(LocalEntregaRetrato())
+                
+            if self.imprime_fatura:
+                # Pagamento à vista
+                if self.NFe.infNFe.ide.indPag.valor == 0:
+                    self.danfe.band_page_header.child_bands.append(FaturaAVistaRetrato())
+                
+                # Pagamento a prazo ou outros
+                else:
+                    fatura_a_prazo = FaturaAPrazoRetrato()
+
+                    if self.imprime_duplicatas:
+                        fatura_a_prazo.elements.append(DuplicatasRetrato())
+                        
+                    self.danfe.band_page_header.child_bands.append(fatura_a_prazo)
+                    
+            self.danfe.band_page_header.child_bands.append(CalculoImpostoRetrato())
+            self.danfe.band_page_header.child_bands.append(TransporteRetrato())
+            
+            cab_produtos = CabProdutoRetrato()
+            
+            # Observação de ausência de valor fiscal
+            # se não houver protocolo ou se o ambiente for de homologação
+            if (not self.protNFe.infProt.nProt.valor) or self.NFe.infNFe.ide.tpAmb.valor == 2:
+                cab_produtos.elements.append(ObsHomologacaoRetrato())
+            
+            self.danfe.band_page_header.child_bands.append(cab_produtos)
+                        
+            if self.imprime_issqn and len(self.NFe.infNFe.total.ISSQNTot.xml):
+                self.danfe.band_page_footer = ISSRetrato()
+            else:
+                self.danfe.band_page_footer = DadosAdicionaisRetrato()
+
+            self.danfe.band_detail = DetProdutoRetrato()
+            
+
+            if self.salvar_arquivo:
+                nome_arq = self.caminho + self.NFe.chave + u'.pdf'
+                self.danfe.generate_by(PDFGenerator, filename=nome_arq)

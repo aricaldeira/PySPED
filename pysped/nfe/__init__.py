@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
 
-from processador_nfe import ProcessadorNFe
+from processador_nfe import ProcessadorNFe, DANFE, Certificado
 
