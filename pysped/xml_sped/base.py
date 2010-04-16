@@ -406,6 +406,9 @@ class TagInteiro(TagCaracter):
     valor = property(get_valor, set_valor)
 
     def formato_danfe(self):
+        if not (self.obrigatorio or self._valor_inteiro):
+            return u''
+            
         return locale.format(u'%d', self._valor_inteiro, grouping=True)
 
 
@@ -517,6 +520,8 @@ class TagDecimal(TagCaracter):
     valor = property(get_valor, set_valor)
 
     def formato_danfe(self):
+        if not (self.obrigatorio or self._valor_decimal):
+            return u''
         
         # Tamanho mínimo das casas decimais
         if (len(self.decimais) >= 3) and self.decimais[2]:

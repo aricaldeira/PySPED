@@ -116,6 +116,15 @@ class ProtNFe(XMLNFe):
        
     xml = property(get_xml, set_xml)
     
+    def protocolo_formatado(self):
+        if not self.infProt.nProt.valor:
+            return u''
+            
+        formatado = self.infProt.nProt.valor
+        formatado += u' - ' 
+        formatado += self.infProt.dhRecbto.formato_danfe()
+        return formatado
+
 
 class RetConsReciNFe(XMLNFe):
     def __init__(self):

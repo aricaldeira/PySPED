@@ -1825,15 +1825,15 @@ class Vol(XMLNFe):
     
     def __init__(self, xml=None):
         super(Vol, self).__init__()
-        #self.qVol   = TagInteiro(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
-        self.qVol   = self.TagInteiroVolume(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
+        self.qVol   = TagInteiro(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
+        #self.qVol   = self.TagInteiroVolume(nome=u'qVol'  , codigo=u'X27', tamanho=[1, 15], raiz=u'//vol', obrigatorio=False)
         self.esp    = TagCaracter(nome=u'esp'  , codigo=u'X28', tamanho=[1, 60], raiz=u'//vol', obrigatorio=False)
         self.marca  = TagCaracter(nome=u'marca', codigo=u'X29', tamanho=[1, 60], raiz=u'//vol', obrigatorio=False)
         self.nVol   = TagCaracter(nome=u'nVol' , codigo=u'X30', tamanho=[1, 60], raiz=u'//vol', obrigatorio=False)
-        #self.pesoL  = TagDecimal(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
-        #self.pesoB  = TagDecimal(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
-        self.pesoL  = self.TagDecimalVolume(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
-        self.pesoB  = self.TagDecimalVolume(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        self.pesoL  = TagDecimal(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        self.pesoB  = TagDecimal(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        #self.pesoL  = self.TagDecimalVolume(nome=u'pesoL' , codiog=u'X31', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
+        #self.pesoB  = self.TagDecimalVolume(nome=u'pesoB' , codiog=u'X32', tamanho=[1, 15, 1], decimais=[0, 3, 3], raiz=u'//vol', obrigatorio=False)
         self.lacres = []
     
     def get_xml(self):
@@ -3065,3 +3065,30 @@ class NFe(XMLNFe):
             da += self.infNFe.infAdic.infCpl.valor.replace(u'|', u'<br />')
             
         return da
+        
+    def canhoto_formatado(self):
+        formatado = u'RECEBEMOS DE <b>'
+        formatado += self.infNFe.emit.xNome.valor.upper()
+        formatado += u'</b> OS PRODUTOS E/OU SERVIÇOS CONSTANTES DA <b>NOTA FISCAL ELETRÔNICA</b> INDICADA AO LADO'
+        return formatado
+        
+    def frete_formatado(self):
+        if self.infNFe.transp.modFrete.valor == 0:
+            formatado = u'0-EMITENTE'
+            
+        elif self.infNFe.transp.modFrete.valor == 1:
+            if self.infNFe.ide.tpNF.valor == 0:
+                formatado = u'1-REMETENTE'
+            else:
+                formatado = u'1-DESTINATÁRIO'
+                
+        elif self.infNFe.transp.modFrete.valor == 2:
+            formatado = u'2-DE TERCEIROS'
+
+        elif self.infNFe.transp.modFrete.valor == 3:
+            formatado = u'3-SEM FRETE'
+        
+        else:
+            formatado = u''
+            
+        return formatado
