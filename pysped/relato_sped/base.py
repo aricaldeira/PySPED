@@ -28,21 +28,21 @@ LARGURA_PAISAGEM = PAISAGEM[0] - MARGEM_ESQUERDA - MARGEM_DIREITA
 #
 # Fontes adicionais
 #
-FONTES_ADICIONAIS = {
-    u'Gentium Book Basic'            : DIRNAME + u'/fonts/genbkbasr.ttf',
-    u'Gentium Book Basic Bold'       : DIRNAME + u'/fonts/genbkbasb.ttf',
-    u'Gentium Book Basic Italic'     : DIRNAME + u'/fonts/genbkbasi.ttf',
-    u'Gentium Book Basic Bold Italic': DIRNAME + u'/fonts/genbkbasbi.ttf',
-
-}
 #FONTES_ADICIONAIS = {
-    #u'Gentium Book Basic': (
-        #(u'Gentium Book Basic'            , DIRNAME + u'/fonts/genbasr.ttf' , False, False),
-        #(u'Gentium Book Basic Bold'       , DIRNAME + u'/fonts/genbasb.ttf' , True , False),
-        #(u'Gentium Book Basic Italic'     , DIRNAME + u'/fonts/genbasi.ttf' , False, True),
-        #(u'Gentium Book Basic Bold Italic', DIRNAME + u'/fonts/genbasbi.ttf', True , True),
-    #)
+    #u'Gentium Book Basic'            : DIRNAME + u'/fonts/genbkbasr.ttf',
+    #u'Gentium Book Basic Bold'       : DIRNAME + u'/fonts/genbkbasb.ttf',
+    #u'Gentium Book Basic Italic'     : DIRNAME + u'/fonts/genbkbasi.ttf',
+    #u'Gentium Book Basic Bold Italic': DIRNAME + u'/fonts/genbkbasbi.ttf',
+
 #}
+FONTES_ADICIONAIS = {
+    u'Gentium Book Basic': (
+        (u'Gentium Book Basic'            , DIRNAME + u'/fonts/genbkbasr.ttf' , False, False),
+        (u'Gentium Book Basic Bold'       , DIRNAME + u'/fonts/genbkbasb.ttf' , True , False),
+        (u'Gentium Book Basic Italic'     , DIRNAME + u'/fonts/genbkbasi.ttf' , False, True),
+        (u'Gentium Book Basic Bold Italic', DIRNAME + u'/fonts/genbkbasbi.ttf', True , True),
+    )
+}
 
 #addMapping('Gentium Basic', 0, 0, 'Gentium Basic')
 #addMapping('Gentium Basic', 1, 0, 'Gentium Basic Bold')
@@ -72,13 +72,16 @@ FONTE_TAMANHO_40 = FONTE_TAMANHO_10 * 4
 
 DESCRITIVO_BLOCO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_8}
 DESCRITIVO_CAMPO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_5}
+DESCRITIVO_CAMPO_NEGRITO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_5}
 DESCRITIVO_PRODUTO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_5, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_7}
 
 DADO_CHAVE = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_85, 'alignment': TA_CENTER}
 DADO_VARIAVEL = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_9, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_11}
 
 DADO_CAMPO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_10, 'leading': FONTE_TAMANHO_12}
+DADO_CAMPO_NEGRITO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_10, 'leading': FONTE_TAMANHO_12}
 DADO_CAMPO_NUMERICO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_10, 'alignment': TA_RIGHT, 'leading': FONTE_TAMANHO_12}
+DADO_CAMPO_NUMERICO_NEGRITO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_10, 'alignment': TA_RIGHT, 'leading': FONTE_TAMANHO_12}
 
 DADO_PRODUTO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_6, 'leading': FONTE_TAMANHO_8}
 DADO_PRODUTO_NUMERICO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_6, 'alignment': TA_RIGHT, 'leading': FONTE_TAMANHO_8}
