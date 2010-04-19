@@ -100,8 +100,10 @@ class RemetenteRetrato(BandaDANFE):
         fld = self.inclui_campo_sem_borda(nome='danfe_serie', conteudo=u'NFe.serie_formatada', top=2.85*cm, left=8*cm, width=3.4*cm, height=0.5*cm)
         fld.style = DESCRITIVO_NUMERO
 
-        txt = self.inclui_texto_sem_borda(nome='danfe_folha', texto=u'FOLHA 99/99', top=3.3*cm, left=8*cm, width=3.4*cm, height=0.5*cm)
-        txt.style = DESCRITIVO_NUMERO
+        fld = SystemField(name='fld_danfe_folha', expression=u'FOLHA %(page_number)02d/%(page_count)02d', top=3.3*cm, left=8*cm, width=3.4*cm, height=0.5*cm)
+        fld.padding_top = 0.1*cm
+        fld.style = DESCRITIVO_NUMERO
+        self.elements.append(fld)
 
         #
         # No caso dos códigos de barra, altura (height) e largura (width) se referem às barras, não à imagem
