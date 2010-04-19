@@ -7,7 +7,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 
 from geraldo import Report, ReportBand, SubReport
-from geraldo import ObjectValue, SystemField, Label, Line, BarCode, Rect
+from geraldo import ObjectValue, SystemField, Label, Line, BarCode, Rect, Image
 from geraldo.generators import PDFGenerator
 
 from pysped.relato_sped import *
@@ -15,33 +15,63 @@ from pysped.nfe.manual_401 import Vol_200
 
 
 class DANFERetrato(Report):
-    title = 'DANFE - Documento Auxiliar da Nota Fiscal Eletrônica'
-    print_if_empty = True
-    additional_fonts = FONTES_ADICIONAIS
-
-    page_size = RETRATO
-    margin_top = MARGEM_SUPERIOR
-    margin_bottom = MARGEM_INFERIOR
-    margin_left = MARGEM_ESQUERDA
-    margin_right = MARGEM_DIREITA
-
     def __init__(self, *args, **kargs):
         super(DANFERetrato, self).__init__(*args, **kargs)
+        self.title = 'DANFE - Documento Auxiliar da Nota Fiscal Eletrônica'
+        self.print_if_empty = True
+        self.additional_fonts = FONTES_ADICIONAIS
+
+        self.page_size = RETRATO
+        self.margin_top = MARGEM_SUPERIOR
+        self.margin_bottom = MARGEM_INFERIOR
+        self.margin_left = MARGEM_ESQUERDA
+        self.margin_right = MARGEM_DIREITA
+
+        # Bandas e observações
+        self.canhoto          = CanhotoRetrato()
+        self.remetente        = RemetenteRetrato()
+        self.destinatario     = DestinatarioRetrato()
+        self.local_retirada   = LocalRetiradaRetrato()
+        self.local_entrega    = LocalEntregaRetrato()
+        self.fatura_a_vista   = FaturaAVistaRetrato()
+        self.fatura_a_prazo   = FaturaAPrazoRetrato()
+        self.duplicatas       = DuplicatasRetrato()
+        self.calculo_imposto  = CalculoImpostoRetrato()
+        self.transporte       = TransporteRetrato()
+        self.cab_produto      = CabProdutoRetrato()
+        self.det_produto      = DetProdutoRetrato()
+        self.iss              = ISSRetrato()
+        self.dados_adicionais = DadosAdicionaisRetrato()
+        self.rodape_final     = RodapeFinalRetrato()
 
     def on_new_page(self, page, page_number, generator):
         if generator._current_page_number <> 1:
-            self.band_page_footer = None
+            self.band_page_footer = self.rodape_final
 
-            self.band_page_header = RemetenteRetrato()
-            self.band_page_header.campo_variavel_normal()
-
+            self.band_page_header = self.remetente
             self.band_page_header.child_bands = []
-            self.band_page_header.child_bands.append(CabProdutoRetrato())
+            self.band_page_header.child_bands.append(self.cab_produto)
+
+    def format_date(self, data, formato):
+        return  data.strftime(formato.encode('utf-8')).decode('utf-8')
+
+
+    class ObsImpressao(SystemField):
+        expression = u'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
+
+        def __init__(self):
+            self.name = 'obs_impressao'
+            self.top = 0*cm
+            self.left = 0.1*cm
+            self.width = 19.4*cm
+            self.height = 0.2*cm
+            self.style = DADO_PRODUTO
+            self.borders = {'bottom': 0.1}
 
 
 class CanhotoRetrato(BandaDANFE):
-    def __init__(self, nfe=None, *args, **kwargs):
-        super(CanhotoRetrato, self).__init__(*args, **kwargs)
+    def __init__(self):
+        super(CanhotoRetrato, self).__init__()
         self.elements = []
         lbl, txt = self.inclui_texto(nome='', titulo='', texto=u'', top=0*cm, left=0*cm, width=16*cm)
         fld = self.inclui_campo_sem_borda(nome='canhoto_recebemos', conteudo=u'NFe.canhoto_formatado', top=0*cm, left=0*cm, width=16*cm)
@@ -72,7 +102,8 @@ class RemetenteRetrato(BandaDANFE):
         super(RemetenteRetrato, self).__init__()
         self.elements = []
 
-        self.inclui_texto(nome='remetente_nome', titulo='', texto='', top=0*cm, left=0*cm, width=8*cm, height=4*cm)
+        # Quadro do emitente
+        self.inclui_texto(nome='quadro_emitente', titulo='', texto='', top=0*cm, left=0*cm, width=8*cm, height=4*cm)
 
         #
         # Área central - Dados do DANFE
@@ -148,7 +179,6 @@ class RemetenteRetrato(BandaDANFE):
         lbl, fld = self.inclui_campo(nome='remetente_var2', titulo=u'DADOS DA NF-e', conteudo=u'NFe.dados_contingencia_fsda_formatados', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
         fld.style = DADO_CHAVE
 
-
     def campo_variavel_contingencia_dpec(self):
         txt = self.inclui_texto_sem_borda(nome='remetente_var1', texto=u'Consulta de autenticidade no portal nacional da NF-e<br /><a href="http://www.nfe.fazenda.gov.br/portal"><u>www.nfe.fazenda.gov.br/portal</u></a>', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
         txt.padding_top = 0.4*cm
@@ -156,6 +186,273 @@ class RemetenteRetrato(BandaDANFE):
 
         lbl, txt = self.inclui_texto(nome='remetente_var2', titulo=u'NÚMERO DE REGISTRO DPEC', texto=u'123456789012345 99/99/9999 99:99:99', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
         txt.style = DADO_VARIAVEL
+
+    def obs_cancelamento(self):
+        txt = Texto()
+        txt.name   = 'txt_obs_cancelamento'
+        txt.text   = u'cancelada'
+        #txt.top    = -0.1*cm
+        txt.top    = 3.5*cm
+        txt.left   = 4.7*cm
+        txt.width  = 10*cm
+        txt.height = 1.5*cm
+        txt.padding_top = 0.1*cm
+        txt.style  = OBS_CANCELAMENTO
+        self.elements.insert(0, txt)
+
+        lbl = LabelMargemEsquerda()
+        lbl.borders = None
+        lbl.name = 'lbl_prot_cancelamento'
+        lbl.text = u'PROTOCOLO<br />DE CANCELAMENTO'
+        #lbl.top = 1.75*cm
+        lbl.top = 5.35*cm
+        lbl.left = 6.15*cm
+        lbl.width = 1.75*cm
+        lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
+        self.elements.append(lbl)
+
+        fld = Campo()
+        fld.name = 'fld_prot_cancelamento'
+        fld.attribute_name = u'retCancNFe.protocolo_formatado'
+        #fld.top  = 1.55*cm
+        fld.top  = 5.15*cm
+        fld.left = 7.5*cm
+        fld.width = 6.3*cm
+        fld.padding_top = 0.25*cm
+        fld.style = DADO_VARIAVEL_CANCELAMENTO
+
+        self.elements.insert(2, fld)
+
+    def obs_contingencia_normal_scan(self):
+        lbl = Texto()
+        lbl.name  = 'txt_obs_contingencia'
+        lbl.text  = u'DANFE em contingência<br /><br />impresso em decorrência de problemas técnicos'
+        lbl.top   = 6.6*cm
+        lbl.left  = 0*cm
+        lbl.width = 19.4*cm
+        lbl.padding_top = 0.1*cm
+        lbl.style = OBS_CONTINGENCIA
+        self.elements.insert(0, lbl)
+
+    def obs_contingencia_dpec(self):
+        lbl = Texto()
+        lbl.name  = 'txt_obs_contingencia'
+        lbl.text  = u'DANFE em contingência<br /><br />DPEC regularmente recebida pela Receita Federal do Brasil'
+        lbl.top   = 6.6*cm
+        lbl.left  = 0*cm
+        lbl.width = 19.4*cm
+        lbl.padding_top = 0.1*cm
+        lbl.style = OBS_CONTINGENCIA
+        self.elements.insert(0, lbl)
+
+    def obs_sem_valor_fiscal(self):
+        lbl = Texto()
+        lbl.name  = 'txt_obs_homologacao'
+        lbl.text  = u'sem valor fiscal'
+        lbl.top   = 9*cm
+        lbl.left  = 0*cm
+        lbl.width = 19.4*cm
+        lbl.padding_top = 0.1*cm
+        lbl.style = OBS_HOMOLOGACAO
+        self.elements.append(lbl)
+
+    def monta_quadro_emitente(self, dados_emitente=[]):
+        for de in dados_emitente:
+            self.elements.append(de)
+
+    def dados_emitente_sem_logo(self):
+        elements = []
+
+        #
+        # Dados do remetente
+        #
+        fld = Campo()
+        fld.nome  = 'fld_rem_nome'
+        fld.attribute_name = u'NFe.infNFe.emit.xNome.valor'
+        fld.top   = 0.2*cm
+        fld.width = 8*cm
+        fld.height = 1.5*cm
+        fld.style = EMIT_NOME
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_1'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_1'
+        fld.top   = 1.4*cm
+        fld.width = 8*cm
+        fld.height = 0.7*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_2'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_2'
+        fld.top   = 2.2*cm
+        fld.width = 8*cm
+        fld.height = 0.7*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_3'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
+        fld.top   = 3*cm
+        fld.width = 8*cm
+        fld.height = 0.45*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_4'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_4'
+        fld.top   = 3.4*cm
+        fld.width = 8*cm
+        fld.height = 0.45*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        return elements
+
+    def dados_emitente_logo_vertical(self, arquivo_imagem):
+        elements = []
+
+        #
+        # Dados do remetente
+        #
+        img = Image()
+        img.top = 0.1*cm
+        img.left = 0.1*cm
+        #
+        # Tamanhos equilaventes, em centímetros, a 2,5 x 3,8, em 128 dpi
+        # estranhamente, colocar os tamanhos em centímetros encolhe a imagem
+        #
+        img.width = 116
+        img.height = 191
+        img.filename = arquivo_imagem
+        elements.append(img)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_nome'
+        fld.attribute_name = u'NFe.infNFe.emit.xNome.valor'
+        fld.top   = 0.2*cm
+        fld.left  = 2.5*cm
+        fld.width = 5.5*cm
+        fld.height = 1.5*cm
+        fld.style = EMIT_NOME
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_1'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_1'
+        fld.top   = 1.4*cm
+        fld.left  = 2.5*cm
+        fld.width = 5.5*cm
+        fld.height = 0.7*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_2'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_2'
+        fld.top   = 2.2*cm
+        fld.left  = 2.5*cm
+        fld.width = 5.5*cm
+        fld.height = 0.7*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_3'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
+        fld.top   = 3*cm
+        fld.left  = 2.5*cm
+        fld.width = 5.5*cm
+        fld.height = 0.45*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_4'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_4'
+        fld.top   = 3.4*cm
+        fld.left  = 2.5*cm
+        fld.width = 5.5*cm
+        fld.height = 0.45*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        return elements
+
+    def dados_emitente_logo_horizontal(self, arquivo_imagem):
+        elements = []
+
+        #
+        # Dados do remetente
+        #
+        img = Image()
+        img.top = 0.1*cm
+        img.left = 0.1*cm
+        #
+        # Tamanhos equilaventes, em centímetros, a 3,8 x 2,5, em 128 dpi
+        # estranhamente, colocar os tamanhos em centímetros encolhe a imagem
+        #
+        img.width = 191
+        img.height = 116
+        img.filename = arquivo_imagem
+        elements.append(img)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_nome'
+        fld.attribute_name = u'NFe.infNFe.emit.xNome.valor'
+        fld.top   = 0.2*cm
+        fld.left  = 4*cm
+        fld.width = 4*cm
+        fld.height = 1.4*cm
+        fld.style = EMIT_NOME
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_3'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
+        fld.top   = 1.7*cm
+        fld.left  = 4*cm
+        fld.width = 4*cm
+        fld.height = 0.45*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_4'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_4'
+        fld.top   = 2.05*cm
+        fld.left  = 4*cm
+        fld.width = 4*cm
+        fld.height = 0.45*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_1'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_1'
+        fld.top   = 2.5*cm
+        fld.left  = 0*cm
+        fld.width = 8*cm
+        fld.height = 0.7*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome  = 'fld_rem_endereco_2'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_2'
+        fld.top   = 3.2*cm
+        fld.left  = 0*cm
+        fld.width = 8*cm
+        fld.height = 0.7*cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+
+        return elements
 
 
 class DestinatarioRetrato(BandaDANFE):
@@ -306,43 +603,6 @@ class CalculoImpostoRetrato(BandaDANFE):
 
         self.height = 1.82*cm
 
-    def monta_obs_cancelamento(self):
-        txt = Texto()
-        txt.name   = 'txt_obs_cancelamento'
-        txt.text   = u'cancelada'
-        txt.top    = -0.1*cm
-        txt.left   = 4.7*cm
-        txt.width  = 10*cm
-        txt.height = 1.5*cm
-        txt.padding_top = 0.1*cm
-        txt.style  = OBS_CANCELAMENTO
-        self.elements.insert(0, txt)
-
-        lbl = LabelMargemEsquerda()
-        lbl.borders = None
-        lbl.name = 'lbl_prot_cancelamento'
-        lbl.text = u'PROTOCOLO<br />DE CANCELAMENTO'
-        lbl.top = 1.75*cm
-        lbl.left = 6.15*cm
-        lbl.width = 1.75*cm
-        lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
-        self.elements.append(lbl)
-
-        fld = Campo()
-        fld.name = 'fld_prot_cancelamento'
-        fld.attribute_name = u'retCancNFe.protocolo_formatado'
-        fld.top  = 1.55*cm
-        fld.left = 7.5*cm
-        fld.width = 6.3*cm
-        fld.padding_top = 0.25*cm
-        fld.style = DADO_VARIAVEL_CANCELAMENTO
-
-        self.elements.insert(2, fld)
-
-
-            #lbl, lbl = self.inclui_campo(nome='remetente_var2', titulo=u'PROTOCOLO DE AUTORIZAÇÃO DE USO', conteudo=u'protNFe.protocolo_formatado', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
-            #lbl.style = DADO_VARIAVEL
-
 
 class TransporteRetrato(BandaDANFE):
     def __init__(self):
@@ -470,14 +730,25 @@ class ISSRetrato(BandaDANFE):
     def __init__(self):
         super(ISSRetrato, self).__init__()
         self.elements = []
+
+        # Cálculo do ISS
         self.inclui_descritivo(nome='iss', titulo=u'CÁLCULO DO ISSQN', top=0*cm, left=0*cm, width=19.4*cm)
+        lbl, fld = self.inclui_campo(nome='iss_im', titulo=u'INSCRIÇÃO MUNICIPAL', conteudo=u'NFe.infNFe.emit.IM.valor', top=0.42*cm, left=0*cm, width=4.85*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='iss_vr_servico', titulo=u'VALOR TOTAL DOS SERVIÇOS', conteudo=u'NFe.infNFe.total.ISSQNTot.vServ.formato_danfe', top=0.42*cm, left=4.85*cm, width=4.85*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='iss_bc', titulo=u'BASE DE CÁLCULO DO ISSQN', conteudo=u'NFe.infNFe.total.ISSQNTot.vBC.formato_danfe', top=0.42*cm, left=9.7*cm, width=4.85*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='iss_vr_iss', titulo=u'VALOR DO ISSQN', conteudo=u'NFe.infNFe.total.ISSQNTot.vISS.formato_danfe', top=0.42*cm, left=14.55*cm, width=4.85*cm, margem_direita=True)
 
-        self.inclui_texto(nome='iss', titulo=u'INSCRIÇÃO MUNICIPAL', texto='', top=0.42*cm, left=0*cm, width=4.85*cm)
-        self.inclui_texto_numerico(nome='iss', titulo=u'VALOR TOTAL DOS SERVIÇOS', texto='9.999.999.999,99', top=0.42*cm, left=4.85*cm, width=4.85*cm)
-        self.inclui_texto_numerico(nome='iss', titulo=u'BASE DE CÁLCULO DO ISSQN', texto='9.999.999.999,99', top=0.42*cm, left=9.7*cm, width=4.85*cm)
-        self.inclui_texto_numerico(nome='iss', titulo=u'VALOR DO ISSQN', texto='9.999.999.999,99', top=0.42*cm, left=14.55*cm, width=4.85*cm)
+        # Dados adicionais
+        self.inclui_descritivo(nome='clc', titulo=u'DADOS ADICIONAIS', top=1.12*cm, left=0*cm, width=19.4*cm)
+        lbl, txt = self.inclui_campo(nome='', titulo='INFORMAÇÕES COMPLEMENTARES', conteudo='NFe.dados_adicionais', top=1.54*cm, left=0*cm, width=11.7*cm, height=4*cm)
+        txt.style = DADO_COMPLEMENTAR
+        self.inclui_texto(nome='', titulo='RESERVADO AO FISCO', texto='', top=1.54*cm, left=11.7*cm, width=7.7*cm, height=4*cm, margem_direita=True)
 
-        self.height = 1.12*cm
+        fld = DANFERetrato.ObsImpressao()
+        fld.top = 5.54*cm
+        self.elements.append(fld)
+
+        self.height = 5.54*cm
 
 
 class DadosAdicionaisRetrato(BandaDANFE):
@@ -489,56 +760,22 @@ class DadosAdicionaisRetrato(BandaDANFE):
         lbl, txt = self.inclui_campo(nome='', titulo='INFORMAÇÕES COMPLEMENTARES', conteudo='NFe.dados_adicionais', top=0.42*cm, left=0*cm, width=11.7*cm, height=4*cm)
         txt.style = DADO_COMPLEMENTAR
         self.inclui_texto(nome='', titulo='RESERVADO AO FISCO', texto='', top=0.42*cm, left=11.7*cm, width=7.7*cm, height=4*cm, margem_direita=True)
-        #self.inclui_texto_sem_borda(nome='', texto='Impresso no dia ', top=4.1*cm, left=0.1*cm, width=5*cm, height=0.2*cm)
+
+        fld = DANFERetrato.ObsImpressao()
+        fld.top = 4.42*cm
+        self.elements.append(fld)
 
         self.height = 4.42*cm
         #self.height = 4.62*cm
 
 
-class ObsContingenciaNormalRetrato(Texto):
+class RodapeFinalRetrato(BandaDANFE):
     def __init__(self):
-        super(ObsContingenciaNormalRetrato, self).__init__()
-        self.name  = 'txt_obs_contingencia'
-        self.text  = u'DANFE em contingência<br /><br />impresso em decorrência de problemas técnicos'
-        self.top   = 4*cm
-        self.left  = 0*cm
-        self.width = 19.4*cm
-        self.padding_top = 0.1*cm
-        self.style = OBS_CONTINGENCIA
+        super(RodapeFinalRetrato, self).__init__()
+        self.elements = []
+        self.height = 0.1*cm
 
-
-class ObsContingenciaDPECRetrato(Texto):
-    def __init__(self):
-        super(ObsContingenciaDPECRetrato, self).__init__()
-        self.name  = 'txt_obs_contingencia'
-        self.text  = u'DANFE em contingência<br /><br />DPEC regularmente recebida pela Receita Federal do Brasil'
-        self.top   = 4*cm
-        self.left  = 0*cm
-        self.width = 19.4*cm
-        self.padding_top = 0.1*cm
-        self.style = OBS_CONTINGENCIA
-
-
-class ObsHomologacaoRetrato(Texto):
-    def __init__(self):
-        super(ObsHomologacaoRetrato, self).__init__()
-        self.name  = 'txt_obs_homologacao'
-        self.text  = u'sem valor fiscal'
-        self.top   = 1*cm
-        self.left  = 0*cm
-        self.width = 19.4*cm
-        self.padding_top = 0.1*cm
-        self.style = OBS_HOMOLOGACAO
-
-
-class ObsCancelamentoRetrato(Texto):
-    def __init__(self):
-        super(ObsCancelamentoRetrato, self).__init__()
-        self.name   = 'txt_obs_cancelamento'
-        self.text   = u'cancelada'
-        self.top    = 0.15*cm
-        self.left   = 5.7*cm
-        self.width  = 8*cm
-        self.height = 1.5*cm
-        self.padding_top = 0.1*cm
-        self.style  = OBS_CANCELADA
+        # Obs de impressão
+        fld = DANFERetrato.ObsImpressao()
+        fld.top = 0.1*cm
+        self.elements.append(fld)
