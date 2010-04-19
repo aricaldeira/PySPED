@@ -20,9 +20,9 @@ class InfCancEnviado(XMLNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        
+
         self.Id.valor = u'ID' + self.chNFe.valor
-        
+
         xml += self.Id.xml
         xml += self.tpAmb.xml
         xml += self.xServ.xml
@@ -31,7 +31,7 @@ class InfCancEnviado(XMLNFe):
         xml += self.xJust.xml
         xml += u'</infCanc>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml    = arquivo
@@ -40,7 +40,7 @@ class InfCancEnviado(XMLNFe):
             self.chNFe.xml = arquivo
             self.nProt.xml = arquivo
             self.xJust.xml = arquivo
-        
+
     xml = property(get_xml, set_xml)
 
 
@@ -50,9 +50,9 @@ class CancNFe(XMLNFe):
         self.versao    = TagDecimal(nome=u'cancNFe', codigo=u'CP01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
         self.infCanc   = InfCancEnviado()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/') 
+        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'cancNFe_v1.07.xsd'
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
@@ -122,7 +122,7 @@ class InfCancRecebido(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
-    
+
 class RetCancNFe(XMLNFe):
     def __init__(self):
         super(RetCancNFe, self).__init__()
@@ -131,16 +131,16 @@ class RetCancNFe(XMLNFe):
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'retCancNFe_v1.07.xsd'
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
         xml += self.infCanc.xml
-        
+
         if len(self.Signature.URI) and (self.Signature.URI.strip() != u'#'):
             xml += self.Signature.xml
-        
+
         xml += u'</retCancNFe>'
         return xml
 
@@ -150,6 +150,15 @@ class RetCancNFe(XMLNFe):
             self.Signature.xml = self._le_noh('//retCancNFe/sig:Signature')
 
     xml = property(get_xml, set_xml)
+
+    def protocolo_formatado(self):
+        if not self.infCanc.nProt.valor:
+            return u''
+
+        formatado = self.infCanc.nProt.valor
+        formatado += u' - '
+        formatado += self.infCanc.dhRecbto.formato_danfe()
+        return formatado
 
 
 class ProcCancNFe(XMLNFe):
