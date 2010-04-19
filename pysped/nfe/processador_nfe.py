@@ -714,6 +714,13 @@ class DANFE(object):
         self.retCancNFe = None
         self.danfe      = None
 
+        self.obs_impressao    = u'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
+        self.nome_sistema     = u''
+        self.site             = u''
+        self.logo             = u''
+        self.leiaute_logo_vertical = False
+        self.dados_emitente   = []
+
     def gerar_danfe(self):
         if self.NFe is None:
             raise ValueError(u'Não é possível gerar um DANFE sem a informação de uma NF-e')
@@ -729,6 +736,7 @@ class DANFE(object):
         #
         self.NFe.monta_chave()
         self.NFe.monta_dados_contingencia_fsda()
+        self.NFe.site = self.site
 
         for detalhe in self.NFe.infNFe.det:
             detalhe.NFe = self.NFe
@@ -744,81 +752,103 @@ class DANFE(object):
             self.danfe = DANFERetrato()
             self.danfe.queryset = self.NFe.infNFe.det
 
-            remetente = RemetenteRetrato()
+        if self.imprime_canhoto:
+            self.danfe.band_page_header = self.danfe.canhoto
+            self.danfe.band_page_header.child_bands = []
+            self.danfe.band_page_header.child_bands.append(self.danfe.remetente)
+        else:
+            self.danfe.band_page_header = self.danfe.remetente
+            self.danfe.band_page_header.child_bands = []
 
-            # Emissão para simples conferência / sem protocolo de autorização
-            if not self.protNFe.infProt.nProt.valor:
-                remetente.campo_variavel_conferencia()
+        # Emissão para simples conferência / sem protocolo de autorização
+        if not self.protNFe.infProt.nProt.valor:
+            self.danfe.remetente.campo_variavel_conferencia()
 
-            # Emissão em contingência com FS ou FSDA
-            elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):
-                remetente.campo_variavel_contingencia_fsda()
-                remetente.elements.insert(0, ObsContingenciaNormalRetrato())
+        # Emissão em contingência com FS ou FSDA
+        elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):
+            self.danfe.remetente.campo_variavel_contingencia_fsda()
+            self.danfe.remetente.obs_contingencia_normal_scan()
 
-            # Emissão em contingência com DPEC
-            elif self.NFe.infNFe.ide.tpEmis.valor == 4:
-                remetente.campo_variavel_contingencia_dpec()
-                remetente.elements.insert(0, ObsContingenciaDPECRetrato())
+        # Emissão em contingência com DPEC
+        elif self.NFe.infNFe.ide.tpEmis.valor == 4:
+            self.danfe.remetente.campo_variavel_contingencia_dpec()
+            self.danfe.remetente.obs_contingencia_dpec()
 
-            # Emissão normal ou contingência SCAN
+        # Emissão normal ou contingência SCAN
+        else:
+            self.danfe.remetente.campo_variavel_normal()
+            # Contingência SCAN
+            if self.NFe.infNFe.ide.tpEmis.valor == 3:
+                self.danfe.remetente.obs_contingencia_normal_scan()
+
+        # A NF-e foi cancelada, no DANFE imprimir o "carimbo" de cancelamento
+        if self.retCancNFe.infCanc.nProt.valor:
+            self.danfe.remetente.obs_cancelamento()
+
+        # Observação de ausência de valor fiscal
+        # se não houver protocolo ou se o ambiente for de homologação
+        if (not self.protNFe.infProt.nProt.valor) or self.NFe.infNFe.ide.tpAmb.valor == 2:
+            self.danfe.remetente.obs_sem_valor_fiscal()
+
+        self.danfe.band_page_header.child_bands.append(self.danfe.destinatario)
+
+        if self.imprime_local_retirada and len(self.NFe.infNFe.retirada.xml):
+            self.danfe.band_page_header.child_bands.append(self.danfe.local_retirada)
+
+        if self.imprime_local_entrega and len(self.NFe.infNFe.entrega.xml):
+            self.danfe.band_page_header.child_bands.append(self.danfe.local_entrega)
+
+        if self.imprime_fatura:
+            # Pagamento à vista
+            if self.NFe.infNFe.ide.indPag.valor == 0:
+                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_vista)
+
+            # Pagamento a prazo ou outros
             else:
-                remetente.campo_variavel_normal()
+                if self.imprime_duplicatas:
+                    self.danfe.fatura_a_prazo.elements.append(self.danfe.duplicatas)
 
-            if self.imprime_canhoto:
-                self.danfe.band_page_header = CanhotoRetrato()
-                self.danfe.band_page_header.child_bands = []
-                self.danfe.band_page_header.child_bands.append(remetente)
+                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_prazo)
+
+        self.danfe.band_page_header.child_bands.append(self.danfe.calculo_imposto)
+        self.danfe.band_page_header.child_bands.append(self.danfe.transporte)
+        self.danfe.band_page_header.child_bands.append(self.danfe.cab_produto)
+
+        if self.imprime_issqn and len(self.NFe.infNFe.total.ISSQNTot.xml):
+            self.danfe.band_page_footer = self.danfe.iss
+        else:
+            self.danfe.band_page_footer = self.danfe.dados_adicionais
+
+        self.danfe.band_detail = self.danfe.det_produto
+
+        #
+        # Observação de impressão
+        #
+        if self.nome_sistema:
+            self.danfe.ObsImpressao.expression = self.nome_sistema + u' - ' + self.obs_impressao
+        else:
+            self.danfe.ObsImpressao.expression = self.obs_impressao
+
+        #
+        # Quadro do emitente
+        #
+        # Personalizado?
+        if self.dados_emitente:
+            self.danfe.remetente.monta_quadro_emitente(self.dados_emitente)
+        else:
+            # Sem logotipo
+            if not self.logo:
+                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_sem_logo())
+
+            # Logotipo na vertical
+            elif self.leiaute_logo_vertical:
+                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_vertical(self.logo))
+
+            # Logotipo na horizontal
             else:
-                self.danfe.band_page_header = remetente
-                self.danfe.band_page_header.child_bands = []
+                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_horizontal(self.logo))
 
-            self.danfe.band_page_header.child_bands.append(DestinatarioRetrato())
 
-            if self.imprime_local_retirada and len(self.NFe.infNFe.retirada.xml):
-                self.danfe.band_page_header.child_bands.append(LocalRetiradaRetrato())
-
-            if self.imprime_local_entrega and len(self.NFe.infNFe.entrega.xml):
-                self.danfe.band_page_header.child_bands.append(LocalEntregaRetrato())
-
-            if self.imprime_fatura:
-                # Pagamento à vista
-                if self.NFe.infNFe.ide.indPag.valor == 0:
-                    self.danfe.band_page_header.child_bands.append(FaturaAVistaRetrato())
-
-                # Pagamento a prazo ou outros
-                else:
-                    fatura_a_prazo = FaturaAPrazoRetrato()
-
-                    if self.imprime_duplicatas:
-                        fatura_a_prazo.elements.append(DuplicatasRetrato())
-
-                    self.danfe.band_page_header.child_bands.append(fatura_a_prazo)
-
-            calculoimposto = CalculoImpostoRetrato()
-
-            # A NF-e foi cancelada, no DANFE imprimir o "carimbo" de cancelamento
-            if self.retCancNFe.infCanc.nProt.valor:
-                calculoimposto.monta_obs_cancelamento()
-
-            self.danfe.band_page_header.child_bands.append(calculoimposto)
-            self.danfe.band_page_header.child_bands.append(TransporteRetrato())
-
-            cab_produtos = CabProdutoRetrato()
-
-            # Observação de ausência de valor fiscal
-            # se não houver protocolo ou se o ambiente for de homologação
-            if (not self.protNFe.infProt.nProt.valor) or self.NFe.infNFe.ide.tpAmb.valor == 2:
-                cab_produtos.elements.append(ObsHomologacaoRetrato())
-
-            self.danfe.band_page_header.child_bands.append(cab_produtos)
-
-            if self.imprime_issqn and len(self.NFe.infNFe.total.ISSQNTot.xml):
-                self.danfe.band_page_footer = ISSRetrato()
-            else:
-                self.danfe.band_page_footer = DadosAdicionaisRetrato()
-
-            self.danfe.band_detail = DetProdutoRetrato()
-
-            if self.salvar_arquivo:
-                nome_arq = self.caminho + self.NFe.chave + u'.pdf'
-                self.danfe.generate_by(PDFGenerator, filename=nome_arq)
+        if self.salvar_arquivo:
+            nome_arq = self.caminho + self.NFe.chave + u'.pdf'
+            self.danfe.generate_by(PDFGenerator, filename=nome_arq)
