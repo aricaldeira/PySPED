@@ -3105,8 +3105,8 @@ class NFe(XMLNFe):
         elif self.infNFe.transp.modFrete.valor == 2:
             formatado = u'2-DE TERCEIROS'
 
-        elif self.infNFe.transp.modFrete.valor == 3:
-            formatado = u'3-SEM FRETE'
+        elif self.infNFe.transp.modFrete.valor == 9:
+            formatado = u'9-SEM FRETE'
 
         else:
             formatado = u''

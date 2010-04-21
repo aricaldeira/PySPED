@@ -14,7 +14,7 @@ class ConsSitNFe(XMLNFe):
         self.versao = TagDecimal(nome=u'consSitNFe', codigo=u'EP01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
         self.tpAmb  = TagInteiro(nome=u'tpAmb'     , codigo=u'EP03', tamanho=[ 1,  1, 1], raiz=u'//consSitNFe', valor=2)
         self.xServ  = TagCaracter(nome=u'xServ'    , codigo=u'EP04', tamanho=[ 9,  9]   , raiz=u'//consSitNFe', valor=u'CONSULTAR')
-        self.chNFe  = TagCaracter(nome=u'chNFe'    , codigo=u'EP05', tamanho=[44, 44]   , raiz=u'//consSitNFe') 
+        self.chNFe  = TagCaracter(nome=u'chNFe'    , codigo=u'EP05', tamanho=[44, 44]   , raiz=u'//consSitNFe')
         self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'consSitNFe_v1.07.xsd'
 
@@ -40,16 +40,16 @@ class ConsSitNFe(XMLNFe):
 
 class InfProt(XMLNFe):
     '''Atenção!!!
-    
+
     Este grupo infProt é DIFERENTE do infProt do retorno do recibo do lote
-    
+
     Colocar esse infProt dentro do arquivo procNFe vai fazer com que o procNFe gerado
     seja INVALIDADO pelo XSD!!!
 
     Para transportar os valores desta infProt para a infProt do procNFe, é preciso usar
-    
+
     procNFe.protNFe.infProt.xml = este_infProt.xml
-    
+
     '''
     def __init__(self):
         super(InfProt, self).__init__()
@@ -57,7 +57,7 @@ class InfProt(XMLNFe):
         self.tpAmb     = TagInteiro(nome=u'tpAmb'    , codigo=u'ER05' , tamanho=[1,   1, 1], raiz=u'//infProt')
         self.verAplic  = TagCaracter(nome=u'verAplic', codigo=u'ER06' , tamanho=[1,  20]   , raiz=u'//infProt')
         self.cStat     = TagCaracter(nome=u'cStat'   , codigo=u'ER07' , tamanho=[1,   3]   , raiz=u'//infProt')
-        self.xMotivo   = TagCaracter(nome=u'xMotivo' , codigo=u'ER08' , tamanho=[1, 255]   , raiz=u'//infProt')
+        self.xMotivo   = TagCaracter(nome=u'xMotivo' , codigo=u'ER08' , tamanho=[1, 2000]  , raiz=u'//infProt')
         self.cUF       = TagInteiro(nome=u'cUF'      , codigo=u'ER08a', tamanho=[2,   2, 2], raiz=u'//infProt')
         self.chNFe     = TagCaracter(nome=u'chNFe'   , codigo=u'ER09' , tamanho=[44, 44]   , raiz=u'//infProt', obrigatorio=False)
         self.dhRecbto  = TagDataHora(nome=u'dhRecbto', codigo=u'ER10'                      , raiz=u'//infProt', obrigatorio=False)
@@ -83,7 +83,7 @@ class InfProt(XMLNFe):
         xml += self.digVal.xml
         xml += u'</infProt>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml        = arquivo
@@ -96,9 +96,9 @@ class InfProt(XMLNFe):
             self.dhRecbto.xml  = arquivo
             self.nProt.xml     = arquivo
             self.digVal.xml    = arquivo
-       
+
     xml = property(get_xml, set_xml)
-    
+
 
 class RetConsSitNFe(XMLNFe):
     def __init__(self):
@@ -117,7 +117,7 @@ class RetConsSitNFe(XMLNFe):
 
         if len(self.Signature.URI) and (self.Signature.URI.strip() != u'#'):
             xml += self.Signature.xml
-        
+
         xml += u'</retConsSitNFe>'
         return xml
 
