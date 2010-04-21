@@ -41,6 +41,7 @@ from manual_401 import ConsStatServ_200, RetConsStatServ_200
 # DANFE
 #
 from danfe.danferetrato import *
+from StringIO import StringIO
 
 
 class ProcessadorNFe(object):
@@ -53,6 +54,7 @@ class ProcessadorNFe(object):
         self.salvar_arquivos   = True
         self.contingencia_SCAN = False
         self.contingencia_SVAN = False
+        self.danfe             = DANFE()
 
         self._servidor     = u''
         self._url          = u''
@@ -121,10 +123,16 @@ class ProcessadorNFe(object):
             con.request(u'POST', u'/' + self._url, self._soap_envio.xml.encode(u'utf-8'), self._soap_envio.header)
             resp = con.getresponse()
 
-            t = resp.read()
+            # Dados da resposta para possível debug
+            self._soap_retorno.resposta.version  = resp.version
+            self._soap_retorno.resposta.status   = resp.status
+            self._soap_retorno.resposta.reason   = resp.reason
+            self._soap_retorno.resposta.msg      = resp.msg
+            self._soap_retorno.resposta.original = resp.read()
+
             # Tudo certo!
-            if resp.status == 200:
-                self._soap_retorno.xml = t
+            if self._soap_retorno.resposta.status == 200:
+                self._soap_retorno.xml = self._soap_retorno.resposta.original
         except Exception, e:
             print e
         else:
@@ -520,7 +528,6 @@ class ProcessadorNFe(object):
         #
         # Serviço em operação?
         #
-        #import pdb; pdb.set_trace()
         if proc_servico[WS_NFE_SITUACAO][u'resposta'].cStat.valor == u'107':
             #
             # Verificar se as notas já não foram emitadas antes
@@ -535,9 +542,9 @@ class ProcessadorNFe(object):
                 # Se a nota já constar na SEFAZ
                 #
                 if not (
-                    ((self.versao == u'1.10') and (proc_consulta[WS_NFE_CONSULTA][u'resposta'].infProt.cStat.valor == u'217'))
+                    ((self.versao == u'1.10') and (proc_consulta[WS_NFE_CONSULTA][u'resposta'].infProt.cStat.valor in (u'217', u'999',)))
                     or
-                    ((self.versao == u'2.00') and (proc_consulta[WS_NFE_CONSULTA][u'resposta'].cStat.valor == u'217'))
+                    ((self.versao == u'2.00') and (proc_consulta[WS_NFE_CONSULTA][u'resposta'].cStat.valor in (u'217', u'999',)))
                 ):
                     #
                     # Interrompe todo o processo
@@ -562,6 +569,8 @@ class ProcessadorNFe(object):
             if ret_envi_nfe.cStat.valor == u'103':
                 proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
 
+                print proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].original
+
                 # Montar os processos das NF-es
                 dic_protNFe = proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].dic_protNFe
                 dic_procNFe = proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].dic_procNFe
@@ -580,7 +589,7 @@ class ProcessadorNFe(object):
                 if processo is not None:
                     dic_procNFe[nfe.chave] = processo
 
-    def montar_processo_uma_nota(self, nfe, protnfe_recibo=None, protnfe_consulta_110=None):
+    def montar_processo_uma_nota(self, nfe, protnfe_recibo=None, protnfe_consulta_110=None, retcancnfe=None):
         #
         # Somente para a versão 1.10
         # Caso processarmos o protocolo vindo de uma consulta,
@@ -593,7 +602,6 @@ class ProcessadorNFe(object):
         if protnfe_consulta_110 is not None:
             protnfe_recibo = ProtNFe_110()
             protnfe_recibo.xml = protnfe_consulta.xml
-
 
         caminho_original = self.caminho
         self.caminho = self._monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
@@ -610,6 +618,17 @@ class ProcessadorNFe(object):
             processo.NFe     = nfe
             processo.protNFe = protnfe_recibo
 
+            self.danfe.NFe     = nfe
+            self.danfe.protNFe = protnfe_recibo
+            self.danfe.salvar  = False
+            self.danfe.gerar_danfe()
+
+            danfe_pdf = StringIO()
+            self.danfe.danfe.generate_by(PDFGenerator, filename=danfe_pdf)
+            processo.danfe_pdf = danfe_pdf.getvalue()
+            print processo.danfe_pdf
+            danfe_pdf.close()
+
             if self.salvar_arquivos:
                 nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, u'0') + u'-proc-nfe.xml'
                 arq = open(nome_arq, 'w')
@@ -625,6 +644,11 @@ class ProcessadorNFe(object):
 
                 arq = open(nome_arq, 'w')
                 arq.write(processo.xml.encode(u'utf-8'))
+                arq.close()
+
+                nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, u'0') + u'.pdf'
+                arq = open(nome_arq, 'w')
+                arq.write(processo.danfe_pdf)
                 arq.close()
 
         self.caminho = caminho_original
