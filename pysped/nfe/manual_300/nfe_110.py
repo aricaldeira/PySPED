@@ -987,7 +987,7 @@ class ICMSCons(XMLNFe):
         self.UFcons        = TagCaracter(nome=u'UFcons'      , codigo=u'L120', tamanho=[2,  2],                        raiz=u'//det/prod/comb/ICMSCons')
 
     def get_xml(self):
-        if not (self.vBCICMSSTDest.valor or self.vICMSSTDest.valor):
+        if not (self.vBCICMSSTCons.valor or self.vICMSSTCons.valor):
             return u''
 
         xml = XMLNFe.get_xml(self)
