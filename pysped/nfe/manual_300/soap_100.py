@@ -13,7 +13,7 @@ class CabecMsg(XMLNFe):
         super(CabecMsg, self).__init__()
         self.versao      = TagDecimal(nome=u'cabecMsg'   , codigo=u''   , propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.02', raiz=u'//cabecMsg')
         self.versaoDados = TagDecimal(nome=u'versaoDados', codigo=u'A01', raiz=u'//cabecMsg', tamanho=[1, 4])
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/') 
+        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'cabecMsg_v1.02.xsd'
 
     def get_xml(self):
@@ -23,11 +23,11 @@ class CabecMsg(XMLNFe):
         xml += self.versaoDados.xml
         xml += u'</cabecMsg>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.versaoDados.xml = arquivo
-        
+
     xml = property(get_xml, set_xml)
 
 
@@ -35,7 +35,7 @@ class NFeCabecMsg(XMLNFe):
     def __init__(self):
         super(NFeCabecMsg, self).__init__()
         self.cabec = CabecMsg()
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += u'<nfeCabecMsg>'
@@ -54,7 +54,7 @@ class NFeDadosMsg(XMLNFe):
     def __init__(self):
         super(NFeDadosMsg, self).__init__()
         self.dados = None
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += u'<nfeDadosMsg>'
@@ -83,7 +83,9 @@ class SOAPEnvio(XMLNFe):
     def get_xml(self):
         self.nfeDadosMsg.dados = self.envio
         self.nfeCabecMsg.cabec.versaoDados.valor = self.envio.versao.valor
-        
+
+        self._header['SOAPAction'] = self.metodo
+
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += u'<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'
@@ -100,11 +102,11 @@ class SOAPEnvio(XMLNFe):
         pass
 
     xml = property(get_xml, set_xml)
-    
+
     def get_header(self):
         header = self._header
         return header
-        
+
     header = property(get_header)
 
 
@@ -114,7 +116,7 @@ class SOAPRetorno(XMLNFe):
         self.webservice = u''
         self.metodo = u''
         self.resposta = None
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
@@ -128,14 +130,14 @@ class SOAPRetorno(XMLNFe):
         xml +=     u'</soap:Body>'
         xml += u'</soap:Envelope>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             resposta = por_acentos(self._le_tag(u'//*/res:' + self.metodo + u'Result',  ns=(u'http://www.portalfiscal.inf.br/nfe/wsdl/' + self.webservice)))
             resposta = tira_abertura(resposta)
             #print resposta
             self.resposta.xml = resposta
-            
+
         return self.xml
-        
+
     xml = property(get_xml, set_xml)
