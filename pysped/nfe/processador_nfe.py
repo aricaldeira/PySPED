@@ -9,7 +9,7 @@ from webservices_flags import *
 import webservices_1
 import webservices_2
 
-from pysped.xml_sped.assinatura import assinar, verificar_assinatura
+from pysped.xml_sped.certificado import Certificado
 
 #
 # Manual do Contribuinte versão 3.00
@@ -61,7 +61,10 @@ class ProcessadorNFe(object):
         self._soap_envio   = None
         self._soap_retorno = None
 
-    def _conectar_servico(self, servico, envio, resposta):
+    def _conectar_servico(self, servico, envio, resposta, ambiente=None):
+        if ambiente is None:
+            ambiente = self.ambiente
+
         if self.versao == u'1.10':
             self._soap_envio   = SOAPEnvio_110()
             self._soap_envio.webservice = webservices_1.METODO_WS[servico]['webservice']
@@ -76,14 +79,14 @@ class ProcessadorNFe(object):
             self._soap_retorno.resposta   = resposta
 
             if self.contingencia_SCAN:
-                self._servidor = webservices_1.SCAN[self.ambiente][u'servidor']
-                self._url      = webservices_1.SCAN[self.ambiente][servico]
+                self._servidor = webservices_1.SCAN[ambiente][u'servidor']
+                self._url      = webservices_1.SCAN[ambiente][servico]
             elif self.contingencia_SVAN:
-                self._servidor = webservices_1.SVAN[self.ambiente][u'servidor']
-                self._url      = webservices_1.SVAN[self.ambiente][servico]
+                self._servidor = webservices_1.SVAN[ambiente][u'servidor']
+                self._url      = webservices_1.SVAN[ambiente][servico]
             else:
-                self._servidor = webservices_1.ESTADO_WS[self.estado][self.ambiente][u'servidor']
-                self._url      = webservices_1.ESTADO_WS[self.estado][self.ambiente][servico]
+                self._servidor = webservices_1.ESTADO_WS[self.estado][ambiente][u'servidor']
+                self._url      = webservices_1.ESTADO_WS[self.estado][ambiente][servico]
 
         elif self.versao == u'2.00':
             self._soap_envio   = SOAPEnvio_200()
@@ -98,45 +101,45 @@ class ProcessadorNFe(object):
             self._soap_retorno.resposta   = resposta
 
             if self.contingencia_SCAN:
-                self._servidor = webservices_2.SCAN[self.ambiente][u'servidor']
-                self._url      = webservices_2.SCAN[self.ambiente][servico]
+                self._servidor = webservices_2.SCAN[ambiente][u'servidor']
+                self._url      = webservices_2.SCAN[ambiente][servico]
             elif self.contingencia_SVAN:
-                self._servidor = webservices_2.SVAN[self.ambiente][u'servidor']
-                self._url      = webservices_2.SVAN[self.ambiente][servico]
+                self._servidor = webservices_2.SVAN[ambiente][u'servidor']
+                self._url      = webservices_2.SVAN[ambiente][servico]
             else:
-                self._servidor = webservices_2.ESTADO_WS[self.estado][self.ambiente][u'servidor']
-                self._url      = webservices_2.ESTADO_WS[self.estado][self.ambiente][servico]
+                self._servidor = webservices_2.ESTADO_WS[self.estado][ambiente][u'servidor']
+                self._url      = webservices_2.ESTADO_WS[self.estado][ambiente][servico]
 
 
-        try:
-            self.certificado.separa_certificado()
+        #try:
+        self.certificado.prepara_certificado_arquivo_pfx()
 
-            arq_tmp = open('/tmp/key.pem', 'w')
-            arq_tmp.write(self.certificado._chave)
-            arq_tmp.close()
+        arq_tmp = open('/tmp/key.pem', 'w')
+        arq_tmp.write(self.certificado.chave)
+        arq_tmp.close()
 
-            arq_tmp = open('/tmp/cert.pem', 'w')
-            arq_tmp.write(self.certificado._certificado)
-            arq_tmp.close()
+        arq_tmp = open('/tmp/cert.pem', 'w')
+        arq_tmp.write(self.certificado.certificado)
+        arq_tmp.close()
 
-            con = HTTPSConnection(self._servidor, key_file='/tmp/key.pem', cert_file='/tmp/cert.pem')
-            con.request(u'POST', u'/' + self._url, self._soap_envio.xml.encode(u'utf-8'), self._soap_envio.header)
-            resp = con.getresponse()
+        con = HTTPSConnection(self._servidor, key_file='/tmp/key.pem', cert_file='/tmp/cert.pem')
+        con.request(u'POST', u'/' + self._url, self._soap_envio.xml.encode(u'utf-8'), self._soap_envio.header)
+        resp = con.getresponse()
 
-            # Dados da resposta para possível debug
-            self._soap_retorno.resposta.version  = resp.version
-            self._soap_retorno.resposta.status   = resp.status
-            self._soap_retorno.resposta.reason   = resp.reason
-            self._soap_retorno.resposta.msg      = resp.msg
-            self._soap_retorno.resposta.original = resp.read()
+        # Dados da resposta para possível debug
+        self._soap_retorno.resposta.version  = resp.version
+        self._soap_retorno.resposta.status   = resp.status
+        self._soap_retorno.resposta.reason   = unicode(resp.reason.decode('utf-8'))
+        self._soap_retorno.resposta.msg      = resp.msg
+        self._soap_retorno.resposta.original = unicode(resp.read().decode('utf-8'))
 
-            # Tudo certo!
-            if self._soap_retorno.resposta.status == 200:
-                self._soap_retorno.xml = self._soap_retorno.resposta.original
-        except Exception, e:
-            print e
-        else:
-            con.close()
+        # Tudo certo!
+        if self._soap_retorno.resposta.status == 200:
+            self._soap_retorno.xml = self._soap_retorno.resposta.original
+        #except Exception, e:
+            #raise e
+        #else:
+        con.close()
 
     def enviar_lote(self, numero_lote=None, lista_nfes=[]):
         if self.versao == u'1.10':
@@ -156,7 +159,7 @@ class ProcessadorNFe(object):
 
         # Vamos assinar e validar todas as NF-e antes
         for nfe in lista_nfes:
-            assinar(u'NFe', nfe, self.certificado.arquivo, self.certificado.senha)
+            self.certificado.assina_xmlnfe(nfe)
             nfe.validar()
 
         envio.NFe = lista_nfes
@@ -223,7 +226,7 @@ class ProcessadorNFe(object):
             arq.write(envio.xml.encode(u'utf-8'))
             arq.close()
 
-        self._conectar_servico(WS_NFE_CONSULTA_RECIBO, envio, resposta)
+        self._conectar_servico(WS_NFE_CONSULTA_RECIBO, envio, resposta, ambiente)
 
         resposta.validar()
         if self.salvar_arquivos:
@@ -288,7 +291,7 @@ class ProcessadorNFe(object):
         envio.infCanc.nProt.valor = numero_protocolo
         envio.infCanc.xJust.valor = justificativa
 
-        assinar(u'cancNFe', envio, self.certificado.arquivo, self.certificado.senha)
+        self.certificado.assina_xmlnfe(envio)
 
         envio.validar()
         if self.salvar_arquivos:
@@ -296,7 +299,7 @@ class ProcessadorNFe(object):
             arq.write(envio.xml.encode(u'utf-8'))
             arq.close()
 
-        self._conectar_servico(WS_NFE_CANCELAMENTO, envio, resposta)
+        self._conectar_servico(WS_NFE_CANCELAMENTO, envio, resposta, ambiente)
 
         resposta.validar()
         if self.salvar_arquivos:
@@ -379,7 +382,7 @@ class ProcessadorNFe(object):
         envio.infInut.xJust.valor  = justificativa
 
         envio.gera_nova_chave()
-        assinar(u'inutNFe', envio, self.certificado.arquivo, self.certificado.senha)
+        self.certificado.assina_xmlnfe(envio)
 
         envio.validar()
         if self.salvar_arquivos:
@@ -387,7 +390,7 @@ class ProcessadorNFe(object):
             arq.write(envio.xml.encode(u'utf-8'))
             arq.close()
 
-        self._conectar_servico(WS_NFE_INUTILIZACAO, envio, resposta)
+        self._conectar_servico(WS_NFE_INUTILIZACAO, envio, resposta, ambiente)
 
         resposta.validar()
         if self.salvar_arquivos:
@@ -459,7 +462,7 @@ class ProcessadorNFe(object):
             arq.write(envio.xml.encode(u'utf-8'))
             arq.close()
 
-        self._conectar_servico(WS_NFE_CONSULTA, envio, resposta)
+        self._conectar_servico(WS_NFE_CONSULTA, envio, resposta, ambiente)
 
         resposta.validar()
         if self.salvar_arquivos:
@@ -502,7 +505,7 @@ class ProcessadorNFe(object):
             arq.write(envio.xml.encode(u'utf-8'))
             arq.close()
 
-        self._conectar_servico(WS_NFE_SITUACAO, envio, resposta)
+        self._conectar_servico(WS_NFE_SITUACAO, envio, resposta, ambiente)
 
         resposta.validar()
         if self.salvar_arquivos:
@@ -520,9 +523,10 @@ class ProcessadorNFe(object):
         nfe = lista_nfes[0]
         nfe.monta_chave()
         self.caminho = caminho_original
+        ambiente = nfe.infNFe.ide.tpAmb.valor
         self.caminho = self._monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
 
-        proc_servico = self.consultar_servico()
+        proc_servico = self.consultar_servico(ambiente=ambiente)
         yield proc_servico
 
         #
@@ -569,8 +573,6 @@ class ProcessadorNFe(object):
             if ret_envi_nfe.cStat.valor == u'103':
                 proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
 
-                print proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].original
-
                 # Montar os processos das NF-es
                 dic_protNFe = proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].dic_protNFe
                 dic_procNFe = proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].dic_procNFe
@@ -601,7 +603,14 @@ class ProcessadorNFe(object):
         #
         if protnfe_consulta_110 is not None:
             protnfe_recibo = ProtNFe_110()
-            protnfe_recibo.xml = protnfe_consulta.xml
+            protnfe_recibo.infProt.tpAmb.valor = protnfe_consulta.infProt.tpAmb.valor
+            protnfe_recibo.infProt.verAplic.valor = protnfe_consulta.infProt.verAplic.valor
+            protnfe_recibo.infProt.chNFe.valor = protnfe_consulta.infProt.chNFe.valor
+            protnfe_recibo.infProt.dhRecbto.valor = protnfe_consulta.infProt.dhRecbto.valor
+            protnfe_recibo.infProt.cStat.valor = protnfe_consulta.infProt.cStat.valor
+            protnfe_recibo.infProt.xMotivo.valor = protnfe_consulta.infProt.xMotivo.valor
+            protnfe_recibo.infProt.nProt.valor = protnfe_consulta.infProt.nProt.valor
+            protnfe_recibo.infProt.digVal.valor = protnfe_consulta.infProt.digVal.valor
 
         caminho_original = self.caminho
         self.caminho = self._monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
@@ -620,13 +629,12 @@ class ProcessadorNFe(object):
 
             self.danfe.NFe     = nfe
             self.danfe.protNFe = protnfe_recibo
-            self.danfe.salvar  = False
+            self.danfe.salvar_arquivo = False
             self.danfe.gerar_danfe()
 
             danfe_pdf = StringIO()
             self.danfe.danfe.generate_by(PDFGenerator, filename=danfe_pdf)
             processo.danfe_pdf = danfe_pdf.getvalue()
-            print processo.danfe_pdf
             danfe_pdf.close()
 
             if self.salvar_arquivos:
@@ -703,24 +711,6 @@ class ProcessadorNFe(object):
         return caminho
 
 
-class Certificado(object):
-    def __init__(self):
-        self.arquivo      = u''
-        self.senha        = u''
-        self._chave       = u''
-        self._certificado = u''
-
-    def separa_certificado(self):
-        # Lendo o arquivo pfx no formato pkcs12 como binario
-        pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
-
-        # Retorna a string decodificada da chave privada
-        self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
-
-        # Retorna a string decodificada do certificado
-        self._certificado = crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate())
-
-
 class DANFE(object):
     def __init__(self):
         self.imprime_canhoto        = True
@@ -787,6 +777,11 @@ class DANFE(object):
         # Emissão para simples conferência / sem protocolo de autorização
         if not self.protNFe.infProt.nProt.valor:
             self.danfe.remetente.campo_variavel_conferencia()
+
+        # NF-e denegada
+        elif self.protNFe.infProt.cStat.valor == u'110':
+            self.danfe.remetente.campo_variavel_denegacao()
+            self.danfe.remetente.obs_denegacao()
 
         # Emissão em contingência com FS ou FSDA
         elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):
@@ -871,7 +866,6 @@ class DANFE(object):
             # Logotipo na horizontal
             else:
                 self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_horizontal(self.logo))
-
 
         if self.salvar_arquivo:
             nome_arq = self.caminho + self.NFe.chave + u'.pdf'
