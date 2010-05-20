@@ -169,6 +169,14 @@ class RemetenteRetrato(BandaDANFE):
         lbl, lbl = self.inclui_campo(nome='remetente_var2', titulo=u'PROTOCOLO DE AUTORIZAÇÃO DE USO', conteudo=u'protNFe.protocolo_formatado', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
         lbl.style = DADO_VARIAVEL
 
+    def campo_variavel_denegacao(self):
+        txt = self.inclui_texto_sem_borda(nome='remetente_var1', texto=u'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais.', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
+        txt.padding_top = 0.2*cm
+        txt.style = DADO_VARIAVEL
+
+        lbl, lbl = self.inclui_campo(nome='remetente_var2', titulo=u'PROTOCOLO DE DENEGAÇÃO DE USO', conteudo=u'protNFe.protocolo_formatado', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
+        lbl.style = DADO_VARIAVEL
+
     def campo_variavel_contingencia_fsda(self):
         #
         # No caso dos códigos de barra, altura (height) e largura (width) se referem às barras, não à imagem
@@ -214,6 +222,42 @@ class RemetenteRetrato(BandaDANFE):
         fld = Campo()
         fld.name = 'fld_prot_cancelamento'
         fld.attribute_name = u'retCancNFe.protocolo_formatado'
+        #fld.top  = 1.55*cm
+        fld.top  = 5.15*cm
+        fld.left = 7.5*cm
+        fld.width = 6.3*cm
+        fld.padding_top = 0.25*cm
+        fld.style = DADO_VARIAVEL_CANCELAMENTO
+
+        self.elements.insert(2, fld)
+
+    def obs_denegacao(self):
+        txt = Texto()
+        txt.name   = 'txt_obs_denegacao'
+        txt.text   = u'denegada'
+        #txt.top    = -0.1*cm
+        txt.top    = 3.5*cm
+        txt.left   = 4.7*cm
+        txt.width  = 10*cm
+        txt.height = 1.5*cm
+        txt.padding_top = 0.1*cm
+        txt.style  = OBS_CANCELAMENTO
+        self.elements.insert(0, txt)
+
+        lbl = LabelMargemEsquerda()
+        lbl.borders = None
+        lbl.name = 'lbl_prot_denegacao'
+        lbl.text = u'PROTOCOLO<br />DE DENEGAÇÃO'
+        #lbl.top = 1.75*cm
+        lbl.top = 5.35*cm
+        lbl.left = 6.15*cm
+        lbl.width = 1.75*cm
+        lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
+        self.elements.append(lbl)
+
+        fld = Campo()
+        fld.name = 'fld_prot_denegacao'
+        fld.attribute_name = u'protNFe.protocolo_formatado'
         #fld.top  = 1.55*cm
         fld.top  = 5.15*cm
         fld.left = 7.5*cm
