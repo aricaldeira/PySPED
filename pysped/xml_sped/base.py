@@ -2,7 +2,7 @@
 
 from lxml import etree
 from StringIO import StringIO
-from datetime import datetime
+from datetime import datetime, date, time
 from decimal import Decimal
 import locale
 
@@ -27,7 +27,6 @@ class NohXML(object):
         if arquivo is None:
             return False
 
-        #print arquivo
         if not isinstance(arquivo, basestring):
             arquivo = etree.tounicode(arquivo)
             #self._xml = arquivo
@@ -35,9 +34,19 @@ class NohXML(object):
 
         #elif arquivo is not None:
         if arquivo is not None:
-            if arquivo[0] == u'<':
-                arquivo = StringIO(arquivo)
-            self._xml = etree.parse(arquivo)
+            if isinstance(arquivo, basestring):
+                if isinstance(arquivo, str):
+                    arquivo = unicode(arquivo.encode('utf-8'))
+                if u'<' in arquivo:
+                    self._xml = etree.fromstring(tira_abertura(arquivo))
+                else:
+                    arq = open(arquivo)
+                    txt = ''.join(arq.readlines())
+                    txt = tira_abertura(txt)
+                    arq.close()
+                    self._xml = etree.fromstring(txt)
+            else:
+                self._xml = etree.parse(arquivo)
             return True
 
         return False
@@ -252,7 +261,7 @@ class TagCaracter(NohXML):
 
     def get_text(self):
         if self.propriedade:
-            return u'%s=%s' % (self.propriedade, self._valor_string)
+            return u'%s_%s=%s' % (self.nome, self.propriedade, self._valor_string)
         else:
             return u'%s=%s' % (self.nome, self._valor_string)
 
@@ -286,7 +295,7 @@ class TagData(TagCaracter):
             else:
                 novo_valor = None
 
-        if isinstance(novo_valor, datetime) and self._valida(novo_valor):
+        if isinstance(novo_valor, (datetime, date,)) and self._valida(novo_valor):
             self._valor_data = novo_valor
             # Cuidado!!!
             # Aqui não dá pra usar a função strftime pois em alguns
@@ -316,7 +325,7 @@ class TagHora(TagData):
             else:
                 novo_valor = None
 
-        if isinstance(novo_valor, datetime) and self._valida(novo_valor):
+        if isinstance(novo_valor, (datetime, time,)) and self._valida(novo_valor):
             self._valor_data = novo_valor
             # Cuidado!!!
             # Aqui não dá pra usar a função strftime pois em alguns
@@ -558,7 +567,7 @@ class XMLNFe(NohXML):
         xml = tira_abertura(self.xml).encode(u'utf-8')
 
         esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-        esquema.assertValid(etree.fromstring(xml))
+        #esquema.assertValid(etree.fromstring(xml))
         #esquema.validate(etree.fromstring(xml))
 
         return esquema.error_log
@@ -633,7 +642,7 @@ def _tipo_para_string(valor, tipo, obrigatorio, dec_min):
     # Aqui não dá pra usar a função strftime pois em alguns
     # casos a data retornada é 01/01/0001 00:00:00
     # e a função strftime só aceita data com anos a partir de 1900
-    if (tipo in (u'd', u'h', u'dh')) and isinstance(valor, datetime):
+    if (tipo in (u'd', u'h', u'dh')) and isinstance(valor, (datetime, date, time,)):
         valor = formata_datahora(valor, tipo)
     elif (tipo == u'n') and isinstance(valor, (int, long, float, Decimal)):
         if isinstance(valor, (int, long, float)):
@@ -670,9 +679,9 @@ def _string_para_tipo(valor, tipo):
     return valor
 
 def formata_datahora(valor, tipo):
-    if (tipo == u'd') and isinstance(valor, datetime):
+    if (tipo == u'd') and isinstance(valor, (datetime, date,)):
         valor = u'%04d-%02d-%02d' % (valor.year, valor.month, valor.day)
-    elif (tipo == u'h') and isinstance(valor, datetime):
+    elif (tipo == u'h') and isinstance(valor, (datetime, time,)):
         valor = u'%02d:%02d:%02d' % (valor.hour, valor.minute, valor.second)
         valor = valor.strftime(u'%H:%M:%S')
     elif (tipo == u'dh') and isinstance(valor, datetime):
