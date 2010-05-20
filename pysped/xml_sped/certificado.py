@@ -19,6 +19,7 @@ class Certificado(object):
         self.chave       = u''
         self.certificado = u''
         self.emissor     = {}
+        self.proprietario = {}
         self.data_inicio_validade = None
         self.data_fim_validade    = None
         self._doc_xml    = None
@@ -28,7 +29,7 @@ class Certificado(object):
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
         # Retorna a string decodificada da chave privada
-        self._chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
+        self.chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
 
         # Retorna a string decodificada do certificado
         self.prepara_certificado_txt(crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()))
@@ -50,11 +51,12 @@ class Certificado(object):
             linhas_certificado.append(cert_txt[i:i+64] + '\n')
         linhas_certificado.append(u'-----END CERTIFICATE-----\n')
 
-        self._certificado = u''.join(linhas_certificado)
+        self.certificado = u''.join(linhas_certificado)
 
-        cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM, self._certificado)
+        cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM, self.certificado)
 
         self.emissor = dict(cert_openssl.get_issuer().get_components())
+        self.proprietario = dict(cert_openssl.get_subject().get_components())
 
         self.data_inicio_validade = datetime.strptime(cert_openssl.get_notBefore(), '%Y%m%d%H%M%SZ')
         self.data_fim_validade    = datetime.strptime(cert_openssl.get_notAfter(), '%Y%m%d%H%M%SZ')
@@ -73,8 +75,8 @@ class Certificado(object):
         ''' Desativa as funções criptográficas e de análise XML
         As funções devem ser chamadas na ordem inversa da ativação
         '''
-        xmlsec.cryptoShutdown()
-        xmlsec.cryptoAppShutdown()
+        #xmlsec.cryptoShutdown()
+        #xmlsec.cryptoAppShutdown()
         xmlsec.shutdown()
 
         libxml2.cleanupParser()
@@ -95,6 +97,9 @@ class Certificado(object):
         return xml
 
     def _prepara_doc_xml(self, xml):
+        if isinstance(xml, str):
+            xml = unicode(xml.encode('utf-8'))
+
         #
         # Determina o tipo de arquivo que vai ser assinado, procurando
         # pela tag correspondente
@@ -114,12 +119,37 @@ class Certificado(object):
         #
         xml = tira_abertura(xml)
         xml = ABERTURA + xml
-        xml = xml.replace(ABERTURA, ABERTURA + doctype).encode(u'utf-8')
+        xml = xml.replace(ABERTURA, ABERTURA + doctype)
 
         #
         # Remove todos os \n
         #
         xml = xml.replace(u'\n', u'')
+
+        return xml
+
+    def _finaliza_xml(self, xml):
+        if isinstance(xml, str):
+            xml = unicode(xml.decode('utf-8'))
+
+        #
+        # Determina o tipo de arquivo que vai ser assinado, procurando
+        # pela tag correspondente
+        #
+        if u'infNFe' in xml:
+            doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
+        elif u'infCanc' in xml:
+            doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
+        elif u'infInut' in xml:
+            doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+        else:
+            raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
+
+        #
+        # Remove o doctype e os \n acrescentados pela libxml2
+        #
+        xml = xml.replace(u'\n', u'')
+        xml = xml.replace(ABERTURA + doctype, ABERTURA)
 
         return xml
 
@@ -130,7 +160,7 @@ class Certificado(object):
         #
         # Colocamos o texto no avaliador XML
         #
-        doc_xml = libxml2.parseMemory(xml, len(xml))
+        doc_xml = libxml2.parseMemory(xml.encode('utf-8'), len(xml.encode('utf-8')))
 
         #
         # Separa o nó da assinatura
@@ -197,11 +227,7 @@ class Certificado(object):
         doc_xml.freeDoc()
         self._finaliza_funcoes_externas()
 
-        #
-        # Remove o doctype e os \n acrescentados pela libxml2
-        #
-        xml = xml.replace(u'\n', u'')
-        xml = xml.replace(ABERTURA + doctype, ABERTURA)
+        xml = self._finaliza_xml(xml)
 
         return xml
 
