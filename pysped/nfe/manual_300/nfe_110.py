@@ -830,7 +830,11 @@ class ICMS(XMLNFe):
             xml += self.pICMS.xml
             xml += self.vICMS.xml
             xml += self.modBCST.xml
-            xml += self.pMVAST.xml
+
+            # Somente quando for marge de valor agregado
+            if self.modBCST.valor == 4:
+                xml += self.pMVAST.xml
+
             xml += self.pRedBCST.xml
             xml += self.vBCST.xml
             xml += self.pICMSST.xml
@@ -845,7 +849,11 @@ class ICMS(XMLNFe):
 
         elif self.CST.valor == u'30':
             xml += self.modBCST.xml
-            xml += self.pMVAST.xml
+
+            # Somente quando for marge de valor agregado
+            if self.modBCST.valor == 4:
+                xml += self.pMVAST.xml
+
             xml += self.pRedBCST.xml
             xml += self.vBCST.xml
             xml += self.pICMSST.xml
@@ -872,7 +880,11 @@ class ICMS(XMLNFe):
             xml += self.pICMS.xml
             xml += self.vICMS.xml
             xml += self.modBCST.xml
-            xml += self.pMVAST.xml
+
+            # Somente quando for marge de valor agregado
+            if self.modBCST.valor == 4:
+                xml += self.pMVAST.xml
+
             xml += self.pRedBCST.xml
             xml += self.vBCST.xml
             xml += self.pICMSST.xml
@@ -885,7 +897,11 @@ class ICMS(XMLNFe):
             xml += self.pICMS.xml
             xml += self.vICMS.xml
             xml += self.modBCST.xml
-            xml += self.pMVAST.xml
+
+            # Somente quando for marge de valor agregado
+            if self.modBCST.valor == 4:
+                xml += self.pMVAST.xml
+
             xml += self.pRedBCST.xml
             xml += self.vBCST.xml
             xml += self.pICMSST.xml
