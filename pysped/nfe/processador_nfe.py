@@ -4,6 +4,7 @@ from httplib import HTTPSConnection, HTTPResponse
 from OpenSSL import crypto
 from datetime import datetime
 import os
+from uuid import uuid4
 
 from webservices_flags import *
 import webservices_1
@@ -44,17 +45,24 @@ from danfe.danferetrato import *
 from StringIO import StringIO
 
 
+class ProcessoNFe(object):
+    def __init__(self, webservice=0, envio=u'', resposta=u''):
+        self.webservice = webservice
+        self.envio = envio
+        self.resposta = resposta
+
+
 class ProcessadorNFe(object):
     def __init__(self):
-        self.ambiente          = 2
-        self.estado            = u'SP'
-        self.versao            = u'1.10'
-        self.certificado       = Certificado()
-        self.caminho           = u''
-        self.salvar_arquivos   = True
+        self.ambiente = 2
+        self.estado = u'SP'
+        self.versao = u'1.10'
+        self.certificado = Certificado()
+        self.caminho = u''
+        self.salvar_arquivos = True
         self.contingencia_SCAN = False
-        self.contingencia_SVAN = False
-        self.danfe             = DANFE()
+        self.danfe = DANFE()
+        self.caminho_temporario = u''
 
         self._servidor     = u''
         self._url          = u''
@@ -81,9 +89,6 @@ class ProcessadorNFe(object):
             if self.contingencia_SCAN:
                 self._servidor = webservices_1.SCAN[ambiente][u'servidor']
                 self._url      = webservices_1.SCAN[ambiente][servico]
-            elif self.contingencia_SVAN:
-                self._servidor = webservices_1.SVAN[ambiente][u'servidor']
-                self._url      = webservices_1.SVAN[ambiente][servico]
             else:
                 self._servidor = webservices_1.ESTADO_WS[self.estado][ambiente][u'servidor']
                 self._url      = webservices_1.ESTADO_WS[self.estado][ambiente][servico]
@@ -103,9 +108,6 @@ class ProcessadorNFe(object):
             if self.contingencia_SCAN:
                 self._servidor = webservices_2.SCAN[ambiente][u'servidor']
                 self._url      = webservices_2.SCAN[ambiente][servico]
-            elif self.contingencia_SVAN:
-                self._servidor = webservices_2.SVAN[ambiente][u'servidor']
-                self._url      = webservices_2.SVAN[ambiente][servico]
             else:
                 self._servidor = webservices_2.ESTADO_WS[self.estado][ambiente][u'servidor']
                 self._url      = webservices_2.ESTADO_WS[self.estado][ambiente][servico]
@@ -114,19 +116,39 @@ class ProcessadorNFe(object):
         #try:
         self.certificado.prepara_certificado_arquivo_pfx()
 
-        arq_tmp = open('/tmp/key.pem', 'w')
+        #
+        # Salva o certificado e a chave privada para uso na conexão HTTPS
+        # Salvamos como um arquivo de nome aleatório para evitar o conflito
+        # de uso de vários certificados e chaves diferentes na mesma máquina
+        # ao mesmo tempo
+        #
+        self.caminho_temporario = self.caminho_temporario or u'/tmp/'
+
+        nome_arq_chave = self.caminho_temporario + uuid4().hex
+        arq_tmp = open(nome_arq_chave, 'w')
         arq_tmp.write(self.certificado.chave)
         arq_tmp.close()
 
-        arq_tmp = open('/tmp/cert.pem', 'w')
+        nome_arq_certificado = self.caminho_temporario + uuid4().hex
+        arq_tmp = open(nome_arq_certificado, 'w')
         arq_tmp.write(self.certificado.certificado)
         arq_tmp.close()
 
-        con = HTTPSConnection(self._servidor, key_file='/tmp/key.pem', cert_file='/tmp/cert.pem')
+        con = HTTPSConnection(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
         con.request(u'POST', u'/' + self._url, self._soap_envio.xml.encode(u'utf-8'), self._soap_envio.header)
         resp = con.getresponse()
 
-        # Dados da resposta para possível debug
+        #
+        # Apagamos os arquivos do certificado e o da chave privada, para evitar
+        # um potencial risco de segurança; muito embora o uso da chave privada
+        # para assinatura exija o uso da senha, pode haver serviços que exijam
+        # apenas o uso do certificado para validar a identidade, independente
+        # da existência de assinatura digital
+        #
+        os.remove(nome_arq_chave)
+        os.remove(nome_arq_certificado)
+
+        # Dados da resposta salvos para possível debug
         self._soap_retorno.resposta.version  = resp.version
         self._soap_retorno.resposta.status   = resp.status
         self._soap_retorno.resposta.reason   = unicode(resp.reason.decode('utf-8'))
@@ -150,14 +172,12 @@ class ProcessadorNFe(object):
             envio = EnviNFe_200()
             resposta = RetEnviNFe_200()
 
-        processo = {
-            WS_NFE_ENVIO_LOTE: {
-                u'envio'   : envio,
-                u'resposta': resposta,
-            }
-        }
+        processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
 
-        # Vamos assinar e validar todas as NF-e antes
+        #
+        # Vamos assinar e validar todas as NF-e antes da transmissão, evitando
+        # rejeição na SEFAZ por incorreção no schema dos arquivos
+        #
         for nfe in lista_nfes:
             self.certificado.assina_xmlnfe(nfe)
             nfe.validar()
@@ -207,12 +227,7 @@ class ProcessadorNFe(object):
             envio = ConsReciNFe_200()
             resposta = RetConsReciNFe_200()
 
-        processo = {
-            WS_NFE_CONSULTA_RECIBO: {
-                u'envio'   : envio,
-                u'resposta': resposta,
-            }
-        }
+        processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_RECIBO, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
@@ -274,17 +289,12 @@ class ProcessadorNFe(object):
             envio = CancNFe_200()
             resposta = RetCancNFe_200()
 
-        processo = {
-            WS_NFE_CANCELAMENTO: {
-                u'envio'   : envio,
-                u'resposta': resposta,
-            }
-        }
+        processo = ProcessoNFe(webservice=WS_NFE_CANCELAMENTO, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
 
-        self.caminho = self._monta_caminho_nfe(ambiente=ambiente, chave_nfe=chave_nfe)
+        self.caminho = self.monta_caminho_nfe(ambiente=ambiente, chave_nfe=chave_nfe)
 
         envio.infCanc.tpAmb.valor = ambiente
         envio.infCanc.chNFe.valor = chave_nfe
@@ -302,6 +312,23 @@ class ProcessadorNFe(object):
         self._conectar_servico(WS_NFE_CANCELAMENTO, envio, resposta, ambiente)
 
         resposta.validar()
+
+        # Se for autorizado, monta o processo de cancelamento
+        if resposta.infCanc.cStat.valor == u'101':
+            if self.versao == u'1.10':
+                processo_cancelamento_nfe = ProcCancNFe_107()
+
+            elif self.versao == u'2.00':
+                processo_cancelamento_nfe = ProcCancNFe_200()
+
+            nome_arq = self.caminho + unicode(envio.infCanc.chNFe.valor).strip().rjust(44, u'0') + u'-proc-canc-nfe.xml'
+            processo_cancelamento_nfe.cancNFe = envio
+            processo_cancelamento_nfe.retCancNFe = resposta
+
+            processo_cancelamento_nfe.validar()
+
+            processo.processo_cancelamento_nfe = processo_cancelamento_nfe
+
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(envio.infCanc.chNFe.valor).strip().rjust(44, u'0') + u'-pro-can-'
 
@@ -317,18 +344,7 @@ class ProcessadorNFe(object):
 
             # Se for autorizado, monta o processo de cancelamento
             if resposta.infCanc.cStat.valor == u'101':
-                if self.versao == u'1.10':
-                    processo_cancelamento_nfe = ProcCancNFe_107()
-
-                elif self.versao == u'2.00':
-                    processo_cancelamento_nfe = ProcCancNFe_200()
-
                 nome_arq = self.caminho + unicode(envio.infCanc.chNFe.valor).strip().rjust(44, u'0') + u'-proc-canc-nfe.xml'
-                processo_cancelamento_nfe.cancNFe = envio
-                processo_cancelamento_nfe.retCancNFe = resposta
-
-                processo_cancelamento_nfe.validar()
-
                 arq = open(nome_arq, 'w')
                 arq.write(processo_cancelamento_nfe.xml.encode(u'utf-8'))
                 arq.close()
@@ -350,12 +366,7 @@ class ProcessadorNFe(object):
             envio = InutNFe_200()
             resposta = RetInutNFe_200()
 
-        processo = {
-            WS_NFE_CANCELAMENTO: {
-                u'envio'   : envio,
-                u'resposta': resposta,
-            }
-        }
+        processo = ProcessoNFe(webservice=WS_NFE_INUTILIZACAO, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
@@ -369,7 +380,7 @@ class ProcessadorNFe(object):
         if numero_final is None:
             numero_final = numero_inicial
 
-        self.caminho = self._monta_caminho_inutilizacao(ambiente=ambiente, serie=serie, numero_inicial=numero_inicial, numero_final=numero_final)
+        self.caminho = self.monta_caminho_inutilizacao(ambiente=ambiente, serie=serie, numero_inicial=numero_inicial, numero_final=numero_final)
 
         envio.infInut.tpAmb.valor  = ambiente
         envio.infInut.cUF.valor    = codigo_estado
@@ -393,6 +404,22 @@ class ProcessadorNFe(object):
         self._conectar_servico(WS_NFE_INUTILIZACAO, envio, resposta, ambiente)
 
         resposta.validar()
+
+        # Se for autorizada, monta o processo de inutilização
+        if resposta.infInut.cStat.valor == u'102':
+            if self.versao == u'1.10':
+                processo_inutilizacao_nfe = ProcInutNFe_107()
+
+            elif self.versao == u'2.00':
+                processo_inutilizacao_nfe = ProcInutNFe_200()
+
+            processo_inutilizacao_nfe.inutNFe = envio
+            processo_inutilizacao_nfe.retInutNFe = resposta
+
+            processo_inutilizacao_nfe.validar()
+
+            processo.processo_inutilizacao_nfe = processo_inutilizacao_nfe
+
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(envio.chave).strip().rjust(41, u'0') + u'-pro-inu-'
 
@@ -408,18 +435,7 @@ class ProcessadorNFe(object):
 
             # Se for autorizada, monta o processo de inutilização
             if resposta.infInut.cStat.valor == u'102':
-                if self.versao == u'1.10':
-                    processo_inutilizacao_nfe = ProcInutNFe_107()
-
-                elif self.versao == u'2.00':
-                    processo_inutilizacao_nfe = ProcInutNFe_200()
-
                 nome_arq = self.caminho + unicode(envio.chave).strip().rjust(41, u'0') + u'-proc-inut-nfe.xml'
-                processo_inutilizacao_nfe.inutNFe = envio
-                processo_inutilizacao_nfe.retInutNFe = resposta
-
-                processo_inutilizacao_nfe.validar()
-
                 arq = open(nome_arq, 'w')
                 arq.write(processo_inutilizacao_nfe.xml.encode(u'utf-8'))
                 arq.close()
@@ -432,7 +448,7 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def consultar_nota(self, ambiente=None, chave_nfe=None):
+    def consultar_nota(self, ambiente=None, chave_nfe=None, nfe=None):
         if self.versao == u'1.10':
             envio = ConsSitNFe_107()
             resposta = RetConsSitNFe_107()
@@ -441,17 +457,12 @@ class ProcessadorNFe(object):
             envio = ConsSitNFe_200()
             resposta = RetConsSitNFe_200()
 
-        processo = {
-            WS_NFE_CONSULTA: {
-                u'envio'   : envio,
-                u'resposta': resposta,
-            }
-        }
+        processo = ProcessoNFe(webservice=WS_NFE_CONSULTA, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
 
-        self.caminho = self._monta_caminho_nfe(ambiente, chave_nfe)
+        self.caminho = self.monta_caminho_nfe(ambiente, chave_nfe)
 
         envio.tpAmb.valor = ambiente
         envio.chNFe.valor = chave_nfe
@@ -465,6 +476,7 @@ class ProcessadorNFe(object):
         self._conectar_servico(WS_NFE_CONSULTA, envio, resposta, ambiente)
 
         resposta.validar()
+
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(chave_nfe).strip().rjust(44, u'0') + u'-sit.xml'
             arq = open(nome_arq, 'w')
@@ -482,12 +494,7 @@ class ProcessadorNFe(object):
             envio = ConsStatServ_200()
             resposta = RetConsStatServ_200()
 
-        processo = {
-            WS_NFE_SITUACAO: {
-                u'envio'   : envio,
-                u'resposta': resposta,
-            }
-        }
+        processo = ProcessoNFe(webservice=WS_NFE_SITUACAO, envio=envio, resposta=resposta)
 
         if ambiente is None:
             ambiente = self.ambiente
@@ -524,7 +531,7 @@ class ProcessadorNFe(object):
         nfe.monta_chave()
         self.caminho = caminho_original
         ambiente = nfe.infNFe.ide.tpAmb.valor
-        self.caminho = self._monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
+        self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
 
         proc_servico = self.consultar_servico(ambiente=ambiente)
         yield proc_servico
@@ -532,7 +539,7 @@ class ProcessadorNFe(object):
         #
         # Serviço em operação?
         #
-        if proc_servico[WS_NFE_SITUACAO][u'resposta'].cStat.valor == u'107':
+        if proc_servico.resposta.cStat.valor == u'107':
             #
             # Verificar se as notas já não foram emitadas antes
             #
@@ -546,9 +553,9 @@ class ProcessadorNFe(object):
                 # Se a nota já constar na SEFAZ
                 #
                 if not (
-                    ((self.versao == u'1.10') and (proc_consulta[WS_NFE_CONSULTA][u'resposta'].infProt.cStat.valor in (u'217', u'999',)))
+                    ((self.versao == u'1.10') and (proc_consulta.resposta.infProt.cStat.valor in (u'217', u'999',)))
                     or
-                    ((self.versao == u'2.00') and (proc_consulta[WS_NFE_CONSULTA][u'resposta'].cStat.valor in (u'217', u'999',)))
+                    ((self.versao == u'2.00') and (proc_consulta.resposta.cStat.valor in (u'217', u'999',)))
                 ):
                     #
                     # Interrompe todo o processo
@@ -561,11 +568,11 @@ class ProcessadorNFe(object):
             nfe = lista_nfes[0]
             nfe.monta_chave()
             self.caminho = caminho_original
-            self.caminho = self._monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
+            self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
             proc_envio = self.enviar_lote(lista_nfes=lista_nfes)
             yield proc_envio
 
-            ret_envi_nfe = proc_envio[WS_NFE_ENVIO_LOTE][u'resposta']
+            ret_envi_nfe = proc_envio.resposta
 
             #
             # Deu certo?
@@ -574,8 +581,8 @@ class ProcessadorNFe(object):
                 proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
 
                 # Montar os processos das NF-es
-                dic_protNFe = proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].dic_protNFe
-                dic_procNFe = proc_recibo[WS_NFE_CONSULTA_RECIBO]['resposta'].dic_procNFe
+                dic_protNFe = proc_recibo.resposta.dic_protNFe
+                dic_procNFe = proc_recibo.resposta.dic_procNFe
 
                 self.caminho = caminho_original
                 self.montar_processo_lista_notas(lista_nfes, dic_protNFe, dic_procNFe)
@@ -613,7 +620,7 @@ class ProcessadorNFe(object):
             protnfe_recibo.infProt.digVal.valor = protnfe_consulta.infProt.digVal.valor
 
         caminho_original = self.caminho
-        self.caminho = self._monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
+        self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
 
         processo = None
         # Se nota foi autorizada ou denegada
@@ -662,7 +669,7 @@ class ProcessadorNFe(object):
         self.caminho = caminho_original
         return processo
 
-    def _monta_caminho_nfe(self, ambiente, chave_nfe):
+    def monta_caminho_nfe(self, ambiente, chave_nfe):
         caminho = self.caminho
 
         if ambiente == 1:
@@ -684,7 +691,7 @@ class ProcessadorNFe(object):
 
         return caminho
 
-    def _monta_caminho_inutilizacao(self, ambiente=None, data=None, serie=None, numero_inicial=None, numero_final=None):
+    def monta_caminho_inutilizacao(self, ambiente=None, data=None, serie=None, numero_inicial=None, numero_final=None):
         caminho = self.caminho
 
         if ambiente == 1:
