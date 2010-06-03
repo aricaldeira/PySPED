@@ -3,6 +3,7 @@
 from pysped.xml_sped import *
 from pysped.nfe.manual_401 import ESQUEMA_ATUAL
 from pysped.nfe.manual_300 import conssitnfe_107
+from pysped.nfe.manual_401 import ProtNFe_200, RetCancNFe_200
 import os
 
 
@@ -15,7 +16,7 @@ class ConsSitNFe(conssitnfe_107.ConsSitNFe):
         self.versao = TagDecimal(nome=u'consSitNFe', codigo=u'EP01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'2.00', raiz=u'/')
         self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'consSitNFe_v2.00.xsd'
-   
+
 
 class RetConsSitNFe(conssitnfe_107.RetConsSitNFe):
     def __init__(self):
@@ -42,7 +43,13 @@ class RetConsSitNFe(conssitnfe_107.RetConsSitNFe):
         xml += self.xMotivo.xml
         xml += self.cUF.xml
         xml += self.chNFe.xml
-       
+
+        if self.protNFe is not None:
+            xml += self.protNFe.xml
+
+        if self.retCancNFe is not None:
+            xml += tira_abertura(self.retCancNFe.xml)
+
         xml += u'</retConsSitNFe>'
         return xml
 
@@ -56,5 +63,13 @@ class RetConsSitNFe(conssitnfe_107.RetConsSitNFe):
             self.cUF.xml       = arquivo
             self.chNFe.xml     = arquivo
 
+            if self._le_noh(u'//retConsSitNFe/protNFe') is not None:
+                self.protNFe = ProtNFe_200()
+                self.protNFe.xml = arquivo
+
+            if self._le_noh(u'//retConsSitNFe/retCancNFe') is not None:
+                self.retCancNFe = RetCancNFe_200()
+                self.retCancNFe.xml = arquivo
+
     xml = property(get_xml, set_xml)
- 
+
