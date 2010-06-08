@@ -203,7 +203,7 @@ class ProcessadorNFe(object):
 
         self._conectar_servico(WS_NFE_ENVIO_LOTE, envio, resposta)
 
-        resposta.validar()
+        #resposta.validar()
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(envio.idLote.valor).strip().rjust(15, u'0') + u'-rec'
 
@@ -243,7 +243,7 @@ class ProcessadorNFe(object):
 
         self._conectar_servico(WS_NFE_CONSULTA_RECIBO, envio, resposta, ambiente)
 
-        resposta.validar()
+        #resposta.validar()
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(envio.nRec.valor).strip().rjust(15, u'0') + u'-pro-rec'
 
@@ -311,7 +311,7 @@ class ProcessadorNFe(object):
 
         self._conectar_servico(WS_NFE_CANCELAMENTO, envio, resposta, ambiente)
 
-        resposta.validar()
+        #resposta.validar()
 
         # Se for autorizado, monta o processo de cancelamento
         if resposta.infCanc.cStat.valor == u'101':
@@ -403,7 +403,7 @@ class ProcessadorNFe(object):
 
         self._conectar_servico(WS_NFE_INUTILIZACAO, envio, resposta, ambiente)
 
-        resposta.validar()
+        #resposta.validar()
 
         # Se for autorizada, monta o processo de inutilização
         if resposta.infInut.cStat.valor == u'102':
@@ -475,7 +475,7 @@ class ProcessadorNFe(object):
 
         self._conectar_servico(WS_NFE_CONSULTA, envio, resposta, ambiente)
 
-        resposta.validar()
+        #resposta.validar()
 
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(chave_nfe).strip().rjust(44, u'0') + u'-sit.xml'
@@ -514,7 +514,7 @@ class ProcessadorNFe(object):
 
         self._conectar_servico(WS_NFE_SITUACAO, envio, resposta, ambiente)
 
-        resposta.validar()
+        #resposta.validar()
         if self.salvar_arquivos:
             arq = open(self.caminho + envio.data.strftime(u'%Y%m%dT%H%M%S') + u'-sta.xml', 'w')
             arq.write(envio.xml.encode(u'utf-8'))
