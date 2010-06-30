@@ -630,7 +630,16 @@ class IPI(XMLNFe):
             # Agora podemos ler os valores tranquilamente...
             #
             self.CST.xml      = arquivo
+            self.clEnq.xml    = arquivo
+            self.CNPJProd.xml = arquivo
+            self.cSelo.xml    = arquivo
+            self.qSelo.xml    = arquivo
+            self.cEnq.xml     = arquivo
             self.vBC.xml      = arquivo
+            self.qUnid.xml    = arquivo
+            self.vUnid.xml    = arquivo
+            self.pIPI.xml     = arquivo
+            self.vIPI.xml     = arquivo
 
     xml = property(get_xml, set_xml)
 
