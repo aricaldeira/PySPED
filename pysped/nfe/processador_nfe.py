@@ -2,6 +2,8 @@
 
 from httplib import HTTPSConnection, HTTPResponse
 from OpenSSL import crypto
+import socket
+import ssl
 from datetime import datetime
 import os
 from uuid import uuid4
@@ -50,6 +52,19 @@ class ProcessoNFe(object):
         self.webservice = webservice
         self.envio = envio
         self.resposta = resposta
+
+
+class ConexaoHTTPS(HTTPSConnection):
+    def connect(self):
+        "Connect to a host on a given (SSL) port."
+
+        sock = socket.create_connection((self.host, self.port),
+                                        self.timeout, self.source_address)
+        if self._tunnel_host:
+            self.sock = sock
+            self._tunnel()
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file,
+                                    ssl_version=ssl.PROTOCOL_SSLv3)
 
 
 class ProcessadorNFe(object):
@@ -134,7 +149,8 @@ class ProcessadorNFe(object):
         arq_tmp.write(self.certificado.certificado)
         arq_tmp.close()
 
-        con = HTTPSConnection(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
+        #con = HTTPSConnection(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
+        con = ConexaoHTTPS(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
         con.request(u'POST', u'/' + self._url, self._soap_envio.xml.encode(u'utf-8'), self._soap_envio.header)
         resp = con.getresponse()
 
@@ -825,16 +841,21 @@ class DANFE(object):
             self.danfe.band_page_header.child_bands.append(self.danfe.local_entrega)
 
         if self.imprime_fatura:
-            # Pagamento à vista
-            if self.NFe.infNFe.ide.indPag.valor == 0:
-                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_vista)
+        if self.imprime_fatura:
+            # Pagamento a prazo
+            if (self.NFe.infNFe.ide.indPag.valor == 1) or \
+                (len(self.NFe.infNFe.cobr.dup) > 1) or \
+                ((len(self.NFe.infNFe.cobr.dup) == 1) and \
+                (self.NFe.infNFe.cobr.dup[0].dVenc.xml > self.NFe.infNFe.ide.dEmi.xml)):
 
-            # Pagamento a prazo ou outros
-            else:
                 if self.imprime_duplicatas:
                     self.danfe.fatura_a_prazo.elements.append(self.danfe.duplicatas)
 
                 self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_prazo)
+
+            # Pagamento a vista
+            else:
+                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_vista)
 
         self.danfe.band_page_header.child_bands.append(self.danfe.calculo_imposto)
         self.danfe.band_page_header.child_bands.append(self.danfe.transporte)
