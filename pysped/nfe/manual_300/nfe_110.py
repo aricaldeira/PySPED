@@ -139,7 +139,16 @@ class TagCSTCOFINS(TagCaracter):
             self.grupo_cofins.qBCProd.obrigatorio   = True
             self.grupo_cofins.vAliqProd.obrigatorio = True
 
-        elif self.valor == u'99':
+        elif self.valor in (u'04', u'06', u'07', u'08', u'09'):
+            self.grupo_cofins.nome_tag = u'COFINSNT'
+            self.grupo_cofins.raiz_tag = u'//det/imposto/COFINS/COFINSNT'
+            #self.grupo_cofins.vBC.obrigatorio       = True
+            #self.grupo_cofins.pCOFINS.obrigatorio   = True
+            #self.grupo_cofins.vCOFINS.obrigatorio   = True
+            #self.grupo_cofins.qBCProd.obrigatorio   = True
+            #self.grupo_cofins.vAliqProd.obrigatorio = True
+
+        else:
             self.grupo_cofins.nome_tag = u'COFINSOutr'
             self.grupo_cofins.raiz_tag = u'//det/imposto/COFINS/COFINSOutr'
             self.grupo_cofins.vBC.obrigatorio       = True
@@ -148,14 +157,6 @@ class TagCSTCOFINS(TagCaracter):
             self.grupo_cofins.qBCProd.obrigatorio   = True
             self.grupo_cofins.vAliqProd.obrigatorio = True
 
-        else:
-            self.grupo_cofins.nome_tag = u'COFINSNT'
-            self.grupo_cofins.raiz_tag = u'//det/imposto/COFINS/COFINSNT'
-            #self.grupo_cofins.vBC.obrigatorio       = True
-            #self.grupo_cofins.pCOFINS.obrigatorio   = True
-            #self.grupo_cofins.vCOFINS.obrigatorio   = True
-            #self.grupo_cofins.qBCProd.obrigatorio   = True
-            #self.grupo_cofins.vAliqProd.obrigatorio = True
 
         #
         # Redefine a raiz para todas as tags do grupo COFINS
@@ -208,7 +209,7 @@ class COFINS(XMLNFe):
             xml += self.vAliqProd.xml
             xml += self.vCOFINS.xml
 
-        elif self.CST.valor != u'99':
+        elif self.CST.valor in (u'04', u'06', u'07', u'08', u'09'):
             pass
 
         else:
@@ -347,7 +348,16 @@ class TagCSTPIS(TagCaracter):
             self.grupo_pis.qBCProd.obrigatorio   = True
             self.grupo_pis.vAliqProd.obrigatorio = True
 
-        elif self.valor == u'99':
+        elif self.valor in (u'04', u'06', u'07', u'08', u'09'):
+            self.grupo_pis.nome_tag = u'PISNT'
+            self.grupo_pis.raiz_tag = u'//det/imposto/PIS/PISNT'
+            #self.grupo_pis.vBC.obrigatorio       = True
+            #self.grupo_pis.pPIS.obrigatorio      = True
+            #self.grupo_pis.vPIS.obrigatorio      = True
+            #self.grupo_pis.qBCProd.obrigatorio   = True
+            #self.grupo_pis.vAliqProd.obrigatorio = True
+
+        else:
             self.grupo_pis.nome_tag = u'PISOutr'
             self.grupo_pis.raiz_tag = u'//det/imposto/PIS/PISOutr'
             self.grupo_pis.vBC.obrigatorio       = True
@@ -356,14 +366,6 @@ class TagCSTPIS(TagCaracter):
             self.grupo_pis.qBCProd.obrigatorio   = True
             self.grupo_pis.vAliqProd.obrigatorio = True
 
-        else:
-            self.grupo_pis.nome_tag = u'PISNT'
-            self.grupo_pis.raiz_tag = u'//det/imposto/PIS/PISNT'
-            #self.grupo_pis.vBC.obrigatorio       = True
-            #self.grupo_pis.pPIS.obrigatorio      = True
-            #self.grupo_pis.vPIS.obrigatorio      = True
-            #self.grupo_pis.qBCProd.obrigatorio   = True
-            #self.grupo_pis.vAliqProd.obrigatorio = True
 
         #
         # Redefine a raiz para todas as tags do grupo PIS
@@ -416,7 +418,7 @@ class PIS(XMLNFe):
             xml += self.vAliqProd.xml
             xml += self.vPIS.xml
 
-        elif self.CST.valor != u'99':
+        elif self.CST.valor in (u'04', u'06', u'07', u'08', u'09'):
             pass
 
         else:
@@ -630,7 +632,16 @@ class IPI(XMLNFe):
             # Agora podemos ler os valores tranquilamente...
             #
             self.CST.xml      = arquivo
+            self.clEnq.xml    = arquivo
+            self.CNPJProd.xml = arquivo
+            self.cSelo.xml    = arquivo
+            self.qSelo.xml    = arquivo
+            self.cEnq.xml     = arquivo
             self.vBC.xml      = arquivo
+            self.qUnid.xml    = arquivo
+            self.vUnid.xml    = arquivo
+            self.pIPI.xml     = arquivo
+            self.vIPI.xml     = arquivo
 
     xml = property(get_xml, set_xml)
 
