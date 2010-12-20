@@ -1144,6 +1144,14 @@ class Det(nfe_110.Det):
         self.prod      = Prod()
         self.imposto   = Imposto()
 
+    def cst_formatado(self):
+        if self.imposto.regime_tributario != 1:
+            super(Det, self).cst_formatado()
+        
+        formatado = unicode(self.imposto.ICMS.orig.valor).zfill(1)
+        formatado += unicode(self.imposto.ICMS.CSOSN.valor).zfill(3)
+        return formatado
+
 
 class Compra(nfe_110.Compra):
     def __init__(self):
