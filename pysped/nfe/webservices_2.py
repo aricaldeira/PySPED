@@ -298,14 +298,14 @@ UFPR = {
         WS_NFE_SITUACAO         : u'NFENWebServices/services/nfeStatusServicoNF'
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'             : u'homologacao.nfe.fazenda.pr.gov.br',
-        WS_NFE_ENVIO_LOTE         : u'NFENWebServices/services/nfeRecepcao',
-        WS_NFE_CONSULTA_RECIBO : u'NFENWebServices/services/nfeRetRecepcao',
-        WS_NFE_CANCELAMENTO     : u'NFENWebServices/services/nfeCancelamentoNF',
-        WS_NFE_INUTILIZACAO     : u'NFENWebServices/services/nfeInutilizacaoNF',
-        WS_NFE_CONSULTA         : u'NFENWebServices/services/nfeConsultaNF',
-        WS_NFE_SITUACAO         : u'NFENWebServices/services/nfeStatusServicoNF'
-        }
+        u'servidor'             : u'homologacao.nfe2.fazenda.pr.gov.br',
+        WS_NFE_ENVIO_LOTE       : u'nfe/NFeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : u'nfe/NFeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : u'nfe/NFeCancelamento2',
+        WS_NFE_INUTILIZACAO     : u'nfe/NFeInutilizacao2',
+        WS_NFE_CONSULTA         : u'nfe/NFeConsulta2',
+        WS_NFE_SITUACAO         : u'nfe/NFeStatusServico2'
+    }
 }
 
 #UFPE = {
