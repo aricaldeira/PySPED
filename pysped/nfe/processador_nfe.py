@@ -841,7 +841,6 @@ class DANFE(object):
             self.danfe.band_page_header.child_bands.append(self.danfe.local_entrega)
 
         if self.imprime_fatura:
-        if self.imprime_fatura:
             # Pagamento a prazo
             if (self.NFe.infNFe.ide.indPag.valor == 1) or \
                 (len(self.NFe.infNFe.cobr.dup) > 1) or \
