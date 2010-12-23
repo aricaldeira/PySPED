@@ -104,12 +104,23 @@ class Certificado(object):
         # Determina o tipo de arquivo que vai ser assinado, procurando
         # pela tag correspondente
         #
+        
+        #
+        # XML da NF-e nacional
+        #
         if u'infNFe' in xml:
             doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
         elif u'infCanc' in xml:
             doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
         elif u'infInut' in xml:
             doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+            
+        #
+        # XML da NFS-e
+        #
+        elif u'ReqEnvioLoteRPS' in xml:
+            doctype = u'<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
+            
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
 
@@ -136,12 +147,23 @@ class Certificado(object):
         # Determina o tipo de arquivo que vai ser assinado, procurando
         # pela tag correspondente
         #
+
+        #
+        # XML da NF-e nacional
+        #
         if u'infNFe' in xml:
             doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
         elif u'infCanc' in xml:
             doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
         elif u'infInut' in xml:
             doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+
+        #
+        # XML da NFS-e
+        #
+        elif u'ReqEnvioLoteRPS' in xml:
+            doctype = u'<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
+
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
 
