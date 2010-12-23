@@ -9,6 +9,7 @@ import locale
 
 NAMESPACE_NFE = u'http://www.portalfiscal.inf.br/nfe'
 NAMESPACE_SIG = u'http://www.w3.org/2000/09/xmldsig#'
+NAMESPACE_NFSE = u'http://localhost:8080/WsNFe2/lote'
 ABERTURA = u'<?xml version="1.0" encoding="utf-8"?>'
 
 CAMINHO_ESQUEMA_110 = u'schema/pl_005d/'
@@ -52,7 +53,13 @@ class NohXML(object):
         return False
 
     def _preenche_namespace(self, tag):
-        tag = u'/nfe:'.join(tag.split(u'/')).replace(u'/nfe:/nfe:', u'//nfe:').replace(u'nfe:sig:', u'sig:')
+        #
+        # As tags da NFS-e já tem que vir com o namespace no caminho,
+        # e não dá certo acrescentar o ns a todos os nós com na NF-e
+        #
+        if u'nfse' not in tag:
+            tag = u'/nfe:'.join(tag.split(u'/')).replace(u'/nfe:/nfe:', u'//nfe:').replace(u'nfe:sig:', u'sig:')
+
         return tag
 
     def _le_nohs(self, tag, ns=None):
@@ -70,14 +77,14 @@ class NohXML(object):
         #
         # Não deu certo, tem que botar mesmo os namespaces
         #
-        namespaces = {u'nfe': NAMESPACE_NFE, u'sig': NAMESPACE_SIG}
+        namespaces = {u'nfe': NAMESPACE_NFE, u'sig': NAMESPACE_SIG, u'nfse': NAMESPACE_NFSE}
 
         if ns is not None:
             namespaces[u'res'] = ns
 
         if not tag.startswith(u'//*/res'):
             tag = self._preenche_namespace(tag)
-
+            
         nohs = self._xml.xpath(tag, namespaces=namespaces)
 
         if len(nohs) >= 1:
@@ -267,6 +274,78 @@ class TagCaracter(NohXML):
 
     text = property(get_text)
 
+
+class TagBoolean(TagCaracter):
+    def __init__(self, **kwargs):
+        super(TagBoolean, self).__init__(**kwargs)
+        self._valor_boolean = None
+        # Codigo para dinamizar a criacao de instancias de entidade,
+        # aplicando os valores dos atributos na instanciacao
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+        if kwargs.has_key('valor'):
+            self.valor = kwargs['valor']
+            
+
+    def _testa_obrigatorio(self, valor):
+        # No caso da tag booleana, False deve ser tratado como preenchido
+        if self.obrigatorio and (valor == None):
+            return ErroObrigatorio(self.codigo, self.nome, self.propriedade)
+
+    def _valida(self, valor):
+        self.alertas = []
+
+        if self._testa_obrigatorio(valor):
+            self.alertas.append(self._testa_obrigatorio(valor))
+
+        return self.alertas == []
+
+    def set_valor(self, novo_valor):
+        if isinstance(novo_valor, basestring):
+            if novo_valor.lower() == u'true':
+                novo_valor = True
+            elif novo_valor.lower() == u'false':
+                novo_valor = False
+            else:
+                novo_valor = None
+
+        if isinstance(novo_valor, bool) and self._valida(novo_valor):
+            self._valor_boolean = novo_valor
+            
+            if novo_valor == None:
+                self._valor_string = u''
+            elif novo_valor:
+                self._valor_string = u'true'
+            else:
+                self._valor_string = u'false'
+        else:
+            self._valor_boolean = None
+            self._valor_string = ''
+
+    def get_valor(self):
+        return self._valor_boolean
+
+    valor = property(get_valor, set_valor)
+
+    def __unicode__(self):
+        if (not self.obrigatorio) and (self.valor == None):
+            texto = u''
+        else:
+            texto = u'<%s' % self.nome
+
+            if self.namespace:
+                texto += u' xmlns="%s"' % self.namespace
+
+            if self.propriedade:
+                texto += u' %s="%s">' % (self.propriedade, self._valor_string)
+            elif not self.valor == None:
+                texto += u'>%s</%s>' % (self._valor_string, self.nome)
+            else:
+                texto += u' />'
+
+        return texto
+    
 
 class TagData(TagCaracter):
     def __init__(self, **kwargs):
@@ -561,14 +640,14 @@ class XMLNFe(NohXML):
 
     def validar(self):
         arquivo_esquema = self.caminho_esquema + self.arquivo_esquema
-
+        
         # Aqui é importante remover a declaração do encoding
         # para evitar erros de conversão unicode para ascii
         xml = tira_abertura(self.xml).encode(u'utf-8')
 
         esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-        esquema.assertValid(etree.fromstring(xml))
-        #esquema.validate(etree.fromstring(xml))
+        #esquema.assertValid(etree.fromstring(xml))
+        esquema.validate(etree.fromstring(xml))
 
         return esquema.error_log
 
