@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
+from __future__ import division, print_function, unicode_literals
+
+
 from pysped.xml_sped import *
 from pysped.nfe.manual_300 import ESQUEMA_ATUAL
 import os
@@ -11,17 +15,17 @@ DIRNAME = os.path.dirname(__file__)
 class InfCancEnviado(XMLNFe):
     def __init__(self):
         super(InfCancEnviado, self).__init__()
-        self.Id    = TagCaracter(nome=u'infCanc', codigo=u'CP03', tamanho=[46, 46]    , raiz=u'//cancNFe', propriedade=u'Id')
-        self.tpAmb = TagInteiro(nome=u'tpAmb'   , codigo=u'CP05', tamanho=[ 1,  1, 1] , raiz=u'//cancNFe/infCanc', valor=2)
-        self.xServ = TagCaracter(nome=u'xServ'  , codigo=u'CP06', tamanho=[ 8,  8]    , raiz=u'//cancNFe/infCanc', valor=u'CANCELAR')
-        self.chNFe = TagCaracter(nome=u'chNFe'   , codigo=u'CP07', tamanho=[44, 44, 44], raiz=u'//cancNFe/infCanc')
-        self.nProt = TagCaracter(nome=u'nProt'   , codigo=u'CP08', tamanho=[15, 15, 15], raiz=u'//cancNFe/infCanc')
-        self.xJust = TagCaracter(nome=u'xJust'  , codigo=u'CP09', tamanho=[15, 255]   , raiz=u'//cancNFe/infCanc')
+        self.Id    = TagCaracter(nome='infCanc', codigo='CP03', tamanho=[46, 46]    , raiz='//cancNFe', propriedade='Id')
+        self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='CP05', tamanho=[ 1,  1, 1] , raiz='//cancNFe/infCanc', valor=2)
+        self.xServ = TagCaracter(nome='xServ'  , codigo='CP06', tamanho=[ 8,  8]    , raiz='//cancNFe/infCanc', valor='CANCELAR')
+        self.chNFe = TagCaracter(nome='chNFe'   , codigo='CP07', tamanho=[44, 44, 44], raiz='//cancNFe/infCanc')
+        self.nProt = TagCaracter(nome='nProt'   , codigo='CP08', tamanho=[15, 15, 15], raiz='//cancNFe/infCanc')
+        self.xJust = TagCaracter(nome='xJust'  , codigo='CP09', tamanho=[15, 255]   , raiz='//cancNFe/infCanc')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
 
-        self.Id.valor = u'ID' + self.chNFe.valor
+        self.Id.valor = 'ID' + self.chNFe.valor
 
         xml += self.Id.xml
         xml += self.tpAmb.xml
@@ -29,7 +33,7 @@ class InfCancEnviado(XMLNFe):
         xml += self.chNFe.xml
         xml += self.nProt.xml
         xml += self.xJust.xml
-        xml += u'</infCanc>'
+        xml += '</infCanc>'
         return xml
 
     def set_xml(self, arquivo):
@@ -47,11 +51,11 @@ class InfCancEnviado(XMLNFe):
 class CancNFe(XMLNFe):
     def __init__(self):
         super(CancNFe, self).__init__()
-        self.versao    = TagDecimal(nome=u'cancNFe', codigo=u'CP01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
+        self.versao    = TagDecimal(nome='cancNFe', codigo='CP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
         self.infCanc   = InfCancEnviado()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'cancNFe_v1.07.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'cancNFe_v1.07.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -62,10 +66,10 @@ class CancNFe(XMLNFe):
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = u'#' + self.infCanc.Id.valor
+        self.Signature.URI = '#' + self.infCanc.Id.valor
 
         xml += self.Signature.xml
-        xml += u'</cancNFe>'
+        xml += '</cancNFe>'
         return xml
 
     def set_xml(self, arquivo):
@@ -79,15 +83,15 @@ class CancNFe(XMLNFe):
 class InfCancRecebido(XMLNFe):
     def __init__(self):
         super(InfCancRecebido, self).__init__()
-        self.Id       = TagCaracter(nome=u'infCanc' , codigo=u'CR03' , tamanho=[17, 17]    , raiz=u'//retCancNFe', propriedade=u'Id', obrigatorio=False)
-        self.tpAmb    = TagInteiro(nome=u'tpAmb'    , codigo=u'CR05' , tamanho=[1, 1, 1]   , raiz=u'//retCancNFe/infCanc', valor=2)
-        self.verAplic = TagCaracter(nome=u'verAplic', codigo=u'CR06' , tamanho=[1, 20]     , raiz=u'//retCancNFe/infCanc')
-        self.cStat    = TagCaracter(nome=u'cStat'    , codigo=u'CR07' , tamanho=[3, 3, 3]   , raiz=u'//retCancNFe/infCanc')
-        self.xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'CR08' , tamanho=[1, 255]    , raiz=u'//retCancNFe/infCanc')
-        self.cUF      = TagInteiro(nome=u'cUF'      , codigo=u'CR08a', tamanho=[2, 2, 2]   , raiz=u'//retCancNFe/infCanc')
-        self.chNFe    = TagCaracter(nome=u'chNFe'    , codigo=u'CR09' , tamanho=[44, 44, 44], raiz=u'//retcancNFe/infCanc', obrigatorio=False)
-        self.dhRecbto = TagDataHora(nome=u'dhRecbto', codigo=u'CR10' ,                       raiz=u'//retCancNFe/infCanc', obrigatorio=False)
-        self.nProt    = TagCaracter(nome=u'nProt'    , codigo=u'CR11' , tamanho=[15, 15, 15], raiz=u'//retCancNFe/infCanc', obrigatorio=False)
+        self.Id       = TagCaracter(nome='infCanc' , codigo='CR03' , tamanho=[17, 17]    , raiz='//retCancNFe', propriedade='Id', obrigatorio=False)
+        self.tpAmb    = TagInteiro(nome='tpAmb'    , codigo='CR05' , tamanho=[1, 1, 1]   , raiz='//retCancNFe/infCanc', valor=2)
+        self.verAplic = TagCaracter(nome='verAplic', codigo='CR06' , tamanho=[1, 20]     , raiz='//retCancNFe/infCanc')
+        self.cStat    = TagCaracter(nome='cStat'    , codigo='CR07' , tamanho=[3, 3, 3]   , raiz='//retCancNFe/infCanc')
+        self.xMotivo  = TagCaracter(nome='xMotivo' , codigo='CR08' , tamanho=[1, 255]    , raiz='//retCancNFe/infCanc')
+        self.cUF      = TagInteiro(nome='cUF'      , codigo='CR08a', tamanho=[2, 2, 2]   , raiz='//retCancNFe/infCanc')
+        self.chNFe    = TagCaracter(nome='chNFe'    , codigo='CR09' , tamanho=[44, 44, 44], raiz='//retcancNFe/infCanc', obrigatorio=False)
+        self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='CR10' ,                       raiz='//retCancNFe/infCanc', obrigatorio=False)
+        self.nProt    = TagCaracter(nome='nProt'    , codigo='CR11' , tamanho=[15, 15, 15], raiz='//retCancNFe/infCanc', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -95,7 +99,7 @@ class InfCancRecebido(XMLNFe):
         if self.Id.xml:
             xml += self.Id.xml
         else:
-            xml += u'<infCanc>'
+            xml += '<infCanc>'
 
         xml += self.tpAmb.xml
         xml += self.verAplic.xml
@@ -105,7 +109,7 @@ class InfCancRecebido(XMLNFe):
         xml += self.chNFe.xml
         xml += self.dhRecbto.xml
         xml += self.nProt.xml
-        xml += u'</infCanc>'
+        xml += '</infCanc>'
         return xml
 
     def set_xml(self, arquivo):
@@ -126,11 +130,11 @@ class InfCancRecebido(XMLNFe):
 class RetCancNFe(XMLNFe):
     def __init__(self):
         super(RetCancNFe, self).__init__()
-        self.versao = TagDecimal(nome=u'retCancNFe', codigo=u'CR01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
+        self.versao = TagDecimal(nome='retCancNFe', codigo='CR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
         self.infCanc = InfCancRecebido()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'retCancNFe_v1.07.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'retCancNFe_v1.07.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -138,10 +142,10 @@ class RetCancNFe(XMLNFe):
         xml += self.versao.xml
         xml += self.infCanc.xml
 
-        if len(self.Signature.URI) and (self.Signature.URI.strip() != u'#'):
+        if len(self.Signature.URI) and (self.Signature.URI.strip() != '#'):
             xml += self.Signature.xml
 
-        xml += u'</retCancNFe>'
+        xml += '</retCancNFe>'
         return xml
 
     def set_xml(self, arquivo):
@@ -153,10 +157,10 @@ class RetCancNFe(XMLNFe):
 
     def protocolo_formatado(self):
         if not self.infCanc.nProt.valor:
-            return u''
+            return ''
 
         formatado = self.infCanc.nProt.valor
-        formatado += u' - '
+        formatado += ' - '
         formatado += self.infCanc.dhRecbto.formato_danfe()
         return formatado
 
@@ -168,19 +172,19 @@ class ProcCancNFe(XMLNFe):
         # Atenção --- a tag procCancNFe tem que começar com letra minúscula, para
         # poder validar no XSD.
         #
-        self.versao = TagDecimal(nome=u'procCancNFe', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
+        self.versao = TagDecimal(nome='procCancNFe', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
         self.cancNFe = CancNFe()
         self.retCancNFe = RetCancNFe()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'procCancNFe_v1.07.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'procCancNFe_v1.07.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
-        xml += self.cancNFe.xml.replace(ABERTURA, u'')
-        xml += self.retCancNFe.xml.replace(ABERTURA, u'')
-        xml += u'</procCancNFe>'
+        xml += self.cancNFe.xml.replace(ABERTURA, '')
+        xml += self.retCancNFe.xml.replace(ABERTURA, '')
+        xml += '</procCancNFe>'
         return xml
 
     def set_xml(self, arquivo):

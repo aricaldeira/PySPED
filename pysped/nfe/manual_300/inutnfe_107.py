@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
+from __future__ import division, print_function, unicode_literals
+
+
 from pysped.xml_sped import *
 from pysped.nfe.manual_300 import ESQUEMA_ATUAL
 import os
@@ -11,17 +15,17 @@ DIRNAME = os.path.dirname(__file__)
 class InfInutEnviado(XMLNFe):
     def __init__(self):
         super(InfInutEnviado, self).__init__()
-        self.Id     = TagCaracter(nome=u'infInut', codigo=u'DP03', tamanho=[41, 41] , raiz=u'//inutNFe', propriedade=u'Id')
-        self.tpAmb  = TagInteiro(nome=u'tpAmb'   , codigo=u'DP05', tamanho=[1, 1, 1], raiz=u'//inutNFe/infInut', valor=2)
-        self.xServ  = TagCaracter(nome=u'xServ'  , codigo=u'DP06', tamanho=[10, 10] , raiz=u'//inutNFe/infInut', valor=u'INUTILIZAR')
-        self.cUF    = TagInteiro(nome=u'cUF'     , codigo=u'DP07', tamanho=[2, 2, 2], raiz=u'//inutNFe/infInut')
-        self.ano    = TagCaracter(nome=u'ano'    , codigo=u'DP08', tamanho=[2, 2]   , raiz=u'//inutNFe/infInut')
-        self.CNPJ   = TagCaracter(nome=u'CNPJ'   , codigo=u'DP09', tamanho=[3, 14]  , raiz=u'//inutNFe/infInut')
-        self.mod    = TagInteiro(nome=u'mod'     , codigo=u'DP10', tamanho=[2, 2, 2], raiz=u'//inutNFe/infInut', valor=55)
-        self.serie  = TagInteiro(nome=u'serie'   , codigo=u'DP11', tamanho=[1, 3]   , raiz=u'//inutNFe/infInut')
-        self.nNFIni = TagInteiro(nome=u'nNFIni'  , codigo=u'DP12', tamanho=[1, 9]   , raiz=u'//inutNFe/infInut')
-        self.nNFFin = TagInteiro(nome=u'nNFFin'  , codigo=u'DP13', tamanho=[1, 9]   , raiz=u'//inutNFe/infInut')
-        self.xJust  = TagCaracter(nome=u'xJust'  , codigo=u'DP14', tamanho=[15, 255], raiz=u'//inutNFe/infInut')
+        self.Id     = TagCaracter(nome='infInut', codigo='DP03', tamanho=[41, 41] , raiz='//inutNFe', propriedade='Id')
+        self.tpAmb  = TagInteiro(nome='tpAmb'   , codigo='DP05', tamanho=[1, 1, 1], raiz='//inutNFe/infInut', valor=2)
+        self.xServ  = TagCaracter(nome='xServ'  , codigo='DP06', tamanho=[10, 10] , raiz='//inutNFe/infInut', valor='INUTILIZAR')
+        self.cUF    = TagInteiro(nome='cUF'     , codigo='DP07', tamanho=[2, 2, 2], raiz='//inutNFe/infInut')
+        self.ano    = TagCaracter(nome='ano'    , codigo='DP08', tamanho=[2, 2]   , raiz='//inutNFe/infInut')
+        self.CNPJ   = TagCaracter(nome='CNPJ'   , codigo='DP09', tamanho=[3, 14]  , raiz='//inutNFe/infInut')
+        self.mod    = TagInteiro(nome='mod'     , codigo='DP10', tamanho=[2, 2, 2], raiz='//inutNFe/infInut', valor=55)
+        self.serie  = TagInteiro(nome='serie'   , codigo='DP11', tamanho=[1, 3]   , raiz='//inutNFe/infInut')
+        self.nNFIni = TagInteiro(nome='nNFIni'  , codigo='DP12', tamanho=[1, 9]   , raiz='//inutNFe/infInut')
+        self.nNFFin = TagInteiro(nome='nNFFin'  , codigo='DP13', tamanho=[1, 9]   , raiz='//inutNFe/infInut')
+        self.xJust  = TagCaracter(nome='xJust'  , codigo='DP14', tamanho=[15, 255], raiz='//inutNFe/infInut')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -36,7 +40,7 @@ class InfInutEnviado(XMLNFe):
         xml += self.nNFIni.xml
         xml += self.nNFFin.xml
         xml += self.xJust.xml
-        xml += u'</infInut>'
+        xml += '</infInut>'
         return xml
         
     def set_xml(self, arquivo):
@@ -59,13 +63,13 @@ class InfInutEnviado(XMLNFe):
 class InutNFe(XMLNFe):
     def __init__(self):
         super(InutNFe, self).__init__()
-        self.versao  = TagDecimal(nome=u'inutNFe', codigo=u'DP01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
+        self.versao  = TagDecimal(nome='inutNFe', codigo='DP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
         self.infInut = InfInutEnviado()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'inutNFe_v1.07.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'inutNFe_v1.07.xsd'
         
-        self.chave = u''
+        self.chave = ''
     
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -76,10 +80,10 @@ class InutNFe(XMLNFe):
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = u'#' + self.infInut.Id.valor
+        self.Signature.URI = '#' + self.infInut.Id.valor
 
         xml += self.Signature.xml
-        xml += u'</inutNFe>'
+        xml += '</inutNFe>'
         return xml
 
     def set_xml(self, arquivo):
@@ -113,26 +117,26 @@ class InutNFe(XMLNFe):
         #
         # Define o Id
         #
-        self.infInut.Id.valor = u'ID' + chave
+        self.infInut.Id.valor = 'ID' + chave
 
 
 class InfInutRecebido(XMLNFe):
     def __init__(self):
         super(InfInutRecebido, self).__init__()
-        self.Id       = TagCaracter(nome=u'infInut' , codigo=u'DR03', tamanho=[17, 17]    , raiz=u'//retInutNFe', propriedade=u'Id', obrigatorio=False)
-        self.tpAmb    = TagInteiro(nome=u'tpAmb'    , codigo=u'DR05', tamanho=[1, 1, 1]   , raiz=u'//retInutNFe/infInut', valor=2)
-        self.verAplic = TagCaracter(nome=u'verAplic', codigo=u'DR06', tamanho=[1, 20]     , raiz=u'//retInutNFe/infInut')
-        self.cStat    = TagCaracter(nome=u'cStat'   , codigo=u'DR07', tamanho=[3, 3, 3]   , raiz=u'//retInutNFe/infInut')
-        self.xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'DR08', tamanho=[1, 255]    , raiz=u'//retInutNFe/infInut')
-        self.cUF      = TagInteiro(nome=u'cUF'      , codigo=u'DR09', tamanho=[2, 2, 2]   , raiz=u'//retInutNFe/infInut')
-        self.ano      = TagCaracter(nome=u'ano'     , codigo=u'DR10', tamanho=[2, 2]      , raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.CNPJ     = TagCaracter(nome=u'CNPJ'    , codigo=u'DR11', tamanho=[3, 14]     , raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.mod      = TagInteiro(nome=u'mod'      , codigo=u'DR12', tamanho=[2, 2, 2]   , raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.serie    = TagInteiro(nome=u'serie'    , codigo=u'DR13', tamanho=[1, 3]      , raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.nNFIni   = TagInteiro(nome=u'nNFIni'   , codigo=u'DR14', tamanho=[1, 9]      , raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.nNFFin   = TagInteiro(nome=u'nNFFin'   , codigo=u'DR15', tamanho=[1, 9]      , raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.dhRecbto = TagDataHora(nome=u'dhRecbto', codigo=u'DR16',                       raiz=u'//retInutNFe/infInut', obrigatorio=False)
-        self.nProt    = TagInteiro(nome=u'nProt'    , codigo=u'DR17', tamanho=[15, 15, 15], raiz=u'//retInutNFe/infInut', obrigatorio=False)
+        self.Id       = TagCaracter(nome='infInut' , codigo='DR03', tamanho=[17, 17]    , raiz='//retInutNFe', propriedade='Id', obrigatorio=False)
+        self.tpAmb    = TagInteiro(nome='tpAmb'    , codigo='DR05', tamanho=[1, 1, 1]   , raiz='//retInutNFe/infInut', valor=2)
+        self.verAplic = TagCaracter(nome='verAplic', codigo='DR06', tamanho=[1, 20]     , raiz='//retInutNFe/infInut')
+        self.cStat    = TagCaracter(nome='cStat'   , codigo='DR07', tamanho=[3, 3, 3]   , raiz='//retInutNFe/infInut')
+        self.xMotivo  = TagCaracter(nome='xMotivo' , codigo='DR08', tamanho=[1, 255]    , raiz='//retInutNFe/infInut')
+        self.cUF      = TagInteiro(nome='cUF'      , codigo='DR09', tamanho=[2, 2, 2]   , raiz='//retInutNFe/infInut')
+        self.ano      = TagCaracter(nome='ano'     , codigo='DR10', tamanho=[2, 2]      , raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.CNPJ     = TagCaracter(nome='CNPJ'    , codigo='DR11', tamanho=[3, 14]     , raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.mod      = TagInteiro(nome='mod'      , codigo='DR12', tamanho=[2, 2, 2]   , raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.serie    = TagInteiro(nome='serie'    , codigo='DR13', tamanho=[1, 3]      , raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.nNFIni   = TagInteiro(nome='nNFIni'   , codigo='DR14', tamanho=[1, 9]      , raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.nNFFin   = TagInteiro(nome='nNFFin'   , codigo='DR15', tamanho=[1, 9]      , raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='DR16',                       raiz='//retInutNFe/infInut', obrigatorio=False)
+        self.nProt    = TagInteiro(nome='nProt'    , codigo='DR17', tamanho=[15, 15, 15], raiz='//retInutNFe/infInut', obrigatorio=False)
     
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -140,7 +144,7 @@ class InfInutRecebido(XMLNFe):
         if self.Id.xml:
             xml += self.Id.xml
         else:
-            xml += u'<infInut>'
+            xml += '<infInut>'
 
         xml += self.tpAmb.xml
         xml += self.verAplic.xml
@@ -155,7 +159,7 @@ class InfInutRecebido(XMLNFe):
         xml += self.nNFFin.xml
         xml += self.dhRecbto.xml
         xml += self.nProt.xml
-        xml += u'</infInut>'
+        xml += '</infInut>'
         return xml
 
     def set_xml(self, arquivo):
@@ -181,13 +185,13 @@ class InfInutRecebido(XMLNFe):
 class RetInutNFe(XMLNFe):
     def __init__(self):
         super(RetInutNFe, self).__init__()
-        self.versao = TagDecimal(nome=u'retInutNFe', codigo=u'DR01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
+        self.versao = TagDecimal(nome='retInutNFe', codigo='DR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
         self.infInut = InfInutRecebido()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'retInutNFe_v1.07.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'retInutNFe_v1.07.xsd'
         
-        self.chave = u''
+        self.chave = ''
     
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -195,10 +199,10 @@ class RetInutNFe(XMLNFe):
         xml += self.versao.xml
         xml += self.infInut.xml
 
-        if len(self.Signature.URI) and (self.Signature.URI.strip() != u'#'):
+        if len(self.Signature.URI) and (self.Signature.URI.strip() != '#'):
             xml += self.Signature.xml
 
-        xml += u'</retInutNFe>'
+        xml += '</retInutNFe>'
         return xml
 
     def set_xml(self, arquivo):
@@ -229,19 +233,19 @@ class ProcInutNFe(XMLNFe):
         # poder validar no XSD. Os outros arquivos proc, procCancNFe, e procNFe
         # começam com minúscula mesmo
         #
-        self.versao = TagDecimal(nome=u'ProcInutNFe', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.07', raiz=u'/')
+        self.versao = TagDecimal(nome='ProcInutNFe', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
         self.inutNFe = InutNFe()
         self.retInutNFe = RetInutNFe()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'procInutNFe_v1.07.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'procInutNFe_v1.07.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
-        xml += self.inutNFe.xml.replace(ABERTURA, u'')
-        xml += self.retInutNFe.xml.replace(ABERTURA, u'')
-        xml += u'</ProcInutNFe>'
+        xml += self.inutNFe.xml.replace(ABERTURA, '')
+        xml += self.retInutNFe.xml.replace(ABERTURA, '')
+        xml += '</ProcInutNFe>'
         return xml
 
     def set_xml(self, arquivo):

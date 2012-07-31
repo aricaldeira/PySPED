@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
+from __future__ import division, print_function, unicode_literals
+
+
 from pysped.xml_sped import *
 #from soap_100 import SOAPEnvio, SOAPRetorno, conectar_servico
 from pysped.nfe.manual_300 import ESQUEMA_ATUAL
@@ -10,21 +14,21 @@ DIRNAME = os.path.dirname(__file__)
 
 
 class _InfConsEnviado(XMLNFe):
-    xServ = TagCaracter(nome=u'xServ', codigo=u'GP04', tamanho=[8, 8]  , raiz=u'//ConsCad', valor=u'CONS-CAD')
-    UF    = TagCaracter(nome=u'UF'   , codigo=u'GP05', tamanho=[2, 2]  , raiz=u'//ConsCad')
-    IE    = TagCaracter(nome=u'IE'   , codigo=u'GP06', tamanho=[2, 14] , raiz=u'//ConsCad', obrigatorio=False)
-    CNPJ  = TagCaracter(nome=u'CNPJ'  , codigo=u'GP07', tamanho=[3, 14], raiz=u'//ConsCad', obrigatorio=False)
-    CPF   = TagCaracter(nome=u'CPF'   , codigo=u'GP08', tamanho=[3, 11], raiz=u'//ConsCad', obrigatorio=False)
+    xServ = TagCaracter(nome='xServ', codigo='GP04', tamanho=[8, 8]  , raiz='//ConsCad', valor='CONS-CAD')
+    UF    = TagCaracter(nome='UF'   , codigo='GP05', tamanho=[2, 2]  , raiz='//ConsCad')
+    IE    = TagCaracter(nome='IE'   , codigo='GP06', tamanho=[2, 14] , raiz='//ConsCad', obrigatorio=False)
+    CNPJ  = TagCaracter(nome='CNPJ'  , codigo='GP07', tamanho=[3, 14], raiz='//ConsCad', obrigatorio=False)
+    CPF   = TagCaracter(nome='CPF'   , codigo='GP08', tamanho=[3, 11], raiz='//ConsCad', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<infCons>'
+        xml += '<infCons>'
         xml += self.xServ.xml
         xml += self.UF.xml
         xml += self.IE.xml
         xml += self.CNPJ.xml
         xml += self.CPF.xml
-        xml += u'</infCons>'
+        xml += '</infCons>'
         return xml
 
     def set_xml(self, arquivo):
@@ -39,17 +43,17 @@ class _InfConsEnviado(XMLNFe):
     
 
 class ConsCad(XMLNFe):
-    versao = TagDecimal(nome=u'ConsCad', codigo=u'GP01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.01', raiz=u'/')
+    versao = TagDecimal(nome='ConsCad', codigo='GP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.01', raiz='/')
     infCons = _InfConsEnviado()
-    caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL)
-    arquivo_esquema = u'consCad_v1.01.xsd'
+    caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL)
+    arquivo_esquema = 'consCad_v1.01.xsd'
     
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
         xml += self.infCons.xml
-        xml += u'</ConsCad>'
+        xml += '</ConsCad>'
         return xml
 
     def set_xml(self, arquivo):
@@ -61,18 +65,18 @@ class ConsCad(XMLNFe):
 
 
 class _Ender(XMLNFe):
-    xLgr    = TagCaracter(nome=u'xLgr'   , codigo=u'GR23', tamanho=[1, 255] , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
-    nro     = TagCaracter(nome=u'nro'    , codigo=u'GR24', tamanho=[1, 60]  , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
-    xCpl    = TagCaracter(nome=u'xCpl'   , codigo=u'GR25', tamanho=[1, 60]  , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
-    xBairro = TagCaracter(nome=u'xBairro', codigo=u'GR26', tamanho=[1, 60]  , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
-    cMun    = TagInteiro(nome=u'cMun'    , codigo=u'GR27', tamanho=[7, 7]   , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
-    xMun    = TagCaracter(nome=u'xMun'   , codigo=u'GR28', tamanho=[1, 60]  , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
-    CEP     = TagInteiro(nome=u'CEP'     , codigo=u'GR29', tamanho=[7, 8]   , raiz=u'//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    xLgr    = TagCaracter(nome='xLgr'   , codigo='GR23', tamanho=[1, 255] , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    nro     = TagCaracter(nome='nro'    , codigo='GR24', tamanho=[1, 60]  , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    xCpl    = TagCaracter(nome='xCpl'   , codigo='GR25', tamanho=[1, 60]  , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    xBairro = TagCaracter(nome='xBairro', codigo='GR26', tamanho=[1, 60]  , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    cMun    = TagInteiro(nome='cMun'    , codigo='GR27', tamanho=[7, 7]   , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    xMun    = TagCaracter(nome='xMun'   , codigo='GR28', tamanho=[1, 60]  , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
+    CEP     = TagInteiro(nome='CEP'     , codigo='GR29', tamanho=[7, 8]   , raiz='//retConsCad/infCons/infCad/ender', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         if self.xLgr.valor or self.nro.valor or self.xCpl.valor or self.xBairro.valor or self.cMun.valor or self.xMun.valor or self.CEP.valor:
-            xml += u'<ender>'
+            xml += '<ender>'
             xml += self.xLgr.xml
             xml += self.nro.xml
             xml += self.xCpl.xml
@@ -80,7 +84,7 @@ class _Ender(XMLNFe):
             xml += self.cMun.xml
             xml += self.xMun.xml
             xml += self.CEP.xml
-            xml += u'</ender>'
+            xml += '</ender>'
         return xml
 
     def set_xml(self, arquivo):
@@ -97,25 +101,25 @@ class _Ender(XMLNFe):
 
 
 class _InfCadRecebido(XMLNFe):
-    IE       = TagCaracter(nome=u'IE'      , codigo=u'GR08' , tamanho=[2, 14], raiz=u'//retConsCad/infCons/infCad')
-    CNPJ     = TagCaracter(nome=u'CNPJ'    , codigo=u'GR09' , tamanho=[3, 14], raiz=u'//retConsCad/infCons/infCad')
-    CPF      = TagCaracter(nome=u'CPF'     , codigo=u'GR10' , tamanho=[3, 11], raiz=u'//retConsCad/infCons/infCad')
-    UF       = TagCaracter(nome=u'UF'      , codigo=u'GR11' , tamanho=[2, 2] , raiz=u'//retConsCad/infCons/infCad')
-    cSit     = TagInteiro(nome=u'cSit'     , codigo=u'GR12' , tamanho=[1, 1] , raiz=u'//retConsCad/infCons/infCad')
-    xNome    = TagCaracter(nome=u'xNome'   , codigo=u'GR13' , tamanho=[1, 60], raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    xFant    = TagCaracter(nome=u'xFant'   , codigo=u'GR13a', tamanho=[1, 60], raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    xRegApur = TagCaracter(nome=u'xRegApur', codigo=u'GR14' , tamanho=[1, 60], raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    CNAE     = TagInteiro(nome=u'CNAE'     , codigo=u'GR15' , tamanho=[6, 7] , raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    dIniAtiv = TagData(nome=u'dIniAtiv'    , codigo=u'GR16' ,                  raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    dUltSit  = TagData(nome=u'dUltSit'     , codigo=u'GR17' ,                  raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    dBaixa   = TagData(nome=u'dBaixa'      , codigo=u'GR18' ,                  raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    IEUnica  = TagCaracter(nome=u'IEUnica' , codigo=u'GR20' , tamanho=[2, 14], raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
-    IEAtual  = TagCaracter(nome=u'IEAtual' , codigo=u'GR21' , tamanho=[2, 14], raiz=u'//retConsCad/infCons/infCad', obrigatorio=False)
+    IE       = TagCaracter(nome='IE'      , codigo='GR08' , tamanho=[2, 14], raiz='//retConsCad/infCons/infCad')
+    CNPJ     = TagCaracter(nome='CNPJ'    , codigo='GR09' , tamanho=[3, 14], raiz='//retConsCad/infCons/infCad')
+    CPF      = TagCaracter(nome='CPF'     , codigo='GR10' , tamanho=[3, 11], raiz='//retConsCad/infCons/infCad')
+    UF       = TagCaracter(nome='UF'      , codigo='GR11' , tamanho=[2, 2] , raiz='//retConsCad/infCons/infCad')
+    cSit     = TagInteiro(nome='cSit'     , codigo='GR12' , tamanho=[1, 1] , raiz='//retConsCad/infCons/infCad')
+    xNome    = TagCaracter(nome='xNome'   , codigo='GR13' , tamanho=[1, 60], raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    xFant    = TagCaracter(nome='xFant'   , codigo='GR13a', tamanho=[1, 60], raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    xRegApur = TagCaracter(nome='xRegApur', codigo='GR14' , tamanho=[1, 60], raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    CNAE     = TagInteiro(nome='CNAE'     , codigo='GR15' , tamanho=[6, 7] , raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    dIniAtiv = TagData(nome='dIniAtiv'    , codigo='GR16' ,                  raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    dUltSit  = TagData(nome='dUltSit'     , codigo='GR17' ,                  raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    dBaixa   = TagData(nome='dBaixa'      , codigo='GR18' ,                  raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    IEUnica  = TagCaracter(nome='IEUnica' , codigo='GR20' , tamanho=[2, 14], raiz='//retConsCad/infCons/infCad', obrigatorio=False)
+    IEAtual  = TagCaracter(nome='IEAtual' , codigo='GR21' , tamanho=[2, 14], raiz='//retConsCad/infCons/infCad', obrigatorio=False)
     ender    = _Ender()
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<infCad>'
+        xml += '<infCad>'
         xml += self.IE.xml      
         xml += self.CNPJ.xml    
         xml += self.CPF.xml     
@@ -131,7 +135,7 @@ class _InfCadRecebido(XMLNFe):
         xml += self.IEUnica.xml 
         xml += self.IEAtual.xml
         xml += self.ender.xml
-        xml += u'</infCad>'
+        xml += '</infCad>'
         return xml
 
     def set_xml(self, arquivo):
@@ -156,20 +160,20 @@ class _InfCadRecebido(XMLNFe):
 
 
 class _InfConsRecebido(XMLNFe):
-    verAplic = TagCaracter(nome=u'verAplic', codigo=u'GR04' , tamanho=[1, 20]  , raiz=u'//retConsCad/infCons')
-    cStat    = TagInteiro(nome=u'cStat'    , codigo=u'GR05' , tamanho=[3, 3, 3], raiz=u'//retConsCad/infCons')
-    xMotivo  = TagCaracter(nome=u'xMotivo' , codigo=u'GR06' , tamanho=[1, 255] , raiz=u'//retConsCad/infCons')
-    UF       = TagCaracter(nome=u'UF'      , codigo=u'GR06a', tamanho=[2, 2]   , raiz=u'//retConsCad/infCons')
-    IE       = TagCaracter(nome=u'IE'      , codigo=u'GR06b', tamanho=[2, 14]  , raiz=u'//retConsCad/infCons', obrigatorio=False)
-    CNPJ     = TagCaracter(nome=u'CNPJ'    , codigo=u'GR06c', tamanho=[3, 14]  , raiz=u'//retConsCad/infCons', obrigatorio=False)
-    CPF      = TagCaracter(nome=u'CPF'     , codigo=u'GR06d', tamanho=[3, 11]  , raiz=u'//retConsCad/infCons', obrigatorio=False)
-    dhCons   = TagDataHora(nome=u'dhCons'  , codigo=u'GR06e',                    raiz=u'//retConsCad/infCons')
-    cUF      = TagInteiro(nome=u'cUF'      , codigo=u'GR06f', tamanho=[2, 2, 2], raiz=u'//retConsCad/infCons')
+    verAplic = TagCaracter(nome='verAplic', codigo='GR04' , tamanho=[1, 20]  , raiz='//retConsCad/infCons')
+    cStat    = TagInteiro(nome='cStat'    , codigo='GR05' , tamanho=[3, 3, 3], raiz='//retConsCad/infCons')
+    xMotivo  = TagCaracter(nome='xMotivo' , codigo='GR06' , tamanho=[1, 255] , raiz='//retConsCad/infCons')
+    UF       = TagCaracter(nome='UF'      , codigo='GR06a', tamanho=[2, 2]   , raiz='//retConsCad/infCons')
+    IE       = TagCaracter(nome='IE'      , codigo='GR06b', tamanho=[2, 14]  , raiz='//retConsCad/infCons', obrigatorio=False)
+    CNPJ     = TagCaracter(nome='CNPJ'    , codigo='GR06c', tamanho=[3, 14]  , raiz='//retConsCad/infCons', obrigatorio=False)
+    CPF      = TagCaracter(nome='CPF'     , codigo='GR06d', tamanho=[3, 11]  , raiz='//retConsCad/infCons', obrigatorio=False)
+    dhCons   = TagDataHora(nome='dhCons'  , codigo='GR06e',                    raiz='//retConsCad/infCons')
+    cUF      = TagInteiro(nome='cUF'      , codigo='GR06f', tamanho=[2, 2, 2], raiz='//retConsCad/infCons')
     infCad   = []
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<infCons>'
+        xml += '<infCons>'
         xml += self.verAplic.xml
         xml += self.cStat.xml
         xml += self.xMotivo.xml
@@ -184,7 +188,7 @@ class _InfConsRecebido(XMLNFe):
             for ic in self.infCad:
                 xml += ic.xml
                 
-        xml += u'</infCons>'
+        xml += '</infCons>'
         return xml
 
     def set_xml(self, arquivo):
@@ -212,17 +216,17 @@ class _InfConsRecebido(XMLNFe):
 
 
 class RetConsCad(XMLNFe):
-    versao = TagDecimal(nome=u'retConsCad', codigo=u'GR01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'1.01', raiz=u'/')
+    versao = TagDecimal(nome='retConsCad', codigo='GR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.01', raiz='/')
     infCons = _InfConsRecebido()
-    caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL)
-    arquivo_esquema = u'retConsCad_v1.01.xsd'
+    caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL)
+    arquivo_esquema = 'retConsCad_v1.01.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
         xml += self.infCons.xml
-        xml += u'</retConsCad>'
+        xml += '</retConsCad>'
         return xml
 
     def set_xml(self, arquivo):
