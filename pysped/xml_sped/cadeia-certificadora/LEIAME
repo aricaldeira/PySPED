@@ -11,32 +11,32 @@
 
     https://acraiz.icpbrasil.gov.br/repositorio/mfirefox-sha512.txt
 
-    Dia 01/05/2010
+    Dia 13/01/2011
+
+    O certificado raiz dos Correios/SERPRO foram baixados daqui:
+    
+    https://ccd.serpro.gov.br/correios/
+    https://ccd.serpro.gov.br/correios/certificado/ACSERPRORFB.crt
+
+    e foi salvo diretamente no diretório certificados.
 
 
-2. O arquivo mfirefox-sha512.txt tinha o seguinte conteúdo:
-
-    16b61a3e50173d3286ef6813e7da4cbafb6e77fabb4f8926fecee051689c6341ed40a073c506f785423371695b8e55904dfe2700601ece77361c7c0554f7c773  mfirefox-der.crt
-
-e foi alterado para:
-
-    16b61a3e50173d3286ef6813e7da4cbafb6e77fabb4f8926fecee051689c6341ed40a073c506f785423371695b8e55904dfe2700601ece77361c7c0554f7c773  mfirefox-der.der
-
-
-3. Verificar os certificados baixados:
+2. Verificar os certificados baixados:
 
     >>> sha512sum -c mfirefox-sha512.txt
     mfirefox-der.der: SUCESSO
 
 
-4. Converter os certificados para o formato PEM, pois a biblioteca PyOpenSSL
+3. Converter os certificados para o formato PEM, pois a biblioteca PyOpenSSL
     não tem como manipular os certificados no formato baixado (pelo menos eu
     não achei como...):
 
     sh converte-certificado.sh
 
 
-5. Separar os certificados em arquivos individuais para leitura e uso pela
+4. Separar os certificados em arquivos individuais para leitura e uso pela
     biblioteca PyXMLSec:
 
     python separa-certificados.py
+
+
