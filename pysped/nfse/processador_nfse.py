@@ -2,7 +2,6 @@
 
 from __future__ import division, print_function, unicode_literals
 
-
 #
 # RPS
 #
@@ -20,7 +19,7 @@ class RPS(object):
         self.dados_rps        = None
         self.rps              = None
 
-        self.obs_impressao    = 'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
+        self.obs_impressao    = 'RPS gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
         self.nome_sistema     = ''
         self.site             = ''
         self.logo             = ''
@@ -77,7 +76,7 @@ class RPS(object):
         # Observação de impressão
         #
         if self.nome_sistema:
-            self.rps.ObsImpressao.expression = self.nome_sistema + u' - ' + self.obs_impressao
+            self.rps.ObsImpressao.expression = self.nome_sistema + ' - ' + self.obs_impressao
         else:
             self.rps.ObsImpressao.expression = self.obs_impressao
 
@@ -105,3 +104,94 @@ class RPS(object):
             nome_arq = 'rps_teste.pdf'
             self.rps.generate_by(PDFGenerator, filename=nome_arq)
 
+
+
+#
+# Mensagens SOAP
+#
+from soap_100 import *
+from httplib import HTTPConnection, HTTPResponse
+from pysped.xml_sped.certificado import Certificado
+from webservices_flags import *
+from webservices import *
+
+
+class ProcessoNFSe(object):
+    def __init__(self, webservice=0, envio='', resposta=''):
+        self.webservice = webservice
+        self.envio = envio
+        self.resposta = resposta
+
+
+class ProcessadorNFSe(object):
+    def __init__(self):
+        self.ambiente = 2
+        self.cidade = SIAFI_SOROCABA_SP
+        self.certificado = Certificado()
+        self.caminho = ''
+        self.salvar_arquivos = True
+        self.rps = RPS()
+        self.caminho_temporario = ''
+
+        self._servidor     = ''
+        self._url          = ''
+        self._soap_envio   = None
+        self._soap_retorno = None
+
+    def _conectar_servico(self, servico, envio, resposta, ambiente=None):
+        if ambiente is None:
+            ambiente = self.ambiente
+            
+        self._servidor = CIDADE_WS[self.cidade][ambiente]['servidor']
+        self._url = CIDADE_WS[self.cidade][ambiente]['url']
+
+        self._soap_envio   = SOAPEnvio()
+        self._soap_envio.metodo     = METODO_WS[servico]['metodo']
+        self._soap_envio.envio      = envio
+
+        self._soap_retorno = SOAPRetorno()
+        self._soap_retorno.metodo     = METODO_WS[servico]['metodo']
+        self._soap_retorno.resposta   = resposta
+        
+        if (servico == WS_NFSE_ENVIO_LOTE):
+            self.certificado.prepara_certificado_arquivo_pfx()
+            self.certificado.assina_xmlnfe(envio)
+
+        con = HTTPConnection(self._servidor)
+        con.set_debuglevel(10)
+        
+        con.request('POST', '/' + self._url, self._soap_envio.xml, self._soap_envio.header)
+        resp = con.getresponse()
+
+        # Dados da resposta salvos para possível debug
+        self._soap_retorno.resposta.version  = resp.version
+        self._soap_retorno.resposta.status   = resp.status
+        self._soap_retorno.resposta.reason   = unicode(resp.reason.decode('utf-8'))
+        self._soap_retorno.resposta.msg      = resp.msg
+        self._soap_retorno.resposta.original = unicode(resp.read().decode('utf-8'))
+
+        # Tudo certo!
+        if self._soap_retorno.resposta.status == 200:
+            self._soap_retorno.xml = self._soap_retorno.resposta.original
+        #except Exception, e:
+            #raise e
+        #else:
+        con.close()
+        
+        print()
+        print()
+        print()
+        
+        print(self._soap_envio.xml)
+        
+        print()
+        print()
+        print()
+        
+        print(por_acentos(self._soap_retorno.resposta.original))
+        
+        print()
+        print()
+        print()
+        
+        print(resposta.xml)
