@@ -47,7 +47,7 @@ class ReqConsultaLote(XMLNFe):
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
-        xml += '<nfse:ReqConsultaLote xmlns:nfse="http://localhost:8080/WsNFe2/lote">'
+        xml += '<nfse:ReqConsultaLote xmlns:nfse="http://localhost:8080/WsNFe2/lote" xmlns:tipos="http://localhost:8080/WsNFe2/tp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost:8080/WsNFe2/lote http://localhost:8080/WsNFe2/xsd/ReqConsultaLote.xsd">'
         xml += self.Cabecalho.xml
         xml += '</nfse:ReqConsultaLote>'
         return xml

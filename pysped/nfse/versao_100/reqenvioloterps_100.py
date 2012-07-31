@@ -20,6 +20,7 @@ class Item(XMLNFe):
         self.ValorTotal           = TagDecimal(nome='ValorTotal'           , tamanho=[ 1, 15, 1], decimais=[0, 2, 2], raiz='//Item')
         self.Tributavel           = TagCaracter(nome='Tributavel'          , tamanho=[ 1,  1]   , raiz='//Item', obrigatorio=False)
 
+    @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Item>'
@@ -40,6 +41,12 @@ class Item(XMLNFe):
             self.Tributavel.xml           = arquivo
         
     xml = property(get_xml, set_xml)
+    
+    def tributavel_formatado(self):
+        if self.Tributavel.valor == 'S':
+            return 'SIM'
+        else:
+            return 'NÃO'
                
                 
 class Deducao(XMLNFe):
@@ -53,6 +60,7 @@ class Deducao(XMLNFe):
         self.PercentualDeduzir    = TagDecimal(nome='PercentualDeduzir'   , tamanho=[ 1,   5, 1], decimais=[0, 2, 2], raiz='//Deducao')
         self.ValorDeduzir         = TagDecimal(nome='ValorDeduzir'        , tamanho=[ 1,  15, 1], decimais=[0, 2, 2], raiz='//Deducao')
 
+    @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Deducao>'
@@ -145,7 +153,7 @@ class RPS(XMLNFe):
         self.BaseCalculo   = TagDecimal(nome='BaseCalculo'  , tamanho=[ 1,   15, 1], decimais=[0, 2, 2])
         self.ValorISS      = TagDecimal(nome='ValorISS'     , tamanho=[ 1,   15, 1], decimais=[0, 2, 2])
         self.Informacoes   = TagCaracter(nome='Informacoes' , tamanho=[ 0, 5000])
-        self.Informacoes.valor = 'Este Recibo Provisório de Serviços - RPS não é válido como documento fiscal. O prestador do serviço, no prazo de até 5 (cinco) dias da emissão deste RPS deverá substituí-lo por uma Nota Fiscal de Serviços Eletrônica - NFS-e.'
+        self.Informacoes.valor = 'Este Recibo Provisório de Serviços - RPS não é válido como documento fiscal. O prestador do serviço, no prazo de até 5 (cinco) dias corridos da emissão deste RPS, deverá substituí-lo por uma Nota Fiscal de Serviços Eletrônica - NFS-e.'
         
         
     def gera_assinatura(self):
@@ -160,22 +168,26 @@ class RPS(XMLNFe):
         texto += self.SituacaoRPS.valor
         
         if self.TipoRecolhimento.valor == 'A':
-            texto += 'S'
-        else:
             texto += 'N'
+        else:
+            texto += 'S'
             
         valor_servicos = D(0)
+        base_calculo = D(0)
         valor_deducoes = D(0)
         
         for s in self.Itens:
             valor_servicos += s.ValorTotal.valor
+            
+            if s.Tributavel.valor == 'S':
+                base_calculo += s.ValorTotal.valor
             
         for d in self.Deducoes:
             valor_deducoes += d.ValorDeduzir.valor
 
         self.ValorTotalRPS.valor = valor_servicos
         self.ValorDeducoes.valor = valor_deducoes
-        self.BaseCalculo.valor = valor_servicos - valor_deducoes
+        self.BaseCalculo.valor = base_calculo - valor_deducoes
         self.ValorISS.valor = (self.BaseCalculo.valor * self.AliquotaAtividade.valor / 100).quantize(D('0.01'))
             
         texto += unicode(((valor_servicos - valor_deducoes) * 100).quantize(1)).zfill(15)
@@ -183,10 +195,13 @@ class RPS(XMLNFe):
         texto += self.CodigoAtividade.valor.zfill(10)
         texto += self.CPFCNPJTomador.valor.zfill(14)
         
+        print(texto)
+        
         gerador_sha1 = sha1()
         gerador_sha1.update(texto)
         self.Assinatura.valor = gerador_sha1.hexdigest()
-        
+
+    @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         
@@ -422,7 +437,8 @@ class _Lote(XMLNFe):
         super(_Lote, self).__init__()
         self.Id = TagCaracter(nome='Lote', propriedade=u'Id', raiz=u'//nfse:ReqEnvioLoteRPS')
         self.RPS  = []
-        
+
+    @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += self.Id.xml
@@ -463,7 +479,8 @@ class _Cabecalho(XMLNFe):
         self.Versao               = TagInteiro(nome='Versao'               , tamanho=[ 1,  3, 1], raiz='//nfse:ReqEnvioLoteRPS/Cabecalho', valor=1)
         self.MetodoEnvio          = TagCaracter(nome='MetodoEnvio'         , tamanho=[ 2,  3]   , raiz='//nfse:ReqEnvioLoteRPS/Cabecalho', valor='WS')
         self.VersaoComponente     = TagCaracter(nome='VersaoComponente'    , tamanho=[ 0, 10]   , raiz='//nfse:ReqEnvioLoteRPS/Cabecalho', obrigatorio=False)
-        
+
+    @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Cabecalho>'
@@ -531,11 +548,12 @@ class ReqEnvioLoteRPS(XMLNFe):
         
         self.Cabecalho.ValorTotalServicos.valor = valor_servicos - valor_deducoes
         self.Cabecalho.ValorTotalDeducoes.valor = valor_deducoes    
-        
+
+    @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
-        xml += '<nfse:ReqEnvioLoteRPS xmlns:nfse="http://localhost:8080/WsNFe2/lote">'
+        xml += '<nfse:ReqEnvioLoteRPS xmlns:nfse="http://localhost:8080/WsNFe2/lote" xmlns:tipos="http://localhost:8080/WsNFe2/tp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost:8080/WsNFe2/lote http://localhost:8080/WsNFe2/xsd/ReqEnvioLoteRPS.xsd">'
         
         if not self.Cabecalho.QtdRPS.valor:
             self.prepara_cabecalho()
