@@ -55,16 +55,23 @@ class ProcessoNFe(object):
 
 
 class ConexaoHTTPS(HTTPSConnection):
+    #
+    # O objetivo dessa derivação da classe HTTPSConnection é o seguinte:
+    #
+    # No estado do PR, o webservice deles anuncia que aceita os protocolos SSLv2 e SSLv3
+    # A classe HTTPSConnection, nesse caso, assume que pode ser usado SSLv2, anunciando pelo servidor
+    # MAS... se você não usar SSLv3 é impossível a conexão...
+    # Bem vindos ao estado do Paraná...
+    #
+    #
     def connect(self):
         "Connect to a host on a given (SSL) port."
 
-        sock = socket.create_connection((self.host, self.port),
-                                        self.timeout, self.source_address)
+        sock = socket.create_connection((self.host, self.port), self.timeout, self.source_address)
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
-        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file,
-                                    ssl_version=ssl.PROTOCOL_SSLv3)
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3)
 
 
 class ProcessadorNFe(object):
