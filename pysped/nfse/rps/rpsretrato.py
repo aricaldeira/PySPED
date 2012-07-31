@@ -49,15 +49,14 @@ class RPSRetrato(Report):
         return  data.strftime(formato.encode('utf-8')).decode('utf-8')
 
     class ObsImpressao(SystemField):
-        def __init__(self):
-            self.name = 'obs_impressao'
-            self.expression = 'RPS gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
-            self.top = 0*cm
-            self.left = 0.1*cm
-            self.width = 19.4*cm
-            self.height = 0.2*cm
-            self.style = DADO_PRODUTO
-            self.borders = {'bottom': 0.1}
+        name = 'obs_impressao'
+        expression = 'RPS gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
+        top = 0*cm
+        left = 0.1*cm
+        width = 19.4*cm
+        height = 0.2*cm
+        style = DADO_PRODUTO
+        borders = {'bottom': 0.1}
 
 
 class CabecalhoRetrato(BandaRPS):
@@ -159,6 +158,11 @@ class PrestadorRetrato(BandaRPS):
         self.elements.append(lbl)
         fld = Campo(attribute_name='RPS.prestador.cnpj', top=0.84*cm, left=1.4*cm, width=18*cm)
         self.elements.append(fld)
+
+        lbl = Titulo(text='Inscrição mobiliária:', top=0.84*cm, left=8*cm, width=3.4*cm)
+        self.elements.append(lbl)
+        fld = Campo(attribute_name='RPS.prestador.im', top=0.84*cm, left=10.7*cm, width=18*cm)
+        self.elements.append(fld)
         
         # 3ª linha
         lbl = Titulo(text='Endereço:', top=1.26*cm, left=0*cm, width=1.4*cm)
@@ -225,7 +229,9 @@ class DiscriminacaoRetrato(BandaRPS):
 
         #self.elements.append(Line(top=4.4*cm, bottom=4.4*cm, left=0*cm, right=19.4*cm, stroke_width=0.1))
         
-        lbl = self.inclui_descritivo_item(nome='', titulo='ITEM', top=4.4*cm, left=0*cm, width=12.5*cm)
+        lbl = self.inclui_descritivo_item(nome='', titulo='TRIBUTÁVEL', top=4.4*cm, left=0*cm, width=1.2*cm)
+        lbl.padding_top = 0.15*cm
+        lbl = self.inclui_descritivo_item(nome='', titulo='ITEM', top=4.4*cm, left=1.2*cm, width=11.3*cm)
         lbl.padding_top = 0.15*cm
         lbl = self.inclui_descritivo_item(nome='', titulo='QUANTIDADE', top=4.4*cm, left=12.5*cm, width=2.3*cm)
         lbl.padding_top = 0.15*cm
@@ -234,32 +240,6 @@ class DiscriminacaoRetrato(BandaRPS):
         lbl = self.inclui_descritivo_item(nome='', titulo='VALOR TOTAL', top=4.4*cm, left=17.1*cm, width=2.3*cm, margem_direita=True)
         lbl.padding_top = 0.15*cm
         
-
-        ## 1ª linha
-        #lbl = Titulo(text='Razão Social/Nome:', top=0.42*cm, left=0*cm, width=2.8*cm)
-        #self.elements.append(lbl)
-        #fld = Campo(attribute_name='RPS.RazaoSocialTomador.valor', top=0.42*cm, left=2.6*cm, width=16.8*cm)
-        #self.elements.append(fld)
-        
-        ## 2ª linha
-        #lbl = Titulo(text='CNPJ/CPF:', top=0.84*cm, left=0*cm, width=1.4*cm)
-        #self.elements.append(lbl)
-        #fld = Campo(attribute_name='RPS.cnpj_tomador_formatado', top=0.84*cm, left=1.4*cm, width=18*cm)
-        #self.elements.append(fld)
-        
-        ## 3ª linha
-        #lbl = Titulo(text='Endereço:', top=1.26*cm, left=0*cm, width=1.4*cm)
-        #self.elements.append(lbl)
-        #fld = Campo(attribute_name='RPS.endereco_tomador_formatado', top=1.26*cm, left=1.4*cm, width=18*cm)
-        #self.elements.append(fld)
-
-        ## 4ª linha
-        #lbl = Titulo(text='Município:', top=1.68*cm, left=0*cm, width=1.4*cm)
-        #self.elements.append(lbl)
-        #fld = Campo(attribute_name='RPS.CidadeTomadorDescricao.valor', top=1.68*cm, left=1.4*cm, width=18*cm)
-        #self.elements.append(fld)
-
-        
         self.height = 4.82*cm
 
 
@@ -267,7 +247,9 @@ class DetItemRetrato(BandaRPS):
     def __init__(self):
         super(DetItemRetrato, self).__init__()
         self.elements = []
-        txt = self.inclui_campo_item(nome='item', conteudo='DiscriminacaoServico.valor', top=0*cm, left=0*cm, width=12.5*cm)
+        txt = self.inclui_campo_item(nome='item', conteudo='tributavel_formatado', top=0*cm, left=0*cm, width=1.2*cm)
+        txt.style = DADO_PRODUTO_CENTRALIZADO
+        txt = self.inclui_campo_item(nome='item', conteudo='DiscriminacaoServico.valor', top=0*cm, left=1.2*cm, width=11.3*cm)
         txt = self.inclui_campo_numerico_item(nome='quantidade', conteudo='Quantidade.formato_danfe', top=0*cm, left=12.5*cm, width=2.3*cm)
         txt = self.inclui_campo_numerico_item(nome='vr_unitario', conteudo='ValorUnitario.formato_danfe', top=0*cm, left=14.8*cm, width=2.3*cm)
         txt = self.inclui_campo_numerico_item(nome='vr_total', conteudo='ValorTotal.formato_danfe', top=0*cm, left=17.1*cm, width=2.3*cm, margem_direita=True)
