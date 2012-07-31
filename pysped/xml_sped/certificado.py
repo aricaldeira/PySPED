@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division, print_function, unicode_literals
+
+
 from pysped.xml_sped import XMLNFe, NAMESPACE_SIG, ABERTURA, tira_abertura
 import libxml2
 import xmlsec
@@ -7,6 +10,7 @@ import os
 from datetime import datetime
 from time import mktime
 from OpenSSL import crypto
+import unicodedata
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -14,10 +18,10 @@ DIRNAME = os.path.dirname(__file__)
 
 class Certificado(object):
     def __init__(self):
-        self.arquivo     = u''
-        self.senha       = u''
-        self.chave       = u''
-        self.certificado = u''
+        self.arquivo     = ''
+        self.senha       = ''
+        self.chave       = ''
+        self.certificado = ''
         self.emissor     = {}
         self.proprietario = {}
         self.data_inicio_validade = None
@@ -42,16 +46,16 @@ class Certificado(object):
         # Para dar certo a leitura pelo xmlsec, temos que separar o certificado
         # em linhas de 64 caracteres de extensão...
         #
-        cert_txt = cert_txt.replace(u'\n', u'')
-        cert_txt = cert_txt.replace(u'-----BEGIN CERTIFICATE-----', u'')
-        cert_txt = cert_txt.replace(u'-----END CERTIFICATE-----', u'')
+        cert_txt = cert_txt.replace('\n', '')
+        cert_txt = cert_txt.replace('-----BEGIN CERTIFICATE-----', '')
+        cert_txt = cert_txt.replace('-----END CERTIFICATE-----', '')
 
-        linhas_certificado = [u'-----BEGIN CERTIFICATE-----\n']
+        linhas_certificado = ['-----BEGIN CERTIFICATE-----\n']
         for i in range(0, len(cert_txt), 64):
             linhas_certificado.append(cert_txt[i:i+64] + '\n')
-        linhas_certificado.append(u'-----END CERTIFICATE-----\n')
+        linhas_certificado.append('-----END CERTIFICATE-----\n')
 
-        self.certificado = u''.join(linhas_certificado)
+        self.certificado = ''.join(linhas_certificado)
 
         cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM, self.certificado)
 
@@ -104,23 +108,23 @@ class Certificado(object):
         # Determina o tipo de arquivo que vai ser assinado, procurando
         # pela tag correspondente
         #
-        
+
         #
         # XML da NF-e nacional
         #
-        if u'infNFe' in xml:
-            doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
-        elif u'infCanc' in xml:
-            doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
-        elif u'infInut' in xml:
-            doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
-            
+        if 'infNFe' in xml:
+            doctype = '<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
+        elif 'infCanc' in xml:
+            doctype = '<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
+        elif 'infInut' in xml:
+            doctype = '<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+
         #
         # XML da NFS-e
         #
-        elif u'ReqEnvioLoteRPS' in xml:
-            doctype = u'<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
-            
+        elif 'ReqEnvioLoteRPS' in xml:
+            doctype = '<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
+
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
 
@@ -135,7 +139,8 @@ class Certificado(object):
         #
         # Remove todos os \n
         #
-        xml = xml.replace(u'\n', u'')
+        xml = xml.replace('\n', '')
+        xml = xml.replace('\r', '')
 
         return xml
 
@@ -151,18 +156,18 @@ class Certificado(object):
         #
         # XML da NF-e nacional
         #
-        if u'infNFe' in xml:
-            doctype = u'<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
-        elif u'infCanc' in xml:
-            doctype = u'<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
-        elif u'infInut' in xml:
-            doctype = u'<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+        if 'infNFe' in xml:
+            doctype = '<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
+        elif 'infCanc' in xml:
+            doctype = '<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
+        elif 'infInut' in xml:
+            doctype = '<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
 
         #
         # XML da NFS-e
         #
-        elif u'ReqEnvioLoteRPS' in xml:
-            doctype = u'<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
+        elif 'ReqEnvioLoteRPS' in xml:
+            doctype = '<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
 
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
@@ -170,7 +175,7 @@ class Certificado(object):
         #
         # Remove o doctype e os \n acrescentados pela libxml2
         #
-        xml = xml.replace(u'\n', u'')
+        xml = xml.replace('\n', '')
         xml = xml.replace(ABERTURA + doctype, ABERTURA)
 
         return xml
@@ -232,8 +237,8 @@ class Certificado(object):
         # o certificado que assinou o documento
         #
         xpath = doc_xml.xpathNewContext()
-        xpath.xpathRegisterNs(u'sig', NAMESPACE_SIG)
-        certificados = xpath.xpathEval(u'//sig:X509Data/sig:X509Certificate')
+        xpath.xpathRegisterNs('sig', NAMESPACE_SIG)
+        certificados = xpath.xpathEval('//sig:X509Data/sig:X509Certificate')
         for i in range(len(certificados)-1):
             certificados[i].unlinkNode()
             certificados[i].freeNode()
@@ -270,7 +275,7 @@ class Certificado(object):
         #
         # Colocamos o texto no avaliador XML
         #
-        doc_xml = libxml2.parseMemory(xml, len(xml))
+        doc_xml = libxml2.parseMemory(xml.encode('utf-8'), len(xml.encode('utf-8')))
 
         #
         # Separa o nó da assinatura
