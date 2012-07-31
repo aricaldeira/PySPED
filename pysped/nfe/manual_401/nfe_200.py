@@ -1594,7 +1594,7 @@ class NFRef(nfe_110.NFRef):
         xml += u'</NFref>'
         return xml
 
-    def set_xml(self):
+    def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.refNFe.xml = arquivo
             self.refNF.xml  = arquivo
@@ -1608,10 +1608,10 @@ class NFRef(nfe_110.NFRef):
 class Ide(nfe_110.Ide):
     def __init__(self):
         super(Ide, self).__init__()
-        self.cNF     = TagCaracter(nome=u'cNF'     , codigo=u'B03', tamanho=[ 8,  8, 8], raiz=u'//NFe/infNFe/ide')
+        self.cNF     = TagCaracter(nome=u'cNF'    , codigo=u'B03', tamanho=[ 8,  8, 8], raiz=u'//NFe/infNFe/ide')
         self.hSaiEnt = TagHora(nome=u'hSaiEnt'    , codigo=u'B10a',                     raiz=u'//NFe/infNFe/ide', obrigatorio=False)
         self.dhCont   = TagDataHora(nome=u'dhCont', codigo=u'B28',                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
-        self.xJust    = TagCaracter(nome=u'xJust',  codigo=u'B29',                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
+        self.xJust    = TagCaracter(nome=u'xJust' , codigo=u'B29',                      raiz=u'//NFe/infNFe/ide', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
