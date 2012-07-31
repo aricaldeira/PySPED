@@ -170,13 +170,13 @@ class RemetenteRetrato(BandaDANFE):
         lbl.style = DADO_VARIAVEL
 
     def campo_variavel_normal(self):
-        #txt = self.inclui_texto_sem_borda(nome='remetente_var1', texto=u'Consulta de autenticidade no portal nacional da NF-e<br /><a href="http://www.nfe.fazenda.gov.br/portal"><u>www.nfe.fazenda.gov.br/portal</u></a><br /> ou no site da SEFAZ autorizadora', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
-        #txt.padding_top = 0.2*cm
-        #txt.style = DADO_VARIAVEL
+        txt = self.inclui_texto_sem_borda(nome='remetente_var1', texto=u'Consulta de autenticidade no portal nacional da NF-e<br /><a href="http://www.nfe.fazenda.gov.br/portal"><u>www.nfe.fazenda.gov.br</u></a><br /> ou no site da SEFAZ autorizadora', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
+        txt.padding_top = 0.2*cm
+        txt.style = DADO_VARIAVEL
 
-        fld = self.inclui_campo_sem_borda(nome='remetente_var1', conteudo=u'NFe.consulta_autenticidade', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
-        fld.padding_top = 0.2*cm
-        fld.style = DADO_VARIAVEL
+        #fld = self.inclui_campo_sem_borda(nome='remetente_var1', conteudo=u'NFe.consulta_autenticidade', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
+        #fld.padding_top = 0.2*cm
+        #fld.style = DADO_VARIAVEL
 
         lbl, lbl = self.inclui_campo(nome='remetente_var2', titulo=u'PROTOCOLO DE AUTORIZAÇÃO DE USO', conteudo=u'protNFe.protocolo_formatado', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
         lbl.style = DADO_VARIAVEL

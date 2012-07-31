@@ -3148,12 +3148,6 @@ class NFe(XMLNFe):
 
         return formatado
 
-    def consulta_autenticidade(self):
-        texto = 'Consulta de autenticidade no portal nacional da NF-e<br /><a href="'
-        texto += 'https://www.nfe.fazenda.gov.br/portal/FormularioDePesquisa.aspx?tipoconsulta=resumo&chaveAcesso=' + self.chave
-        texto += '"><u>www.nfe.fazenda.gov.br/portal</u></a><br /> ou no site da SEFAZ autorizadora...'
-        return texto
-
     def cst_descricao(self):
         return 'CST'
         
