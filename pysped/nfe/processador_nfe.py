@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division, print_function, unicode_literals
+
 from httplib import HTTPSConnection, HTTPResponse
 from OpenSSL import crypto
 import socket
@@ -809,9 +811,18 @@ class DANFE(object):
             self.danfe.remetente.campo_variavel_conferencia()
 
         # NF-e denegada
-        elif self.protNFe.infProt.cStat.valor == u'110':
-            self.danfe.remetente.campo_variavel_denegacao()
+        elif self.protNFe.infProt.cStat.valor in (u'110', u'301', u'302'):
+            #self.danfe.remetente.campo_variavel_denegacao()
+            self.danfe.remetente.campo_variavel_normal()
             self.danfe.remetente.obs_denegacao()
+            
+            #
+            # Adiciona a observação de quem é a irregularidade fiscal
+            #
+            #if self.protNFe.infProt.cStat.valor == '301':
+                #self.danfe.remetente.find_by_name('txt_remetente_var1').text = b'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais do emitente.'
+            #elif self.protNFe.infProt.cStat.valor == '302':
+                #self.danfe.remetente.find_by_name('txt_remetente_var1').text = b'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais do destinatário.'
 
         # Emissão em contingência com FS ou FSDA
         elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):

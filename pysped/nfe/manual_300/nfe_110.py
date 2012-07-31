@@ -3012,7 +3012,10 @@ class NFe(XMLNFe):
         return formatado
 
     def endereco_emitente_formatado_linha_3(self):
-        formatado = 'Fone: ' + self.fone_emitente_formatado()
+        if self.fone_emitente_formatado().strip() != u'':
+            formatado = 'Fone: ' + self.fone_emitente_formatado()
+        else:
+            formatado = ''
         return formatado
 
     def endereco_emitente_formatado_linha_4(self):
@@ -3020,6 +3023,9 @@ class NFe(XMLNFe):
 
     def _formata_fone(self, fone):
         if not len(fone.strip()):
+            return ''
+
+        if fone.strip() == '0':
             return ''
 
         if len(fone) <= 8:
@@ -3035,10 +3041,12 @@ class NFe(XMLNFe):
         return self._formata_fone(unicode(self.infNFe.emit.enderEmit.fone.valor))
 
     def cnpj_destinatario_formatado(self):
-        if len(self.infNFe.dest.CPF.valor):
+        if self.infNFe.dest.CPF.valor and len(self.infNFe.dest.CPF.valor):
             return self._formata_cpf(unicode(self.infNFe.dest.CPF.valor))
-        else:
+        elif self.infNFe.dest.CNPJ.valor and len(self.infNFe.dest.CNPJ.valor):
             return self._formata_cnpj(unicode(self.infNFe.dest.CNPJ.valor))
+        else:
+            return ''
 
     def endereco_destinatario_formatado(self):
         formatado = self.infNFe.dest.enderDest.xLgr.valor
@@ -3139,3 +3147,15 @@ class NFe(XMLNFe):
             formatado = ''
 
         return formatado
+
+    def consulta_autenticidade(self):
+        texto = 'Consulta de autenticidade no portal nacional da NF-e<br /><a href="'
+        texto += 'https://www.nfe.fazenda.gov.br/portal/FormularioDePesquisa.aspx?tipoconsulta=resumo&chaveAcesso=' + self.chave
+        texto += '"><u>www.nfe.fazenda.gov.br/portal</u></a><br /> ou no site da SEFAZ autorizadora...'
+        return texto
+
+    def cst_descricao(self):
+        return 'CST'
+        
+    def crt_descricao(self):
+        return ''

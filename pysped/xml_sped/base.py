@@ -46,7 +46,8 @@ class NohXML(object):
                     self._xml = etree.fromstring(tira_abertura(arquivo).encode('utf-8'))
                 else:
                     arq = open(arquivo)
-                    txt = ''.join(arq.readlines())
+                    txt = b''.join(arq.readlines())
+                    txt = unicode(txt.decode('utf-8'))
                     txt = tira_abertura(txt)
                     arq.close()
                     self._xml = etree.fromstring(txt)

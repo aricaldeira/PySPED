@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division, print_function, unicode_literals
+
 
 from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import A4, landscape
@@ -114,13 +116,19 @@ class RemetenteRetrato(BandaDANFE):
         txt = self.inclui_texto_sem_borda(nome='danfe_ext', texto=u'DOCUMENTO AUXILIAR DA NOTA FISCAL ELETRÔNICA', top=0.6*cm, left=8*cm, width=3.4*cm, height=4*cm)
         txt.style = DESCRITIVO_DANFE_GERAL
 
-        txt = self.inclui_texto_sem_borda(nome='danfe_entrada', texto=u'0 - ENTRADA', top=1.45*cm, left=8.3*cm, width=3.4*cm, height=4*cm)
+        txt = self.inclui_texto_sem_borda(nome='danfe_ext', texto=u'versão', top=1.1*cm, left=8.8*cm, width=1.4*cm, height=0.6*cm)
+        txt.style = DESCRITIVO_DANFE_GERAL
+
+        fld = self.inclui_campo_sem_borda(nome='danfe_entrada_saida', conteudo=u'NFe.infNFe.versao.valor', top=1.1*cm, left=9.8*cm, width=0.6*cm, height=0.6*cm)
+        fld.style = DESCRITIVO_DANFE_GERAL
+
+        txt = self.inclui_texto_sem_borda(nome='danfe_entrada', texto=u'0 - ENTRADA', top=1.5*cm, left=8.3*cm, width=3.4*cm, height=4*cm)
         txt.style = DESCRITIVO_DANFE_ES
 
-        txt = self.inclui_texto_sem_borda(nome='danfe_saida', texto=u'1 - SAÍDA', top=1.85*cm, left=8.3*cm, width=3.4*cm, height=4*cm)
+        txt = self.inclui_texto_sem_borda(nome='danfe_saida', texto=u'1 - SAÍDA', top=1.9*cm, left=8.3*cm, width=3.4*cm, height=4*cm)
         txt.style = DESCRITIVO_DANFE_ES
 
-        fld = self.inclui_campo_sem_borda(nome='danfe_entrada_saida', conteudo=u'NFe.infNFe.ide.tpNF.valor', top=1.6*cm, left=10.4*cm, width=0.6*cm, height=0.6*cm)
+        fld = self.inclui_campo_sem_borda(nome='danfe_entrada_saida', conteudo=u'NFe.infNFe.ide.tpNF.valor', top=1.65*cm, left=10.4*cm, width=0.6*cm, height=0.6*cm)
         fld.style = DESCRITIVO_NUMERO
         fld.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': 0.1}
         fld.padding_bottom = 0.2*cm
@@ -162,9 +170,13 @@ class RemetenteRetrato(BandaDANFE):
         lbl.style = DADO_VARIAVEL
 
     def campo_variavel_normal(self):
-        txt = self.inclui_texto_sem_borda(nome='remetente_var1', texto=u'Consulta de autenticidade no portal nacional da NF-e<br /><a href="http://www.nfe.fazenda.gov.br/portal"><u>www.nfe.fazenda.gov.br/portal</u></a><br /> ou no site da SEFAZ autorizadora', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
-        txt.padding_top = 0.2*cm
-        txt.style = DADO_VARIAVEL
+        #txt = self.inclui_texto_sem_borda(nome='remetente_var1', texto=u'Consulta de autenticidade no portal nacional da NF-e<br /><a href="http://www.nfe.fazenda.gov.br/portal"><u>www.nfe.fazenda.gov.br/portal</u></a><br /> ou no site da SEFAZ autorizadora', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
+        #txt.padding_top = 0.2*cm
+        #txt.style = DADO_VARIAVEL
+
+        fld = self.inclui_campo_sem_borda(nome='remetente_var1', conteudo=u'NFe.consulta_autenticidade', top=2.375*cm, left=11.4*cm, width=8*cm, height=1.625*cm)
+        fld.padding_top = 0.2*cm
+        fld.style = DADO_VARIAVEL
 
         lbl, lbl = self.inclui_campo(nome='remetente_var2', titulo=u'PROTOCOLO DE AUTORIZAÇÃO DE USO', conteudo=u'protNFe.protocolo_formatado', top=4*cm, left=11.4*cm, width=8*cm, margem_direita=True)
         lbl.style = DADO_VARIAVEL
@@ -355,6 +367,15 @@ class RemetenteRetrato(BandaDANFE):
         fld.style = EMIT_DADOS
         elements.append(fld)
 
+        fld = Campo()
+        fld.nome  = 'fld_regime_tributario'
+        fld.attribute_name = 'NFe.crt_descricao'
+        fld.top   = 3.6*cm
+        fld.width = 8*cm
+        fld.height = 0.4*cm
+        fld.style = DADO_PRODUTO_CENTRALIZADO
+        elements.append(fld)
+        
         return elements
 
     def dados_emitente_logo_vertical(self, arquivo_imagem):
@@ -424,6 +445,16 @@ class RemetenteRetrato(BandaDANFE):
         fld.height = 0.45*cm
         fld.style = EMIT_DADOS
         elements.append(fld)
+        
+        fld = Campo()
+        fld.nome  = 'fld_regime_tributario'
+        fld.attribute_name = 'NFe.crt_descricao'
+        fld.top   = 3.6*cm
+        fld.left  = 2.5*cm
+        fld.width = 5.5*cm
+        fld.height = 0.4*cm
+        fld.style = DADO_PRODUTO_CENTRALIZADO
+        elements.append(fld)        
 
         return elements
 
@@ -458,22 +489,22 @@ class RemetenteRetrato(BandaDANFE):
         fld = Campo()
         fld.nome  = 'fld_rem_endereco_3'
         fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
-        fld.top   = 1.7*cm
-        fld.left  = 4*cm
-        fld.width = 4*cm
-        fld.height = 0.45*cm
-        fld.style = EMIT_DADOS
-        elements.append(fld)
-
-        fld = Campo()
-        fld.nome  = 'fld_rem_endereco_4'
-        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_4'
         fld.top   = 2.05*cm
         fld.left  = 4*cm
         fld.width = 4*cm
         fld.height = 0.45*cm
         fld.style = EMIT_DADOS
         elements.append(fld)
+
+#        fld = Campo()
+#        fld.nome  = 'fld_rem_endereco_4'
+#        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_4'
+#        fld.top   = 2.05*cm
+#        fld.left  = 4*cm
+#        fld.width = 4*cm
+#        fld.height = 0.45*cm
+#        fld.style = EMIT_DADOS
+#        elements.append(fld)
 
         fld = Campo()
         fld.nome  = 'fld_rem_endereco_1'
@@ -495,6 +526,15 @@ class RemetenteRetrato(BandaDANFE):
         fld.style = EMIT_DADOS
         elements.append(fld)
 
+        fld = Campo()
+        fld.nome  = 'fld_regime_tributario'
+        fld.attribute_name = 'NFe.crt_descricao'
+        fld.top   = 3.6*cm
+        fld.left  = 0*cm
+        fld.width = 8*cm
+        fld.height = 0.4*cm
+        fld.style = DADO_PRODUTO_CENTRALIZADO
+        elements.append(fld)  
 
         return elements
 
@@ -700,21 +740,33 @@ class CabProdutoRetrato(BandaDANFE):
         self.elements = []
         self.inclui_descritivo(nome='cabprod', titulo=u'DADOS DOS PRODUTOS/SERVIÇOS', top=0*cm, left=0*cm, width=19.4*cm)
 
-        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DO PRODUTO', top=0.42*cm, left=0*cm, width=2.6*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DO PRODUTO', top=0.42*cm, left=0*cm, width=2*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='DESCRIÇÃO DO PRODUTO/SERVIÇO', top=0.42*cm, left=2.6*cm, width=5.26*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='DESCRIÇÃO DO PRODUTO/SERVIÇO', top=0.42*cm, left=2*cm, width=5.1*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='NCM/SH', top=0.42*cm, left=7.86*cm, width=1*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='NCM/SH', top=0.42*cm, left=7.1*cm, width=1*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='CST', top=0.42*cm, left=8.86*cm, width=0.44*cm)
+        
+        #lbl = self.inclui_descritivo_produto(nome='', titulo='CST', top=0.42*cm, left=8.75*cm, width=0.55*cm)
+        #lbl.padding_top = 0.15*cm
+        
+        fld = self.inclui_campo_sem_borda(nome='cst_descricao', conteudo=u'NFe.cst_descricao', top=0.42*cm, left=8.1*cm, width=0.6*cm)
+        fld.style = DESCRITIVO_PRODUTO
+        fld.padding_top = 0.15*cm
+        fld.padding_left = 0.05*cm
+        fld.padding_bottom = 0.05*cm
+        fld.padding_right = 0.05*cm
+        fld.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': False}
+        fld.height = 0.52*cm
+
+        lbl = self.inclui_descritivo_produto(nome='', titulo='CFOP', top=0.42*cm, left=8.7*cm, width=0.54*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='CFOP', top=0.42*cm, left=9.3*cm, width=0.54*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='UNIDADE', top=0.42*cm, left=9.24*cm, width=1.1*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='UNIDADE', top=0.42*cm, left=9.84*cm, width=1.1*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='QUANTIDADE', top=0.42*cm, left=10.34*cm, width=1.4*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='QUANTIDADE', top=0.42*cm, left=10.94*cm, width=1.4*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR UNITÁRIO', top=0.42*cm, left=11.74*cm, width=2*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR UNITÁRIO', top=0.42*cm, left=12.34*cm, width=1.4*cm)
         lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR TOTAL', top=0.42*cm, left=13.74*cm, width=1.2*cm)
         lbl.padding_top = 0.15*cm
         lbl = self.inclui_descritivo_produto(nome='', titulo='BASE CÁLC. DO ICMS', top=0.42*cm, left=14.94*cm, width=1.2*cm)
@@ -743,7 +795,7 @@ class DetProdutoRetrato(BandaDANFE):
         #txt = self.inclui_texto_centralizado_produto(nome='', texto='9999', top=0*cm, left=9.3*cm, width=0.54*cm)
         #txt = self.inclui_texto_centralizado_produto(nome='', texto='MMMMMM', top=0*cm, left=9.84*cm, width=1.1*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999', top=0*cm, left=10.94*cm, width=1.4*cm)
-        #txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999', top=0*cm, left=12.34*cm, width=1.4*cm)
+        #txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999999999', top=0*cm, left=12.34*cm, width=2*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=13.74*cm, width=1.2*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=14.94*cm, width=1.2*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='999.999,99', top=0*cm, left=16.14*cm, width=1.05*cm)
@@ -751,14 +803,14 @@ class DetProdutoRetrato(BandaDANFE):
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
-        txt = self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2.6*cm)
-        txt = self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2.6*cm, width=5.26*cm)
-        txt = self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=7.86*cm, width=1*cm)
-        txt = self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=8.86*cm, width=0.44*cm)
-        txt = self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=9.3*cm, width=0.54*cm)
-        txt = self.inclui_campo_centralizado_produto(nome=u'prod_unidade', conteudo=u'prod.uCom.valor', top=0*cm, left=9.84*cm, width=1.1*cm)
-        txt = self.inclui_campo_numerico_produto(nome='prod_quantidade', conteudo=u'prod.qCom.formato_danfe', top=0*cm, left=10.94*cm, width=1.4*cm)
-        txt = self.inclui_campo_numerico_produto(nome='vr_unitario', conteudo=u'prod.vUnCom.formato_danfe', top=0*cm, left=12.34*cm, width=1.4*cm)
+        txt = self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2*cm)
+        txt = self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2*cm, width=5.1*cm)
+        txt = self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=7.1*cm, width=1*cm)
+        txt = self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=8.1*cm, width=0.6*cm)
+        txt = self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=8.7*cm, width=0.54*cm)
+        txt = self.inclui_campo_centralizado_produto(nome=u'prod_unidade', conteudo=u'prod.uCom.valor', top=0*cm, left=9.24*cm, width=1.1*cm)
+        txt = self.inclui_campo_numerico_produto(nome='prod_quantidade', conteudo=u'prod.qCom.formato_danfe', top=0*cm, left=10.34*cm, width=1.4*cm)
+        txt = self.inclui_campo_numerico_produto(nome='vr_unitario', conteudo=u'prod.vUnCom.formato_danfe', top=0*cm, left=11.74*cm, width=2*cm)
         txt = self.inclui_campo_numerico_produto(nome='', conteudo='prod.vProd.formato_danfe', top=0*cm, left=13.74*cm, width=1.2*cm)
         txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vBC.formato_danfe', top=0*cm, left=14.94*cm, width=1.2*cm)
         txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vICMS.formato_danfe', top=0*cm, left=16.14*cm, width=1.05*cm)

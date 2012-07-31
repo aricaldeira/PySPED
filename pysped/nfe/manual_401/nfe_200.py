@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division, print_function, unicode_literals
+
 from pysped.xml_sped import *
 #from soap_100 import SOAPEnvio, SOAPRetorno, conectar_servico
 from pysped.nfe.manual_401 import ESQUEMA_ATUAL
@@ -1145,11 +1147,13 @@ class Det(nfe_110.Det):
         self.imposto   = Imposto()
 
     def cst_formatado(self):
-        if self.imposto.regime_tributario != 1:
-            super(Det, self).cst_formatado()
-        
         formatado = unicode(self.imposto.ICMS.orig.valor).zfill(1)
-        formatado += unicode(self.imposto.ICMS.CSOSN.valor).zfill(3)
+
+        if self.imposto.ICMS.regime_tributario == 1:
+            formatado += unicode(self.imposto.ICMS.CSOSN.valor).zfill(3)
+        else:
+            formatado += unicode(self.imposto.ICMS.CST.valor).zfill(2)
+
         return formatado
 
 
@@ -1784,3 +1788,21 @@ class NFe(nfe_110.NFe):
         chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, u'0')
         chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, u'0')
         self.chave = chave
+
+    def cst_descricao(self):
+        if self.infNFe.emit.CRT.valor == 1:
+            return 'CSOSN'
+        else:
+            return 'CST'
+            
+    def crt_descricao(self):
+        texto = 'Regime tributário: '
+       
+        if self.infNFe.emit.CRT.valor == 1:
+            texto += 'SIMPLES Nacional'
+        elif self.infNFe.emit.CRT.valor == 2:
+            texto += 'SIMPLES Nacional - excesso de sublimite de receita bruta'
+        else:
+            texto += 'regime normal'
+           
+        return texto
