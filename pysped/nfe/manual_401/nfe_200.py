@@ -20,13 +20,13 @@ class Deduc(XMLNFe):
 
     def get_xml(self):
         if not (self.xDed.valor or self.vDed.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<deduc>'
+        xml += '<deduc>'
         xml += self.xDed.xml
         xml += self.vDed.xml
-        xml += u'</deduc>'
+        xml += '</deduc>'
         return xml
 
     def set_xml(self, arquivo):
@@ -45,13 +45,13 @@ class ForDia(XMLNFe):
 
     def get_xml(self):
         if not (self.dia.valor or self.qtde.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<forDia>'
+        xml += '<forDia>'
         xml += self.dia.xml
         xml += self.qtde.xml
-        xml += u'</forDia>'
+        xml += '</forDia>'
         return xml
 
     def set_xml(self, arquivo):
@@ -78,10 +78,10 @@ class Cana(XMLNFe):
 
     def get_xml(self):
         if not (self.safra.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<cana>'
+        xml += '<cana>'
         xml += self.safra.xml
         xml += self.ref.xml
 
@@ -98,7 +98,7 @@ class Cana(XMLNFe):
         xml += self.vFor.xml
         xml += self.vTotDed.xml
         xml += self.vLiqFor.xml
-        xml += u'</cana>'
+        xml += '</cana>'
         return xml
 
     def set_xml(self, arquivo):
@@ -124,17 +124,17 @@ class ISSQN(nfe_110.ISSQN):
 
     def get_xml(self):
         if not (self.cSitTrib.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<ISSQN>'
+        xml += '<ISSQN>'
         xml += self.vBC.xml
         xml += self.vAliq.xml
         xml += self.vISSQN.xml
         xml += self.cMunFG.xml
         xml += self.cListServ.xml
         xml += self.cSitTrib.xml
-        xml += u'</ISSQN>'
+        xml += '</ISSQN>'
         return xml
 
     def set_xml(self, arquivo):
@@ -147,6 +147,22 @@ class ISSQN(nfe_110.ISSQN):
             self.cSitTrib.xml  = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not (self.cSitTrib.valor):
+            return ''
+
+        txt = 'U|'
+        txt += self.vBC.txt + '|'
+        txt += self.vAliq.txt + '|'
+        txt += self.vISSQN.txt + '|'
+        txt += self.cMunFG.txt + '|'
+        txt += self.cListServ.txt + '|'
+        txt += self.cSitTrib.txt + '|'
+        txt += '\n'
+        return txt
+
+    txt = property(get_txt)
 
 
 class COFINSST(nfe_110.COFINSST):
@@ -197,10 +213,10 @@ class IPI(nfe_110.IPI):
 class TagCSOSN(TagCaracter):
     def __init__(self, *args, **kwargs):
         super(TagCSOSN, self).__init__(*args, **kwargs)
-        self.nome = u'CSOSN'
-        self.codigo = u'N12a'
+        self.nome = 'CSOSN'
+        self.codigo = 'N12a'
         self.tamanho = [3, 3]
-        self.raiz = u''
+        self.raiz = ''
         self.grupo_icms = None
 
     def set_valor(self, novo_valor):
@@ -234,20 +250,20 @@ class TagCSOSN(TagCaracter):
         # tributária
         #
         self.grupo_icms.modBC.valor       = 3
-        self.grupo_icms.vBC.valor         = u'0.00'
-        self.grupo_icms.pRedBC.valor      = u'0.00'
-        self.grupo_icms.pICMS.valor       = u'0.00'
-        self.grupo_icms.vICMS.valor       = u'0.00'
+        self.grupo_icms.vBC.valor         = '0.00'
+        self.grupo_icms.pRedBC.valor      = '0.00'
+        self.grupo_icms.pICMS.valor       = '0.00'
+        self.grupo_icms.vICMS.valor       = '0.00'
         self.grupo_icms.modBCST.valor     = 4
-        self.grupo_icms.pMVAST.valor      = u'0.00'
-        self.grupo_icms.pRedBCST.valor    = u'0.00'
-        self.grupo_icms.vBCST.valor       = u'0.00'
-        self.grupo_icms.pICMSST.valor     = u'0.00'
-        self.grupo_icms.vICMSST.valor     = u'0.00'
-        self.grupo_icms.vBCSTRet.valor    = u'0.00'
-        self.grupo_icms.vICMSSTRet.valor  = u'0.00'
-        self.grupo_icms.pCredSN.valor     = u'0.00'
-        self.grupo_icms.vCredICMSSN.valor = u'0.00'
+        self.grupo_icms.pMVAST.valor      = '0.00'
+        self.grupo_icms.pRedBCST.valor    = '0.00'
+        self.grupo_icms.vBCST.valor       = '0.00'
+        self.grupo_icms.pICMSST.valor     = '0.00'
+        self.grupo_icms.vICMSST.valor     = '0.00'
+        self.grupo_icms.vBCSTRet.valor    = '0.00'
+        self.grupo_icms.vICMSSTRet.valor  = '0.00'
+        self.grupo_icms.pCredSN.valor     = '0.00'
+        self.grupo_icms.vCredICMSSN.valor = '0.00'
 
         #
         # Para cada código de situação tributária,
@@ -264,48 +280,54 @@ class TagCSOSN(TagCaracter):
         # Usamos a propriedade privada, para evitar
         # o processamento do set_valor da classe TagCSTICMS
         #
-        if self.valor == u'101':
-            self.grupo_icms.nome_tag = u'ICMSSN101'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN101'
+        if self.valor == '101':
+            self.grupo_icms.nome_tag = 'ICMSSN101'
+            self.grupo_icms.nome_tag_txt = 'N10c'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN101'
             self.grupo_icms.pCredSN.obrigatorio     = True
             self.grupo_icms.vCredICMSSN.obrigatorio = True
-            self.grupo_icms.CST._valor_string       = u'41'
+            self.grupo_icms.CST._valor_string       = '41'
 
-        elif self.valor in (u'102', u'103', u'300', u'400'):
-            self.grupo_icms.nome_tag = u'ICMSSN102'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN102'
-            self.grupo_icms.CST._valor_string       = u'41'
+        elif self.valor in (u'102', '103', '300', '400'):
+            self.grupo_icms.nome_tag = 'ICMSSN102'
+            self.grupo_icms.nome_tag_txt = 'N10d'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN102'
+            self.grupo_icms.CST._valor_string       = '41'
 
-        elif self.valor == u'201':
-            self.grupo_icms.nome_tag = u'ICMSSN201'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN201'
+        elif self.valor == '201':
+            self.grupo_icms.nome_tag = 'ICMSSN201'
+            self.grupo_icms.nome_tag_txt = 'N10e'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN201'
             self.grupo_icms.modBCST.obrigatorio     = True
             self.grupo_icms.vBCST.obrigatorio       = True
             self.grupo_icms.pICMSST.obrigatorio     = True
             self.grupo_icms.vICMSST.obrigatorio     = True
             self.grupo_icms.pCredSN.obrigatorio     = True
             self.grupo_icms.vCredICMSSN.obrigatorio = True
-            self.grupo_icms.CST._valor_string       = u'30'
+            self.grupo_icms.CST._valor_string       = '30'
 
-        elif self.valor in (u'202', u'203'):
-            self.grupo_icms.nome_tag = u'ICMSSN202'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN202'
+        elif self.valor in (u'202', '203'):
+            self.grupo_icms.nome_tag = 'ICMSSN202'
+            self.grupo_icms.nome_tag_txt = 'N10f'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN202'
             self.grupo_icms.modBCST.obrigatorio     = True
             self.grupo_icms.vBCST.obrigatorio       = True
             self.grupo_icms.pICMSST.obrigatorio     = True
             self.grupo_icms.vICMSST.obrigatorio     = True
-            self.grupo_icms.CST._valor_string       = u'30'
+            self.grupo_icms.CST._valor_string       = '30'
 
-        elif self.valor == u'500':
-            self.grupo_icms.nome_tag = u'ICMSSN500'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN500'
+        elif self.valor == '500':
+            self.grupo_icms.nome_tag = 'ICMSSN500'
+            self.grupo_icms.nome_tag_txt = 'N10g'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN500'
             self.grupo_icms.vBCSTRet.obrigatorio    = True
             self.grupo_icms.vICMSSTRet.obrigatorio  = True
-            self.grupo_icms.CST._valor_string       = u'60'
+            self.grupo_icms.CST._valor_string       = '60'
 
-        elif self.valor == u'900':
-            self.grupo_icms.nome_tag = u'ICMSSN900'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSSN900'
+        elif self.valor == '900':
+            self.grupo_icms.nome_tag = 'ICMSSN900'
+            self.grupo_icms.nome_tag_txt = 'N10h'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN900'
             self.grupo_icms.modBC.obrigatorio       = True
             self.grupo_icms.vBC.obrigatorio         = True
             self.grupo_icms.pICMS.obrigatorio       = True
@@ -316,7 +338,7 @@ class TagCSOSN(TagCaracter):
             self.grupo_icms.vICMSST.obrigatorio     = True
             self.grupo_icms.pCredSN.obrigatorio     = True
             self.grupo_icms.vCredICMSSN.obrigatorio = True
-            self.grupo_icms.CST._valor_string       = u'90'
+            self.grupo_icms.CST._valor_string       = '90'
 
         #
         # Redefine a raiz para todas as tags do grupo ICMS
@@ -348,10 +370,10 @@ class TagCSOSN(TagCaracter):
 class TagCSTICMS(nfe_110.TagCSTICMS):
     def __init__(self, *args, **kwargs):
         super(TagCSTICMS, self).__init__(*args, **kwargs)
-        self.nome = u'CST'
-        self.codigo = u'N12'
+        self.nome = 'CST'
+        self.codigo = 'N12'
         self.tamanho = [2, 2]
-        self.raiz = u''
+        self.raiz = ''
         self.grupo_icms = None
 
     def set_valor(self, novo_valor):
@@ -388,38 +410,39 @@ class TagCSTICMS(nfe_110.TagCSTICMS):
         # tributária
         #
         self.grupo_icms.modBC.valor       = 3
-        self.grupo_icms.vBC.valor         = u'0.00'
-        self.grupo_icms.pRedBC.valor      = u'0.00'
-        self.grupo_icms.pICMS.valor       = u'0.00'
-        self.grupo_icms.vICMS.valor       = u'0.00'
+        self.grupo_icms.vBC.valor         = '0.00'
+        self.grupo_icms.pRedBC.valor      = '0.00'
+        self.grupo_icms.pICMS.valor       = '0.00'
+        self.grupo_icms.vICMS.valor       = '0.00'
         self.grupo_icms.modBCST.valor     = 4
-        self.grupo_icms.pMVAST.valor      = u'0.00'
-        self.grupo_icms.pRedBCST.valor    = u'0.00'
-        self.grupo_icms.vBCST.valor       = u'0.00'
-        self.grupo_icms.pICMSST.valor     = u'0.00'
-        self.grupo_icms.vICMSST.valor     = u'0.00'
+        self.grupo_icms.pMVAST.valor      = '0.00'
+        self.grupo_icms.pRedBCST.valor    = '0.00'
+        self.grupo_icms.vBCST.valor       = '0.00'
+        self.grupo_icms.pICMSST.valor     = '0.00'
+        self.grupo_icms.vICMSST.valor     = '0.00'
         self.grupo_icms.motDesICMS.valor  = 0
-        self.grupo_icms.vBCSTRet.valor    = u'0.00'
-        self.grupo_icms.vICMSSTRet.valor  = u'0.00'
-        self.grupo_icms.vBCSTDest.valor   = u'0.00'
-        self.grupo_icms.vICMSSTDest.valor = u'0.00'
-        self.grupo_icms.UFST.valor        = u''
-        self.grupo_icms.pBCOp.valor       = u'0.00'
+        self.grupo_icms.vBCSTRet.valor    = '0.00'
+        self.grupo_icms.vICMSSTRet.valor  = '0.00'
+        self.grupo_icms.vBCSTDest.valor   = '0.00'
+        self.grupo_icms.vICMSSTDest.valor = '0.00'
+        self.grupo_icms.UFST.valor        = ''
+        self.grupo_icms.pBCOp.valor       = '0.00'
 
         #
         # Para cada código de situação tributária,
         # redefinimos a raiz e a obrigatoriedade das
         # tags do grupo de ICMS
         #
-        if self.valor == u'00':
-            self.grupo_icms.nome_tag = u'ICMS00'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS00'
+        if self.valor == '00':
+            self.grupo_icms.nome_tag = 'ICMS00'
+            self.grupo_icms.nome_tag_txt = 'N02'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS00'
             self.grupo_icms.modBC.obrigatorio    = True
             self.grupo_icms.vBC.obrigatorio      = True
             self.grupo_icms.pICMS.obrigatorio    = True
             self.grupo_icms.vICMS.obrigatorio    = True
 
-        elif self.valor == u'10':
+        elif self.valor == '10':
             self.grupo_icms.modBC.obrigatorio    = True
             self.grupo_icms.vBC.obrigatorio      = True
             self.grupo_icms.pICMS.obrigatorio    = True
@@ -430,56 +453,65 @@ class TagCSTICMS(nfe_110.TagCSTICMS):
             self.grupo_icms.vICMSST.obrigatorio  = True
 
             if not self.grupo_icms.partilha:
-                self.grupo_icms.nome_tag = u'ICMS10'
-                self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS10'
+                self.grupo_icms.nome_tag = 'ICMS10'
+                self.grupo_icms.nome_tag_txt = 'N03'
+                self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS10'
             else:
-                self.grupo_icms.nome_tag = u'ICMSPart'
-                self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSPart'
+                self.grupo_icms.nome_tag = 'ICMSPart'
+                self.grupo_icms.nome_tag_txt = 'N10a'
+                self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSPart'
                 self.grupo_icms.pBCOp.obrigatorio    = True
                 self.grupo_icms.UFST.obrigatorio     = True
 
-        elif self.valor == u'20':
-            self.grupo_icms.nome_tag = u'ICMS20'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS20'
+        elif self.valor == '20':
+            self.grupo_icms.nome_tag = 'ICMS20'
+            self.grupo_icms.nome_tag_txt = 'N04'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS20'
             self.grupo_icms.modBC.obrigatorio    = True
             self.grupo_icms.vBC.obrigatorio      = True
             self.grupo_icms.pRedBC.obrigatorio   = True
             self.grupo_icms.pICMS.obrigatorio    = True
             self.grupo_icms.vICMS.obrigatorio    = True
 
-        elif self.valor == u'30':
-            self.grupo_icms.nome_tag = u'ICMS30'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS30'
+        elif self.valor == '30':
+            self.grupo_icms.nome_tag = 'ICMS30'
+            self.grupo_icms.nome_tag_txt = 'N05'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS30'
             self.grupo_icms.modBCST.obrigatorio  = True
             self.grupo_icms.vBCST.obrigatorio    = True
             self.grupo_icms.pICMSST.obrigatorio  = True
             self.grupo_icms.vICMSST.obrigatorio  = True
 
-        elif self.valor in (u'40', u'41', u'50'):
-            if self.grupo_icms.repasse and self.valor == u'41':
-                self.grupo_icms.nome_tag = u'ICMSST'
-                self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSST'
+        elif self.valor in (u'40', '41', '50'):
+            if self.grupo_icms.repasse and self.valor == '41':
+                self.grupo_icms.nome_tag = 'ICMSST'
+                self.grupo_icms.nome_tag_txt = 'N10b'
+                self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSST'
                 self.grupo_icms.vBCSTRet.obrigatorio    = True
                 self.grupo_icms.vICMSSTRet.obrigatorio  = True
                 self.grupo_icms.vBCSTDest.obrigatorio   = True
                 self.grupo_icms.vICMSSTDest.obrigatorio = True
             else:
-                self.grupo_icms.nome_tag = u'ICMS40'
-                self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS40'
+                self.grupo_icms.nome_tag = 'ICMS40'
+                self.grupo_icms.nome_tag_txt = 'N06'
+                self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS40'
 
-        elif self.valor == u'51':
-            self.grupo_icms.nome_tag = u'ICMS51'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS51'
+        elif self.valor == '51':
+            self.grupo_icms.nome_tag = 'ICMS51'
+            self.grupo_icms.nome_tag_txt = 'N07'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS51'
 
-        elif self.valor == u'60':
-            self.grupo_icms.nome_tag = u'ICMS60'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS60'
+        elif self.valor == '60':
+            self.grupo_icms.nome_tag = 'ICMS60'
+            self.grupo_icms.nome_tag_txt = 'N08'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS60'
             self.grupo_icms.vBCSTRet.obrigatorio   = True
             self.grupo_icms.vICMSSTRet.obrigatorio = True
 
-        elif self.valor == u'70':
-            self.grupo_icms.nome_tag = u'ICMS70'
-            self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS70'
+        elif self.valor == '70':
+            self.grupo_icms.nome_tag = 'ICMS70'
+            self.grupo_icms.nome_tag_txt = 'N09'
+            self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS70'
             self.grupo_icms.modBC.obrigatorio    = True
             self.grupo_icms.vBC.obrigatorio      = True
             self.grupo_icms.pRedBC.obrigatorio   = True
@@ -490,7 +522,7 @@ class TagCSTICMS(nfe_110.TagCSTICMS):
             self.grupo_icms.pICMSST.obrigatorio  = True
             self.grupo_icms.vICMSST.obrigatorio  = True
 
-        elif self.valor == u'90':
+        elif self.valor == '90':
             self.grupo_icms.modBC.obrigatorio    = True
             self.grupo_icms.vBC.obrigatorio      = True
             self.grupo_icms.pICMS.obrigatorio    = True
@@ -501,11 +533,13 @@ class TagCSTICMS(nfe_110.TagCSTICMS):
             self.grupo_icms.vICMSST.obrigatorio  = True
 
             if not self.grupo_icms.partilha:
-                self.grupo_icms.nome_tag = u'ICMS90'
-                self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMS90'
+                self.grupo_icms.nome_tag = 'ICMS90'
+                self.grupo_icms.nome_tag_txt = 'N10'
+                self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMS90'
             else:
-                self.grupo_icms.nome_tag = u'ICMSPart'
-                self.grupo_icms.raiz_tag = u'//det/imposto/ICMS/ICMSPart'
+                self.grupo_icms.nome_tag = 'ICMSPart'
+                self.grupo_icms.nome_tag_txt = 'N10a'
+                self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSPart'
                 self.grupo_icms.pBCOp.obrigatorio    = True
                 self.grupo_icms.UFST.obrigatorio     = True
 
@@ -542,8 +576,9 @@ class TagCSTICMS(nfe_110.TagCSTICMS):
 class ICMS(nfe_110.ICMS):
     def __init__(self):
         super(ICMS, self).__init__()
-        self.nome_tag = u'ICMSSN102'
-        self.raiz_tag = u'//det/imposto/ICMS/ICMSSN102'
+        self.nome_tag = 'ICMSSN102'
+        self.nome_tag_txt = 'N10d'
+        self.raiz_tag = '//det/imposto/ICMS/ICMSSN102'
 
         #
         # Valores de controle, para gerar corretamente as tags
@@ -571,21 +606,21 @@ class ICMS(nfe_110.ICMS):
         #
         self.CSOSN = TagCSOSN()
         self.CSOSN.grupo_icms = self
-        self.CSOSN.valor = u'400'
+        self.CSOSN.valor = '400'
 
         #
         # Situação tributária tradicional
         #
         self.CST = TagCSTICMS()
         self.CST.grupo_icms = self
-        self.CST.valor = u'41'
+        self.CST.valor = '41'
 
     def get_xml(self):
         #
         # Define as tags baseado no código da situação tributária
         #
         xml = XMLNFe.get_xml(self)
-        xml += u'<ICMS><' + self.nome_tag + u'>'
+        xml += '<ICMS><' + self.nome_tag + '>'
         xml += self.orig.xml
 
         #
@@ -594,13 +629,13 @@ class ICMS(nfe_110.ICMS):
         if self.regime_tributario != 1:
             xml += self.CST.xml
 
-            if self.CST.valor == u'00':
+            if self.CST.valor == '00':
                 xml += self.modBC.xml
                 xml += self.vBC.xml
                 xml += self.pICMS.xml
                 xml += self.vICMS.xml
 
-            elif self.CST.valor == u'10':
+            elif self.CST.valor == '10':
                 if not self.partilha:
                     xml += self.modBC.xml
                     xml += self.vBC.xml
@@ -636,14 +671,14 @@ class ICMS(nfe_110.ICMS):
                     xml += self.pBCOp.xml
                     xml += self.UFST.xml
 
-            elif self.CST.valor == u'20':
+            elif self.CST.valor == '20':
                 xml += self.modBC.xml
                 xml += self.vBC.xml
                 xml += self.pRedBC.xml
                 xml += self.pICMS.xml
                 xml += self.vICMS.xml
 
-            elif self.CST.valor == u'30':
+            elif self.CST.valor == '30':
                 xml += self.modBCST.xml
 
                 # Somente quando for marge de valor agregado
@@ -655,8 +690,8 @@ class ICMS(nfe_110.ICMS):
                 xml += self.pICMSST.xml
                 xml += self.vICMSST.xml
 
-            elif self.CST.valor in (u'40', u'41', u'50'):
-                if self.repasse and self.CST.valor == u'41':
+            elif self.CST.valor in (u'40', '41', '50'):
+                if self.repasse and self.CST.valor == '41':
                     xml += self.vBCSTRet.xml
                     xml += self.vICMSSTRet.xml
                     xml += self.vBCSTDest.xml
@@ -666,18 +701,18 @@ class ICMS(nfe_110.ICMS):
                     xml += self.vICMS.xml
                     xml += self.motDesICMS.xml
 
-            elif self.CST.valor == u'51':
+            elif self.CST.valor == '51':
                 xml += self.modBC.xml
                 xml += self.pRedBC.xml
                 xml += self.vBC.xml
                 xml += self.pICMS.xml
                 xml += self.vICMS.xml
 
-            elif self.CST.valor == u'60':
+            elif self.CST.valor == '60':
                 xml += self.vBCSTRet.xml
                 xml += self.vICMSSTRet.xml
 
-            elif self.CST.valor == u'70':
+            elif self.CST.valor == '70':
                 xml += self.modBC.xml
                 xml += self.vBC.xml
                 xml += self.pRedBC.xml
@@ -694,7 +729,7 @@ class ICMS(nfe_110.ICMS):
                 xml += self.pICMSST.xml
                 xml += self.vICMSST.xml
 
-            elif self.CST.valor == u'90':
+            elif self.CST.valor == '90':
                 xml += self.modBC.xml
                 xml += self.vBC.xml
                 xml += self.pRedBC.xml
@@ -721,14 +756,14 @@ class ICMS(nfe_110.ICMS):
         else:
             xml += self.CSOSN.xml
 
-            if self.CSOSN.valor == u'101':
+            if self.CSOSN.valor == '101':
                 xml += self.pCredSN.xml
                 xml += self.vCredICMSSN.xml
 
-            elif self.CSOSN.valor in (u'102', u'103', u'300', u'400'):
+            elif self.CSOSN.valor in (u'102', '103', '300', '400'):
                 pass
 
-            elif self.CSOSN.valor == u'201':
+            elif self.CSOSN.valor == '201':
                 xml += self.modBCST.xml
 
                 # Somente quando for marge de valor agregado
@@ -742,7 +777,7 @@ class ICMS(nfe_110.ICMS):
                 xml += self.pCredSN.xml
                 xml += self.vCredICMSSN.xml
 
-            elif self.CSOSN.valor in (u'202', u'203'):
+            elif self.CSOSN.valor in (u'202', '203'):
                 xml += self.modBCST.xml
 
                 # Somente quando for marge de valor agregado
@@ -754,11 +789,11 @@ class ICMS(nfe_110.ICMS):
                 xml += self.pICMSST.xml
                 xml += self.vICMSST.xml
 
-            elif self.CSOSN.valor == u'500':
+            elif self.CSOSN.valor == '500':
                 xml += self.vBCSTRet.xml
                 xml += self.vICMSSTRet.xml
 
-            elif self.CSOSN.valor == u'900':
+            elif self.CSOSN.valor == '900':
                 xml += self.modBC.xml
                 xml += self.vBC.xml
                 xml += self.pRedBC.xml
@@ -777,7 +812,7 @@ class ICMS(nfe_110.ICMS):
                 xml += self.pCredSN.xml
                 xml += self.vCredICMSSN.xml
 
-        xml += u'</' + self.nome_tag + u'></ICMS>'
+        xml += '</' + self.nome_tag + '></ICMS>'
         return xml
 
     def set_xml(self, arquivo):
@@ -791,57 +826,57 @@ class ICMS(nfe_110.ICMS):
 
             if self._le_noh(u'//det/imposto/ICMS/ICMS00') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'00'
+                self.CST.valor = '00'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS10') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'10'
+                self.CST.valor = '10'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS20') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'20'
+                self.CST.valor = '20'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS30') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'30'
+                self.CST.valor = '30'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS40') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'40'
+                self.CST.valor = '40'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS51') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'51'
+                self.CST.valor = '51'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS60') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'60'
+                self.CST.valor = '60'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS70') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'70'
+                self.CST.valor = '70'
             elif self._le_noh(u'//det/imposto/ICMS/ICMS90') is not None:
                 self.regime_tributario = 3
-                self.CST.valor = u'90'
+                self.CST.valor = '90'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSPart') is not None:
                 self.regime_tributario = 3
                 self.partilha = True
-                self.CST.valor = u'10'
+                self.CST.valor = '10'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSST') is not None:
                 self.regime_tributario = 3
                 self.repasse = True
-                self.CST.valor = u'41'
+                self.CST.valor = '41'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSSN101') is not None:
                 self.regime_tributario = 1
-                self.CSOSN.valor = u'101'
+                self.CSOSN.valor = '101'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSSN102') is not None:
                 self.regime_tributario = 1
-                self.CSOSN.valor = u'102'
+                self.CSOSN.valor = '102'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSSN201') is not None:
                 self.regime_tributario = 1
-                self.CSOSN.valor = u'201'
+                self.CSOSN.valor = '201'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSSN202') is not None:
                 self.regime_tributario = 1
-                self.CSOSN.valor = u'202'
+                self.CSOSN.valor = '202'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSSN500') is not None:
                 self.regime_tributario = 1
-                self.CSOSN.valor = u'500'
+                self.CSOSN.valor = '500'
             elif self._le_noh(u'//det/imposto/ICMS/ICMSSN900') is not None:
                 self.regime_tributario = 1
-                self.CSOSN.valor = u'900'
+                self.CSOSN.valor = '900'
 
             #
             # Agora podemos ler os valores tranquilamente...
@@ -875,6 +910,222 @@ class ICMS(nfe_110.ICMS):
 
     xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        #
+        # Define as tags baseado no código da situação tributária
+        #
+        txt = 'N|\n'
+        txt += self.nome_tag_txt + '|'
+        txt += self.orig.txt + '|'
+
+        #
+        # Se for regime tradicional (não Simples Nacional)
+        #
+        if self.regime_tributario != 1:
+            txt += self.CST.txt + '|'
+
+            if self.CST.valor == '00':
+                txt += self.modBC.txt + '|'
+                txt += self.vBC.txt + '|'
+                txt += self.pICMS.txt + '|'
+                txt += self.vICMS.txt + '|'
+
+            elif self.CST.valor == '10':
+                if not self.partilha:
+                    txt += self.modBC.txt + '|'
+                    txt += self.vBC.txt + '|'
+                    #txt += self.pRedBC.txt + '|'
+                    txt += self.pICMS.txt + '|'
+                    txt += self.vICMS.txt + '|'
+                    txt += self.modBCST.txt + '|'
+
+                    # Somente quando for marge de valor agregado
+                    if self.modBCST.valor == 4:
+                        txt += self.pMVAST.txt + '|'
+                    else:
+                        txt += '|'
+
+                    txt += self.pRedBCST.txt + '|'
+                    txt += self.vBCST.txt + '|'
+                    txt += self.pICMSST.txt + '|'
+                    txt += self.vICMSST.txt + '|'
+                else:
+                    txt += self.modBC.txt + '|'
+                    txt += self.vBC.txt + '|'
+                    txt += self.pRedBC.txt + '|'
+                    txt += self.pICMS.txt + '|'
+                    txt += self.vICMS.txt + '|'
+                    txt += self.modBCST.txt + '|'
+
+                    # Somente quando for marge de valor agregado
+                    if self.modBCST.valor == 4:
+                        txt += self.pMVAST.txt + '|'
+                    else:
+                        txt += '|'
+
+                    txt += self.pRedBCST.txt + '|'
+                    txt += self.vBCST.txt + '|'
+                    txt += self.pICMSST.txt + '|'
+                    txt += self.vICMSST.txt + '|'
+                    txt += self.pBCOp.txt + '|'
+                    txt += self.UFST.txt + '|'
+
+            elif self.CST.valor == '20':
+                txt += self.modBC.txt + '|'
+                txt += self.vBC.txt + '|'
+                txt += self.pRedBC.txt + '|'
+                txt += self.pICMS.txt + '|'
+                txt += self.vICMS.txt + '|'
+
+            elif self.CST.valor == '30':
+                txt += self.modBCST.txt + '|'
+
+                # Somente quando for marge de valor agregado
+                if self.modBCST.valor == 4:
+                    txt += self.pMVAST.txt + '|'
+                else:
+                    txt += '|'
+
+                txt += self.pRedBCST.txt + '|'
+                txt += self.vBCST.txt + '|'
+                txt += self.pICMSST.txt + '|'
+                txt += self.vICMSST.txt + '|'
+
+            elif self.CST.valor in (u'40', '41', '50'):
+                if self.repasse and self.CST.valor == '41':
+                    txt += self.vBCSTRet.txt + '|'
+                    txt += self.vICMSSTRet.txt + '|'
+                    txt += self.vBCSTDest.txt + '|'
+                    txt += self.vICMSSTDest.txt + '|'
+
+                elif self.motDesICMS.valor:
+                    txt += self.vICMS.txt + '|'
+                    txt += self.motDesICMS.txt + '|'
+
+            elif self.CST.valor == '51':
+                txt += self.modBC.txt + '|'
+                txt += self.pRedBC.txt + '|'
+                txt += self.vBC.txt + '|'
+                txt += self.pICMS.txt + '|'
+                txt += self.vICMS.txt + '|'
+
+            elif self.CST.valor == '60':
+                txt += self.vBCSTRet.txt + '|'
+                txt += self.vICMSSTRet.txt + '|'
+
+            elif self.CST.valor == '70':
+                txt += self.modBC.txt + '|'
+                txt += self.vBC.txt + '|'
+                txt += self.pRedBC.txt + '|'
+                txt += self.pICMS.txt + '|'
+                txt += self.vICMS.txt + '|'
+                txt += self.modBCST.txt + '|'
+
+                # Somente quando for marge de valor agregado
+                if self.modBCST.valor == 4:
+                    txt += self.pMVAST.txt + '|'
+                else:
+                    txt += '|'
+
+                txt += self.pRedBCST.txt + '|'
+                txt += self.vBCST.txt + '|'
+                txt += self.pICMSST.txt + '|'
+                txt += self.vICMSST.txt + '|'
+
+            elif self.CST.valor == '90':
+                txt += self.modBC.txt + '|'
+                txt += self.vBC.txt + '|'
+                txt += self.pRedBC.txt + '|'
+                txt += self.pICMS.txt + '|'
+                txt += self.vICMS.txt + '|'
+                txt += self.modBCST.txt + '|'
+
+                # Somente quando for marge de valor agregado
+                if self.modBCST.valor == 4:
+                    txt += self.pMVAST.txt + '|'
+                else:
+                    txt += '|'
+
+                txt += self.pRedBCST.txt + '|'
+                txt += self.vBCST.txt + '|'
+                txt += self.pICMSST.txt + '|'
+                txt += self.vICMSST.txt + '|'
+
+                if self.partilha:
+                    txt += self.pBCOp.txt + '|'
+                    txt += self.UFST.txt + '|'
+
+        #
+        # O regime tributário é o Simples Nacional
+        #
+        else:
+            txt += self.CSOSN.txt + '|'
+
+            if self.CSOSN.valor == '101':
+                txt += self.pCredSN.txt + '|'
+                txt += self.vCredICMSSN.txt + '|'
+
+            elif self.CSOSN.valor in (u'102', '103', '300', '400'):
+                pass
+
+            elif self.CSOSN.valor == '201':
+                txt += self.modBCST.txt + '|'
+
+                # Somente quando for marge de valor agregado
+                if self.modBCST.valor == 4:
+                    txt += self.pMVAST.txt + '|'
+                else:
+                    txt += '|'
+
+                txt += self.pRedBCST.txt + '|'
+                txt += self.vBCST.txt + '|'
+                txt += self.pICMSST.txt + '|'
+                txt += self.vICMSST.txt + '|'
+                txt += self.pCredSN.txt + '|'
+                txt += self.vCredICMSSN.txt + '|'
+
+            elif self.CSOSN.valor in (u'202', '203'):
+                txt += self.modBCST.txt + '|'
+
+                # Somente quando for marge de valor agregado
+                if self.modBCST.valor == 4:
+                    txt += self.pMVAST.txt + '|'
+                else:
+                    txt += '|'
+
+                txt += self.pRedBCST.txt + '|'
+                txt += self.vBCST.txt + '|'
+                txt += self.pICMSST.txt + '|'
+                txt += self.vICMSST.txt + '|'
+
+            elif self.CSOSN.valor == '500':
+                txt += self.vBCSTRet.txt + '|'
+                txt += self.vICMSSTRet.txt + '|'
+
+            elif self.CSOSN.valor == '900':
+                txt += self.modBC.txt + '|'
+                txt += self.vBC.txt + '|'
+                txt += self.pRedBC.txt + '|'
+                txt += self.pICMS.txt + '|'
+                txt += self.vICMS.txt + '|'
+                txt += self.modBCST.txt + '|'
+
+                # Somente quando for marge de valor agregado
+                if self.modBCST.valor == 4:
+                    txt += self.pMVAST.txt + '|'
+                else:
+                    txt += '|'
+
+                txt += self.pRedBCST.txt + '|'
+                txt += self.vBCST.txt + '|'
+                txt += self.pICMSST.txt + '|'
+                txt += self.vICMSST.txt + '|'
+                txt += self.pCredSN.txt + '|'
+                txt += self.vCredICMSSN.txt + '|'
+
+        txt += '\n'
+        return txt
+
 
 class Imposto(nfe_110.Imposto):
     def __init__(self):
@@ -884,7 +1135,7 @@ class Imposto(nfe_110.Imposto):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<imposto>'
+        xml += '<imposto>'
 
         # Enviar ICMS, IPI e II somente quando não for serviço
         if not self.ISSQN.cSitTrib.valor:
@@ -900,7 +1151,7 @@ class Imposto(nfe_110.Imposto):
         if self.ISSQN.cSitTrib.valor:
             xml += self.ISSQN.xml
 
-        xml += u'</imposto>'
+        xml += '</imposto>'
         return xml
 
     #def set_xml(self, arquivo):
@@ -916,6 +1167,26 @@ class Imposto(nfe_110.Imposto):
 
     #xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        txt = 'M|\n'
+        
+        if not self.ISSQN.cSitTrib.valor:
+            txt += self.ICMS.txt
+            txt += self.IPI.txt
+            txt += self.II.txt
+
+        txt += self.PIS.txt
+        txt += self.PISST.txt
+        txt += self.COFINS.txt
+        txt += self.COFINSST.txt
+
+        if self.ISSQN.cSitTrib.valor:
+            txt += self.ISSQN.txt
+            
+        return txt
+
+    txt = property(get_txt)
+
 
 class CIDE(nfe_110.CIDE):
     def __init__(self):
@@ -925,15 +1196,15 @@ class CIDE(nfe_110.CIDE):
 class Comb(nfe_110.Comb):
     def get_xml(self):
         if not self.cProdANP.valor:
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<comb>'
+        xml += '<comb>'
         xml += self.cProdANP.xml
         xml += self.CODIF.xml
         xml += self.qTemp.xml
         xml += self.CIDE.xml
-        xml += u'</comb>'
+        xml += '</comb>'
         return xml
 
     def set_xml(self, arquivo):
@@ -944,6 +1215,21 @@ class Comb(nfe_110.Comb):
             self.CIDE.xml      = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not self.cProdANP.valor:
+            return ''
+
+        txt = 'L1|'
+        txt += self.cProdANP.txt + '|'
+        txt += self.CODIF.txt + '|'
+        txt += self.qTemp.txt + '|'
+        txt += '\n'
+
+        txt += self.CIDE.txt
+        return txt
+
+    txt = property(get_txt)
 
 
 class Arma(nfe_110.Arma):
@@ -968,10 +1254,10 @@ class VeicProd(nfe_110.VeicProd):
 
     def get_xml(self):
         if not self.chassi.valor:
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<veicProd>'
+        xml += '<veicProd>'
         xml += self.tpOp.xml
         xml += self.chassi.xml
         xml += self.cCor.xml
@@ -996,7 +1282,7 @@ class VeicProd(nfe_110.VeicProd):
         xml += self.cCorDENATRAN.xml
         xml += self.lota.xml
         xml += self.tpRest.xml
-        xml += u'</veicProd>'
+        xml += '</veicProd>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1028,6 +1314,40 @@ class VeicProd(nfe_110.VeicProd):
 
     xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        if not self.chassi.valor:
+            return ''
+
+        txt = 'J|'
+        txt += self.tpOp.txt + '|'
+        txt += self.chassi.txt + '|'
+        txt += self.cCor.txt + '|'
+        txt += self.xCor.txt + '|'
+        txt += self.pot.txt + '|'
+        txt += self.cilin.txt + '|'
+        txt += self.pesoL.txt + '|'
+        txt += self.pesoB.txt + '|'
+        txt += self.nSerie.txt + '|'
+        txt += self.tpComb.txt + '|'
+        txt += self.nMotor.txt + '|'
+        txt += self.CMT.txt + '|'
+        txt += self.dist.txt + '|'
+        txt += self.anoMod.txt + '|'
+        txt += self.anoFab.txt + '|'
+        txt += self.tpPint.txt + '|'
+        txt += self.tpVeic.txt + '|'
+        txt += self.espVeic.txt + '|'
+        txt += self.VIN.txt + '|'
+        txt += self.condVeic.txt + '|'
+        txt += self.cMod.txt + '|'
+        txt += self.cCorDENATRAN.txt + '|'
+        txt += self.lota.txt + '|'
+        txt += self.tpRest.txt + '|'
+        txt += '\n'
+        return txt
+
+    txt = property(get_txt)
+
 
 class Adi(nfe_110.Adi):
     def __init__(self):
@@ -1056,7 +1376,7 @@ class Prod(nfe_110.Prod):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<prod>'
+        xml += '<prod>'
         xml += self.cProd.xml
         xml += self.cEAN.xml
         xml += self.xProd.xml
@@ -1092,7 +1412,7 @@ class Prod(nfe_110.Prod):
             xml += a.xml
 
         xml += self.comb.xml
-        xml += u'</prod>'
+        xml += '</prod>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1102,7 +1422,7 @@ class Prod(nfe_110.Prod):
             self.xProd.xml    = arquivo
             self.NCM.xml      = arquivo
             self.EXTIPI.xml   = arquivo
-            self.genero.xml   = arquivo
+            #self.genero.xml   = arquivo
             self.CFOP.xml     = arquivo
             self.uCom.xml     = arquivo
             self.qCom.xml     = arquivo
@@ -1115,6 +1435,8 @@ class Prod(nfe_110.Prod):
             self.vFrete.xml   = arquivo
             self.vSeg.xml     = arquivo
             self.vDesc.xml    = arquivo
+            self.vOutro.xml   = arquivo
+            self.indTot.xml   = arquivo
 
             #
             # Técnica para leitura de tags múltiplas
@@ -1124,6 +1446,8 @@ class Prod(nfe_110.Prod):
             #
             self.DI = self.le_grupo('//det/prod/DI', DI)
 
+            self.xPed.xml     = arquivo
+            self.nItemPed.xml = arquivo
             self.veicProd.xml = arquivo
 
             #
@@ -1138,6 +1462,49 @@ class Prod(nfe_110.Prod):
             self.comb.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        txt = 'I|'
+        txt += self.cProd.txt + '|'
+        txt += self.cEAN.txt + '|'
+        txt += self.xProd.txt + '|'
+        txt += self.NCM.txt + '|'
+        txt += self.EXTIPI.txt + '|'
+        #txt += self.genero.txt + '|'
+        txt += self.CFOP.txt + '|'
+        txt += self.uCom.txt + '|'
+        txt += self.qCom.txt + '|'
+        txt += self.vUnCom.txt + '|'
+        txt += self.vProd.txt + '|'
+        txt += self.cEANTrib.txt + '|'
+        txt += self.uTrib.txt + '|'
+        txt += self.qTrib.txt + '|'
+        txt += self.vUnTrib.txt + '|'
+        txt += self.vFrete.txt + '|'
+        txt += self.vSeg.txt + '|'
+        txt += self.vDesc.txt + '|'
+        txt += self.vOutro.txt + '|'
+        txt += self.indTot.txt + '|'
+        txt += self.xPed.txt + '|'
+        txt += self.nItemPed.txt + '|'
+        txt += '\n'
+
+        for d in self.DI:
+            txt += d.txt
+
+        txt += self.veicProd.txt
+
+        for m in self.med:
+            txt += m.txt
+
+        for a in self.arma:
+            txt += a.txt
+
+        txt += self.comb.txt
+
+        return txt
+
+    txt = property(get_txt)
 
 
 class Det(nfe_110.Det):
@@ -1241,7 +1608,7 @@ class Transp(nfe_110.Transp):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<transp>'
+        xml += '<transp>'
         xml += self.modFrete.xml
         xml += self.transporta.xml
         xml += self.retTransp.xml
@@ -1259,7 +1626,7 @@ class Transp(nfe_110.Transp):
         for v in self.vol:
             xml += v.xml
 
-        xml += u'</transp>'
+        xml += '</transp>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1282,8 +1649,24 @@ class Transp(nfe_110.Transp):
 
             self.vol = self.le_grupo('//NFe/infNFe/transp/vol', nfe_110.Vol)
 
-
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        txt = 'X|'
+        txt += self.modFrete.txt + '|\n'
+        txt += self.transporta.txt
+        txt += self.retTransp.txt
+        txt += self.veicTransp.txt
+
+        for r in self.reboque:
+            txt += r.txt
+
+        for v in self.vol:
+            txt += v.txt
+
+        return txt
+
+    txt = property(get_txt)
 
 
 class RetTrib(nfe_110.RetTrib):
@@ -1315,10 +1698,10 @@ class Entrega(nfe_110.Entrega):
 
     def get_xml(self):
         if not (self.CNPJ.valor or self.CPF.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<entrega>'
+        xml += '<entrega>'
 
         if self.CPF.valor:
             xml += self.CPF.xml
@@ -1332,7 +1715,7 @@ class Entrega(nfe_110.Entrega):
         xml += self.cMun.xml
         xml += self.xMun.xml
         xml += self.UF.xml
-        xml += u'</entrega>'
+        xml += '</entrega>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1348,6 +1731,30 @@ class Entrega(nfe_110.Entrega):
             self.UF.xml      = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not len(self.CNPJ.valor):
+            return ''
+
+        txt = 'G|'
+        txt += self.CNPJ.txt + '|'
+        txt += self.xLgr.txt + '|'
+        txt += self.nro.txt + '|'
+        txt += self.xCpl.txt + '|'
+        txt += self.xBairro.txt + '|'
+        txt += self.cMun.txt + '|'
+        txt += self.xMun.txt + '|'
+        txt += self.UF.txt + '|'
+        txt += '\n'
+
+        if self.CPF.valor:
+            txt += 'G02a|' + self.CPF.txt + '|\n'
+        else:
+            txt += 'G02|' + self.CNPJ.txt + '|\n'
+
+        return txt
+
+    txt = property(get_txt)
 
 
 class Retirada(nfe_110.Retirada):
@@ -1359,10 +1766,10 @@ class Retirada(nfe_110.Retirada):
 
     def get_xml(self):
         if not (self.CNPJ.valor or self.CPF.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<retirada>'
+        xml += '<retirada>'
 
         if self.CPF.valor:
             xml += self.CPF.xml
@@ -1376,7 +1783,7 @@ class Retirada(nfe_110.Retirada):
         xml += self.cMun.xml
         xml += self.xMun.xml
         xml += self.UF.xml
-        xml += u'</retirada>'
+        xml += '</retirada>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1392,6 +1799,30 @@ class Retirada(nfe_110.Retirada):
             self.UF.xml      = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not len(self.CNPJ.valor):
+            return ''
+
+        txt = 'F|'
+        txt += self.CNPJ.txt + '|'
+        txt += self.xLgr.txt + '|'
+        txt += self.nro.txt + '|'
+        txt += self.xCpl.txt + '|'
+        txt += self.xBairro.txt + '|'
+        txt += self.cMun.txt + '|'
+        txt += self.xMun.txt + '|'
+        txt += self.UF.txt + '|'
+        txt += '\n'
+
+        if self.CPF.valor:
+            txt += 'F02a|' + self.CPF.txt + '|\n'
+        else:
+            txt += 'F02|' + self.CNPJ.txt + '|\n'
+
+        return txt
+
+    txt = property(get_txt)
 
 
 class EnderDest(nfe_110.EnderDest):
@@ -1409,7 +1840,7 @@ class Dest(nfe_110.Dest):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<dest>'
+        xml += '<dest>'
 
         if self.CPF.valor:
             xml += self.CPF.xml
@@ -1421,7 +1852,7 @@ class Dest(nfe_110.Dest):
         xml += self.IE.xml
         xml += self.ISUF.xml
         xml += self.email.xml
-        xml += u'</dest>'
+        xml += '</dest>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1435,6 +1866,24 @@ class Dest(nfe_110.Dest):
             self.email.xml     = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        txt = 'E|'
+        txt += self.xNome.txt + '|'
+        txt += self.IE.txt + '|'
+        txt += self.ISUF.txt + '|'
+        txt += self.email.txt + '|'
+        txt += '\n'
+
+        if self.CPF.valor:
+            txt += 'E03|' + self.CPF.txt + '|\n'
+        else:
+            txt += 'E02|' + self.CNPJ.txt + '|\n'
+
+        txt += self.enderDest.txt
+        return txt
+
+    txt = property(get_txt)
 
 
 class Avulsa(nfe_110.Avulsa):
@@ -1458,7 +1907,7 @@ class Emit(nfe_110.Emit):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<emit>'
+        xml += '<emit>'
         xml += self.CNPJ.xml
         xml += self.CPF.xml
         xml += self.xNome.xml
@@ -1469,7 +1918,7 @@ class Emit(nfe_110.Emit):
         xml += self.IM.xml
         xml += self.CNAE.xml
         xml += self.CRT.xml
-        xml += u'</emit>'
+        xml += '</emit>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1487,6 +1936,29 @@ class Emit(nfe_110.Emit):
 
     xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        txt = 'C|'
+        txt += self.xNome.txt + '|'
+        txt += self.xFant.txt + '|'
+        txt += self.IE.txt + '|'
+        txt += self.IEST.txt + '|'
+        txt += self.IM.txt + '|'
+        txt += self.CNAE.txt + '|'
+        txt += self.CRT.txt + '|'
+        txt += '\n'
+
+        if self.CNPJ.valor:
+            txt += 'C02|' + self.CNPJ.txt + '|\n'
+
+        else:
+            txt += 'C02a|' + self.CPF.txt + '|\n'
+
+        txt += self.enderEmit.txt
+
+        return txt
+
+    txt = property(get_txt)
+
 
 class RefECF(XMLNFe):
     def __init__(self):
@@ -1497,14 +1969,14 @@ class RefECF(XMLNFe):
 
     def get_xml(self):
         if not (self.mod.valor or self.nECF.valor or self.nCOO.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<refECF>'
+        xml += '<refECF>'
         xml += self.mod.xml
         xml += self.nECF.xml
         xml += self.nCOO.xml
-        xml += u'</refECF>'
+        xml += '</refECF>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1514,6 +1986,19 @@ class RefECF(XMLNFe):
             self.nCOO.xml   = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not (self.mod.valor or self.nECF.valor or self.nCOO.valor):
+            return ''
+
+        txt = 'B20g|'
+        txt += self.mod.txt + '|'
+        txt += self.nECF.txt + '|'
+        txt += self.nCOO.txt + '|'
+        txt += '\n'
+        return txt
+
+    txt = property(get_txt)
 
 
 class RefNFP(XMLNFe):
@@ -1530,10 +2015,10 @@ class RefNFP(XMLNFe):
 
     def get_xml(self):
         if not (self.cUF.valor or self.AAMM.valor or self.CNPJ.valor or self.CPF.valor or self.IE.valor or self.mod.valor or self.serie.valor or self.nNF.valor):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<refNFP>'
+        xml += '<refNFP>'
         xml += self.cUF.xml
         xml += self.AAMM.xml
 
@@ -1546,7 +2031,7 @@ class RefNFP(XMLNFe):
         xml += self.mod.xml
         xml += self.serie.xml
         xml += self.nNF.xml
-        xml += u'</refNFP>'
+        xml += '</refNFP>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1561,6 +2046,28 @@ class RefNFP(XMLNFe):
             self.nNF.xml   = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not (self.cUF.valor or self.AAMM.valor or self.CNPJ.valor or self.CPF.valor or self.IE.valor or self.mod.valor or self.serie.valor or self.nNF.valor):
+            return ''
+
+        txt = 'B20a|'
+        txt += self.cUF.txt + '|'
+        txt += self.AAMM.txt + '|'
+        txt += self.IE.txt + '|'
+        txt += self.mod.txt + '|'
+        txt += self.serie.txt + '|'
+        txt += self.nNF.txt + '|'
+        txt += '\n'
+
+        if self.CPF.valor:
+            txt += 'B20e|' + self.CPF.txt + '|\n'
+        else:
+            txt += 'B20d|' + self.CNPJ.txt + '|\n'
+
+        return txt
+
+    txt = property(get_txt)
 
 
 class RefNF(nfe_110.RefNF):
@@ -1579,10 +2086,10 @@ class NFRef(nfe_110.NFRef):
 
     def get_xml(self):
         if not (self.refNFe.valor or self.refNF.xml or self.refNFP.xml or self.refCTe.valor or self.refECF.xml):
-            return u''
+            return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<NFref>'
+        xml += '<NFref>'
 
         if self.refNFe.valor:
             xml += self.refNFe.xml
@@ -1595,7 +2102,7 @@ class NFRef(nfe_110.NFRef):
         elif self.refECF.xml:
             xml += self.refECF.xml
 
-        xml += u'</NFref>'
+        xml += '</NFref>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1608,6 +2115,25 @@ class NFRef(nfe_110.NFRef):
 
     xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        if not (self.refNFe.valor or self.refNF.xml):
+            return ''
+
+        if self.refNFe.xml:
+            txt = 'B13|' + self.refNFe.txt + '|'
+        elif self.refNF.xml:
+            txt += self.refNF.txt
+        elif self.refNFP.xml:
+            txt += self.refNFP.txt
+        elif self.refCTe.xml:
+            txt = 'B20i|' + self.refCTe.txt + '|'
+        elif self.refECF.xml:
+            txt += self.refECF.txt
+
+        return txt
+
+    txt = property(get_txt)
+
 
 class Ide(nfe_110.Ide):
     def __init__(self):
@@ -1619,7 +2145,7 @@ class Ide(nfe_110.Ide):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<ide>'
+        xml += '<ide>'
         xml += self.cUF.xml
         xml += self.cNF.xml
         xml += self.natOp.xml
@@ -1629,6 +2155,7 @@ class Ide(nfe_110.Ide):
         xml += self.nNF.xml
         xml += self.dEmi.xml
         xml += self.dSaiEnt.xml
+        xml += self.hSaiEnt.xml
         xml += self.tpNF.xml
         xml += self.cMunFG.xml
 
@@ -1644,7 +2171,7 @@ class Ide(nfe_110.Ide):
         xml += self.verProc.xml
         xml += self.dhCont.xml
         xml += self.xJust.xml
-        xml += u'</ide>'
+        xml += '</ide>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1681,6 +2208,38 @@ class Ide(nfe_110.Ide):
 
     xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        txt = 'B|'
+        txt += self.cUF.txt + '|'
+        txt += self.cNF.txt + '|'
+        txt += self.natOp.txt + '|'
+        txt += self.indPag.txt + '|'
+        txt += self.mod.txt + '|'
+        txt += self.serie.txt + '|'
+        txt += self.nNF.txt + '|'
+        txt += self.dEmi.txt + '|'
+        txt += self.dSaiEnt.txt + '|'
+        txt += self.hSaiEnt.txt + '|'
+        txt += self.tpNF.txt + '|'
+        txt += self.cMunFG.txt + '|'
+        txt += self.tpImp.txt + '|'
+        txt += self.tpEmis.txt + '|'
+        txt += self.cDV.txt + '|'
+        txt += self.tpAmb.txt + '|'
+        txt += self.finNFe.txt + '|'
+        txt += self.procEmi.txt + '|'
+        txt += self.verProc.txt + '|'
+        txt += self.dhCont.txt + '|'
+        txt += self.xJust.txt + '|'
+        txt += '\n'
+
+        for nr in self.NFref:
+            txt += nr.txt
+
+        return txt
+
+    txt = property(get_txt)
+
 
 class InfNFe(nfe_110.InfNFe):
     def __init__(self):
@@ -1704,7 +2263,7 @@ class InfNFe(nfe_110.InfNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<infNFe versao="' + unicode(self.versao.valor) + u'" Id="' + self.Id.valor + u'">'
+        xml += '<infNFe versao="' + unicode(self.versao.valor) + '" Id="' + self.Id.valor + '">'
         xml += self.ide.xml
         xml += self.emit.xml
         xml += self.avulsa.xml
@@ -1722,7 +2281,7 @@ class InfNFe(nfe_110.InfNFe):
         xml += self.exporta.xml
         xml += self.compra.xml
         xml += self.cana.xml
-        xml += u'</infNFe>'
+        xml += '</infNFe>'
         return xml
 
     def set_xml(self, arquivo):
@@ -1754,14 +2313,42 @@ class InfNFe(nfe_110.InfNFe):
 
     xml = property(get_xml, set_xml)
 
+    def get_txt(self):
+        txt = 'A|'
+        txt += self.versao.txt + '|'
+        txt += self.Id.txt + '|'
+        txt += '\n'
+
+        txt += self.ide.txt
+        txt += self.emit.txt
+        txt += self.avulsa.txt
+        txt += self.dest.txt
+        txt += self.retirada.txt
+        txt += self.entrega.txt
+
+        for d in self.det:
+            txt += d.txt
+
+        txt += self.total.txt
+        txt += self.transp.txt
+        txt += self.cobr.txt
+        txt += self.infAdic.txt
+        txt += self.exporta.txt
+        txt += self.compra.txt
+        #txt += self.cana.txt
+
+        return txt
+
+    txt = property(get_txt)
+
 
 class NFe(nfe_110.NFe):
     def __init__(self):
         super(NFe, self).__init__()
         self.infNFe = InfNFe()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'nfe_v2.00.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'nfe_v2.00.xsd'
 
     def gera_nova_chave(self):
         super(NFe, self).gera_nova_chave()
@@ -1773,20 +2360,20 @@ class NFe(nfe_110.NFe):
         self.infNFe.ide.cNF.valor = self.chave[35:43]
 
     def monta_chave(self):
-        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, u'0')
-        chave += unicode(self.infNFe.ide.dEmi.valor.strftime(u'%y%m')).strip().rjust(4, u'0')
-        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, u'0')
-        chave += u'55'
-        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, u'0')
-        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, u'0')
+        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, '0')
+        chave += unicode(self.infNFe.ide.dEmi.valor.strftime(u'%y%m')).strip().rjust(4, '0')
+        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, '0')
+        chave += '55'
+        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, '0')
+        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, '0')
 
         #
         # Inclui agora o tipo da emissão
         #
-        chave += unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, u'0')
+        chave += unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, '0')
 
-        chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, u'0')
-        chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, u'0')
+        chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, '0')
+        chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
         self.chave = chave
 
     def cst_descricao(self):

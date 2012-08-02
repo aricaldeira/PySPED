@@ -279,6 +279,11 @@ class TagCaracter(NohXML):
 
     text = property(get_text)
 
+    def get_txt(self):
+        return self._valor_string
+
+    txt = property(get_txt)
+
 
 class TagBoolean(TagCaracter):
     def __init__(self, **kwargs):
