@@ -2,10 +2,16 @@
 
 from __future__ import division, print_function, unicode_literals
 
+#
+# Tenta evitar a necessidade do xmlsec estar instalado
+#
+try:
+    import xmlsec
+except ImportError:
+    pass
 
 from pysped.xml_sped import XMLNFe, NAMESPACE_SIG, ABERTURA, tira_abertura
 import libxml2
-import xmlsec
 import os
 from datetime import datetime
 from time import mktime
