@@ -755,10 +755,11 @@ class DANFE(object):
         self.caminho           = u''
         self.salvar_arquivo    = True
 
-        self.NFe        = None
-        self.protNFe    = None
-        self.retCancNFe = None
-        self.danfe      = None
+        self.NFe         = None
+        self.protNFe     = None
+        self.procCancNFe = None
+        self.retCancNFe  = None
+        self.danfe       = None
 
         self.obs_impressao    = u'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
         self.nome_sistema     = u''
@@ -777,6 +778,9 @@ class DANFE(object):
         if self.retCancNFe is None:
             self.retCancNFe = RetCancNFe_200()
 
+        if self.procCancNFe is None:
+            self.procCancNFe = ProcCancNFe_200()
+
         #
         # Prepara o queryset para impressão
         #
@@ -788,6 +792,7 @@ class DANFE(object):
             detalhe.NFe = self.NFe
             detalhe.protNFe = self.protNFe
             detalhe.retCancNFe = self.retCancNFe
+            detalhe.procCancNFe = self.procCancNFe
 
         #
         # Prepara as bandas de impressão para cada formato
@@ -842,8 +847,11 @@ class DANFE(object):
                 self.danfe.remetente.obs_contingencia_normal_scan()
 
         # A NF-e foi cancelada, no DANFE imprimir o "carimbo" de cancelamento
-        if self.retCancNFe.infCanc.nProt.valor:
-            self.danfe.remetente.obs_cancelamento()
+        if self.retCancNFe.infCanc.nProt.valor or self.procCancNFe.retCancNFe.infCanc.nProt.valor:
+            if self.procCancNFe.cancNFe.infCanc.xJust.valor:
+                self.danfe.remetente.obs_cancelamento_com_motivo()
+            else:
+                self.danfe.remetente.obs_cancelamento()
 
         # Observação de ausência de valor fiscal
         # se não houver protocolo ou se o ambiente for de homologação

@@ -224,24 +224,63 @@ class RemetenteRetrato(BandaDANFE):
         lbl.borders = None
         lbl.name = 'lbl_prot_cancelamento'
         lbl.text = u'PROTOCOLO<br />DE CANCELAMENTO'
-        #lbl.top = 1.75*cm
         lbl.top = 5.35*cm
         lbl.left = 6.15*cm
         lbl.width = 1.75*cm
         lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
-        self.elements.append(lbl)
+        self.elements.insert(2, lbl)
 
         fld = Campo()
         fld.name = 'fld_prot_cancelamento'
         fld.attribute_name = u'retCancNFe.protocolo_formatado'
-        #fld.top  = 1.55*cm
         fld.top  = 5.15*cm
         fld.left = 7.5*cm
         fld.width = 6.3*cm
         fld.padding_top = 0.25*cm
         fld.style = DADO_VARIAVEL_CANCELAMENTO
+        self.elements.insert(3, fld)
 
-        self.elements.insert(2, fld)
+    def obs_cancelamento_com_motivo(self):
+        txt = Texto()
+        txt.name   = 'txt_obs_cancelamento'
+        txt.text   = u'cancelada'
+        txt.top    = 3.5*cm
+        txt.left   = 4.7*cm
+        txt.width  = 10*cm
+        txt.height = 1.5*cm
+        txt.padding_top = 0.1*cm
+        txt.style  = OBS_DENEGACAO
+        self.elements.insert(0, txt)
+
+        fld = Campo()
+        fld.name = 'fld_motivo_cancelamento'
+        fld.attribute_name = u'procCancNFe.cancNFe.infCanc.xJust'
+        fld.top  = 5.15*cm
+        fld.left = 4.7*cm
+        fld.width = 10*cm
+        fld.padding_top = 0.25*cm
+        fld.style = DADO_VARIAVEL_CANCELAMENTO
+        self.elements.insert(1, fld)
+        
+        lbl = LabelMargemEsquerda()
+        lbl.borders = None
+        lbl.name = 'lbl_prot_cancelamento'
+        lbl.text = u'PROTOCOLO<br />DE CANCELAMENTO'
+        lbl.top = 5.72*cm
+        lbl.left = 6.15*cm
+        lbl.width = 1.75*cm
+        lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
+        self.elements.insert(2, lbl)
+
+        fld = Campo()
+        fld.name = 'fld_prot_cancelamento'
+        fld.attribute_name = u'retCancNFe.protocolo_formatado'
+        fld.top  = 5.52*cm
+        fld.left = 7.5*cm
+        fld.width = 6.3*cm
+        fld.padding_top = 0.25*cm
+        fld.style = DADO_VARIAVEL_CANCELAMENTO
+        self.elements.insert(3, fld)
 
     def obs_denegacao(self):
         txt = Texto()
@@ -253,31 +292,38 @@ class RemetenteRetrato(BandaDANFE):
         txt.width  = 10*cm
         txt.height = 1.5*cm
         txt.padding_top = 0.1*cm
-        txt.style  = OBS_CANCELAMENTO
+        txt.style  = OBS_DENEGACAO
         self.elements.insert(0, txt)
+
+        fld = Campo()
+        fld.name = 'fld_motivo_denegacao'
+        fld.attribute_name = u'protNFe.infProt.xMotivo'
+        fld.top  = 5.15*cm
+        fld.left = 4.7*cm
+        fld.width = 10*cm
+        fld.padding_top = 0.25*cm
+        fld.style = DADO_VARIAVEL_CANCELAMENTO
+        self.elements.insert(1, fld)
 
         lbl = LabelMargemEsquerda()
         lbl.borders = None
         lbl.name = 'lbl_prot_denegacao'
         lbl.text = u'PROTOCOLO<br />DE DENEGAÇÃO'
-        #lbl.top = 1.75*cm
-        lbl.top = 5.35*cm
+        lbl.top = 5.72*cm
         lbl.left = 6.15*cm
         lbl.width = 1.75*cm
         lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
-        self.elements.append(lbl)
+        self.elements.insert(2, lbl)
 
         fld = Campo()
         fld.name = 'fld_prot_denegacao'
         fld.attribute_name = u'protNFe.protocolo_formatado'
-        #fld.top  = 1.55*cm
-        fld.top  = 5.15*cm
+        fld.top  = 5.52*cm
         fld.left = 7.5*cm
         fld.width = 6.3*cm
         fld.padding_top = 0.25*cm
         fld.style = DADO_VARIAVEL_CANCELAMENTO
-
-        self.elements.insert(2, fld)
+        self.elements.insert(3, fld)
 
     def obs_contingencia_normal_scan(self):
         lbl = Texto()

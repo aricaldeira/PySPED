@@ -88,6 +88,7 @@ DESCRITIVO_DANFE_ES = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_7, 'a
 OBS_CONTINGENCIA = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_18, 'alignment': TA_CENTER, 'textColor': CINZA_MARCADAGUA}
 OBS_HOMOLOGACAO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_40, 'alignment': TA_CENTER, 'textColor': VERMELHO_CARIMBO}
 OBS_CANCELAMENTO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_40, 'leading': FONTE_TAMANHO_40+24, 'alignment': TA_CENTER, 'textColor': VERMELHO_CARIMBO, 'borderWidth': 3, 'borderColor': VERMELHO_CARIMBO, 'borderRadius': 3}
+OBS_DENEGACAO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_40, 'leading': FONTE_TAMANHO_40+36, 'alignment': TA_CENTER, 'textColor': VERMELHO_CARIMBO, 'borderWidth': 3, 'borderColor': VERMELHO_CARIMBO, 'borderRadius': 3}
 DESCRITIVO_CAMPO_CANCELAMENTO = {'fontName': FONTE_NEGRITO, 'fontSize': FONTE_TAMANHO_5, 'leading': FONTE_TAMANHO_5, 'textColor': VERMELHO_CARIMBO, 'backColor': 'white'}
 DADO_VARIAVEL_CANCELAMENTO = {'fontName': FONTE_NORMAL, 'fontSize': FONTE_TAMANHO_9, 'alignment': TA_CENTER, 'leading': FONTE_TAMANHO_11, 'textColor': VERMELHO_CARIMBO}
 
