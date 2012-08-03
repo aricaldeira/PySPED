@@ -9,8 +9,9 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 
 from geraldo import Report, ReportBand, SubReport
-from geraldo import ObjectValue, SystemField, Label, Line, BarCode, Rect, Image
+from geraldo import ObjectValue, SystemField, Label, Line, Rect, Image
 from geraldo.generators import PDFGenerator
+from geraldo.barcodes import BarCode
 
 from pysped.relato_sped import *
 from pysped.nfe.manual_401 import Vol_200
@@ -606,8 +607,8 @@ class DestinatarioRetrato(BandaDANFE):
         fld.style = DADO_CAMPO_NEGRITO
 
         ## 3ª linha
-        lbl, fld = self.inclui_campo(nome='remetente_municipio', titulo=u'MUNICÍPIO', conteudo=u'NFe.infNFe.dest.enderDest.xMun.valor', top=1.82*cm, left=0*cm, width=10.4*cm)
-        lbl, fld = self.inclui_campo(nome='remetente_fone', titulo=u'FONE', conteudo=u'NFe.fone_destinatario_formatado', top=1.82*cm, left=10.4*cm, width=2.8*cm)
+        lbl, fld = self.inclui_campo(nome='remetente_municipio', titulo=u'MUNICÍPIO', conteudo=u'NFe.infNFe.dest.enderDest.xMun.valor', top=1.82*cm, left=0*cm, width=9.9*cm)
+        lbl, fld = self.inclui_campo(nome='remetente_fone', titulo=u'FONE', conteudo=u'NFe.fone_destinatario_formatado', top=1.82*cm, left=9.9*cm, width=3.3*cm)
         lbl, fld = self.inclui_campo(nome='remetente_uf', titulo=u'UF', conteudo='NFe.infNFe.dest.enderDest.UF.valor', top=1.82*cm, left=13.2*cm, width=0.75*cm)
         lbl, fld = self.inclui_campo(nome='remetente_ie', titulo=u'INSCRIÇÃO ESTADUAL', conteudo=u'NFe.infNFe.dest.IE.valor', top=1.82*cm, left=13.95*cm, width=3.25*cm)
         lbl, fld = self.inclui_campo(nome='remetente_hora_entradasaida', titulo=u'HORA DA ENTRADA/SAÍDA', conteudo=u'NFe.infNFe.ide.hSaiEnt.formato_danfe', top=1.82*cm, left=17.2*cm, width=2.2*cm, margem_direita=True)

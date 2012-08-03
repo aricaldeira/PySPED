@@ -4127,6 +4127,23 @@ class NFe(XMLNFe):
             fone = fone[2:]
             formatado = '(' + ddd + ') ' + fone[:-4] + '-' + fone[-4:]
 
+        #
+        # Celulares de SP agora têm 9 dígitos...
+        #
+        elif len(fone) <= 11:
+            ddd = fone[0:3]
+            fone = fone[3:]
+            formatado = '(' + ddd + ') ' + fone[:-4] + '-' + fone[-4:]
+
+        #
+        # Assume 8 dígitos para o número, 2 para o DD, e o restante é o DDI
+        #
+        else:
+            numero = fone[len(fone)-8:]
+            ddd = fone[len(fone)-10:len(fone)-8]
+            ddi = fone[:len(fone)-10]
+            formatado = '+' + ddi + ' (' + ddd + ') ' + numero[:-4] + '-' + numero[-4:]
+
         return formatado
 
     def fone_emitente_formatado(self):
