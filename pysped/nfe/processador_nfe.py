@@ -1,4 +1,43 @@
 # -*- coding: utf-8 -*-
+#
+# PySPED - Python libraries to deal with Brazil's SPED Project
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# PySPED - Bibliotecas Python para o
+#          SPED - Sistema Público de Escrituração Digital
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
+#
+# Este programa é um software livre: você pode redistribuir e/ou modificar
+# este programa sob os termos da licença GNU Affero General Public License,
+# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# com sua opção, qualquer versão posterior.
+#
+# Este programa é distribuido na esperança de que venha a ser útil,
+# porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
+# COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
+# GNU Affero General Public License para mais detalhes.
+#
+# Você deve ter recebido uma cópia da GNU Affero General Public License
+# juntamente com este programa. Caso esse não seja o caso, acesse:
+# <http://www.gnu.org/licenses/>
+#
 
 from __future__ import division, print_function, unicode_literals
 
@@ -135,7 +174,6 @@ class ProcessadorNFe(object):
             else:
                 self._servidor = webservices_2.ESTADO_WS[self.estado][ambiente][u'servidor']
                 self._url      = webservices_2.ESTADO_WS[self.estado][ambiente][servico]
-
 
         #try:
         self.certificado.prepara_certificado_arquivo_pfx()
@@ -616,7 +654,7 @@ class ProcessadorNFe(object):
 
     def montar_processo_lista_notas(self, lista_nfes, dic_protNFe, dic_procNFe):
         for nfe in lista_nfes:
-            if dic_protNFe.has_key(nfe.chave):
+            if nfe.chave in dic_protNFe:
                 protocolo = dic_protNFe[nfe.chave]
                 processo = self.montar_processo_uma_nota(nfe, protnfe_recibo=protocolo)
 
@@ -869,9 +907,11 @@ class DANFE(object):
         if self.imprime_fatura:
             # Pagamento a prazo
             if (self.NFe.infNFe.ide.indPag.valor == 1) or \
-                (len(self.NFe.infNFe.cobr.dup) > 1) or \
-                ((len(self.NFe.infNFe.cobr.dup) == 1) and \
-                (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())):
+               (len(self.NFe.infNFe.cobr.dup) > 1) or \
+               (
+                   (len(self.NFe.infNFe.cobr.dup) == 1) and
+                   (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())
+               ):
 
                 if self.imprime_duplicatas:
                     self.danfe.fatura_a_prazo.elements.append(self.danfe.duplicatas)
