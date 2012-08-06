@@ -158,7 +158,7 @@ class COFINSST(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 
 class TagCSTCOFINS(TagCaracter):
@@ -641,7 +641,7 @@ class PIS(XMLNFe):
         else:
             txt += self.vPIS.txt + '|'
             txt += '\n'
-            
+
             if self.qBCProd.valor or self.vAliqProd.valor:
                 txt += 'Q10|'
                 txt += self.qBCProd.txt + '|'
@@ -650,7 +650,7 @@ class PIS(XMLNFe):
                 txt += 'Q07|'
                 txt += self.vBC.txt + '|'
                 txt += self.pPIS.txt + '|'
-                
+
             txt += '\n'
 
         return txt
@@ -704,7 +704,7 @@ class II(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class TagCSTIPI(TagCaracter):
     def __init__(self, *args, **kwargs):
@@ -886,12 +886,12 @@ class IPI(XMLNFe):
         else:
             txt += self.vIPI.txt + '|'
             txt += '\n'
-            
+
             if self.qUnid.valor or self.vUnid.valor:
                 txt += 'O10|'
                 txt += self.qUnid.txt + '|'
                 txt += self.vUnid.txt + '|'
-                
+
             else:
                 txt += 'O11|'
                 txt += self.vBC.txt + '|'
@@ -1438,7 +1438,7 @@ class ICMSCons(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class ICMSInter(XMLNFe):
     def __init__(self):
@@ -1616,7 +1616,7 @@ class Comb(XMLNFe):
         txt += self.ICMSComb.txt
         txt += self.ICMSInter.txt
         txt += self.ICMSCons.txt
-        
+
         return txt
 
     txt = property(get_txt)
@@ -1831,7 +1831,7 @@ class VeicProd(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class Adi(XMLNFe):
     def __init__(self):
@@ -1870,7 +1870,7 @@ class Adi(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class DI(XMLNFe):
     def __init__(self):
@@ -2090,7 +2090,7 @@ class Prod(XMLNFe):
             txt += a.txt
 
         txt += self.comb.txt
-        
+
         return txt
 
     txt = property(get_txt)
@@ -2134,7 +2134,7 @@ class Det(XMLNFe):
 
     txt = property(get_txt)
 
-    
+
     def descricao_produto_formatada(self):
         formatado = self.prod.xProd.valor.replace('|', '<br />')
 
@@ -2189,7 +2189,7 @@ class Compra(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class Exporta(XMLNFe):
     def __init__(self):
@@ -2260,7 +2260,7 @@ class ProcRef(XMLNFe):
         txt += self.nProc.txt + '|'
         txt += self.indProc.txt + '|'
         txt += '\n'
-        return txt        
+        return txt
 
     txt = property(get_txt)
 
@@ -2297,10 +2297,10 @@ class ObsFisco(XMLNFe):
         txt += self.xCampo.txt + '|'
         txt += self.xTexto.txt + '|'
         txt += '\n'
-        return txt    
+        return txt
 
     txt = property(get_txt)
-    
+
 
 class ObsCont(XMLNFe):
     def __init__(self):
@@ -2405,7 +2405,7 @@ class InfAdic(XMLNFe):
 
         return txt
 
-    txt = property(get_txt)    
+    txt = property(get_txt)
 
 
 class Dup(XMLNFe):
@@ -2447,7 +2447,7 @@ class Dup(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class Fat(XMLNFe):
     def __init__(self):
@@ -2539,7 +2539,7 @@ class Cobr(XMLNFe):
 
         return txt
 
-    txt = property(get_txt)    
+    txt = property(get_txt)
 
 
 class Lacres(XMLNFe):
@@ -2572,7 +2572,7 @@ class Lacres(XMLNFe):
         txt += '\n'
         return txt
 
-    txt = property(get_txt)    
+    txt = property(get_txt)
 
 
 class Vol(XMLNFe):
@@ -2659,7 +2659,7 @@ class Vol(XMLNFe):
 
         for l in self.lacres:
             txt += l.txt
-        
+
         return txt
 
     txt = property(get_txt)
@@ -2703,7 +2703,7 @@ class Reboque(XMLNFe):
         txt += '\n'
         return txt
 
-    txt = property(get_txt)    
+    txt = property(get_txt)
 
 
 class VeicTransp(XMLNFe):
@@ -2978,7 +2978,7 @@ class RetTrib(XMLNFe):
         txt += '\n'
         return txt
 
-    txt = property(get_txt)    
+    txt = property(get_txt)
 
 
 class ISSQNTot(XMLNFe):
@@ -3189,7 +3189,7 @@ class Entrega(XMLNFe):
     def get_txt(self):
         if not len(self.CNPJ.valor):
             return ''
-        
+
         txt = 'G|'
         txt += self.CNPJ.txt + '|'
         txt += self.xLgr.txt + '|'
@@ -3202,7 +3202,7 @@ class Entrega(XMLNFe):
         txt += '\n'
         return txt
 
-    txt = property(get_txt)    
+    txt = property(get_txt)
 
 
 class Retirada(XMLNFe):
@@ -3251,7 +3251,7 @@ class Retirada(XMLNFe):
     def get_txt(self):
         if not len(self.CNPJ.valor):
             return ''
-        
+
         txt = 'F|'
         txt += self.CNPJ.txt + '|'
         txt += self.xLgr.txt + '|'
@@ -3529,7 +3529,7 @@ class EnderEmit(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class Emit(XMLNFe):
     def __init__(self):
@@ -3583,7 +3583,7 @@ class Emit(XMLNFe):
         txt += self.IM.txt + '|'
         txt += self.CNAE.txt + '|'
         txt += '\n'
-        
+
         if self.CNPJ.valor:
             txt += 'C02|' + self.CNPJ.txt + '|\n'
 
@@ -3595,7 +3595,7 @@ class Emit(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 class RefNF(XMLNFe):
     def __init__(self):
@@ -3636,7 +3636,7 @@ class RefNF(XMLNFe):
     def get_txt(self):
         if not (self.cUF.valor or self.AAMM.valor or self.CNPJ.valor or self.mod.valor or self.serie.valor or self.nNF.valor):
             return ''
-        
+
         txt = 'B14|'
         txt += self.cUF.txt + '|'
         txt += self.AAMM.txt + '|'
@@ -3648,7 +3648,7 @@ class RefNF(XMLNFe):
         return txt
 
     txt = property(get_txt)
-    
+
 
 
 class NFRef(XMLNFe):
@@ -4296,6 +4296,6 @@ class NFe(XMLNFe):
 
     def cst_descricao(self):
         return 'CST'
-        
+
     def crt_descricao(self):
         return ''

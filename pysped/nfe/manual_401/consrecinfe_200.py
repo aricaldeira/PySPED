@@ -55,20 +55,20 @@ class ConsReciNFe(consrecinfe_110.ConsReciNFe):
     def __init__(self):
         super(ConsReciNFe, self).__init__()
         self.versao  = TagDecimal(nome=u'consReciNFe', codigo=u'BP02', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'2.00', raiz=u'/')
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/') 
+        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'consReciNFe_v2.00.xsd'
 
 
 class InfProt(consrecinfe_110.InfProt):
     def __init__(self):
         super(InfProt, self).__init__()
-    
+
 
 class ProtNFe(consrecinfe_110.ProtNFe):
     def __init__(self):
         super(ProtNFe, self).__init__()
         self.versao  = TagDecimal(nome=u'protNFe', codigo=u'PR02' , propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'2.00', raiz=u'/')
-    
+
 
 class RetConsReciNFe(consrecinfe_110.RetConsReciNFe):
     def __init__(self):
@@ -76,9 +76,9 @@ class RetConsReciNFe(consrecinfe_110.RetConsReciNFe):
         self.versao   = TagDecimal(nome=u'retConsReciNFe', codigo=u'BR02' , propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'2.00', raiz=u'/')
         self.cMsg     = TagCaracter(nome=u'cMsg'         , codigo=u'BR06b', tamanho=[4,   4], raiz=u'//retConsReciNFe', obrigatorio=False)
         self.xMsg     = TagCaracter(nome=u'xMsg'         , codigo=u'BR06c', tamanho=[1, 200], raiz=u'//retConsReciNFe', obrigatorio=False)
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/') 
+        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'retConsReciNFe_v2.00.xsd'
-        
+
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -91,13 +91,13 @@ class RetConsReciNFe(consrecinfe_110.RetConsReciNFe):
         xml += self.cUF.xml
         xml += self.cMsg.xml
         xml += self.xMsg.xml
-        
+
         for pn in self.protNFe:
             xml += pn.xml
-            
+
         xml += u'</retConsReciNFe>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.versao.xml   = arquivo
@@ -116,7 +116,7 @@ class RetConsReciNFe(consrecinfe_110.RetConsReciNFe):
             #
             for pn in self.protNFe:
                 self.dic_protNFe[pn.infProt.chNFe.valor] = pn
-       
+
     xml = property(get_xml, set_xml)
 
 
@@ -126,6 +126,5 @@ class ProcNFe(consrecinfe_110.ProcNFe):
         self.versao  = TagDecimal(nome=u'nfeProc', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'2.00', raiz=u'/')
         self.NFe     = NFe()
         self.protNFe = ProtNFe()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/') 
+        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'procNFe_v2.00.xsd'
-    

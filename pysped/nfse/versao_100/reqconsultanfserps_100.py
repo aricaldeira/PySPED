@@ -55,13 +55,13 @@ class RPSConsulta(XMLNFe):
         self.InscricaoMunicipalPrestador = TagCaracter(nome='InscricaoMunicipalPrestador', tamanho=[ 6,  11]   , raiz='//RPS')
         self.NumeroRPS                   = TagInteiro(nome='NumeroRPS'                   , tamanho=[ 1,  12, 1], raiz='//RPS')
         self.SeriePrestacao              = TagCaracter(nome='SeriePrestacao'             , tamanho=[ 2,  2]    , raiz='//RPS', valor='99')
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        
+
         if self.Id.valor == '':
             self.Id.valor = 'rps:' + unicode(self.NumeroRPS.valor)
-            
+
         xml += self.Id.xml
         xml += self.InscricaoMunicipalPrestador.xml
         xml += self.NumeroRPS.xml
@@ -77,8 +77,8 @@ class RPSConsulta(XMLNFe):
             self.SeriePrestacao.xml = arquivo
 
     xml = property(get_xml, set_xml)
-    
-    
+
+
 class NotaConsulta(XMLNFe):
     def __init__(self):
         super(NotaConsulta, self).__init__()
@@ -86,13 +86,13 @@ class NotaConsulta(XMLNFe):
         self.InscricaoMunicipalPrestador = TagCaracter(nome='InscricaoMunicipalPrestador', tamanho=[ 6,  11]   , raiz='//Nota')
         self.NumeroNota                  = TagInteiro(nome='NumeroNota'                  , tamanho=[ 1,  12, 1], raiz='//Nota')
         self.CodigoVerificacao           = TagCaracter(nome='CodigoVerificacao'          , tamanho=[ 1, 255]   , raiz='//Nota')
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        
+
         if self.Id.valor == '':
             self.Id.valor = 'nota:' + unicode(self.NumeroNota.valor)
-            
+
         xml += self.Id.xml
         xml += self.InscricaoMunicipalPrestador.xml
         xml += self.NumeroNota.xml
@@ -116,34 +116,34 @@ class _Lote(XMLNFe):
         self.Id = TagCaracter(nome='Lote', propriedade=u'Id', raiz=u'//nfse:ReqConsultaNFSeRPS')
         self.NotaConsulta = []
         self.RPSConsulta  = []
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += self.Id.xml
-        
+
         if len(self.NotaConsulta):
             xml += '<NotaConsulta>'
-            
+
             for n in self.NotaConsulta:
                 xml += n.xml
-            
+
             xml += '</NotaConsulta>'
-            
+
         if len(self.RPSConsulta):
             xml += '<RPSConsulta>'
-        
+
             for r in self.RPSConsulta:
                 xml += r.xml
-            
+
             xml += '</RPSConsulta>'
-            
+
         xml += '</Lote>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml        = arquivo
-            
+
             notas = self._le_nohs('//nfse:ReqConsultaNFSeRPS/Lote/NotaConsulta/Nota')
             self.NotaConsulta = []
             if notas is not None:
@@ -159,7 +159,7 @@ class _Lote(XMLNFe):
                     self.RPSConsulta[i].xml = rps[i]
 
     xml = property(get_xml, set_xml)
-    
+
 
 class _Cabecalho(XMLNFe):
     def __init__(self):
@@ -168,7 +168,7 @@ class _Cabecalho(XMLNFe):
         self.CPFCNPJRemetente = TagCaracter(nome='CPFCNPJRemetente', tamanho=[11, 14]   , raiz='//nfse:ReqConsultaNFSeRPS/Cabecalho')
         self.transacao        = TagBoolean(nome='transacao'        ,                      raiz='//nfse:ReqConsultaNFSeRPS/Cabecalho', valor=True)
         self.Versao           = TagInteiro(nome='Versao'           , tamanho=[ 1,  3, 1], raiz='//nfse:ReqConsultaNFSeRPS/Cabecalho', valor=1)
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Cabecalho>'
@@ -204,14 +204,14 @@ class ReqConsultaNFSeRPS(XMLNFe):
         xml += '<nfse:ReqConsultaNFSeRPS xmlns:nfse="http://localhost:8080/WsNFe2/lote">'
         xml += self.Cabecalho.xml
         xml += self.Lote.xml
-        
+
         #
         # Define a URI a ser assinada
         #
         self.Signature.URI = '#' + self.Lote.Id.valor
 
         xml += self.Signature.xml
-        
+
         xml += '</nfse:ReqConsultaNFSeRPS>'
         return xml
 

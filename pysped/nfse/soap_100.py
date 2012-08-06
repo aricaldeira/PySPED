@@ -109,7 +109,7 @@ class SOAPRetorno(XMLNFe):
         xml += '</soap:Envelope>'
         return xml
 
-    def set_xml(self, arquivo):        
+    def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             resposta = por_acentos(self._le_tag('//*/' + self.metodo + 'Return'))
             resposta = tira_abertura(resposta)

@@ -134,7 +134,7 @@ class CabecalhoRetrato(BandaRPS):
         img.height = 98
         img.filename = 'logotipo_prefeitura/sp-sorocaba.jpeg'
         self.elements.append(img)
-        
+
 
         #txt = self.inclui_texto_sem_borda(nome='danfe_ext', texto=u'DOCUMENTO AUXILIAR DA NOTA FISCAL ELETRÔNICA', top=0.6*cm, left=8*cm, width=3.4*cm, *cm)height=4*cm)
         #txt.style = DESCRITIVO_DANFE_GERAL
@@ -189,7 +189,7 @@ class PrestadorRetrato(BandaRPS):
         self.elements.append(lbl)
         fld = Campo(attribute_name='RPS.prestador.nome', top=0.42*cm, left=2.6*cm, width=16.8*cm)
         self.elements.append(fld)
-        
+
         # 2ª linha
         lbl = Titulo(text='CNPJ/CPF:', top=0.84*cm, left=0*cm, width=1.4*cm)
         self.elements.append(lbl)
@@ -200,7 +200,7 @@ class PrestadorRetrato(BandaRPS):
         self.elements.append(lbl)
         fld = Campo(attribute_name='RPS.prestador.im', top=0.84*cm, left=10.7*cm, width=18*cm)
         self.elements.append(fld)
-        
+
         # 3ª linha
         lbl = Titulo(text='Endereço:', top=1.26*cm, left=0*cm, width=1.4*cm)
         self.elements.append(lbl)
@@ -212,9 +212,9 @@ class PrestadorRetrato(BandaRPS):
         self.elements.append(lbl)
         fld = Campo(attribute_name='RPS.prestador.cidade', top=1.68*cm, left=1.4*cm, width=18*cm)
         self.elements.append(fld)
-        
+
         self.elements.append(Line(top=2.1*cm, bottom=2.1*cm, left=0*cm, right=19.4*cm, stroke_width=0.1))
-        
+
         self.height = 2.1*cm
 
 
@@ -229,13 +229,13 @@ class TomadorRetrato(BandaRPS):
         self.elements.append(lbl)
         fld = Campo(attribute_name='RPS.RazaoSocialTomador.valor', top=0.42*cm, left=2.6*cm, width=16.8*cm)
         self.elements.append(fld)
-        
+
         # 2ª linha
         lbl = Titulo(text='CNPJ/CPF:', top=0.84*cm, left=0*cm, width=1.4*cm)
         self.elements.append(lbl)
         fld = Campo(attribute_name='RPS.cnpj_tomador_formatado', top=0.84*cm, left=1.4*cm, width=18*cm)
         self.elements.append(fld)
-        
+
         # 3ª linha
         lbl = Titulo(text='Endereço:', top=1.26*cm, left=0*cm, width=1.4*cm)
         self.elements.append(lbl)
@@ -249,7 +249,7 @@ class TomadorRetrato(BandaRPS):
         self.elements.append(fld)
 
         self.elements.append(Line(top=2.1*cm, bottom=2.1*cm, left=0*cm, right=19.4*cm, stroke_width=0.1))
-        
+
         self.height = 2.1*cm
 
 
@@ -265,7 +265,7 @@ class DiscriminacaoRetrato(BandaRPS):
         self.elements.append(fld)
 
         #self.elements.append(Line(top=4.4*cm, bottom=4.4*cm, left=0*cm, right=19.4*cm, stroke_width=0.1))
-        
+
         lbl = self.inclui_descritivo_item(nome='', titulo='TRIBUTÁVEL', top=4.4*cm, left=0*cm, width=1.2*cm)
         lbl.padding_top = 0.15*cm
         lbl = self.inclui_descritivo_item(nome='', titulo='ITEM', top=4.4*cm, left=1.2*cm, width=11.3*cm)
@@ -276,7 +276,7 @@ class DiscriminacaoRetrato(BandaRPS):
         lbl.padding_top = 0.15*cm
         lbl = self.inclui_descritivo_item(nome='', titulo='VALOR TOTAL', top=4.4*cm, left=17.1*cm, width=2.3*cm, margem_direita=True)
         lbl.padding_top = 0.15*cm
-        
+
         self.height = 4.82*cm
 
 
@@ -299,39 +299,38 @@ class RodapeRetrato(BandaRPS):
     def __init__(self):
         super(RodapeRetrato, self).__init__()
         self.elements = []
-        
+
         # 1ª linha
         lbl, fld = self.inclui_campo_imposto(nome='clc_bip', titulo='RPS.aliquota_pis_formatada', conteudo='RPS.ValorPIS.formato_danfe', top=0*cm, left=0*cm, width=3.88*cm)
         lbl, fld = self.inclui_campo_imposto(nome='clc_vip', titulo='RPS.aliquota_cofins_formatada', conteudo='RPS.ValorCOFINS.formato_danfe', top=0*cm, left=3.88*cm, width=3.88*cm)
         lbl, fld = self.inclui_campo_imposto(nome='clc_bis', titulo='RPS.aliquota_inss_formatada', conteudo='RPS.ValorINSS.formato_danfe', top=0*cm, left=7.76*cm, width=3.88*cm)
         lbl, fld = self.inclui_campo_imposto(nome='clc_vis', titulo='RPS.aliquota_ir_formatada', conteudo='RPS.ValorIR.formato_danfe', top=0*cm, left=11.64*cm, width=3.88*cm)
         lbl, fld = self.inclui_campo_imposto(nome='clc_vpn', titulo='RPS.aliquota_csll_formatada', conteudo='RPS.ValorCSLL.formato_danfe', top=0*cm, left=15.52*cm, width=3.88*cm, margem_direita=True)
-        
+
         lbl = self._inclui_texto(nome='titulo_discriminacao', texto='VALOR TOTAL DO RPS =', top=0.85*cm, left=0*cm, width=19.4*cm)
         lbl.style = DESCRICAO_VALOR_TOTAL
         self.elements.append(lbl)
-        
+
         fld = self._inclui_campo(nome='total', conteudo='RPS.ValorTotalRPS.formato_danfe', top=0.85*cm, left=14.4*cm, width=5*cm)
         fld.style = VALOR_TOTAL
         self.elements.append(fld)
-        
+
         lbl, fld = self.inclui_campo_numerico(nome='iss_im', titulo='VALOR TOTAL DAS DEDUÇÕES', conteudo='RPS.ValorDeducoes.formato_danfe'    , top=1.5*cm, left=0*cm, width=4.85*cm)
         lbl, fld = self.inclui_campo_numerico(nome='iss_vr', titulo='BASE DE CÁLCULO DO ISS'  , conteudo='RPS.BaseCalculo.formato_danfe'      , top=1.5*cm, left=4.85*cm, width=4.85*cm)
         lbl, fld = self.inclui_campo_numerico(nome='iss_bc', titulo='ALÍQUOTA'                , conteudo='RPS.AliquotaAtividade.formato_danfe', top=1.5*cm, left=9.7*cm, width=4.85*cm)
         lbl, fld = self.inclui_campo_numerico(nome='iss_vr', titulo='VALOR DO ISS'            , conteudo='RPS.ValorISS.formato_danfe'         , top=1.5*cm, left=14.55*cm, width=4.85*cm, margem_direita=True)
 
         self.inclui_descritivo(nome='titulo_discriminacao', titulo='INFORMAÇÕES IMPORTANTES', top=2.2*cm, left=0*cm, width=19.4*cm)
-        
+
         fld = Campo(attribute_name='RPS.informacoes_formatadas', top=2.62*cm, left=0*cm, width=19.4*cm)
         fld.style = DADO_CAMPO_NORMAL
         fld.height = 3.98*cm
         self.elements.append(fld)
-    
+
         self.elements.append(Line(top=6.6*cm, bottom=6.6*cm, left=0*cm, right=19.4*cm, stroke_width=0.1))
-        
+
         fld = RPSRetrato.ObsImpressao()
         fld.top = 6.6*cm
         self.elements.append(fld)
-        
+
         self.height = 6.6*cm
-    

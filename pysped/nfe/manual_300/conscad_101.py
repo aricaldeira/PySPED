@@ -77,14 +77,14 @@ class _InfConsEnviado(XMLNFe):
             self.CPF.xml   = arquivo
 
     xml = property(get_xml, set_xml)
-    
+
 
 class ConsCad(XMLNFe):
     versao = TagDecimal(nome='ConsCad', codigo='GP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.01', raiz='/')
     infCons = _InfConsEnviado()
     caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL)
     arquivo_esquema = 'consCad_v1.01.xsd'
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
@@ -157,19 +157,19 @@ class _InfCadRecebido(XMLNFe):
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<infCad>'
-        xml += self.IE.xml      
-        xml += self.CNPJ.xml    
-        xml += self.CPF.xml     
-        xml += self.UF.xml      
-        xml += self.cSit.xml    
-        xml += self.xNome.xml   
-        xml += self.xFant.xml   
+        xml += self.IE.xml
+        xml += self.CNPJ.xml
+        xml += self.CPF.xml
+        xml += self.UF.xml
+        xml += self.cSit.xml
+        xml += self.xNome.xml
+        xml += self.xFant.xml
         xml += self.xRegApur.xml
         xml += self.CNAE.xml
         xml += self.dIniAtiv.xml
-        xml += self.dUltSit.xml 
+        xml += self.dUltSit.xml
         xml += self.dBaixa.xml
-        xml += self.IEUnica.xml 
+        xml += self.IEUnica.xml
         xml += self.IEAtual.xml
         xml += self.ender.xml
         xml += '</infCad>'
@@ -220,11 +220,11 @@ class _InfConsRecebido(XMLNFe):
         xml += self.CPF.xml
         xml += self.dhCons.xml
         xml += self.cUF.xml
-        
+
         if len(self.infCad) > 0:
             for ic in self.infCad:
                 xml += ic.xml
-                
+
         xml += '</infCons>'
         return xml
 
@@ -239,10 +239,10 @@ class _InfConsRecebido(XMLNFe):
             self.CPF.xml       = arquivo
             self.dhCons.xml    = arquivo
             self.cUF.xml       = arquivo
-            
+
             self.infCad = []
             cadastros = self._le_nohs('//retConsCad/infCons/infCad')
-            
+
             if len(cadastros) > 0:
                 for c in cadastros:
                     nc = _InfCadRecebido()

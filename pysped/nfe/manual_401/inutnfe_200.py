@@ -63,12 +63,12 @@ class InutNFe(inutnfe_107.InutNFe):
         self.infInut = InfInutEnviado()
         self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'inutNFe_v2.00.xsd'
-        
+
         self.chave = u''
-    
+
     def gera_nova_chave(self):
         chave = self.monta_chave()
-        
+
         #
         # Na versão 1.07 da NF-e a chave de inutilização não tem
         # o ano
@@ -76,7 +76,7 @@ class InutNFe(inutnfe_107.InutNFe):
         # Mas na versão 2.00 tem
         #
         #chave = chave[0:2] + chave[4:]
-        
+
         #
         # Define o Id
         #
@@ -87,7 +87,7 @@ class InfInutRecebido(inutnfe_107.InfInutRecebido):
     def __init__(self):
         super(InfInutRecebido, self).__init__()
 
-    
+
 class RetInutNFe(inutnfe_107.RetInutNFe):
     def __init__(self):
         super(RetInutNFe, self).__init__()

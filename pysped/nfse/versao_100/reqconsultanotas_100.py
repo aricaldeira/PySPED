@@ -59,7 +59,7 @@ class _Cabecalho(XMLNFe):
         self.dtFim            = TagData(nome='dtFim', raiz='//nfse:ReqConsultaNotas/Cabecalho')
         self.NotaInicial      = TagInteiro(nome='NotaInicial'      , tamanho=[ 1, 12, 1], raiz='//nfse:ReqConsultaNotas/Cabecalho', obrigatorio=False)
         self.Versao           = TagInteiro(nome='Versao'           , tamanho=[ 1,  3, 1], raiz='//nfse:ReqConsultaNotas/Cabecalho', valor=1)
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Cabecalho>'

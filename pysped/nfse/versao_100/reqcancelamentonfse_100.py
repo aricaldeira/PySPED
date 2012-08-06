@@ -56,13 +56,13 @@ class NotaCancelamento(XMLNFe):
         self.NumeroNota                  = TagInteiro(nome='NumeroNota'                  , tamanho=[1,  12, 1], raiz='//Nota')
         self.CodigoVerificacao           = TagCaracter(nome='CodigoVerificacao'          , tamanho=[1, 255]   , raiz='//Nota')
         self.MotivoCancelamento          = TagCaracter(nome='MotivoCancelamento'         , tamanho=[1,  80]   , raiz='//Nota')
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        
+
         if self.Id.valor == '':
             self.Id.valor = 'nota:' + unicode(self.NumeroNota.valor)
-            
+
         xml += self.Id.xml
         xml += self.InscricaoMunicipalPrestador.xml
         xml += self.NumeroNota.xml
@@ -87,22 +87,22 @@ class _Lote(XMLNFe):
         super(_Lote, self).__init__()
         self.Id = TagCaracter(nome='Lote', propriedade=u'Id', raiz=u'//nfse:ReqCancelamentoNFSe')
         self.NotaCancelamento = []
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += self.Id.xml
-        
+
         if len(self.NotaCancelamento):
             for n in self.NotaCancelamento:
                 xml += n.xml
-            
+
         xml += '</Lote>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml        = arquivo
-            
+
             notas = self._le_nohs('//nfse:ReqCancelamentoNFSe/Lote/Nota')
             self.NotaCancelamento = []
             if notas is not None:
@@ -120,7 +120,7 @@ class _Cabecalho(XMLNFe):
         self.CPFCNPJRemetente = TagCaracter(nome='CPFCNPJRemetente', tamanho=[11, 14]   , raiz='//nfse:ReqCancelamentoNFSe/Cabecalho')
         self.transacao        = TagBoolean(nome='transacao'        ,                      raiz='//nfse:ReqCancelamentoNFSe/Cabecalho', valor=True)
         self.Versao           = TagInteiro(nome='Versao'           , tamanho=[ 1,  3, 1], raiz='//nfse:ReqCancelamentoNFSe/Cabecalho', valor=1)
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Cabecalho>'
@@ -139,7 +139,7 @@ class _Cabecalho(XMLNFe):
             self.Versao.xml           = arquivo
 
     xml = property(get_xml, set_xml)
-    
+
 
 class ReqCancelamentoNFSe(XMLNFe):
     def __init__(self):
@@ -156,14 +156,14 @@ class ReqCancelamentoNFSe(XMLNFe):
         xml += '<nfse:ReqCancelamentoNFSe xmlns:nfse="http://localhost:8080/WsNFe2/lote">'
         xml += self.Cabecalho.xml
         xml += self.Lote.xml
-        
+
         #
         # Define a URI a ser assinada
         #
         self.Signature.URI = '#' + self.Lote.Id.valor
 
         xml += self.Signature.xml
-        
+
         xml += '</nfse:ReqCancelamentoNFSe>'
         return xml
 

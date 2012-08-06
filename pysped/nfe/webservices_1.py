@@ -149,7 +149,7 @@ DPEC = {
         WS_DPEC_CONSULTA: u'SCERecepcaoRFB/SCERecepcaoRFB.asmx',
         WS_DPEC_RECEPCAO: u'SCEConsultaRFB/SCEConsultaRFB.asmx'
     }
-}    
+}
 
 UFAM = {
     NFE_AMBIENTE_PRODUCAO: {
@@ -444,7 +444,7 @@ UFSP = {
 
 
 #
-# Informação obtida em 
+# Informação obtida em
 # http://www.nfe.fazenda.gov.br/portal/VerificacaoDeServicos/VerificacaoServicos.aspx
 #  Última verificação: 07/04/2010 16:30:14
 #  * Estados Emissores pela Sefaz Virtual RS (Rio Grande do Sul): AC, AL, AM, AP, DF, MS, PB, RJ, RO, RR, SC, SE e TO.
@@ -452,7 +452,7 @@ UFSP = {
 # Estados que têm seus próprios servidores: BA, GO, MG, MT, PE, PR, SP.
 #
 
-  
+
 ESTADO_WS = {
     u'AC': SVRS,
     u'AL': SVRS,
@@ -481,4 +481,4 @@ ESTADO_WS = {
     u'SE': SVRS,
     u'SP': UFSP,
     u'TO': SVRS
-}   
+}

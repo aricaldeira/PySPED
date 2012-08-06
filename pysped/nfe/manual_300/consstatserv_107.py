@@ -77,7 +77,7 @@ class ConsStatServ(XMLNFe):
             self.xServ.xml  = arquivo
 
     xml = property(get_xml, set_xml)
-    
+
 
 class RetConsStatServ(XMLNFe):
     def __init__(self):

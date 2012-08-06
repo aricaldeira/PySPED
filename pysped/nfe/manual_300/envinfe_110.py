@@ -56,18 +56,18 @@ class EnviNFe(XMLNFe):
         self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.10', raiz='/')
         self.idLote  = TagInteiro(nome='idLote' , codigo='AP03', tamanho=[1, 15, 1], raiz='//enviNFe')
         self.NFe     = []
-        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/') 
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'enviNFe_v1.10.xsd'
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
         xml += self.idLote.xml
-        
+
         for n in self.NFe:
             xml += tira_abertura(n.xml)
-            
+
         xml += '</enviNFe>'
         return xml
 
@@ -76,7 +76,7 @@ class EnviNFe(XMLNFe):
             self.versao.xml    = arquivo
             self.idLote.xml    = arquivo
             self.NFe = self.le_grupo('//enviLote/NFe', NFe)
-            
+
         return self.xml
 
     xml = property(get_xml, set_xml)
@@ -87,12 +87,12 @@ class InfRec(XMLNFe):
         super(InfRec, self).__init__()
         self.nRec     = TagCaracter(nome='nRec'     , codigo='AR08', tamanho=[1, 15, 1], raiz='//retEnviNFe/infRec')
         self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='AR09'                    , raiz='//retEnviNFe/infRec')
-        self.tMed     = TagInteiro(nome='tMed'     , codigo='AR10', tamanho=[1,  4, 1], raiz='//retEnviNFe/infRec')          
-        
+        self.tMed     = TagInteiro(nome='tMed'     , codigo='AR10', tamanho=[1,  4, 1], raiz='//retEnviNFe/infRec')
+
     def get_xml(self):
         if not self.nRec.valor:
             return ''
-        
+
         xml = XMLNFe.get_xml(self)
         xml += '<infRec>'
         xml += self.nRec.xml
@@ -100,15 +100,15 @@ class InfRec(XMLNFe):
         xml += self.tMed.xml
         xml += '</infRec>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.nRec.xml     = arquivo
             self.dhRecbto.xml = arquivo
             self.tMed.xml     = arquivo
-       
+
     xml = property(get_xml, set_xml)
-    
+
 
 class RetEnviNFe(XMLNFe):
     def __init__(self):
@@ -120,7 +120,7 @@ class RetEnviNFe(XMLNFe):
         self.xMotivo  = TagCaracter(nome='xMotivo'  , codigo='AR06' , tamanho=[1, 255]   , raiz='//retEnviNFe')
         self.cUF      = TagCaracter(nome='cUF'      , codigo='AR06a', tamanho=[2,   2, 2], raiz='//retEnviNFe')
         self.infRec   = InfRec()
-        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/') 
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'retEnviNFe_v1.10.xsd'
 
     def get_xml(self):
@@ -134,7 +134,7 @@ class RetEnviNFe(XMLNFe):
         xml += self.infRec.xml
         xml += '</retEnviNFe>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.versao.xml   = arquivo
@@ -144,6 +144,5 @@ class RetEnviNFe(XMLNFe):
             self.xMotivo.xml  = arquivo
             self.cUF.xml      = arquivo
             self.infRec.xml   = arquivo
-       
+
     xml = property(get_xml, set_xml)
-             

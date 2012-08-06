@@ -50,7 +50,7 @@ import os
 DIRNAME = os.path.dirname(__file__)
 
 
-class _Cabecalho(XMLNFe):    
+class _Cabecalho(XMLNFe):
     def __init__(self):
         super(_Cabecalho, self).__init__()
         self.CodCidade            = TagInteiro(nome='CodCidade'            , tamanho=[ 1, 10, 1], raiz='//nfse:RetornoCancelamentoNFSe/Cabecalho')
@@ -96,15 +96,15 @@ class RetornoCancelamentoNFSe(XMLNFe):
 
         if len(self.NotasCanceladas):
             xml += '<NotasCanceladas>'
-            
+
             for n in self.NotasCanceladas:
                 xml += n.xml
 
             xml += '</NotasCanceladas>'
-        
+
         if len(self.Alertas):
             xml += '<Alertas>'
-            
+
             for a in self.Alertas:
                 xml += a.xml
 
@@ -112,12 +112,12 @@ class RetornoCancelamentoNFSe(XMLNFe):
 
         if len(self.Erros):
             xml += '<Erros>'
-            
+
             for e in self.Erros:
                 xml += e.xml
 
             xml += '</Erros>'
-            
+
         xml += '</nfse:RetornoCancelamentoNFSe>'
         return xml
 

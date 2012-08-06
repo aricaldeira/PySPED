@@ -59,7 +59,7 @@ class ConsStatServ(consstatserv_107.ConsStatServ):
 
 class RetConsStatServ(consstatserv_107.RetConsStatServ):
     def __init__(self):
-        super(RetConsStatServ, self).__init__()    
+        super(RetConsStatServ, self).__init__()
         self.versao    = TagDecimal(nome=u'retConsStatServ', codigo=u'FR01', propriedade=u'versao', namespace=NAMESPACE_NFE, valor=u'2.00', raiz=u'/')
         self.caminho_esquema = os.path.join(DIRNAME, u'schema', ESQUEMA_ATUAL + u'/')
         self.arquivo_esquema = u'retConsStatServ_v2.00.xsd'

@@ -60,13 +60,13 @@ class ConsCad(conscad_101.ConsCad):
         envio.nfeCabecMsg.cUF.valor = 35
         envio.nfeCabecMsg.versaoDados.valor = self.versao.valor
         envio.nfeDadosMsg.dados = self
-        
+
         retorno = SOAPRetorno()
         retorno.wsdl = envio.wsdl
         retorno.servico = envio.servico
         self.retorno = RetConsCad()
         retorno.resposta = self.retorno
-        
+
         conectar_servico(envio, retorno, self.certificado, self.senha)
 
 

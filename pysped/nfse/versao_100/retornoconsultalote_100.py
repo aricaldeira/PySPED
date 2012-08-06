@@ -63,11 +63,11 @@ class ConsultaNFSe(XMLNFe):
         self.ValorDeduzir         = TagDecimal(nome='ValorDeduzir'         , tamanho=[1,  15, 1], decimais=[0, 2, 0], raiz='//ConsultaNFSe', obrigatorio=False)
         self.ValorTotal           = TagDecimal(nome='ValorTotal'           , tamanho=[1,  15, 1], decimais=[0, 2, 0], raiz='//ConsultaNFSe')
         self.Aliquota             = TagDecimal(nome='Aliquota'             , tamanho=[1,   6, 1], decimais=[0, 4, 2], raiz='//ConsultaNFSe')
-    
+
     def get_xml(self):
         if self.InscricaoPrestador.valor.strip() == '':
             return ''
-            
+
         xml = XMLNFe.get_xml(self)
         xml += '<ConsultaNFSe>'
         xml += self.InscricaoPrestador.xml
@@ -83,7 +83,7 @@ class ConsultaNFSe(XMLNFe):
         xml += self.Aliquota.xml
         xml += '</ConsultaNFSe>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.InscricaoPrestador.xml   = arquivo
@@ -97,11 +97,11 @@ class ConsultaNFSe(XMLNFe):
             self.ValorDeduzir.xml         = arquivo
             self.ValorTotal.xml           = arquivo
             self.Aliquota.xml             = arquivo
-        
-    xml = property(get_xml, set_xml)
-        
 
-class _Cabecalho(XMLNFe):    
+    xml = property(get_xml, set_xml)
+
+
+class _Cabecalho(XMLNFe):
     def __init__(self):
         super(_Cabecalho, self).__init__()
         self.CodCidade            = TagInteiro(nome='CodCidade'            , tamanho=[ 1, 10, 1], raiz='//nfse:RetornoConsultaLote/Cabecalho')
@@ -165,10 +165,10 @@ class RetornoConsultaLote(XMLNFe):
         xml += ABERTURA
         xml += '<nfse:RetornoConsultaLote xmlns:nfse="http://localhost:8080/WsNFe2/lote">'
         xml += self.Cabecalho.xml
-        
+
         if len(self.Alertas):
             xml += '<Alertas>'
-            
+
             for a in self.Alertas:
                 xml += a.xml
 
@@ -176,21 +176,21 @@ class RetornoConsultaLote(XMLNFe):
 
         if len(self.Erros):
             xml += '<Erros>'
-            
+
             for e in self.Erros:
                 xml += e.xml
 
             xml += '</Erros>'
-            
+
         if len(self.ListaNFSe):
             xml += '<ListaNFSe>'
-            
+
             for c in self.ListaNFSe:
                 xml += c.xml
 
             xml += '</ListaNFSe>'
-            
-                
+
+
         xml += '</nfse:RetornoConsultaLote>'
         return xml
 

@@ -1208,7 +1208,7 @@ class Imposto(nfe_110.Imposto):
 
     def get_txt(self):
         txt = 'M|\n'
-        
+
         if not self.ISSQN.cSitTrib.valor:
             txt += self.ICMS.txt
             txt += self.IPI.txt
@@ -1221,7 +1221,7 @@ class Imposto(nfe_110.Imposto):
 
         if self.ISSQN.cSitTrib.valor:
             txt += self.ISSQN.txt
-            
+
         return txt
 
     txt = property(get_txt)
@@ -2420,15 +2420,15 @@ class NFe(nfe_110.NFe):
             return 'CSOSN'
         else:
             return 'CST'
-            
+
     def crt_descricao(self):
         texto = 'Regime tributário: '
-       
+
         if self.infNFe.emit.CRT.valor == 1:
             texto += 'SIMPLES Nacional'
         elif self.infNFe.emit.CRT.valor == 2:
             texto += 'SIMPLES Nacional - excesso de sublimite de receita bruta'
         else:
             texto += 'regime normal'
-           
+
         return texto

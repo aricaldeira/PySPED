@@ -280,7 +280,7 @@ class BandaRPS(ReportBand):
         fld.style = DADO_CAMPO_NUMERICO
 
         return lbl, fld
-        
+
     def inclui_campo_imposto(self, nome, titulo, conteudo, top, left, width, height=None, margem_direita=False):
         borda = self._inclui_titulo(nome, '', top, left, width, height, margem_direita)
         borda.height = 0.8*cm
@@ -292,7 +292,7 @@ class BandaRPS(ReportBand):
         lbl.padding_bottom = 0.08*cm
         lbl.height = 0.4*cm
         self.elements.append(lbl)
-        
+
         top += 0.4*cm
         fld = self._inclui_campo(nome, conteudo, top, left, width, height)
         fld.style = DADO_CAMPO_NUMERICO_NEGRITO
@@ -302,7 +302,7 @@ class BandaRPS(ReportBand):
         self.elements.append(fld)
 
         return lbl, fld
-        
+
 
     def inclui_texto(self, nome, titulo, texto, top, left, width, height=None, margem_direita=False):
         lbl = self._inclui_titulo(nome, titulo, top, left, width, height, margem_direita)

@@ -301,7 +301,7 @@ class RemetenteRetrato(BandaDANFE):
         fld.padding_top = 0.25*cm
         fld.style = DADO_VARIAVEL_CANCELAMENTO
         self.elements.insert(1, fld)
-        
+
         lbl = LabelMargemEsquerda()
         lbl.borders = None
         lbl.name = 'lbl_prot_cancelamento'
@@ -461,7 +461,7 @@ class RemetenteRetrato(BandaDANFE):
         fld.height = 0.4*cm
         fld.style = DADO_PRODUTO_CENTRALIZADO
         elements.append(fld)
-        
+
         return elements
 
     def dados_emitente_logo_vertical(self, arquivo_imagem):
@@ -531,7 +531,7 @@ class RemetenteRetrato(BandaDANFE):
         fld.height = 0.45*cm
         fld.style = EMIT_DADOS
         elements.append(fld)
-        
+
         fld = Campo()
         fld.nome  = 'fld_regime_tributario'
         fld.attribute_name = 'NFe.crt_descricao'
@@ -540,7 +540,7 @@ class RemetenteRetrato(BandaDANFE):
         fld.width = 5.5*cm
         fld.height = 0.4*cm
         fld.style = DADO_PRODUTO_CENTRALIZADO
-        elements.append(fld)        
+        elements.append(fld)
 
         return elements
 
@@ -620,7 +620,7 @@ class RemetenteRetrato(BandaDANFE):
         fld.width = 8*cm
         fld.height = 0.4*cm
         fld.style = DADO_PRODUTO_CENTRALIZADO
-        elements.append(fld)  
+        elements.append(fld)
 
         return elements
 
@@ -832,10 +832,10 @@ class CabProdutoRetrato(BandaDANFE):
         lbl.padding_top = 0.15*cm
         lbl = self.inclui_descritivo_produto(nome='', titulo='NCM/SH', top=0.42*cm, left=7.1*cm, width=1*cm)
         lbl.padding_top = 0.15*cm
-        
+
         #lbl = self.inclui_descritivo_produto(nome='', titulo='CST', top=0.42*cm, left=8.75*cm, width=0.55*cm)
         #lbl.padding_top = 0.15*cm
-        
+
         fld = self.inclui_campo_sem_borda(nome='cst_descricao', conteudo=u'NFe.cst_descricao', top=0.42*cm, left=8.1*cm, width=0.6*cm)
         fld.style = DESCRITIVO_PRODUTO
         fld.padding_top = 0.15*cm

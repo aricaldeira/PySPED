@@ -79,7 +79,7 @@ class InfInutEnviado(XMLNFe):
         xml += self.xJust.xml
         xml += '</infInut>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml     = arquivo
@@ -93,7 +93,7 @@ class InfInutEnviado(XMLNFe):
             self.nNFIni.xml = arquivo
             self.nNFFin.xml = arquivo
             self.xJust.xml  = arquivo
-        
+
     xml = property(get_xml, set_xml)
 
 
@@ -105,15 +105,15 @@ class InutNFe(XMLNFe):
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'inutNFe_v1.07.xsd'
-        
+
         self.chave = ''
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
         xml += self.infInut.xml
-        
+
         #
         # Define a URI a ser assinada
         #
@@ -129,7 +129,7 @@ class InutNFe(XMLNFe):
             self.Signature.xml = self._le_noh('//inutNFe/sig:Signature')
 
     xml = property(get_xml, set_xml)
-    
+
     def monta_chave(self):
         chave = unicode(self.infInut.cUF.valor).zfill(2)
         chave += self.infInut.ano.valor.zfill(2)
@@ -138,19 +138,19 @@ class InutNFe(XMLNFe):
         chave += unicode(self.infInut.serie.valor).zfill(3)
         chave += unicode(self.infInut.nNFIni.valor).zfill(9)
         chave += unicode(self.infInut.nNFFin.valor).zfill(9)
-        
+
         self.chave = chave
         return chave
-        
+
     def gera_nova_chave(self):
         chave = self.monta_chave()
-        
+
         #
         # Na versão 1.07 da NF-e a chave de inutilização não tem
         # o ano
         #
         chave = chave[0:2] + chave[4:]
-        
+
         #
         # Define o Id
         #
@@ -174,7 +174,7 @@ class InfInutRecebido(XMLNFe):
         self.nNFFin   = TagInteiro(nome='nNFFin'   , codigo='DR15', tamanho=[1, 9]      , raiz='//retInutNFe/infInut', obrigatorio=False)
         self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='DR16',                       raiz='//retInutNFe/infInut', obrigatorio=False)
         self.nProt    = TagInteiro(nome='nProt'    , codigo='DR17', tamanho=[15, 15, 15], raiz='//retInutNFe/infInut', obrigatorio=False)
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
 
@@ -218,7 +218,7 @@ class InfInutRecebido(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
-    
+
 class RetInutNFe(XMLNFe):
     def __init__(self):
         super(RetInutNFe, self).__init__()
@@ -227,9 +227,9 @@ class RetInutNFe(XMLNFe):
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'retInutNFe_v1.07.xsd'
-        
+
         self.chave = ''
-    
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
@@ -257,7 +257,7 @@ class RetInutNFe(XMLNFe):
         chave += unicode(self.infInut.serie.valor).zfill(3)
         chave += unicode(self.infInut.nNFIni.valor).zfill(9)
         chave += unicode(self.infInut.nNFFin.valor).zfill(9)
-        
+
         self.chave = chave
         return chave
 

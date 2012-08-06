@@ -70,7 +70,7 @@ class Item(XMLNFe):
         xml += self.Tributavel.xml
         xml += '</Item>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.DiscriminacaoServico.xml = arquivo
@@ -78,16 +78,16 @@ class Item(XMLNFe):
             self.ValorUnitario.xml        = arquivo
             self.ValorTotal.xml           = arquivo
             self.Tributavel.xml           = arquivo
-        
+
     xml = property(get_xml, set_xml)
-    
+
     def tributavel_formatado(self):
         if self.Tributavel.valor == 'S':
             return 'SIM'
         else:
             return 'NÃO'
-               
-                
+
+
 class Deducao(XMLNFe):
     def __init__(self):
         super(Deducao, self).__init__()
@@ -112,7 +112,7 @@ class Deducao(XMLNFe):
         xml += self.ValorDeduzir.xml
         xml += '</Deducao>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.DeducaoPor.xml           = arquivo
@@ -122,7 +122,7 @@ class Deducao(XMLNFe):
             self.ValorTotalReferencia.xml = arquivo
             self.PercentualDeduzir.xml    = arquivo
             self.ValorDeduzir.xml         = arquivo
-        
+
     xml = property(get_xml, set_xml)
 
 
@@ -183,7 +183,7 @@ class RPS(XMLNFe):
         self.CPFCNPJIntermediario        = TagCaracter(nome='CPFCNPJIntermediario'       , tamanho=[11,   14]   , raiz='//RPS', obrigatorio=False)
         self.Deducoes = []
         self.Itens = []
-        
+
         #
         # Tags usadas somente para a impressão, não fazem parte do XML a ser gerado
         #
@@ -193,8 +193,8 @@ class RPS(XMLNFe):
         self.ValorISS      = TagDecimal(nome='ValorISS'     , tamanho=[ 1,   15, 1], decimais=[0, 2, 2])
         self.Informacoes   = TagCaracter(nome='Informacoes' , tamanho=[ 0, 5000])
         self.Informacoes.valor = 'Este Recibo Provisório de Serviços - RPS não é válido como documento fiscal. O prestador do serviço, no prazo de até 5 (cinco) dias corridos da emissão deste RPS, deverá substituí-lo por uma Nota Fiscal de Serviços Eletrônica - NFS-e.'
-        
-        
+
+
     def gera_assinatura(self):
         '''
         Gera o hash sha1 para a tag Assinatura
@@ -205,22 +205,22 @@ class RPS(XMLNFe):
         texto += self.DataEmissaoRPS.valor.strftime(r'%Y%m%d')
         texto += self.Tributacao.valor.ljust(2)
         texto += self.SituacaoRPS.valor
-        
+
         if self.TipoRecolhimento.valor == 'A':
             texto += 'N'
         else:
             texto += 'S'
-            
+
         valor_servicos = D(0)
         base_calculo = D(0)
         valor_deducoes = D(0)
-        
+
         for s in self.Itens:
             valor_servicos += s.ValorTotal.valor
-            
+
             if s.Tributavel.valor == 'S':
                 base_calculo += s.ValorTotal.valor
-            
+
         for d in self.Deducoes:
             valor_deducoes += d.ValorDeduzir.valor
 
@@ -228,14 +228,14 @@ class RPS(XMLNFe):
         self.ValorDeducoes.valor = valor_deducoes
         self.BaseCalculo.valor = base_calculo - valor_deducoes
         self.ValorISS.valor = (self.BaseCalculo.valor * self.AliquotaAtividade.valor / 100).quantize(D('0.01'))
-            
+
         texto += unicode(((valor_servicos - valor_deducoes) * 100).quantize(1)).zfill(15)
         texto += unicode((valor_deducoes * 100).quantize(1)).zfill(15)
         texto += self.CodigoAtividade.valor.zfill(10)
         texto += self.CPFCNPJTomador.valor.zfill(14)
-        
+
         print(texto)
-        
+
         gerador_sha1 = sha1()
         gerador_sha1.update(texto)
         self.Assinatura.valor = gerador_sha1.hexdigest()
@@ -243,15 +243,15 @@ class RPS(XMLNFe):
     @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        
+
         if self.Id.valor.strip() == '':
             xml += '<RPS>'
         else:
             xml += self.Id.xml
-            
+
         if self.Assinatura.valor.strip() == '':
             self.gera_assinatura()
-            
+
         xml += self.Assinatura.xml
         xml += self.InscricaoMunicipalPrestador.xml
         xml += self.RazaoSocialPrestador.xml
@@ -303,30 +303,30 @@ class RPS(XMLNFe):
         xml += self.TelefoneTomador.xml
         xml += self.MotCancelamento.xml
         xml += self.CPFCNPJIntermediario.xml
-        
+
         if len(self.Deducoes):
             xml += '<Deducoes>'
-            
+
             for d in self.Deducoes:
                 xml += d.xml
-            
+
             xml += '</Deducoes>'
 
         if len(self.Itens):
             xml += '<Itens>'
-            
+
             for i in self.Itens:
                 xml += i.xml
-            
+
             xml += '</Itens>'
-            
+
         xml += '</RPS>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml                          = arquivo
-            self.Assinatura.xml                  = arquivo 
+            self.Assinatura.xml                  = arquivo
             self.InscricaoMunicipalPrestador.xml = arquivo
             self.RazaoSocialPrestador.xml        = arquivo
             self.TipoRPS.xml                     = arquivo
@@ -377,32 +377,32 @@ class RPS(XMLNFe):
             self.TelefoneTomador.xml             = arquivo
             self.MotCancelamento.xml             = arquivo
             self.CPFCNPJIntermediario.xml        = arquivo
-            
+
             deducoes = self._le_nohs('//RPS/Deducoes/Deducao')
             self.Deducoes = []
             if deducoes is not None:
                 self.Deducoes = [Deducao() for d in deducoes]
                 for i in range(len(deducoes)):
                     self.Deducoes[i].xml = deducoes[i]
-                    
+
             itens = self._le_nohs('//RPS/Itens/Item')
             self.Itens = []
             if itens is not None:
                 self.Itens = [Item() for i in itens]
                 for i in range(len(itens)):
                     self.Itens[i].xml = itens[i]
-        
+
     xml = property(get_xml, set_xml)
-    
+
     #
     # Funções para formatar campos para a impressão do RPS
     #
-    
+
     def numero_formatado(self):
         num = unicode(self.NumeroRPS.valor).zfill(12)
         num_formatado = '.'.join((num[0:3], num[3:6], num[6:9], num[9:12]))
         return num_formatado
-        
+
     def _formata_cpf(self, cpf):
         if not len(cpf.strip()):
             return u''
@@ -416,45 +416,45 @@ class RPS(XMLNFe):
 
         formatado = cnpj[0:2] + u'.' + cnpj[2:5] + u'.' + cnpj[5:8] + u'/' + cnpj[8:12] + u'-' + cnpj[12:14]
         return formatado
-        
+
     def cnpj_tomador_formatado(self):
         if len(self.CPFCNPJTomador.valor) == 11:
             return self._formata_cpf(self.CPFCNPJTomador.valor)
         else:
             return self._formata_cnpj(self.CPFCNPJTomador.valor)
-        
+
     def endereco_tomador_formatado(self):
         end = ''
-        
+
         if len(self.TipoLogradouroTomador.valor.strip()):
             end = self.TipoLogradouroTomador.valor.strip() + ' '
-        
+
         end += self.LogradouroTomador.valor
-        
+
         if len(self.NumeroEnderecoTomador.valor.strip()):
             end += ', ' + self.NumeroEnderecoTomador.valor
 
         if len(self.ComplementoEnderecoTomador.valor.strip()):
             end += ' - ' + self.ComplementoEnderecoTomador.valor
-            
+
         if len(self.TipoBairroTomador.valor.strip()):
             end += ' - ' + self.TipoBairroTomador.valor + ' ' + self.BairroTomador.valor
         else:
             end += ' - ' + self.BairroTomador.valor
-            
+
         end += ' - ' + self.CEPTomador.valor[0:5] + '-' + self.CEPTomador.valor[5:]
-        
+
         return end
-            
+
     def descricao_formatada(self):
         return self.DescricaoRPS.valor.replace('|', '<br />')
 
     def informacoes_formatadas(self):
         return self.Informacoes.valor.replace('|', '<br />')
-        
+
     def _formata_aliquota_federal(self, descricao, aliquota):
         return descricao + ' (' + aliquota.rjust(5) + '%)'
-        
+
     def aliquota_pis_formatada(self):
         return self._formata_aliquota_federal('PIS', self.AliquotaPIS.formato_danfe())
 
@@ -481,18 +481,18 @@ class _Lote(XMLNFe):
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += self.Id.xml
-        
+
         if len(self.RPS):
             for r in self.RPS:
                 xml += r.xml
-            
+
         xml += '</Lote>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Id.xml        = arquivo
-            
+
             rps = self._le_nohs('//nfse:ReqEnvioLoteRPS/Lote/RPS')
             self.RPS = []
             if rps is not None:
@@ -501,7 +501,7 @@ class _Lote(XMLNFe):
                     self.RPS[i].xml = rps[i]
 
     xml = property(get_xml, set_xml)
-    
+
 
 class _Cabecalho(XMLNFe):
     def __init__(self):
@@ -564,7 +564,7 @@ class ReqEnvioLoteRPS(XMLNFe):
         self.Cabecalho = _Cabecalho()
         self.Lote = _Lote()
         self.Signature = Signature()
-        
+
     def prepara_cabecalho(self):
         '''
         Preenche as tags dos valores totais do cabecalho com o conteúdo real
@@ -572,7 +572,7 @@ class ReqEnvioLoteRPS(XMLNFe):
         '''
         valor_servicos = D(0)
         valor_deducoes = D(0)
-        
+
         for r in self.Lote.RPS:
             for s in r.Itens:
                 valor_servicos += s.ValorTotal.valor
@@ -580,33 +580,33 @@ class ReqEnvioLoteRPS(XMLNFe):
                 valor_deducoes += d.ValorDeduzir.valor
 
         self.Cabecalho.QtdRPS.valor = len(self.Lote.RPS)
-        
+
         if len(self.Lote.RPS):
             self.Cabecalho.dtInicio.valor = self.Lote.RPS[0].DataEmissaoRPS.valor
             self.Cabecalho.dtFim.valor = self.Lote.RPS[-1].DataEmissaoRPS.valor
-        
+
         self.Cabecalho.ValorTotalServicos.valor = valor_servicos - valor_deducoes
-        self.Cabecalho.ValorTotalDeducoes.valor = valor_deducoes    
+        self.Cabecalho.ValorTotalDeducoes.valor = valor_deducoes
 
     @somente_ascii
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += '<nfse:ReqEnvioLoteRPS xmlns:nfse="http://localhost:8080/WsNFe2/lote" xmlns:tipos="http://localhost:8080/WsNFe2/tp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost:8080/WsNFe2/lote http://localhost:8080/WsNFe2/xsd/ReqEnvioLoteRPS.xsd">'
-        
+
         if not self.Cabecalho.QtdRPS.valor:
             self.prepara_cabecalho()
-            
+
         xml += self.Cabecalho.xml
         xml += self.Lote.xml
-        
+
         #
         # Define a URI a ser assinada
         #
         self.Signature.URI = '#' + self.Lote.Id.valor
 
         xml += self.Signature.xml
-        
+
         xml += '</nfse:ReqEnvioLoteRPS>'
         return xml
 

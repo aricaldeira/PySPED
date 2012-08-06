@@ -55,11 +55,11 @@ class ChaveNFe(XMLNFe):
         self.NumeroNFe            = TagInteiro(nome='NumeroNFe'            , tamanho=[ 1,  12, 1], raiz='//*/ChaveNFe')
         self.CodigoVerificacao    = TagCaracter(nome='CodigoVerificacao'   , tamanho=[ 1, 255]   , raiz='//*/ChaveNFe')
         self.RazaoSocialPrestador = TagCaracter(nome='RazaoSocialPrestador', tamanho=[ 1, 120]   , raiz='//*/ChaveNFe')
-        
+
     def get_xml(self):
         if self.InscricaoPrestador.valor.strip() == '':
             return ''
-        
+
         xml = XMLNFe.get_xml(self)
         xml += '<ChaveNFe>'
         xml += self.InscricaoPrestador.xml
@@ -68,14 +68,14 @@ class ChaveNFe(XMLNFe):
         xml += self.RazaoSocialPrestador.xml
         xml += '</ChaveNFe>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.InscricaoPrestador.xml   = arquivo
             self.NumeroNFe.xml            = arquivo
             self.CodigoVerificacao.xml       = arquivo
             self.RazaoSocialPrestador.xml = arquivo
-        
+
     xml = property(get_xml, set_xml)
 
 
@@ -87,11 +87,11 @@ class ChaveRPS(XMLNFe):
         self.NumeroRPS            = TagInteiro(nome='NumeroRPS'            , tamanho=[ 1,  12, 1], raiz='//*/ChaveRPS')
         self.DataEmissaoRPS       = TagDataHora(nome='DataEmissaoRPS'                            , raiz='//*/ChaveRPS')
         self.RazaoSocialPrestador = TagCaracter(nome='RazaoSocialPrestador', tamanho=[ 1, 120]   , raiz='//*/ChaveRPS')
-        
+
     def get_xml(self):
         if self.InscricaoPrestador.valor.strip() == '':
             return ''
-            
+
         xml = XMLNFe.get_xml(self)
         xml += '<ChaveRPS>'
         xml += self.InscricaoPrestador.xml
@@ -101,7 +101,7 @@ class ChaveRPS(XMLNFe):
         xml += self.RazaoSocialPrestador.xml
         xml += '</ChaveRPS>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.InscricaoPrestador.xml   = arquivo
@@ -109,7 +109,7 @@ class ChaveRPS(XMLNFe):
             self.NumeroRPS.xml            = arquivo
             self.DataEmissaoRPS.xml       = arquivo
             self.RazaoSocialPrestador.xml = arquivo
-        
+
     xml = property(get_xml, set_xml)
 
 
@@ -120,7 +120,7 @@ class Alerta(XMLNFe):
         self.Descricao = TagCaracter(nome='Descricao', tamanho=[0, 300] , raiz='//Alerta')
         self.ChaveRPS = ChaveRPS()
         self.ChaveNFe = ChaveNFe()
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Alerta>'
@@ -130,17 +130,17 @@ class Alerta(XMLNFe):
         xml += self.ChaveNFe.xml
         xml += '</Alerta>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Codigo.xml    = arquivo
             self.Descricao.xml = arquivo
             self.ChaveRPS.xml  = arquivo
             self.ChaveNFe.xml  = arquivo
-        
+
     xml = property(get_xml, set_xml)
-    
-    
+
+
 class Erro(XMLNFe):
     def __init__(self):
         super(Erro, self).__init__()
@@ -148,7 +148,7 @@ class Erro(XMLNFe):
         self.Descricao = TagCaracter(nome='Descricao', tamanho=[0, 300] , raiz='//Erro')
         self.ChaveRPS = ChaveRPS()
         self.ChaveNFe = ChaveNFe()
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<Erro>'
@@ -158,12 +158,12 @@ class Erro(XMLNFe):
         xml += self.ChaveNFe.xml
         xml += '</Erro>'
         return xml
-        
+
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.Codigo.xml    = arquivo
             self.Descricao.xml = arquivo
             self.ChaveRPS.xml  = arquivo
             self.ChaveNFe.xml  = arquivo
-        
+
     xml = property(get_xml, set_xml)

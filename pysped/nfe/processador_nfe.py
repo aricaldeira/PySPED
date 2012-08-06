@@ -858,7 +858,7 @@ class DANFE(object):
             #self.danfe.remetente.campo_variavel_denegacao()
             self.danfe.remetente.campo_variavel_normal()
             self.danfe.remetente.obs_denegacao()
-            
+
             #
             # Adiciona a observação de quem é a irregularidade fiscal
             #

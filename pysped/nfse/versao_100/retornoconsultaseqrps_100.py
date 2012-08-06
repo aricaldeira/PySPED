@@ -48,9 +48,9 @@ import os
 
 DIRNAME = os.path.dirname(__file__)
 
-    
 
-class _Cabecalho(XMLNFe):    
+
+class _Cabecalho(XMLNFe):
     def __init__(self):
         super(_Cabecalho, self).__init__()
         self.CodCid           = TagInteiro(nome='CodCid'           , tamanho=[ 1, 10, 1], raiz='//nfse:RetornoConsultaSeqRps/Cabecalho')
@@ -98,10 +98,10 @@ class RetornoConsultaSeqRPS(XMLNFe):
         xml += ABERTURA
         xml += '<nfse:RetornoConsultaSeqRps xmlns:nfse="http://localhost:8080/WsNFe2/lote" xmlns:tipos="http://localhost:8080/WsNFe2/tp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost:8080/WsNFe2/lote http://localhost:8080/WsNFe2/xsd/RetornoConsultaSeqRps.xsd">'
         xml += self.Cabecalho.xml
-        
+
         if len(self.Alertas):
             xml += '<Alertas>'
-            
+
             for a in self.Alertas:
                 xml += a.xml
 
@@ -109,12 +109,12 @@ class RetornoConsultaSeqRPS(XMLNFe):
 
         if len(self.Erros):
             xml += '<Erros>'
-            
+
             for e in self.Erros:
                 xml += e.xml
 
             xml += '</Erros>'
-                
+
         xml += '</nfse:RetornoConsultaSeqRps>'
         return xml
 
