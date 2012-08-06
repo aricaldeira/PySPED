@@ -319,7 +319,13 @@ class TagCaracter(NohXML):
     text = property(get_text)
 
     def get_txt(self):
-        return self._valor_string
+        if self.obrigatorio:
+            return self._valor_string
+
+        if self.valor:
+            return self._valor_string
+
+        return ''
 
     txt = property(get_txt)
 
