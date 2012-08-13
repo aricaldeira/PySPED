@@ -916,11 +916,9 @@ class DANFE(object):
         if self.imprime_fatura:
             # Pagamento a prazo
             if (self.NFe.infNFe.ide.indPag.valor == 1) or \
-               (len(self.NFe.infNFe.cobr.dup) > 1) or \
-               (
-                   (len(self.NFe.infNFe.cobr.dup) == 1) and
-                   (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())
-               ):
+                (len(self.NFe.infNFe.cobr.dup) > 1) or \
+                ((len(self.NFe.infNFe.cobr.dup) == 1) and \
+                (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())):
 
                 if self.imprime_duplicatas:
                     self.danfe.fatura_a_prazo.elements.append(self.danfe.duplicatas)
@@ -928,8 +926,11 @@ class DANFE(object):
                 self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_prazo)
 
             # Pagamento a vista
-            else:
+            elif (self.NFe.infNFe.ide.indPag.valor != 2):
                 self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_vista)
+
+                if self.imprime_duplicatas:
+                    self.danfe.fatura_a_vista.elements.append(self.danfe.duplicatas)
 
         self.danfe.band_page_header.child_bands.append(self.danfe.calculo_imposto)
         self.danfe.band_page_header.child_bands.append(self.danfe.transporte)
