@@ -39,4 +39,4 @@
 # <http://www.gnu.org/licenses/>
 #
 
-import nfe
+from .nfe import *
