@@ -72,48 +72,62 @@ METODO_WS = {
     WS_NFE_CONSULTA_CADASTRO: {
         'webservice': 'CadConsultaCadastro2',
         'metodo'    : 'consultaCadastro2',
-    }
+    },
+    WS_NFE_RECEPCAO_ENVENTO: {
+        'webservice': 'RecepcaoEvento',
+        'metodo'    : 'nfeRecepcaoEvento',
+    },
+    WS_NFE_DOWNLOAD: {
+        'webservice': 'NfeDownloadNF',
+        'metodo'    : 'nfeDownloadNF',
+    },
 }
 
 SVRS = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'            : 'nfe.sefazvirtual.rs.gov.br',
-        WS_NFE_ENVIO_LOTE        : 'ws/nferecepcao/NfeRecepcao2.asmx',
-        WS_NFE_CONSULTA_RECIBO: 'ws/nferetrecepcao/NfeRetRecepcao2.asmx',
+        'servidor'             : 'nfe.sefazvirtual.rs.gov.br',
+        WS_NFE_ENVIO_LOTE      : 'ws/nferecepcao/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO : 'ws/nferetrecepcao/NfeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO    : 'ws/nfecancelamento/NfeCancelamento2.asmx',
         WS_NFE_INUTILIZACAO    : 'ws/nfeinutilizacao/NfeInutilizacao2.asmx',
         WS_NFE_CONSULTA        : 'ws/nfeconsulta/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO        : 'ws/nfestatusservico/NfeStatusServico2.asmx'
+        WS_NFE_SITUACAO        : 'ws/nfestatusservico/NfeStatusServico2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'            : 'homologacao.nfe.sefazvirtual.rs.gov.br',
-        WS_NFE_ENVIO_LOTE        : 'ws/nferecepcao/NfeRecepcao2.asmx',
-        WS_NFE_CONSULTA_RECIBO: 'ws/nferetrecepcao/NfeRetRecepcao2.asmx',
+        'servidor'             : 'homologacao.nfe.sefazvirtual.rs.gov.br',
+        WS_NFE_ENVIO_LOTE      : 'ws/nferecepcao/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO : 'ws/nferetrecepcao/NfeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO    : 'ws/nfecancelamento/NfeCancelamento2.asmx',
         WS_NFE_INUTILIZACAO    : 'ws/nfeinutilizacao/NfeInutilizacao2.asmx',
         WS_NFE_CONSULTA        : 'ws/nfeconsulta/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO        : 'ws/nfestatusservico/NfeStatusServico2.asmx'
+        WS_NFE_SITUACAO        : 'ws/nfestatusservico/NfeStatusServico2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         }
 }
 
 SVAN = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'            : 'www.sefazvirtual.fazenda.gov.br',
+        'servidor'             : 'www.sefazvirtual.fazenda.gov.br',
         WS_NFE_ENVIO_LOTE      : 'NfeRecepcao2/NfeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO : 'NFeRetRecepcao2/NFeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO    : 'NFeCancelamento2/NFeCancelamento2.asmx',
         WS_NFE_INUTILIZACAO    : 'NFeInutilizacao2/NFeInutilizacao2.asmx',
         WS_NFE_CONSULTA        : 'nfeconsulta2/nfeconsulta2.asmx',
-        WS_NFE_SITUACAO        : 'NFeStatusServico2/NFeStatusServico2.asmx'
+        WS_NFE_SITUACAO        : 'NFeStatusServico2/NFeStatusServico2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO: 'RecepcaoEvento/RecepcaoEvento.asmx',
+        WS_NFE_DOWNLOAD        : 'NfeDownloadNF/NfeDownloadNF.asmx',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'            : 'hom.sefazvirtual.fazenda.gov.br',
+        'servidor'             : 'hom.sefazvirtual.fazenda.gov.br',
         WS_NFE_ENVIO_LOTE      : 'NfeRecepcao2/NfeRecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO : 'NFeRetRecepcao2/NFeRetRecepcao2.asmx',
         WS_NFE_CANCELAMENTO    : 'NFeCancelamento2/NFeCancelamento2.asmx',
         WS_NFE_INUTILIZACAO    : 'NFeInutilizacao2/NFeInutilizacao2.asmx',
         WS_NFE_CONSULTA        : 'nfeconsulta2/nfeconsulta2.asmx',
-        WS_NFE_SITUACAO        : 'NFeStatusServico2/NFeStatusServico2.asmx'
+        WS_NFE_SITUACAO        : 'NFeStatusServico2/NFeStatusServico2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO: 'RecepcaoEvento/RecepcaoEvento.asmx',
+        WS_NFE_DOWNLOAD        : 'NfeDownloadNF/NfeDownloadNF.asmx',
         }
 }
 
@@ -151,170 +165,181 @@ DPEC = {
     }
 }
 
-#UFAM = {
-    #NFE_AMBIENTE_PRODUCAO: {
-        #'servidor'            : 'nfe.sefaz.am.gov.br',
-        #WS_NFE_ENVIO_LOTE        : 'ws/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO: 'ws/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO    : 'ws/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO    : 'ws/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA        : 'ws/services/NfeConsulta',
-        #WS_NFE_SITUACAO        : 'ws/services/NfeStatusServico'
-        #},
-    #NFE_AMBIENTE_HOMOLOGACAO: {
-        #'servidor'            : 'homnfe.sefaz.am.gov.br',
-        #WS_NFE_ENVIO_LOTE        : 'ws/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO: 'ws/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO    : 'ws/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO    : 'ws/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA        : 'ws/services/NfeConsulta',
-        #WS_NFE_SITUACAO        : 'ws/services/NfeStatusServico'
-        #}
-#}
+AN = {
+    NFE_AMBIENTE_PRODUCAO: {
+        'servidor': 'www.nfe.fazenda.gov.br',
+        WS_NFE_RECEPCAO_ENVENTO: 'RecepcaoEvento/RecepcaoEvento.asmx',
+        #WS_NFE_CONSULTA_DEST:
+    },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        'servidor': 'hom.nfe.fazenda.gov.br',
+        WS_NFE_RECEPCAO_ENVENTO: 'RecepcaoEvento/RecepcaoEvento.asmx',
+        #WS_NFE_CONSULTA_DEST:
+    },
+}
+
+UFAM = {
+    NFE_AMBIENTE_PRODUCAO: {
+        'servidor'              : 'nfe.sefaz.am.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'services2/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'services2/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'services2/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'services2/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'services2/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'services2/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'services2/services/cadconsultacadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'services2/services/RecepcaoEvento',
+        },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        'servidor'            : 'homnfe.sefaz.am.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'services2/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'services2/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'services2/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'services2/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'services2/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'services2/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'services2/services/cadconsultacadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'services2/services/RecepcaoEvento',
+        }
+}
 
 UFBA = {
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'             : 'nfe.sefaz.ba.gov.br',
-        WS_NFE_ENVIO_LOTE       : 'webservices/nfe/NfeRecepcao2.asmx',
-        WS_NFE_CONSULTA_RECIBO  : 'webservices/nfe/NfeRetRecepcao2.asmx',
-        WS_NFE_CANCELAMENTO     : 'webservices/nfe/NfeCancelamento2.asmx',
-        WS_NFE_INUTILIZACAO     : 'webservices/nfe/NfeInutilizacao2.asmx',
-        WS_NFE_CONSULTA         : 'webservices/nfe/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO         : 'webservices/nfe/NfeStatusServico2.asmx',
-        #WS_NFE_CONSULTA_CADASTRO: 'webservices/nfe/NfeConsulta2.asmx'
+        WS_NFE_ENVIO_LOTE       : 'webservices/nfenw/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO  : 'webservices/nfenw/NfeRetRecepcao2.asmx',
+        WS_NFE_CANCELAMENTO     : 'webservices/nfenw/NfeCancelamento2.asmx',
+        WS_NFE_INUTILIZACAO     : 'webservices/nfenw/NfeInutilizacao2.asmx',
+        WS_NFE_CONSULTA         : 'webservices/nfenw/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO         : 'webservices/nfenw/NfeStatusServico2.asmx',
+        WS_NFE_CONSULTA_CADASTRO: 'webservices/nfenw/CadConsultaCadastro2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO : 'webservices/sre/RecepcaoEvento.asmx',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'            : 'hnfe.sefaz.ba.gov.br',
-        WS_NFE_ENVIO_LOTE      : 'webservices/nfenw/NfeRecepcao2.asmx',
-        WS_NFE_CONSULTA_RECIBO : 'webservices/nfenw/NfeRetRecepcao2.asmx',
-        WS_NFE_CANCELAMENTO    : 'webservices/nfenw/NfeCancelamento2.asmx',
-        WS_NFE_INUTILIZACAO    : 'webservices/nfenw/NfeInutilizacao2.asmx',
-        WS_NFE_CONSULTA        : 'webservices/nfenw/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO        : 'webservices/nfenw/NfeStatusServico2.asmx'
+        WS_NFE_ENVIO_LOTE       : 'webservices/nfenw/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO  : 'webservices/nfenw/NfeRetRecepcao2.asmx',
+        WS_NFE_CANCELAMENTO     : 'webservices/nfenw/NfeCancelamento2.asmx',
+        WS_NFE_INUTILIZACAO     : 'webservices/nfenw/NfeInutilizacao2.asmx',
+        WS_NFE_CONSULTA         : 'webservices/nfenw/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO         : 'webservices/nfenw/NfeStatusServico2.asmx',
+        WS_NFE_CONSULTA_CADASTRO: 'webservices/nfenw/CadConsultaCadastro2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO : 'webservices/sre/RecepcaoEvento.asmx',
         }
 }
 
-#UFCE = {
-    #NFE_AMBIENTE_PRODUCAO: {
-        #'servidor'             : 'nfe.sefaz.ce.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'nfe/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO : 'nfe/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO     : 'nfe/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : 'nfe/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA         : 'nfe/services/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'nfe/services/NfeStatusServico',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe/services/CadConsultaCadastro'
-        #},
-    #NFE_AMBIENTE_HOMOLOGACAO: {
-        #'servidor'             : 'nfeh.sefaz.ce.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'nfe/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO : 'nfe/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO     : 'nfe/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : 'nfe/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA         : 'nfe/services/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'nfe/services/NfeStatusServico',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe/services/CadConsultaCadastro'
-        #}
-#}
+UFCE = {
+    NFE_AMBIENTE_PRODUCAO: {
+        'servidor'              : 'nfe.sefaz.ce.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'nfe2/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'nfe2/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'nfe2/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe2/services/RecepcaoEvento',
+        },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        'servidor'              : 'nfeh.sefaz.ce.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'nfe2/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'nfe2/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'nfe2/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe2/services/RecepcaoEvento',
+        }
+}
 
-#UFDF = {
-    #NFE_AMBIENTE_PRODUCAO: {
-        #'servidor'             : 'dec.fazenda.df.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'nfe/ServiceRecepcao.asmx',
-        #WS_NFE_CONSULTA_RECIBO : 'nfe/ServiceRetRecepcao.asmx',
-        #WS_NFE_CANCELAMENTO     : 'nfe/ServiceCancelamento.asmx',
-        #WS_NFE_INUTILIZACAO     : 'nfe/ServiceInutilizacao.asmx',
-        #WS_NFE_CONSULTA         : 'nfe/ServiceConsulta.asmx',
-        #WS_NFE_SITUACAO         : 'nfe/ServiceStatus.asmx',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe/ServiceConsultaCadastro.asmx',
-        #},
-    #NFE_AMBIENTE_HOMOLOGACAO: {
-        #'servidor'             : 'homolog.nfe.fazenda.df.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'nfe/ServiceRecepcao.asmx',
-        #WS_NFE_CONSULTA_RECIBO : 'nfe/ServiceRetRecepcao.asmx',
-        #WS_NFE_CANCELAMENTO     : 'nfe/ServiceCancelamento.asmx',
-        #WS_NFE_INUTILIZACAO     : 'nfe/ServiceInutilizacao.asmx',
-        #WS_NFE_CONSULTA         : 'nfe/ServiceConsulta.asmx',
-        #WS_NFE_SITUACAO         : 'nfe/ServiceStatus.asmx',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe/ServiceConsultaCadastro.asmx'
-        #}
-#}
 
 UFGO = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.sefaz.go.gov.br',
+        'servidor'              : 'nfe.sefaz.go.gov.br',
         WS_NFE_ENVIO_LOTE       : 'nfe/services/v2/NfeRecepcao2',
         WS_NFE_CONSULTA_RECIBO  : 'nfe/services/v2/NfeRetRecepcao2',
         WS_NFE_CANCELAMENTO     : 'nfe/services/v2/NfeCancelamento2',
         WS_NFE_INUTILIZACAO     : 'nfe/services/v2/NfeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe/services/v2/NfeConsulta2',
         WS_NFE_SITUACAO         : 'nfe/services/v2/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe/services/v2/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe/services/v2/NfeRecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homolog.sefaz.go.gov.br',
+        'servidor'              : 'homolog.sefaz.go.gov.br',
         WS_NFE_ENVIO_LOTE       : 'nfe/services/v2/NfeRecepcao2',
         WS_NFE_CONSULTA_RECIBO  : 'nfe/services/v2/NfeRetRecepcao2',
         WS_NFE_CANCELAMENTO     : 'nfe/services/v2/NfeCancelamento2',
         WS_NFE_INUTILIZACAO     : 'nfe/services/v2/NfeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe/services/v2/NfeConsulta2',
         WS_NFE_SITUACAO         : 'nfe/services/v2/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe/services/v2/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe/services/v2/NfeRecepcaoEvento',
         }
 }
 
 UFMT = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.sefaz.mt.gov.br',
-        WS_NFE_ENVIO_LOTE       : 'nfews/v2/NfeRecepcao2',
-        WS_NFE_CONSULTA_RECIBO  : 'nfews/v2/NfeRetRecepcao2',
-        WS_NFE_CANCELAMENTO     : 'nfews/v2/NfeCancelamento2',
-        WS_NFE_INUTILIZACAO     : 'nfews/v2/NfeInutilizacao2',
-        WS_NFE_CONSULTA         : 'nfews/v2/NfeConsulta2',
-        WS_NFE_SITUACAO         : 'nfews/v2/NfeStatusServico2',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfews/CadConsultaCadastro'
+        'servidor'              : 'nfe.sefaz.mt.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'nfews/v2/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'nfews/v2/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'nfews/v2/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'nfews/v2/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'nfews/v2/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'nfews/v2/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfews/CadConsultaCadastro',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfews/v2/services/RecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homologacao.sefaz.mt.gov.br',
-        WS_NFE_ENVIO_LOTE       : 'nfews/v2/NfeRecepcao2',
-        WS_NFE_CONSULTA_RECIBO  : 'nfews/v2/NfeRetRecepcao2',
-        WS_NFE_CANCELAMENTO     : 'nfews/v2/NfeCancelamento2',
-        WS_NFE_INUTILIZACAO     : 'nfews/v2/NfeInutilizacao2',
-        WS_NFE_CONSULTA         : 'nfews/v2/NfeConsulta2',
-        WS_NFE_SITUACAO         : 'nfews/v2/NfeStatusServico2',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfews/CadConsultaCadastro'
+        'servidor'              : 'homologacao.sefaz.mt.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'nfews/v2/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'nfews/v2/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'nfews/v2/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'nfews/v2/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'nfews/v2/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'nfews/v2/services/NfeStatusServico2',
+        #WS_NFE_CONSULTA_CADASTRO: 'nfews/CadConsultaCadastro',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfews/v2/services/RecepcaoEvento',
         }
 }
 
-#UFMS = {
-    #NFE_AMBIENTE_PRODUCAO: {
-        #'servidor'             : 'producao.nfe.ms.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'producao/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO : 'producao/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO     : 'producao/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : 'producao/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA         : 'producao/services/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'producao/services/NfeStatusServico'
-        #},
-    #NFE_AMBIENTE_HOMOLOGACAO: {
-        #'servidor'             : 'homologacao.nfe.ms.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'homologacao/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO : 'homologacao/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO     : 'homologacao/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : 'homologacao/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA         : 'homologacao/services/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'homologacao/services/NfeStatusServico'
-        #}
-#}
+UFMS = {
+    NFE_AMBIENTE_PRODUCAO: {
+        'servidor'              : 'nfe.fazenda.ms.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'producao/services2/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'producao/services2/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'producao/services2/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'producao/services2/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'producao/services2/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'producao/services2/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'producao/services2/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'producao/services2/RecepcaoEvento',
+        },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        'servidor'             : 'homologacao.nfe.ms.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'homologacao/services2/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'homologacao/services2/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'homologacao/services2/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'homologacao/services2/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'homologacao/services2/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'homologacao/services2/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'homologacao/services2/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'homologacao/services2/RecepcaoEvento',
+        }
+}
 
 UFMG = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.fazenda.mg.gov.br',
+        'servidor'              : 'nfe.fazenda.mg.gov.br',
         WS_NFE_ENVIO_LOTE       : 'nfe2/services/NfeRecepcao2',
         WS_NFE_CONSULTA_RECIBO  : 'nfe2/services/NfeRetRecepcao2',
         WS_NFE_CANCELAMENTO     : 'nfe2/services/NfeCancelamento2',
         WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
         WS_NFE_SITUACAO         : 'nfe2/services/NfeStatus2',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro'
+        WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/cadconsultacadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe2/services/RecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'             : 'hnfe.fazenda.mg.gov.br',
@@ -324,111 +349,99 @@ UFMG = {
         WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
         WS_NFE_SITUACAO         : 'nfe2/services/NfeStatus2',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro'
+        WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/cadconsultacadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe2/services/RecepcaoEvento',
         }
 }
 
 UFPR = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe2.fazenda.pr.gov.br',
+        'servidor'              : 'nfe2.fazenda.pr.gov.br',
         WS_NFE_ENVIO_LOTE       : 'nfe/NFeRecepcao2',
         WS_NFE_CONSULTA_RECIBO  : 'nfe/NFeRetRecepcao2',
         WS_NFE_CANCELAMENTO     : 'nfe/NFeCancelamento2',
         WS_NFE_INUTILIZACAO     : 'nfe/NFeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe/NFeConsulta2',
         WS_NFE_SITUACAO         : 'nfe/NFeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe-evento/NFeRecepcaoEvento',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homologacao.nfe2.fazenda.pr.gov.br',
+        'servidor'              : 'homologacao.nfe2.fazenda.pr.gov.br',
         WS_NFE_ENVIO_LOTE       : 'nfe/NFeRecepcao2',
         WS_NFE_CONSULTA_RECIBO  : 'nfe/NFeRetRecepcao2',
         WS_NFE_CANCELAMENTO     : 'nfe/NFeCancelamento2',
         WS_NFE_INUTILIZACAO     : 'nfe/NFeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe/NFeConsulta2',
         WS_NFE_SITUACAO         : 'nfe/NFeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe-evento/NFeRecepcaoEvento',
     }
 }
 
-#UFPE = {
-    #NFE_AMBIENTE_PRODUCAO: {
-        #'servidor'             : 'nfe.sefaz.pe.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'nfe-service/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO : 'nfe-service/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO     : 'nfe-service/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : 'nfe-service/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA         : 'nfe-service/services/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'nfe-service/services/NfeStatusServico',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe-service/services/CadConsultaCadastro'
-        #},
-    #NFE_AMBIENTE_HOMOLOGACAO: {
-        #'servidor'             : 'nfehomolog.sefaz.pe.gov.br',
-        #WS_NFE_ENVIO_LOTE         : 'nfe-service/services/NfeRecepcao',
-        #WS_NFE_CONSULTA_RECIBO : 'nfe-service/services/NfeRetRecepcao',
-        #WS_NFE_CANCELAMENTO     : 'nfe-service/services/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : 'nfe-service/services/NfeInutilizacao',
-        #WS_NFE_CONSULTA         : 'nfe-service/services/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'nfe-service/services/NfeStatusServico',
-        #WS_NFE_CONSULTA_CADASTRO: 'nfe-service/services/CadConsultaCadastro'
-    #}
-#}
+UFPE = {
+    NFE_AMBIENTE_PRODUCAO: {
+        'servidor'              : 'nfe.sefaz.pe.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'nfe-service/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'nfe-service/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'nfe-service/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'nfe-service/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'nfe-service/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'nfe-service/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe-service/services/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe-service/services/RecepcaoEvento',
+        },
+    NFE_AMBIENTE_HOMOLOGACAO: {
+        'servidor'             : 'nfehomolog.sefaz.pe.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'nfe-service/services/NfeRecepcao2',
+        WS_NFE_CONSULTA_RECIBO  : 'nfe-service/services/NfeRetRecepcao2',
+        WS_NFE_CANCELAMENTO     : 'nfe-service/services/NfeCancelamento2',
+        WS_NFE_INUTILIZACAO     : 'nfe-service/services/NfeInutilizacao2',
+        WS_NFE_CONSULTA         : 'nfe-service/services/NfeConsulta2',
+        WS_NFE_SITUACAO         : 'nfe-service/services/NfeStatusServico2',
+        WS_NFE_CONSULTA_CADASTRO: 'nfe-service/services/CadConsultaCadastro2',
+        WS_NFE_RECEPCAO_ENVENTO : 'nfe-service/services/RecepcaoEvento',
+    }
+}
 
 
 UFRS = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.sefaz.rs.gov.br',
-        WS_NFE_ENVIO_LOTE         : 'ws/nferecepcao/NfeRecepcao2.asmx',
-        WS_NFE_CONSULTA_RECIBO : 'ws/nferetrecepcao/NfeRetRecepcao2.asmx',
-        WS_NFE_CANCELAMENTO     : 'ws/nfecancelamento/NfeCancelamento2.asmx',
-        WS_NFE_INUTILIZACAO     : 'ws/nfeinutilizacao/NfeInutilizacao2.asmx',
-        WS_NFE_CONSULTA         : 'ws/nfeconsulta/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO         : 'ws/nfestatusservico/NfeStatusServico2.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx'
+        'servidor'              : 'nfe.sefaz.rs.gov.br',
+        WS_NFE_ENVIO_LOTE       : 'ws/Nferecepcao/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO  : 'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
+        WS_NFE_CANCELAMENTO     : 'ws/NfeCancelamento/NfeCancelamento2.asmx',
+        WS_NFE_INUTILIZACAO     : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+        WS_NFE_CONSULTA         : 'ws/NfeConsulta/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO         : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
+        WS_NFE_CONSULTA_CADASTRO: 'ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO : 'ws/recepcaoevento/recepcaoevento.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'             : 'homologacao.nfe.sefaz.rs.gov.br',
-        WS_NFE_ENVIO_LOTE         : 'ws/nferecepcao/NfeRecepcao2.asmx',
-        WS_NFE_CONSULTA_RECIBO : 'ws/nferetrecepcao/NfeRetRecepcao2.asmx',
-        WS_NFE_CANCELAMENTO     : 'ws/nfecancelamento/NfeCancelamento2.asmx',
-        WS_NFE_INUTILIZACAO     : 'ws/nfeinutilizacao/NfeInutilizacao2.asmx',
-        WS_NFE_CONSULTA         : 'ws/nfeconsulta/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO         : 'ws/nfestatusservico/NfeStatusServico2.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx'
+        WS_NFE_ENVIO_LOTE       : 'ws/Nferecepcao/NfeRecepcao2.asmx',
+        WS_NFE_CONSULTA_RECIBO  : 'ws/NfeRetRecepcao/NfeRetRecepcao2.asmx',
+        WS_NFE_CANCELAMENTO     : 'ws/NfeCancelamento/NfeCancelamento2.asmx',
+        WS_NFE_INUTILIZACAO     : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+        WS_NFE_CONSULTA         : 'ws/NfeConsulta/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO         : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
+        #WS_NFE_CONSULTA_CADASTRO: 'ws/cadconsultacadastro/cadconsultacadastro2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO : 'ws/recepcaoevento/recepcaoevento.asmx',
     }
 }
 
-#UFRO = {
-    #NFE_AMBIENTE_PRODUCAO: {
-        #'servidor'             : 'ws.nfe.sefin.ro.gov.br',
-        #WS_NFE_ENVIO_LOTE         : SVRS[NFE_AMBIENTE_PRODUCAO][WS_NFE_ENVIO_LOTE],
-        #WS_NFE_CONSULTA_RECIBO : SVRS[NFE_AMBIENTE_PRODUCAO][WS_NFE_CONSULTA_RECIBO],
-        #WS_NFE_CANCELAMENTO     : 'wsprod/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : SVRS[NFE_AMBIENTE_PRODUCAO][WS_NFE_INUTILIZACAO],
-        #WS_NFE_CONSULTA         : 'wsprod/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'wsprod/NfeStatusServico',
-        #WS_NFE_CONSULTA_CADASTRO: 'wsprod/CadConsultaCadastro'
-    #},
-    #NFE_AMBIENTE_HOMOLOGACAO: {
-        #'servidor'             : 'ws.nfe.sefin.ro.gov.br',
-        #WS_NFE_ENVIO_LOTE         : SVRS[NFE_AMBIENTE_HOMOLOGACAO][WS_NFE_ENVIO_LOTE],
-        #WS_NFE_CONSULTA_RECIBO : SVRS[NFE_AMBIENTE_HOMOLOGACAO][WS_NFE_CONSULTA_RECIBO],
-        #WS_NFE_CANCELAMENTO     : 'ws/NfeCancelamento',
-        #WS_NFE_INUTILIZACAO     : SVRS[NFE_AMBIENTE_HOMOLOGACAO][WS_NFE_INUTILIZACAO],
-        #WS_NFE_CONSULTA         : 'ws/NfeConsulta',
-        #WS_NFE_SITUACAO         : 'ws/NfeStatusServico',
-        #WS_NFE_CONSULTA_CADASTRO: 'ws/CadConsultaCadastro'
-    #}
-#}
 
 UFSP = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.fazenda.sp.gov.br',
+        'servidor'              : 'nfe.fazenda.sp.gov.br',
         WS_NFE_ENVIO_LOTE       : 'nfeweb/services/nferecepcao2.asmx',
         WS_NFE_CONSULTA_RECIBO  : 'nfeweb/services/nferetrecepcao2.asmx',
         WS_NFE_CANCELAMENTO     : 'nfeweb/services/nfecancelamento2.asmx',
         WS_NFE_INUTILIZACAO     : 'nfeweb/services/nfeinutilizacao2.asmx',
         WS_NFE_CONSULTA         : 'nfeweb/services/nfeconsulta2.asmx',
         WS_NFE_SITUACAO         : 'nfeweb/services/nfestatusservico2.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'nfeweb/services/cadconsultacadastro.asmx'
+        WS_NFE_CONSULTA_CADASTRO: 'nfeweb/services/cadconsultacadastro2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO : 'eventosWEB/services/RecepcaoEvento.asmx',
         },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'             : 'homologacao.nfe.fazenda.sp.gov.br',
@@ -438,37 +451,37 @@ UFSP = {
         WS_NFE_INUTILIZACAO     : 'nfeweb/services/nfeinutilizacao2.asmx',
         WS_NFE_CONSULTA         : 'nfeweb/services/nfeconsulta2.asmx',
         WS_NFE_SITUACAO         : 'nfeweb/services/nfestatusservico2.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'nfeWEB/services/cadconsultacadastro.asmx'
+        WS_NFE_CONSULTA_CADASTRO: 'nfeweb/services/CadConsultaCadastro2.asmx',
+        WS_NFE_RECEPCAO_ENVENTO : 'eventosWEB/services/RecepcaoEvento.asmx',
         }
 }
 
 #
 # Informação obtida em
-# http://www.nfe.fazenda.gov.br/portal/VerificacaoDeServicos/VerificacaoServicos.aspx
-#  Última verificação: 07/04/2010 16:30:14
+# http://www.nfe.fazenda.gov.br/portal/disponibilidade.aspx?versao=2.00&tipoConteudo=Skeuqr8PQBY=
+#  Última verificação: 20/08/2012 14:22
 #  * Estados Emissores pela Sefaz Virtual RS (Rio Grande do Sul): AC, AL, AM, AP, DF, MS, PB, RJ, RO, RR, SC, SE e TO.
-#  ** Estados Emissores pela Sefaz Virtual AN (Ambiente Nacional): CE, ES, MA, PA, PI e RN.
-# Estados que têm seus próprios servidores: BA, GO, MG, MT, PE, PR, SP.
+#  ** Estados Emissores pela Sefaz Virtual AN (Ambiente Nacional): ES, MA, PA, PI e RN.
 #
 
 
 ESTADO_WS = {
     'AC': SVRS,
     'AL': SVRS,
-    'AM': SVRS,
+    'AM': UFAM,
     'AP': SVRS,
     'BA': UFBA,
-    'CE': SVAN,
+    'CE': UFCE,
     'DF': SVRS,
     'ES': SVAN,
     'GO': UFGO,
     'MA': SVAN,
     'MG': UFMG,
     'MS': SVRS,
-    #'MT': UFMT,
+    'MT': UFMT,
     'PA': SVAN,
     'PB': SVRS,
-    #'PE': UFPE,
+    'PE': UFPE,
     'PI': SVAN,
     'PR': UFPR,
     'RJ': SVRS,
@@ -479,5 +492,5 @@ ESTADO_WS = {
     'SC': SVRS,
     'SE': SVRS,
     'SP': UFSP,
-    'TO': SVRS
+    'TO': SVRS,
 }

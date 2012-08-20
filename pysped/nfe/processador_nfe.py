@@ -181,8 +181,17 @@ class ProcessadorNFe(object):
                 self._servidor = webservices_2.SCAN[ambiente]['servidor']
                 self._url      = webservices_2.SCAN[ambiente][servico]
             else:
-                self._servidor = webservices_2.ESTADO_WS[self.estado][ambiente]['servidor']
-                self._url      = webservices_2.ESTADO_WS[self.estado][ambiente][servico]
+                #
+                # Testa a opção de um estado, para determinado serviço, usar o WS
+                # de outro estado
+                #
+                if type(webservices_2.ESTADO_WS[self.estado][ambiente][servico]) == dict:
+                    ws_a_usar = webservices_2.ESTADO_WS[self.estado][ambiente][servico]
+                else:
+                    ws_a_usar = webservices_2.ESTADO_WS[self.estado]
+
+                self._servidor = ws_a_usar[ambiente]['servidor']
+                self._url      = ws_a_usar[ambiente][servico]
 
         #try:
         self.certificado.prepara_certificado_arquivo_pfx()
