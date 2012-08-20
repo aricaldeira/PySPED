@@ -394,8 +394,12 @@ class ProcessadorNFe(object):
 
         #resposta.validar()
 
+        #
         # Se for autorizado, monta o processo de cancelamento
-        if resposta.infCanc.cStat.valor == '101':
+        # 101 - cancelado dentro do prazo
+        # 151 - cancelado fora do prazo
+        #
+        if resposta.infCanc.cStat.valor in ('101', '151'):
             if self.versao == '1.10':
                 processo_cancelamento_nfe = ProcCancNFe_107()
 
@@ -704,8 +708,15 @@ class ProcessadorNFe(object):
         self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
 
         processo = None
+        #
         # Se nota foi autorizada ou denegada
-        if protnfe_recibo.infProt.cStat.valor in ('100', '110', '301', '302'):
+        # 100 - autorizada
+        # 150 - autorizada fora do prazo
+        # 110 - denegada
+        # 301 - denegada por irregularidade do emitente
+        # 302 - denegada por irregularidade do destinatário
+        #
+        if protnfe_recibo.infProt.cStat.valor in ('100', '150', '110', '301', '302'):
             if self.versao == '1.10':
                 processo = ProcNFe_110()
 
@@ -733,7 +744,7 @@ class ProcessadorNFe(object):
 
                 # Estranhamente, o nome desse arquivo, pelo manual, deve ser chave-nfe.xml ou chave-den.xml
                 # para notas denegadas
-                if protnfe_recibo.infProt.cStat.valor == '100':
+                if protnfe_recibo.infProt.cStat.valor in ('100', '150'):
                     nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '-nfe.xml'
                 else:
                     nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '-den.xml'
