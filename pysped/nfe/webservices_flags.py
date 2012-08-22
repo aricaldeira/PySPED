@@ -55,6 +55,7 @@ WS_DPEC_CONSULTA = 8
 
 WS_NFE_RECEPCAO_ENVENTO = 9
 WS_NFE_DOWNLOAD = 10
+WS_NFE_CONSULTA_RELACAO = 11
 
 NFE_AMBIENTE_PRODUCAO = 1
 NFE_AMBIENTE_HOMOLOGACAO = 2
@@ -86,7 +87,8 @@ UF_CODIGO = {
     'SC': 42,
     'SE': 28,
     'SP': 35,
-    'TO': 17
+    'TO': 17,
+    'RFB': 90, # Código especial para eventos
 }
 
 CODIGO_UF = {
@@ -116,6 +118,7 @@ CODIGO_UF = {
     42: 'SC',
     28: 'SE',
     35: 'SP',
-    17: 'TO'
+    17: 'TO',
+    90: 'RFB', # Código especial para eventos
 }
 
