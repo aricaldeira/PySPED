@@ -41,76 +41,114 @@
 
 from __future__ import division, print_function, unicode_literals
 
+#
+# Versão 2.00, usada a partir de maio/2010
+#
+#
 
-ESQUEMA_ATUAL = u'pl_006g'
-
+#
+# O esquemar pl_006m contém os esquemas dos enventos da NF-e
+#
+from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 
 #
 # Envelopes SOAP
 #
-from soap_200 import SOAPEnvio as SOAPEnvio_200
-from soap_200 import SOAPRetorno as SOAPRetorno_200
+from pysped.nfe.leiaute.soap_200 import SOAPEnvio as SOAPEnvio_200
+from pysped.nfe.leiaute.soap_200 import SOAPRetorno as SOAPRetorno_200
 
 #
 # Emissão de NF-e
 #
-from nfe_200 import NFe as NFe_200
-from nfe_200 import NFRef as NFRef_200
-from nfe_200 import Det as Det_200
-from nfe_200 import DI as DI_200
-from nfe_200 import Adi as Adi_200
-from nfe_200 import Med as Med_200
-from nfe_200 import Arma as Arma_200
-from nfe_200 import Reboque as Reboque_200
-from nfe_200 import Vol as Vol_200
-from nfe_200 import Lacres as Lacres_200
-from nfe_200 import Dup as Dup_200
-from nfe_200 import ObsCont as ObsCont_200
-from nfe_200 import ObsFisco as ObsFisco_200
-from nfe_200 import ProcRef as ProcRef_200
+from pysped.nfe.leiaute.nfe_200 import NFe as NFe_200
+from pysped.nfe.leiaute.nfe_200 import NFRef as NFRef_200
+from pysped.nfe.leiaute.nfe_200 import Det as Det_200
+from pysped.nfe.leiaute.nfe_200 import DI as DI_200
+from pysped.nfe.leiaute.nfe_200 import Adi as Adi_200
+from pysped.nfe.leiaute.nfe_200 import Med as Med_200
+from pysped.nfe.leiaute.nfe_200 import Arma as Arma_200
+from pysped.nfe.leiaute.nfe_200 import Reboque as Reboque_200
+from pysped.nfe.leiaute.nfe_200 import Vol as Vol_200
+from pysped.nfe.leiaute.nfe_200 import Lacres as Lacres_200
+from pysped.nfe.leiaute.nfe_200 import Dup as Dup_200
+from pysped.nfe.leiaute.nfe_200 import ObsCont as ObsCont_200
+from pysped.nfe.leiaute.nfe_200 import ObsFisco as ObsFisco_200
+from pysped.nfe.leiaute.nfe_200 import ProcRef as ProcRef_200
 
 #
 # Envio de lote de NF-e
 #
-from envinfe_200 import EnviNFe as EnviNFe_200
-from envinfe_200 import RetEnviNFe as RetEnviNFe_200
+from pysped.nfe.leiaute.envinfe_200 import EnviNFe as EnviNFe_200
+from pysped.nfe.leiaute.envinfe_200 import RetEnviNFe as RetEnviNFe_200
 
 #
 # Consulta do recibo do lote de NF-e
 #
-from consrecinfe_200 import ConsReciNFe as ConsReciNFe_200
-from consrecinfe_200 import RetConsReciNFe as RetConsReciNFe_200
-from consrecinfe_200 import ProtNFe as ProtNFe_200
-from consrecinfe_200 import ProcNFe as ProcNFe_200
+from pysped.nfe.leiaute.consrecinfe_200 import ConsReciNFe as ConsReciNFe_200
+from pysped.nfe.leiaute.consrecinfe_200 import RetConsReciNFe as RetConsReciNFe_200
+from pysped.nfe.leiaute.consrecinfe_200 import ProtNFe as ProtNFe_200
+from pysped.nfe.leiaute.consrecinfe_200 import ProcNFe as ProcNFe_200
 
 #
 # Cancelamento de NF-e
 #
-from cancnfe_200 import CancNFe as CancNFe_200
-from cancnfe_200 import RetCancNFe as RetCancNFe_200
-from cancnfe_200 import ProcCancNFe as ProcCancNFe_200
+from pysped.nfe.leiaute.cancnfe_200 import CancNFe as CancNFe_200
+from pysped.nfe.leiaute.cancnfe_200 import RetCancNFe as RetCancNFe_200
+from pysped.nfe.leiaute.cancnfe_200 import ProcCancNFe as ProcCancNFe_200
 
 #
 # Inutilização de NF-e
 #
-from inutnfe_200 import InutNFe as InutNFe_200
-from inutnfe_200 import RetInutNFe as RetInutNFe_200
-from inutnfe_200 import ProcInutNFe as ProcInutNFe_200
+from pysped.nfe.leiaute.inutnfe_200 import InutNFe as InutNFe_200
+from pysped.nfe.leiaute.inutnfe_200 import RetInutNFe as RetInutNFe_200
+from pysped.nfe.leiaute.inutnfe_200 import ProcInutNFe as ProcInutNFe_200
 
 #
 # Consulta a situação de NF-e
 #
-from conssitnfe_200 import ConsSitNFe as ConsSitNFe_200
-from conssitnfe_200 import RetConsSitNFe as RetConsSitNFe_200
+from pysped.nfe.leiaute.conssitnfe_200 import ConsSitNFe as ConsSitNFe_200
+from pysped.nfe.leiaute.conssitnfe_200 import RetConsSitNFe as RetConsSitNFe_200
 
 #
 # Consulta a situação do serviço
 #
-from consstatserv_200 import ConsStatServ as ConsStatServ_200
-from consstatserv_200 import RetConsStatServ as RetConsStatServ_200
+from pysped.nfe.leiaute.consstatserv_200 import ConsStatServ as ConsStatServ_200
+from pysped.nfe.leiaute.consstatserv_200 import RetConsStatServ as RetConsStatServ_200
 
 #
 # Consulta cadastro
 #
-#from conscad_101 import ConsCad as ConsCad_101
-#from conscad_101 import RetConsCad as RetConsCad_101
+#from pysped.nfe.leiaute.conscad_101 import ConsCad as ConsCad_101
+#from pysped.nfe.leiaute.conscad_101 import RetConsCad as RetConsCad_101
+
+#
+# Eventos da NF-e - Carta de Correção Eletrônica
+#
+from pysped.nfe.leiaute.evtccenfe_100 import EventoCCe as EventoCCe_100
+from pysped.nfe.leiaute.evtccenfe_100 import RetEventoCCe as RetEventoCCe_100
+from pysped.nfe.leiaute.evtccenfe_100 import ProcEventoCCe as ProcEventoCCe_100
+from pysped.nfe.leiaute.evtccenfe_100 import EnvEventoCCe as EnvEventoCCe_100
+from pysped.nfe.leiaute.evtccenfe_100 import RetEnvEventoCCe as RetEnvEventoCCe_100
+
+#
+# Eventos da NF-e - Cancelamento como Evento
+#
+from pysped.nfe.leiaute.evtcancnfe_100 import EventoCancNFe as EventoCancNFe_100
+from pysped.nfe.leiaute.evtcancnfe_100 import RetEventoCancNFe as RetEventoCancNFe_100
+from pysped.nfe.leiaute.evtcancnfe_100 import ProcEventoCancNFe as ProcEventoCancNFe_100
+from pysped.nfe.leiaute.evtcancnfe_100 import EnvEventoCancNFe as EnvEventoCancNFe_100
+from pysped.nfe.leiaute.evtcancnfe_100 import RetEnvEventoCancNFe as RetEnvEventoCancNFe_100
+
+#
+# Eventos da NF-e - Confirmação de Recebimento/Manifestação do Destinatário
+#
+from pysped.nfe.leiaute.evtconfrecebimento_100 import EventoConfRecebimento as EventoConfRecebimento_100
+from pysped.nfe.leiaute.evtconfrecebimento_100 import RetEventoConfRecebimento as RetEventoConfRecebimento_100
+from pysped.nfe.leiaute.evtconfrecebimento_100 import ProcEventoConfRecebimento as ProcEventoConfRecebimento_100
+from pysped.nfe.leiaute.evtconfrecebimento_100 import EnvEventoConfRecebimento as EnvEventoConfRecebimento_100
+from pysped.nfe.leiaute.evtconfrecebimento_100 import RetEnvEventoConfRecebimento as RetEnvEventoConfRecebimento_100
+from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
+from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_CIENCIA_OPERACAO
+from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
+from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
+from pysped.nfe.leiaute.evtconfrecebimento_100 import DESCEVENTO_CONF_RECEBIMENTO
