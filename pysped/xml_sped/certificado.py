@@ -163,6 +163,8 @@ class Certificado(object):
             doctype = '<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
         elif 'infInut' in xml:
             doctype = '<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+        elif 'infEvento' in xml:
+            doctype = '<!DOCTYPE evento [<!ATTLIST infEvento Id ID #IMPLIED>]>'
 
         #
         # XML da NFS-e
@@ -207,6 +209,8 @@ class Certificado(object):
             doctype = '<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
         elif 'infInut' in xml:
             doctype = '<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
+        elif 'infEvento' in xml:
+            doctype = '<!DOCTYPE evento [<!ATTLIST infEvento Id ID #IMPLIED>]>'
 
         #
         # XML da NFS-e
