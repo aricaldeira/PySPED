@@ -43,19 +43,18 @@ from __future__ import division, print_function, unicode_literals
 
 from lxml import etree
 from StringIO import StringIO
-from datetime import datetime, date, time
+from datetime import datetime, date, time, tzinfo
 from decimal import Decimal
 import locale
 import unicodedata
+import re
+import pytz
 
 
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
 NAMESPACE_SIG = 'http://www.w3.org/2000/09/xmldsig#'
 NAMESPACE_NFSE = 'http://localhost:8080/WsNFe2/lote'
 ABERTURA = '<?xml version="1.0" encoding="utf-8"?>'
-
-CAMINHO_ESQUEMA_110 = 'schema/pl_005d/'
-CAMINHO_ESQUEMA_200 = 'schema/pl_006e/'
 
 locale.setlocale(locale.LC_ALL, b'pt_BR.UTF-8')
 locale.setlocale(locale.LC_COLLATE, b'pt_BR.UTF-8')
@@ -512,6 +511,101 @@ class TagDataHora(TagData):
             return ''
         else:
             return self._valor_data.strftime('%d/%m/%Y %H:%M:%S')
+
+
+class TagDataHoraUTC(TagData):
+    def __init__(self, **kwargs):
+        super(TagDataHoraUTC, self).__init__(**kwargs)
+        #
+        # Expressão de validação do formato (vinda do arquivo leiauteSRE_V1.00.xsd
+        # Alterada para tornar a informação do fuso horário opcional
+        #
+        self._validacao = re.compile(r'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))T(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d(-0[1-4]:00)?')
+        self._valida_fuso = re.compile(r'.*-0[1-4]:00$')
+        self._brasilia = pytz.timezone('America/Sao_Paulo')
+        self.fuso_horario = 'America/Sao_Paulo'
+
+    def set_valor(self, novo_valor):
+        if isinstance(novo_valor, basestring):
+            if self._validacao.match(novo_valor):
+                if self._valida_fuso.match(novo_valor):
+                    #
+                    # Extrai e determina qual o fuso horário informado
+                    #
+                    self.fuso_horario = novo_valor[19:]
+                    novo_valor = novo_valor[:19]
+
+                #
+                # Converte a data sem fuso horário para o fuso horário atual
+                # Isso é necessário pois a função strptime ignora a informação
+                # do fuso horário na string de entrada
+                #
+                novo_valor = self.fuso_horario.localize(datetime.strptime(novo_valor, '%Y-%m-%dT%H:%M:%S'))
+                print(self.fuso_horario)
+                print(novo_valor)
+            else:
+                novo_valor = None
+
+        if isinstance(novo_valor, datetime) and self._valida(novo_valor):
+            self._valor_data = novo_valor
+            # Cuidado!!!
+            # Aqui não dá pra usar a função strftime pois em alguns
+            # casos a data retornada é 01/01/0001 00:00:00
+            # e a função strftime só aceita data com anos a partir de 1900
+            #self._valor_string = '%04d-%02d-%02dT%02d:%02d:%02d' % (self._valor_data.year, self._valor_data.month, self._valor_data.day,
+            #    self._valor_data.hour, self._valor_data.minute, self._valor_data.second)
+
+            self._valor_string = self._valor_data.isoformat()
+        else:
+            self._valor_data = None
+            self._valor_string = ''
+
+    def get_valor(self):
+        return self._valor_data
+
+    valor = property(get_valor, set_valor)
+
+    def set_fuso_horaro(self, novo_valor):
+        print(novo_valor)
+        if novo_valor in pytz.country_timezones['br']:
+            self._fuso_horario = pytz.timezone(novo_valor)
+
+        #
+        # Nos valores abaixo, não entendi ainda até agora, mas para o resultado
+        # correto é preciso usar GMT+ (mais), não (menos) como seria de se
+        # esperar...
+        #
+        elif novo_valor == '-04:00' or novo_valor == '-0400':
+            self._fuso_horario = pytz.timezone('Etc/GMT+4')
+        elif novo_valor == '-03:00' or novo_valor == '-0300':
+            self._fuso_horario = pytz.timezone('Etc/GMT+3')
+        elif novo_valor == '-02:00' or novo_valor == '-0200':
+            self._fuso_horario = pytz.timezone('Etc/GMT+2')
+        elif novo_valor == '-01:00' or novo_valor == '-0100':
+            self._fuso_horario = pytz.timezone('Etc/GMT+1')
+
+    def get_fuso_horario(self):
+        return self._fuso_horario
+
+    fuso_horario = property(get_fuso_horario, set_fuso_horaro)
+
+    def formato_danfe(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S %Z (%z)')
+            #
+            # Troca as siglas:
+            # BRT - Brazilian Time -> HOB - Horário Oficial do Brasil
+            # BRST - Brazilian Summer Time -> HVOB - Horário de Verão Oficial do Brasil
+            #
+            valor = valor.replace('(-0100)', '(-01:00)')
+            valor = valor.replace('(-0200)', '(-02:00)')
+            valor = valor.replace('(-0300)', '(-03:00)')
+            valor = valor.replace('(-0400)', '(-04:00)')
+            valor = valor.replace('BRT', 'HOB')
+            valor = valor.replace('BRST', 'HVOB')
+            return valor
 
 
 class TagInteiro(TagCaracter):
