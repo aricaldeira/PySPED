@@ -69,27 +69,27 @@ from pysped.xml_sped.certificado import Certificado
 # Manual do Contribuinte versão 3.00
 # NF-e leiaute 1.10
 #
-from manual_300 import SOAPEnvio_110, SOAPRetorno_110
-from manual_300 import EnviNFe_110, RetEnviNFe_110
-from manual_300 import ConsReciNFe_110, RetConsReciNFe_110, ProtNFe_110, ProcNFe_110
-from manual_300 import CancNFe_107, RetCancNFe_107, ProcCancNFe_107
-from manual_300 import InutNFe_107, RetInutNFe_107, ProcInutNFe_107
-from manual_300 import ConsSitNFe_107, RetConsSitNFe_107
-from manual_300 import ConsStatServ_107, RetConsStatServ_107
-#from manual_300 import ConsCad_101, RetConsCad_101
+from leiaute import SOAPEnvio_110, SOAPRetorno_110
+from leiaute import EnviNFe_110, RetEnviNFe_110
+from leiaute import ConsReciNFe_110, RetConsReciNFe_110, ProtNFe_110, ProcNFe_110
+from leiaute import CancNFe_107, RetCancNFe_107, ProcCancNFe_107
+from leiaute import InutNFe_107, RetInutNFe_107, ProcInutNFe_107
+from leiaute import ConsSitNFe_107, RetConsSitNFe_107
+from leiaute import ConsStatServ_107, RetConsStatServ_107
+#from leiaute import ConsCad_101, RetConsCad_101
 
 #
 # Manual do Contribuinte versão 4.01
 # NF-e leiaute 2.00
 #
-from manual_401 import SOAPEnvio_200, SOAPRetorno_200
-from manual_401 import EnviNFe_200, RetEnviNFe_200
-from manual_401 import ConsReciNFe_200, RetConsReciNFe_200, ProtNFe_200, ProcNFe_200
-from manual_401 import CancNFe_200, RetCancNFe_200, ProcCancNFe_200
-from manual_401 import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
-from manual_401 import ConsSitNFe_200, RetConsSitNFe_200
-from manual_401 import ConsStatServ_200, RetConsStatServ_200
-#from manual_401 import ConsCad_200, RetConsCad_200
+from leiaute import SOAPEnvio_200, SOAPRetorno_200
+from leiaute import EnviNFe_200, RetEnviNFe_200
+from leiaute import ConsReciNFe_200, RetConsReciNFe_200, ProtNFe_200, ProcNFe_200
+from leiaute import CancNFe_200, RetCancNFe_200, ProcCancNFe_200
+from leiaute import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
+from leiaute import ConsSitNFe_200, RetConsSitNFe_200
+from leiaute import ConsStatServ_200, RetConsStatServ_200
+#from leiaute import ConsCad_200, RetConsCad_200
 
 #
 # DANFE
