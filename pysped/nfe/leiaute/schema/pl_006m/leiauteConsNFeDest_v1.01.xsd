@@ -336,7 +336,7 @@
 										<xs:annotation>
 											<xs:documentation>Data e hora de processamento de autorização, no formato AAAA-MM-DDTHH:MM:SS.</xs:documentation>
 										</xs:annotation>
-									</xs:element>									
+									</xs:element>
 									<xs:element name="cSitNFe">
 										<xs:annotation>
 											<xs:documentation>Situação da NF-e
@@ -459,7 +459,7 @@
 										<xs:annotation>
 											<xs:documentation>Data e hora de processamento de autorização, no formato AAAA-MM-DDTHH:MM:SS.</xs:documentation>
 										</xs:annotation>
-									</xs:element>									
+									</xs:element>
 								</xs:sequence>
 								<xs:attribute name="NSU" type="TNSU" use="required"/>
 							</xs:complexType>
