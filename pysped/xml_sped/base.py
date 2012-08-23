@@ -541,8 +541,6 @@ class TagDataHoraUTC(TagData):
                 # do fuso horário na string de entrada
                 #
                 novo_valor = self.fuso_horario.localize(datetime.strptime(novo_valor, '%Y-%m-%dT%H:%M:%S'))
-                print(self.fuso_horario)
-                print(novo_valor)
             else:
                 novo_valor = None
 
@@ -566,7 +564,6 @@ class TagDataHoraUTC(TagData):
     valor = property(get_valor, set_valor)
 
     def set_fuso_horaro(self, novo_valor):
-        print(novo_valor)
         if novo_valor in pytz.country_timezones['br']:
             self._fuso_horario = pytz.timezone(novo_valor)
 
