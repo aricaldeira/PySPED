@@ -81,6 +81,10 @@ METODO_WS = {
         'webservice': 'NfeDownloadNF',
         'metodo'    : 'nfeDownloadNF',
     },
+    WS_NFE_CONSULTA_DESTINADAS: {
+        'webservice': 'NFeConsultaDest',
+        'metodo'    : 'nfeConsultaNFDest',
+    },
 }
 
 SVRS = {
@@ -168,13 +172,13 @@ DPEC = {
 AN = {
     NFE_AMBIENTE_PRODUCAO: {
         'servidor': 'www.nfe.fazenda.gov.br',
-        WS_NFE_RECEPCAO_ENVENTO: 'RecepcaoEvento/RecepcaoEvento.asmx',
-        #WS_NFE_CONSULTA_DEST:
+        WS_NFE_RECEPCAO_ENVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
+        WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor': 'hom.nfe.fazenda.gov.br',
-        WS_NFE_RECEPCAO_ENVENTO: 'RecepcaoEvento/RecepcaoEvento.asmx',
-        #WS_NFE_CONSULTA_DEST:
+        WS_NFE_RECEPCAO_ENVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
+        WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
     },
 }
 
