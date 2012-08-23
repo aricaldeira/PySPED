@@ -42,26 +42,18 @@
 from __future__ import division, print_function, unicode_literals
 
 import sys
-
-if sys.version_info[0] < 3:
-    from StringIO import StringIO
-    from httplib import HTTPSConnection, HTTPResponse
-
-else:
-    from io import StringIO
-    from http.client import HTTPSConnection, HTTPResponse
-
-
+import os
+from httplib import HTTPSConnection, HTTPResponse
 from OpenSSL import crypto
 import socket
 import ssl
 from datetime import datetime
-import os
+import time
 from uuid import uuid4
 
-from .webservices_flags import *
-from .webservices_1 import *
-from .webservices_2 import *
+from webservices_flags import *
+import webservices_1
+import webservices_2
 
 from pysped.xml_sped.certificado import Certificado
 
@@ -88,13 +80,17 @@ from leiaute import ConsReciNFe_200, RetConsReciNFe_200, ProtNFe_200, ProcNFe_20
 from leiaute import CancNFe_200, RetCancNFe_200, ProcCancNFe_200
 from leiaute import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
 from leiaute import ConsSitNFe_200, RetConsSitNFe_200
+from leiaute import ConsSitNFe_201, RetConsSitNFe_201
 from leiaute import ConsStatServ_200, RetConsStatServ_200
 #from leiaute import ConsCad_200, RetConsCad_200
+
+from leiaute import EnvEventoCCe_100, RetEnvEventoCCe_100
+
 
 #
 # DANFE
 #
-from danfe.danferetrato import *
+from danfe import DANFE
 
 
 class ProcessoNFe(object):
@@ -102,6 +98,12 @@ class ProcessoNFe(object):
         self.webservice = webservice
         self.envio = envio
         self.resposta = resposta
+
+    def __repr__(self):
+        return 'Processo: ' + webservices_2.METODO_WS[self.webservice]['metodo']
+
+    def __unicode__(self):
+        return unicode(self.__repr__())
 
 
 class ConexaoHTTPS(HTTPSConnection):
@@ -128,35 +130,28 @@ class ProcessadorNFe(object):
     def __init__(self):
         self.ambiente = 2
         self.estado = 'SP'
-        self.versao = '1.10'
+        self.versao = '2.00'
         self.certificado = Certificado()
         self.caminho = ''
         self.salvar_arquivos = True
         self.contingencia_SCAN = False
         self.danfe = DANFE()
         self.caminho_temporario = ''
+        self.maximo_tentativas_consulta_recibo = 5
 
         self._servidor     = ''
         self._url          = ''
         self._soap_envio   = None
         self._soap_retorno = None
 
-    def _conectar_servico(self, servico, envio, resposta, ambiente=None):
+    def _conectar_servico(self, servico, envio, resposta, ambiente=None, somente_ambiente_nacional=False):
         if ambiente is None:
             ambiente = self.ambiente
 
         if self.versao == '1.10':
+            metodo_ws = webservices_1.METODO_WS
             self._soap_envio   = SOAPEnvio_110()
-            self._soap_envio.webservice = webservices_1.METODO_WS[servico]['webservice']
-            self._soap_envio.metodo     = webservices_1.METODO_WS[servico]['metodo']
-            self._soap_envio.envio      = envio
-            #self._soap_envio.nfeDadosMsg.dados = envio
-            #self._soap_envio.nfeCabecMsg.cabec.versaoDados.valor = envio.versao.valor
-
             self._soap_retorno = SOAPRetorno_110()
-            self._soap_retorno.webservice = webservices_1.METODO_WS[servico]['webservice']
-            self._soap_retorno.metodo     = webservices_1.METODO_WS[servico]['metodo']
-            self._soap_retorno.resposta   = resposta
 
             if self.contingencia_SCAN:
                 self._servidor = webservices_1.SCAN[ambiente]['servidor']
@@ -166,20 +161,19 @@ class ProcessadorNFe(object):
                 self._url      = webservices_1.ESTADO_WS[self.estado][ambiente][servico]
 
         elif self.versao == '2.00':
+            metodo_ws = webservices_2.METODO_WS
             self._soap_envio   = SOAPEnvio_200()
-            self._soap_envio.webservice = webservices_2.METODO_WS[servico]['webservice']
-            self._soap_envio.metodo     = webservices_2.METODO_WS[servico]['metodo']
-            self._soap_envio.cUF        = UF_CODIGO[self.estado]
-            self._soap_envio.envio      = envio
-
             self._soap_retorno = SOAPRetorno_200()
-            self._soap_retorno.webservice = webservices_2.METODO_WS[servico]['webservice']
-            self._soap_retorno.metodo     = webservices_2.METODO_WS[servico]['metodo']
-            self._soap_retorno.resposta   = resposta
+            self._soap_envio.cUF = UF_CODIGO[self.estado]
 
-            if self.contingencia_SCAN:
+            if somente_ambiente_nacional:
+                self._servidor = webservices_2.AN[ambiente]['servidor']
+                self._url      = webservices_2.AN[ambiente][servico]
+
+            elif self.contingencia_SCAN:
                 self._servidor = webservices_2.SCAN[ambiente]['servidor']
                 self._url      = webservices_2.SCAN[ambiente][servico]
+
             else:
                 #
                 # Testa a opção de um estado, para determinado serviço, usar o WS
@@ -192,6 +186,14 @@ class ProcessadorNFe(object):
 
                 self._servidor = ws_a_usar[ambiente]['servidor']
                 self._url      = ws_a_usar[ambiente][servico]
+
+        self._soap_envio.webservice = metodo_ws[servico]['webservice']
+        self._soap_envio.metodo     = metodo_ws[servico]['metodo']
+        self._soap_envio.envio      = envio
+
+        self._soap_retorno.webservice = self._soap_envio.webservice
+        self._soap_retorno.metodo     = self._soap_envio.metodo
+        self._soap_retorno.resposta   = resposta
 
         #try:
         self.certificado.prepara_certificado_arquivo_pfx()
@@ -216,7 +218,12 @@ class ProcessadorNFe(object):
 
         #con = HTTPSConnection(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
         con = ConexaoHTTPS(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
-        con.request('POST', '/' + self._url, self._soap_envio.xml.encode('utf-8'), self._soap_envio.header)
+        #con.request('POST', '/' + self._url, self._soap_envio.xml.decode('utf-8'), self._soap_envio.header)
+        #
+        # É preciso definir o POST abaixo como bytestring, já que importamos
+        # os unicode_literals... Dá um pau com xml com acentos sem isso...
+        #
+        con.request(b'POST', b'/' + self._url.encode('utf-8'), self._soap_envio.xml.encode('utf-8'), self._soap_envio.header)
         resp = con.getresponse()
 
         #
@@ -252,6 +259,12 @@ class ProcessadorNFe(object):
         elif self.versao == '2.00':
             envio = EnviNFe_200()
             resposta = RetEnviNFe_200()
+
+            if self.ambiente == 2: # Homologação tem detalhes especificos desde a NT2011_002
+                for nfe in lista_nfes:
+                    nfe.infNFe.dest.CNPJ.valor = '99999999000191'
+                    nfe.infNFe.dest.xNome.valor = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+                    nfe.infNFe.dest.IE.valor = ''
 
         processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
 
@@ -539,8 +552,8 @@ class ProcessadorNFe(object):
             resposta = RetConsSitNFe_107()
 
         elif self.versao == '2.00':
-            envio = ConsSitNFe_200()
-            resposta = RetConsSitNFe_200()
+            envio = ConsSitNFe_201()
+            resposta = RetConsSitNFe_201()
 
         processo = ProcessoNFe(webservice=WS_NFE_CONSULTA, envio=envio, resposta=resposta)
 
@@ -663,7 +676,23 @@ class ProcessadorNFe(object):
             # Deu certo?
             #
             if ret_envi_nfe.cStat.valor == '103':
+                #
+                # Aguarda o tempo do processamento antes da consulta
+                #
+                time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.3)
+
                 proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+
+                #
+                # Tenta receber o resultado do processamento do lote
+                #
+                tentativa = 0
+                while proc_recibo.resposta.cStat.valor == '105' and tentativa < self.maximo_tentativas_consulta_recibo:
+                    time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.5)
+                    tentativa += 1
+                    proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+
+
 
                 # Montar os processos das NF-es
                 dic_protNFe = proc_recibo.resposta.dic_protNFe
@@ -730,11 +759,7 @@ class ProcessadorNFe(object):
             self.danfe.protNFe = protnfe_recibo
             self.danfe.salvar_arquivo = False
             self.danfe.gerar_danfe()
-
-            danfe_pdf = StringIO()
-            self.danfe.danfe.generate_by(PDFGenerator, filename=danfe_pdf)
-            processo.danfe_pdf = danfe_pdf.getvalue()
-            danfe_pdf.close()
+            processo.danfe_pdf = self.danfe.conteudo_pdf
 
             if self.salvar_arquivos:
                 nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '-proc-nfe.xml'
@@ -809,187 +834,79 @@ class ProcessadorNFe(object):
 
         return caminho
 
+    def enviar_lote_cce(self, numero_lote=None, lista_cces=[]):
+        envio = EnvEventoCCe_100()
+        resposta = RetEnvEventoCCe_100()
 
-class DANFE(object):
-    def __init__(self):
-        self.imprime_canhoto        = True
-        self.imprime_local_retirada = True
-        self.imprime_local_entrega  = True
-        self.imprime_fatura         = True
-        self.imprime_duplicatas     = True
-        self.imprime_issqn          = True
-
-        self.caminho           = ''
-        self.salvar_arquivo    = True
-
-        self.NFe         = None
-        self.protNFe     = None
-        self.procCancNFe = None
-        self.retCancNFe  = None
-        self.danfe       = None
-
-        self.obs_impressao    = 'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
-        self.nome_sistema     = ''
-        self.site             = ''
-        self.logo             = ''
-        self.leiaute_logo_vertical = False
-        self.dados_emitente   = []
-
-    def gerar_danfe(self):
-        if self.NFe is None:
-            raise ValueError('Não é possível gerar um DANFE sem a informação de uma NF-e')
-
-        if self.protNFe is None:
-            self.protNFe = ProtNFe_200()
-
-        if self.retCancNFe is None:
-            self.retCancNFe = RetCancNFe_200()
-
-        if self.procCancNFe is None:
-            self.procCancNFe = ProcCancNFe_200()
+        processo = ProcessoNFe(webservice=WS_NFE_RECEPCAO_ENVENTO, envio=envio, resposta=resposta)
 
         #
-        # Prepara o queryset para impressão
+        # Vamos assinar e validar todas os Eventos antes da transmissão, evitando
+        # rejeição na SEFAZ por incorreção no schema dos arquivos
         #
-        self.NFe.monta_chave()
-        self.NFe.monta_dados_contingencia_fsda()
-        self.NFe.site = self.site
+        for cce in lista_cces:
+            self.certificado.assina_xmlnfe(cce)
+            cce.validar()
 
-        for detalhe in self.NFe.infNFe.det:
-            detalhe.NFe = self.NFe
-            detalhe.protNFe = self.protNFe
-            detalhe.retCancNFe = self.retCancNFe
-            detalhe.procCancNFe = self.procCancNFe
+        envio.evento = lista_cces
 
-        #
-        # Prepara as bandas de impressão para cada formato
-        #
-        if self.NFe.infNFe.ide.tpImp.valor == 2:
-            raise ValueError('DANFE em formato paisagem ainda não implementado')
-        else:
-            self.danfe = DANFERetrato()
-            self.danfe.queryset = self.NFe.infNFe.det
+        if numero_lote is None:
+            numero_lote = datetime.now().strftime('%Y%m%d%H%M%S')
 
-        if self.imprime_canhoto:
-            self.danfe.band_page_header = self.danfe.canhoto
-            self.danfe.band_page_header.child_bands = []
-            self.danfe.band_page_header.child_bands.append(self.danfe.remetente)
-        else:
-            self.danfe.band_page_header = self.danfe.remetente
-            self.danfe.band_page_header.child_bands = []
+        envio.idLote.valor = numero_lote
 
-        # Emissão para simples conferência / sem protocolo de autorização
-        if not self.protNFe.infProt.nProt.valor:
-            self.danfe.remetente.campo_variavel_conferencia()
+        envio.validar()
+        if self.salvar_arquivos:
+            for cce in lista_cces:
+                arq = open(self.caminho + cce.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-cce.xml', 'w')
+                arq.write(n.xml.encode('utf-8'))
+                arq.close
 
-        # NF-e denegada
-        elif self.protNFe.infProt.cStat.valor in ('110', '301', '302'):
-            #self.danfe.remetente.campo_variavel_denegacao()
-            self.danfe.remetente.campo_variavel_normal()
-            self.danfe.remetente.obs_denegacao()
+            arq = open(self.caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-env-cce.xml', 'w')
+            arq.write(envio.xml.encode('utf-8'))
+            arq.close()
+
+        self._conectar_servico(WS_NFE_RECEPCAO_ENVENTO, envio, resposta)
+
+        #resposta.validar()
+        if self.salvar_arquivos:
+            nome_arq = self.caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-rec'
+
+            if resposta.cStat.valor != '129':
+                nome_arq += '-rej.xml'
+            else:
+                nome_arq += '.xml'
+
+            arq = open(nome_arq, 'w')
+            arq.write(resposta.xml.encode('utf-8'))
+            arq.close()
 
             #
-            # Adiciona a observação de quem é a irregularidade fiscal
+            # Salva o processamento de cada arquivo
             #
-            #if self.protNFe.infProt.cStat.valor == '301':
-                #self.danfe.remetente.find_by_name('txt_remetente_var1').text = b'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais do emitente.'
-            #elif self.protNFe.infProt.cStat.valor == '302':
-                #self.danfe.remetente.find_by_name('txt_remetente_var1').text = b'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais do destinatário.'
+            for ret in resposta.retEvento:
+                #
+                # O evento foi aceito e vinculado à NF-e
+                #
+                if ret.infEvento.cStat.valor == '135':
+                    arq = open(self.caminho + ret.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-ret-cce.xml', 'w')
+                    arq.write(n.xml.encode('utf-8'))
+                    arq.close
 
-        # Emissão em contingência com FS ou FSDA
-        elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):
-            self.danfe.remetente.campo_variavel_contingencia_fsda()
-            self.danfe.remetente.obs_contingencia_normal_scan()
+                #
+                # O evento foi aceito, mas não foi vinculado à NF-e
+                #
+                elif ret.infEvento.cStat.valor == '136':
+                    arq = open(self.caminho + ret.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-ret-cce-sv.xml', 'w')
+                    arq.write(n.xml.encode('utf-8'))
+                    arq.close
 
-        # Emissão em contingência com DPEC
-        elif self.NFe.infNFe.ide.tpEmis.valor == 4:
-            self.danfe.remetente.campo_variavel_contingencia_dpec()
-            self.danfe.remetente.obs_contingencia_dpec()
+                #
+                # O evento foi rejeitado
+                #
+                else:
+                    arq = open(self.caminho + ret.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-ret-cce-rej.xml', 'w')
+                    arq.write(n.xml.encode('utf-8'))
+                    arq.close
 
-        # Emissão normal ou contingência SCAN
-        else:
-            self.danfe.remetente.campo_variavel_normal()
-            # Contingência SCAN
-            if self.NFe.infNFe.ide.tpEmis.valor == 3:
-                self.danfe.remetente.obs_contingencia_normal_scan()
-
-        # A NF-e foi cancelada, no DANFE imprimir o "carimbo" de cancelamento
-        if self.retCancNFe.infCanc.nProt.valor or self.procCancNFe.retCancNFe.infCanc.nProt.valor:
-            if self.procCancNFe.cancNFe.infCanc.xJust.valor:
-                self.danfe.remetente.obs_cancelamento_com_motivo()
-            else:
-                self.danfe.remetente.obs_cancelamento()
-
-        # Observação de ausência de valor fiscal
-        # se não houver protocolo ou se o ambiente for de homologação
-        if (not self.protNFe.infProt.nProt.valor) or self.NFe.infNFe.ide.tpAmb.valor == 2:
-            self.danfe.remetente.obs_sem_valor_fiscal()
-
-        self.danfe.band_page_header.child_bands.append(self.danfe.destinatario)
-
-        if self.imprime_local_retirada and len(self.NFe.infNFe.retirada.xml):
-            self.danfe.band_page_header.child_bands.append(self.danfe.local_retirada)
-
-        if self.imprime_local_entrega and len(self.NFe.infNFe.entrega.xml):
-            self.danfe.band_page_header.child_bands.append(self.danfe.local_entrega)
-
-        if self.imprime_fatura:
-            # Pagamento a prazo
-            if (self.NFe.infNFe.ide.indPag.valor == 1) or \
-                (len(self.NFe.infNFe.cobr.dup) > 1) or \
-                ((len(self.NFe.infNFe.cobr.dup) == 1) and \
-                (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())):
-
-                if self.imprime_duplicatas:
-                    self.danfe.fatura_a_prazo.elements.append(self.danfe.duplicatas)
-
-                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_prazo)
-
-            # Pagamento a vista
-            elif (self.NFe.infNFe.ide.indPag.valor != 2):
-                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_vista)
-
-                if self.imprime_duplicatas:
-                    self.danfe.fatura_a_vista.elements.append(self.danfe.duplicatas)
-
-        self.danfe.band_page_header.child_bands.append(self.danfe.calculo_imposto)
-        self.danfe.band_page_header.child_bands.append(self.danfe.transporte)
-        self.danfe.band_page_header.child_bands.append(self.danfe.cab_produto)
-
-        if self.imprime_issqn and len(self.NFe.infNFe.total.ISSQNTot.xml):
-            self.danfe.band_page_footer = self.danfe.iss
-        else:
-            self.danfe.band_page_footer = self.danfe.dados_adicionais
-
-        self.danfe.band_detail = self.danfe.det_produto
-
-        #
-        # Observação de impressão
-        #
-        if self.nome_sistema:
-            self.danfe.ObsImpressao.expression = self.nome_sistema + ' - ' + self.obs_impressao
-        else:
-            self.danfe.ObsImpressao.expression = self.obs_impressao
-
-        #
-        # Quadro do emitente
-        #
-        # Personalizado?
-        if self.dados_emitente:
-            self.danfe.remetente.monta_quadro_emitente(self.dados_emitente)
-        else:
-            # Sem logotipo
-            if not self.logo:
-                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_sem_logo())
-
-            # Logotipo na vertical
-            elif self.leiaute_logo_vertical:
-                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_vertical(self.logo))
-
-            # Logotipo na horizontal
-            else:
-                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_horizontal(self.logo))
-
-        if self.salvar_arquivo:
-            nome_arq = self.caminho + self.NFe.chave + '.pdf'
-            self.danfe.generate_by(PDFGenerator, filename=nome_arq)
+        return processo
