@@ -2222,6 +2222,7 @@ class Ide(nfe_110.Ide):
             self.nNF.xml     = arquivo
             self.dEmi.xml    = arquivo
             self.dSaiEnt.xml = arquivo
+            self.hSaiEnt.xml = arquivo
             self.tpNF.xml    = arquivo
             self.cMunFG.xml  = arquivo
 
@@ -2309,6 +2310,8 @@ class InfNFe(nfe_110.InfNFe):
         xml += self.entrega.xml
 
         for d in self.det:
+            #d.imposto.regime_tributario = self.emit.CRT.valor
+            d.imposto.ICMS.regime_tributario = self.emit.CRT.valor
             xml += d.xml
 
         xml += self.total.xml
