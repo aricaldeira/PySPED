@@ -574,12 +574,17 @@ class ProcessadorNFe(object):
         self._conectar_servico(WS_NFE_CONSULTA, envio, resposta, ambiente)
 
         #resposta.validar()
-
         if self.salvar_arquivos:
             nome_arq = self.caminho + unicode(chave_nfe).strip().rjust(44, '0') + '-sit.xml'
             arq = open(nome_arq, 'w')
             arq.write(resposta.xml.encode('utf-8'))
             arq.close()
+
+        #
+        # Se a NF-e tiver sido informada, montar o processo da NF-e
+        #
+        if nfe:
+            self.montar_processo_uma_nota(nfe, protnfe_recibo=resposta.protNFe)
 
         return processo
 
@@ -691,8 +696,6 @@ class ProcessadorNFe(object):
                     time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.5)
                     tentativa += 1
                     proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
-
-
 
                 # Montar os processos das NF-es
                 dic_protNFe = proc_recibo.resposta.dic_protNFe
