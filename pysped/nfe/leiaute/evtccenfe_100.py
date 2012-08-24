@@ -81,6 +81,7 @@ class InfEventoCCe(InfEvento):
     def __init__(self):
         super(InfEventoCCe, self).__init__()
         self.detEvento  = DetEventoCCe()
+        self.tpEvento.valor = '110110'
 
 
 class EventoCCe(Evento):

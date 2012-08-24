@@ -128,6 +128,15 @@ from consstatserv_200 import RetConsStatServ as RetConsStatServ_200
 #from conscad_101 import RetConsCad as RetConsCad_101
 
 #
+# Eventos da NF-e - classes básicas
+#
+from eventonfe_100 import Evento as Evento_100
+from eventonfe_100 import RetEvento as RetEvento_100
+from eventonfe_100 import ProcEvento as ProcEvento_100
+from eventonfe_100 import EnvEvento as EnvEvento_100
+from eventonfe_100 import RetEnvEvento as RetEnvEvento_100
+
+#
 # Eventos da NF-e - Carta de Correção Eletrônica
 #
 from evtccenfe_100 import EventoCCe as EventoCCe_100
@@ -158,6 +167,18 @@ from evtconfrecebimento_100 import CONF_RECEBIMENTO_CIENCIA_OPERACAO
 from evtconfrecebimento_100 import CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
 from evtconfrecebimento_100 import CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
 from evtconfrecebimento_100 import DESCEVENTO_CONF_RECEBIMENTO
+
+#
+# Consulta NF-e destinadas
+#
+from consnfedest_101 import ConsNFeDest as ConsNFeDest_101
+
+
+#
+# Consulta a situação de NF-e - nova versão com os eventos
+#
+from conssitnfe_201 import ConsSitNFe as ConsSitNFe_201
+from conssitnfe_201 import RetConsSitNFe as RetConsSitNFe_201
 
 
 #
