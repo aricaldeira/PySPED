@@ -47,7 +47,8 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 
 from geraldo import Report, ReportBand, SubReport
-from geraldo import ObjectValue, SystemField, Label, Line, BarCode, Rect, Image
+from geraldo import ObjectValue, SystemField, Label, Line, Rect, Image
+from geraldo.barcodes import BarCode
 from geraldo.generators import PDFGenerator
 
 from pysped.relato_sped.base_rps import *

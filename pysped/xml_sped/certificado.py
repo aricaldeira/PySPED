@@ -145,14 +145,13 @@ class Certificado(object):
         xml = self.assina_xml(xml)
         return xml
 
-    def _prepara_doc_xml(self, xml):
-        if isinstance(xml, str):
-            xml = unicode(xml.encode('utf-8'))
+    def _obtem_doctype(self, xml):
+        """Obtém DOCTYPE do XML
 
-        #
-        # Determina o tipo de arquivo que vai ser assinado, procurando
-        # pela tag correspondente
-        #
+        Determina o tipo de arquivo que vai ser assinado, procurando pela tag
+        correspondente.
+        """
+        doctype = None
 
         #
         # XML da NF-e nacional
@@ -171,9 +170,21 @@ class Certificado(object):
         #
         elif 'ReqEnvioLoteRPS' in xml:
             doctype = '<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
+        elif 'EnviarLoteRpsEnvio' in xml:
+            doctype = '<!DOCTYPE EnviarLoteRpsEnvio>'
+        elif 'CancelarNfseEnvio' in xml:
+            doctype = '<!DOCTYPE CancelarNfseEnvio>'
 
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
+
+        return doctype
+
+    def _prepara_doc_xml(self, xml):
+        if isinstance(xml, str):
+            xml = unicode(xml.encode('utf-8'))
+
+        doctype = self._obtem_doctype(xml)
 
         #
         # Importantíssimo colocar o encode, pois do contário não é possível
@@ -195,31 +206,7 @@ class Certificado(object):
         if isinstance(xml, str):
             xml = unicode(xml.decode('utf-8'))
 
-        #
-        # Determina o tipo de arquivo que vai ser assinado, procurando
-        # pela tag correspondente
-        #
-
-        #
-        # XML da NF-e nacional
-        #
-        if 'infNFe' in xml:
-            doctype = '<!DOCTYPE NFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
-        elif 'infCanc' in xml:
-            doctype = '<!DOCTYPE cancNFe [<!ATTLIST infCanc Id ID #IMPLIED>]>'
-        elif 'infInut' in xml:
-            doctype = '<!DOCTYPE inutNFe [<!ATTLIST infInut Id ID #IMPLIED>]>'
-        elif 'infEvento' in xml:
-            doctype = '<!DOCTYPE evento [<!ATTLIST infEvento Id ID #IMPLIED>]>'
-
-        #
-        # XML da NFS-e
-        #
-        elif 'ReqEnvioLoteRPS' in xml:
-            doctype = '<!DOCTYPE Lote [<!ATTLIST Lote Id ID #IMPLIED>]>'
-
-        else:
-            raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
+        doctype = self._obtem_doctype(xml)
 
         #
         # Remove o doctype e os \n acrescentados pela libxml2
