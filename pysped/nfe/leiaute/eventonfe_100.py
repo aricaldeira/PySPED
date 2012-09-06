@@ -294,6 +294,7 @@ class EnvEvento(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += self.versao.xml
+        xml += self.idLote.xml
 
         for e in self.evento:
             xml += tira_abertura(e.xml)
@@ -321,6 +322,16 @@ class RetEnvEvento(XMLNFe):
         self.cStat     = TagCaracter(nome='cStat'      , codigo='HR07', tamanho=[3, 3, 3]   , raiz='//retEnvEvento')
         self.xMotivo   = TagCaracter(nome='xMotivo'    , codigo='HR08', tamanho=[1, 255]    , raiz='//retEnvEvento')
         self.retEvento = []
+
+        #
+        # Dicionário dos retornos, com a chave sendo a chave da NF-e
+        #
+        self.dic_retEvento = {}
+        #
+        # Dicionário dos processos (evento + retorno), com a chave sendo a chave da NF-e
+        #
+        self.dic_procEvento = {}
+
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'retEnvEvento_V1.00.xsd'
 
@@ -351,5 +362,12 @@ class RetEnvEvento(XMLNFe):
             self.cStat.xml       = arquivo
             self.xMotivo.xml     = arquivo
             self.retEvento = self.le_grupo('//retEnvEvento/retEvento', RetEvento)
+
+            #
+            # Monta o dicionário dos retornos
+            #
+            for ret in self.retEvento:
+                self.dic_retEvento[ret.infEvento.chNFe.valor] = ret
+
 
     xml = property(get_xml, set_xml)
