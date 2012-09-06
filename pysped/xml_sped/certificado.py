@@ -67,10 +67,10 @@ class Certificado(object):
         self.senha       = ''
         self.chave       = ''
         self.certificado = ''
-        self.emissor     = {}
-        self.proprietario = {}
-        self.data_inicio_validade = None
-        self.data_fim_validade    = None
+        self._emissor     = {}
+        self._proprietario = {}
+        self._data_inicio_validade = None
+        self._data_fim_validade    = None
         self._doc_xml    = None
 
     def prepara_certificado_arquivo_pfx(self):
@@ -104,11 +104,126 @@ class Certificado(object):
 
         cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM, self.certificado)
 
-        self.emissor = dict(cert_openssl.get_issuer().get_components())
-        self.proprietario = dict(cert_openssl.get_subject().get_components())
+        self._emissor = dict(cert_openssl.get_issuer().get_components())
+        self._proprietario = dict(cert_openssl.get_subject().get_components())
+        self._data_inicio_validade = datetime.strptime(cert_openssl.get_notBefore(), '%Y%m%d%H%M%SZ')
+        self._data_fim_validade    = datetime.strptime(cert_openssl.get_notAfter(), '%Y%m%d%H%M%SZ')
 
-        self.data_inicio_validade = datetime.strptime(cert_openssl.get_notBefore(), '%Y%m%d%H%M%SZ')
-        self.data_fim_validade    = datetime.strptime(cert_openssl.get_notAfter(), '%Y%m%d%H%M%SZ')
+    def _set_chave(self, chave):
+        self._chave = chave
+
+    def _get_chave(self):
+        try:
+            if self._chave: # != ''
+                return self._chave
+            else:
+                raise AttributeError("'chave' precisa ser regenerada")
+        except AttributeError, e:
+            if self.arquivo:    # arquivo disponível
+                self.prepara_certificado_arquivo_pfx()
+                return self._chave  # agora já disponível
+            else:
+                return ''
+
+    chave = property(_get_chave, _set_chave)
+
+    def _set_certificado(self, certificado):
+        self._certificado = certificado
+
+    def _get_certificado(self):
+        try:
+            if self._certificado:   # != ''
+                return self._certificado
+            else:
+                raise AttributeError("'certificado' precisa ser regenerado")
+        except AttributeError, e:
+            if self.arquivo:    # arquivo disponível
+                self.prepara_certificado_arquivo_pfx()
+                return self._certificado  # agora já disponível
+            else:
+                return ''
+
+    certificado = property(_get_certificado, _set_certificado)
+
+    @property
+    def proprietario_nome(self):
+        if 'CN' in self.proprietario:
+            #
+            # Alguns certrificados não têm o CNPJ na propriedade CN, somente o
+            # nome do proprietário
+            #
+            if ':' in self.proprietario['CN']:
+                return self.proprietario['CN'].rsplit(':',1)[0]
+            else:
+                return self.proprietario['CN']
+        else: # chave CN ainda não disponível
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self.proprietario['CN'].rsplit(':',1)[0]
+            except IOError, e:  # arquivo do certificado não disponível
+                return ''
+
+    @property
+    def proprietario_cnpj(self):
+        if 'CN' in self.proprietario:
+            #
+            # Alguns certrificados não têm o CNPJ na propriedade CN, somente o
+            # nome do proprietário
+            #
+            if ':' in self.proprietario['CN']:
+                return self.proprietario['CN'].rsplit(':',1)[1]
+            else:
+                return ''
+        else: #chave CN ainda não disponível
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self.proprietario['CN'].rsplit(':',1)[1]
+            except IOError, e:  # arquivo do certificado não disponível
+                return ''
+
+    @property
+    def proprietario(self):
+        if self._proprietario:
+            return self._proprietario
+        else:
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self._proprietario
+            except IOError, e:  # arquivo do certificado não disponível
+                return dict()
+
+    @property
+    def emissor(self):
+        if self._emissor:
+            return self._emissor
+        else:
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self._emissor
+            except IOError, e:  # arquivo do certificado não disponível
+                return dict()
+
+    @property
+    def data_inicio_validade(self):
+        if self._data_inicio_validade:
+            return self._data_inicio_validade
+        else:
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self._data_inicio_validade
+            except IOError, e:  # arquivo do certificado não disponível
+                return None
+
+    @property
+    def data_fim_validade(self):
+        if self._data_fim_validade:
+            return self._data_fim_validade
+        else:
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self._data_fim_validade
+            except IOError, e:  # arquivo do certificado não disponível
+                return None
 
     def _inicia_funcoes_externas(self):
         # Ativa as funções de análise de arquivos XML
