@@ -115,7 +115,7 @@ class EnvEventoCCe(EnvEvento):
     def __init__(self):
         super(EnvEventoCCe, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'envCCe_V1.00.xsd'
+        self.arquivo_esquema = 'envCCe_v1.00.xsd'
 
     def get_xml(self):
         return super(EnvEventoCCe, self).get_xml()
