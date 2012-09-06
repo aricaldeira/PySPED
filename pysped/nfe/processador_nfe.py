@@ -87,9 +87,14 @@ from leiaute import ConsStatServ_200, RetConsStatServ_200
 from leiaute import EventoCCe_100, EnvEventoCCe_100, RetEnvEventoCCe_100, ProcEventoCCe_100
 from leiaute import EventoCancNFe_100, EnvEventoCancNFe_100, RetEnvEventoCancNFe_100, ProcEventoCancNFe_100
 from leiaute import EventoConfRecebimento_100, EnvEventoConfRecebimento_100, RetEnvEventoConfRecebimento_100, ProcEventoConfRecebimento_100
+from leiaute import CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
+from leiaute import CONF_RECEBIMENTO_CIENCIA_OPERACAO
+from leiaute import CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
+from leiaute import CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
+from leiaute import DESCEVENTO_CONF_RECEBIMENTO
 
 from leiaute import ConsNFeDest_101, RetConsNFeDest_101
-from leiaute import DownloadNFe_100, RetDownloadNFe_100
+from leiaute import DownloadNFe_100, RetDownloadNFe_100, TagChNFe_100
 
 
 #
@@ -596,7 +601,7 @@ class ProcessadorNFe(object):
         # Se a NF-e tiver sido informada, montar o processo da NF-e
         #
         if nfe:
-            self.montar_processo_uma_nota(nfe, protnfe_recibo=resposta.protNFe)
+           nfe.procNFe = self.montar_processo_uma_nota(nfe, protnfe_recibo=resposta.protNFe)
 
         return processo
 
@@ -994,9 +999,15 @@ class ProcessadorNFe(object):
     def enviar_lote_confirmacao_recebimento(self, numero_lote=None, lista_eventos=[]):
         return self._enviar_lote_evento('confrec', numero_lote, lista_eventos)
 
-    def consultar_notas_destinadas(self, consulta):
-        envio = consulta
+    def consultar_notas_destinadas(self, ambiente=None, cnpj=None, ultimo_nsu='0', tipo_emissao='0', tipo_nfe='0'):
+        envio = ConsNFeDest_101()
         resposta = RetConsNFeDest_101()
+
+        envio.tpAmb.valor = ambiente or self.ambiente
+        envio.CNPJ.valor = cnpj
+        envio.ultNSU.valor = ultimo_nsu
+        envio.indNFe.valor = tipo_nfe
+        envio.indEmi.valor = tipo_emissao
 
         processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_DESTINADAS, envio=envio, resposta=resposta)
 
@@ -1018,9 +1029,13 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def baixar_notas(self, downloadnfe):
-        envio = downloadnfe
+    def baixar_notas_destinadas(self, ambiente=None, cnpj=None, lista_chaves=[]):
+        envio = DownloadNFe_100()
         resposta = RetDownloadNFe_100()
+
+        envio.tpAmb.valor = ambiente or self.ambiente
+        envio.CNPJ.valor = cnpj
+        envio.chNFe = [TagChNFe_100(valor=ch) for ch in lista_chaves]
 
         processo = ProcessoNFe(webservice=WS_NFE_DOWNLOAD, envio=envio, resposta=resposta)
 
@@ -1040,4 +1055,83 @@ class ProcessadorNFe(object):
             arq.write(resposta.original.encode('utf-8'))
             arq.close()
 
+        return processo
+
+    def cancelar_nota_evento(self, ambiente=None, chave_nfe=None, numero_protocolo=None, justificativa=None):
+        evento = EventoCancNFe_100()
+        evento.infEvento.tpAmb.valor = ambiente or self.ambiente
+        evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
+        evento.infEvento.CNPJ.valor = chave_nfe[6:20] # Extrai o CNPJ da própria chave da NF-e
+        evento.infEvento.chNFe.valor = chave_nfe
+        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.detEvento.nProt.valor = numero_protocolo
+        evento.infEvento.detEvento.xJust.valor = justificativa
+
+        processo = self.enviar_lote_cancelamento(lista_eventos=[evento])
+        return processo
+
+    def corrigir_nota_evento(self, ambiente=None, chave_nfe=None, numero_sequencia=None, correcao=None):
+        evento = EventoCCe_100()
+        evento.infEvento.tpAmb.valor = ambiente or self.ambiente
+        evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
+        evento.infEvento.CNPJ.valor = chave_nfe[6:20] # Extrai o CNPJ da própria chave da NF-e
+        evento.infEvento.chNFe.valor = chave_nfe
+        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.detEvento.xCorrecao.valor = correcao
+        evento.infEvento.nSeqEvento.valor = numero_sequencia or 1
+
+        processo = self.enviar_lote_cce(lista_eventos=[evento])
+        return processo
+
+    def confirmar_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None):
+        evento = EventoConfRecebimento_100()
+        evento.infEvento.tpAmb.valor = ambiente or self.ambiente
+        evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
+        evento.infEvento.CNPJ.valor = cnpj
+        evento.infEvento.chNFe.valor = chave_nfe
+        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
+        evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
+
+        processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
+        return processo
+
+    def conhecer_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None):
+        evento = EventoConfRecebimento_100()
+        evento.infEvento.tpAmb.valor = ambiente or self.ambiente
+        evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
+        evento.infEvento.CNPJ.valor = cnpj
+        evento.infEvento.chNFe.valor = chave_nfe
+        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_CIENCIA_OPERACAO
+        evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
+
+        processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
+        return processo
+
+    def desconhecer_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None):
+        evento = EventoConfRecebimento_100()
+        evento.infEvento.tpAmb.valor = ambiente or self.ambiente
+        evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
+        evento.infEvento.CNPJ.valor = cnpj
+        evento.infEvento.chNFe.valor = chave_nfe
+        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
+        evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
+
+        processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
+        return processo
+
+    def nao_realizar_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None, justificativa=None):
+        evento = EventoConfRecebimento_100()
+        evento.infEvento.tpAmb.valor = ambiente or self.ambiente
+        evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
+        evento.infEvento.CNPJ.valor = cnpj
+        evento.infEvento.chNFe.valor = chave_nfe
+        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
+        evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
+        evento.infEvento.detEvento.xJust.valor = justificativa
+
+        processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
         return processo
