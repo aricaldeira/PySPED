@@ -173,7 +173,11 @@ from evtconfrecebimento_100 import DESCEVENTO_CONF_RECEBIMENTO
 #
 from consnfedest_101 import ConsNFeDest as ConsNFeDest_101
 from consnfedest_101 import RetConsNFeDest as RetConsNFeDest_101
-
+from consnfedest_101 import CONS_NFE_TODAS
+from consnfedest_101 import CONS_NFE_SEM_CONFIRMACAO_OPERACAO
+from consnfedest_101 import CONS_NFE_SEM_CIENCIA_OPERACAO
+from consnfedest_101 import CONS_NFE_EMISSAO_TODOS_EMITENTES
+from consnfedest_101 import CONS_NFE_EMISSAO_SOMENTE_TERCEIROS
 
 #
 # Consulta a situação de NF-e - nova versão com os eventos

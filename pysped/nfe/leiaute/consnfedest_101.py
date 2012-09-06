@@ -48,6 +48,14 @@ import os
 DIRNAME = os.path.dirname(__file__)
 
 
+CONS_NFE_TODAS = '0'
+CONS_NFE_SEM_CONFIRMACAO_OPERACAO = '1'
+CONS_NFE_SEM_CIENCIA_OPERACAO = '2'
+
+CONS_NFE_EMISSAO_TODOS_EMITENTES = '0'
+CONS_NFE_EMISSAO_SOMENTE_TERCEIROS = '1'
+
+
 class ConsNFeDest(XMLNFe):
     def __init__(self):
         super(ConsNFeDest, self).__init__()
@@ -55,8 +63,8 @@ class ConsNFeDest(XMLNFe):
         self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='IP03', tamanho=[ 1,  1, 1] , raiz='//consNFeDest', valor=2)
         self.xServ = TagCaracter(nome='xServ'  , codigo='IP04', tamanho=[18, 18]    , raiz='//consNFeDest', valor='CONSULTAR NFE DEST')
         self.CNPJ  = TagCaracter(nome='CNPJ'  , codigo='IP05', tamanho=[14, 14], raiz='//consNFeDest')
-        self.indNFe = TagInteiro(nome='indNFe'   , codigo='IP06', tamanho=[ 1,  1, 1] , raiz='//consNFeDest', valor=0)
-        self.indEmi = TagInteiro(nome='indEmi'   , codigo='IP07', tamanho=[ 1,  1, 1] , raiz='//consNFeDest', valor=0)
+        self.indNFe = TagInteiro(nome='indNFe'   , codigo='IP06', tamanho=[ 1,  1, 1] , raiz='//consNFeDest', valor=CONS_NFE_TODAS)
+        self.indEmi = TagInteiro(nome='indEmi'   , codigo='IP07', tamanho=[ 1,  1, 1] , raiz='//consNFeDest', valor=CONS_NFE_EMISSAO_TODOS_EMITENTES)
         self.ultNSU = TagCaracter(nome='ultNSU'   , codigo='IP08', tamanho=[1, 15], raiz='//consNFeDest', valor='0')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'consNFeDest_v1.01.xsd'
