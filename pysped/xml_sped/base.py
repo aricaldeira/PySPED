@@ -491,6 +491,7 @@ class TagDataHora(TagData):
 
         if isinstance(novo_valor, datetime) and self._valida(novo_valor):
             self._valor_data = novo_valor
+            self._valor_data = self._valor_data.replace(microsecond=0)
             # Cuidado!!!
             # Aqui não dá pra usar a função strftime pois em alguns
             # casos a data retornada é 01/01/0001 00:00:00
@@ -546,6 +547,11 @@ class TagDataHoraUTC(TagData):
 
         if isinstance(novo_valor, datetime) and self._valida(novo_valor):
             self._valor_data = novo_valor
+            self._valor_data = self._valor_data.replace(microsecond=0)
+            try:
+                self._valor_data = self.fuso_horario.localize(self._valor_data)
+            except:
+                pass
             # Cuidado!!!
             # Aqui não dá pra usar a função strftime pois em alguns
             # casos a data retornada é 01/01/0001 00:00:00
@@ -792,8 +798,8 @@ class XMLNFe(NohXML):
         xml = tira_abertura(self.xml).encode('utf-8')
 
         esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-        #esquema.assertValid(etree.fromstring(xml))
-        esquema.validate(etree.fromstring(xml))
+        esquema.assertValid(etree.fromstring(xml))
+        #esquema.validate(etree.fromstring(xml))
 
         return esquema.error_log
 
@@ -818,7 +824,7 @@ def tirar_acentos(texto):
     texto = texto.replace('<', '&lt;')
     texto = texto.replace('>', '&gt;')
     texto = texto.replace('"', '&quot;')
-    texto = texto.replace(u"'", '&apos;')
+    texto = texto.replace("'", '&apos;')
 
     #
     # Trocar ENTER e TAB
