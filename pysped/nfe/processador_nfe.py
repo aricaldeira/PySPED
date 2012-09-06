@@ -84,7 +84,12 @@ from leiaute import ConsSitNFe_201, RetConsSitNFe_201
 from leiaute import ConsStatServ_200, RetConsStatServ_200
 #from leiaute import ConsCad_200, RetConsCad_200
 
-from leiaute import EnvEventoCCe_100, RetEnvEventoCCe_100
+from leiaute import EventoCCe_100, EnvEventoCCe_100, RetEnvEventoCCe_100, ProcEventoCCe_100
+from leiaute import EventoCancNFe_100, EnvEventoCancNFe_100, RetEnvEventoCancNFe_100, ProcEventoCancNFe_100
+from leiaute import EventoConfRecebimento_100, EnvEventoConfRecebimento_100, RetEnvEventoConfRecebimento_100, ProcEventoConfRecebimento_100
+
+from leiaute import ConsNFeDest_101, RetConsNFeDest_101
+from leiaute import DownloadNFe_100, RetDownloadNFe_100
 
 
 #
@@ -170,6 +175,10 @@ class ProcessadorNFe(object):
                 self._servidor = webservices_2.AN[ambiente]['servidor']
                 self._url      = webservices_2.AN[ambiente][servico]
 
+            elif servico == WS_NFE_DOWNLOAD:
+                self._servidor = webservices_2.SVAN[ambiente]['servidor']
+                self._url      = webservices_2.SVAN[ambiente][servico]
+
             elif self.contingencia_SCAN:
                 self._servidor = webservices_2.SCAN[ambiente]['servidor']
                 self._url      = webservices_2.SCAN[ambiente][servico]
@@ -235,6 +244,9 @@ class ProcessadorNFe(object):
         #
         os.remove(nome_arq_chave)
         os.remove(nome_arq_certificado)
+
+        # Dados do envelope de envio salvos para possível debug
+        envio.original = self._soap_envio.xml
 
         # Dados da resposta salvos para possível debug
         self._soap_retorno.resposta.version  = resp.version
@@ -837,21 +849,54 @@ class ProcessadorNFe(object):
 
         return caminho
 
-    def enviar_lote_cce(self, numero_lote=None, lista_cces=[]):
-        envio = EnvEventoCCe_100()
-        resposta = RetEnvEventoCCe_100()
+    def montar_processo_lista_eventos(self, lista_eventos, dic_retEvento, dic_procEvento, classe_procEvento):
+        for evento in lista_eventos:
+            chave = evento.infEvento.chNFe.valor
+            if chave in dic_retEvento:
+                retorno = dic_retEvento[chave]
+                processo = classe_procEvento()
+                processo.evento = evento
+                processo.retEvento = retorno
+                dic_procEvento[chave] = processo
 
-        processo = ProcessoNFe(webservice=WS_NFE_RECEPCAO_ENVENTO, envio=envio, resposta=resposta)
+    def _enviar_lote_evento(self, tipo_evento, numero_lote=None, lista_eventos=[]):
+        #
+        # Determina o tipo do evento
+        #
+        if tipo_evento == 'cce':
+            classe_evento = ProcEventoCCe_100
+            envio = EnvEventoCCe_100()
+            resposta = RetEnvEventoCCe_100()
+
+        elif tipo_evento == 'can':
+            classe_evento = ProcEventoCancNFe_100
+            envio = EnvEventoCancNFe_100()
+            resposta = RetEnvEventoCancNFe_100()
+
+        elif tipo_evento == 'confrec':
+            classe_evento = ProcEventoConfRecebimento_100
+            envio = EnvEventoConfRecebimento_100()
+            resposta = RetEnvEventoConfRecebimento_100()
+
+        processo = ProcessoNFe(webservice=WS_NFE_RECEPCAO_EVENTO, envio=envio, resposta=resposta)
 
         #
         # Vamos assinar e validar todas os Eventos antes da transmissão, evitando
         # rejeição na SEFAZ por incorreção no schema dos arquivos
         #
-        for cce in lista_cces:
-            self.certificado.assina_xmlnfe(cce)
-            cce.validar()
+        for evento in lista_eventos:
+            #
+            # No caso de eventos de confirmação de recebimento, só é possível o
+            # envio para o ambiente nacional, então é preciso forçar o cOrgao
+            # nos eventos
+            #
+            if tipo_evento == 'confrec':
+                evento.infEvento.cOrgao.valor = UF_CODIGO['RFB']
 
-        envio.evento = lista_cces
+            self.certificado.assina_xmlnfe(evento)
+            #evento.validar()
+
+        envio.evento = lista_eventos
 
         if numero_lote is None:
             numero_lote = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -860,20 +905,25 @@ class ProcessadorNFe(object):
 
         envio.validar()
         if self.salvar_arquivos:
-            for cce in lista_cces:
-                arq = open(self.caminho + cce.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-cce.xml', 'w')
-                arq.write(n.xml.encode('utf-8'))
+            for evento in lista_eventos:
+                chave = evento.infEvento.chNFe.valor
+                ambiente = evento.infEvento.tpAmb.valor
+                caminho = self.monta_caminho_nfe(ambiente=ambiente, chave_nfe=chave)
+                numero_sequencia = evento.infEvento.nSeqEvento.valor
+                nome_arq = caminho + chave + '-' + unicode(numero_sequencia).zfill(2)
+                arq = open(nome_arq + '-' + tipo_evento + '.xml', 'w')
+                arq.write(evento.xml.encode('utf-8'))
                 arq.close
 
-            arq = open(self.caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-env-cce.xml', 'w')
+            arq = open(caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-env-' + tipo_evento + '.xml', 'w')
             arq.write(envio.xml.encode('utf-8'))
             arq.close()
 
-        self._conectar_servico(WS_NFE_RECEPCAO_ENVENTO, envio, resposta)
+        self._conectar_servico(WS_NFE_RECEPCAO_EVENTO, envio, resposta, somente_ambiente_nacional=tipo_evento=='confrec')
 
         #resposta.validar()
         if self.salvar_arquivos:
-            nome_arq = self.caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-rec'
+            nome_arq = caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-rec-' + tipo_evento
 
             if resposta.cStat.valor != '129':
                 nome_arq += '-rej.xml'
@@ -884,32 +934,110 @@ class ProcessadorNFe(object):
             arq.write(resposta.xml.encode('utf-8'))
             arq.close()
 
+            self.montar_processo_lista_eventos(lista_eventos, processo.resposta.dic_retEvento, processo.resposta.dic_procEvento, classe_evento)
+
             #
             # Salva o processamento de cada arquivo
             #
             for ret in resposta.retEvento:
+                chave = ret.infEvento.chNFe.valor
+                ambiente = ret.infEvento.tpAmb.valor
+                caminho = self.monta_caminho_nfe(ambiente=ambiente, chave_nfe=chave)
+                nome_arq = caminho + ret.infEvento.chNFe.valor + '-' + unicode(ret.infEvento.nSeqEvento.valor).zfill(2)
+
                 #
                 # O evento foi aceito e vinculado à NF-e
                 #
                 if ret.infEvento.cStat.valor == '135':
-                    arq = open(self.caminho + ret.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-ret-cce.xml', 'w')
-                    arq.write(n.xml.encode('utf-8'))
+                    arq = open(nome_arq + '-ret-' + tipo_evento + '.xml', 'w')
+                    arq.write(ret.xml.encode('utf-8'))
+                    arq.close
+
+                    #
+                    # Salva o processo do evento
+                    #
+                    arq = open(nome_arq + '-proc-' + tipo_evento + '.xml', 'w')
+                    arq.write(processo.resposta.dic_procEvento[chave].xml.encode('utf-8'))
                     arq.close
 
                 #
                 # O evento foi aceito, mas não foi vinculado à NF-e
                 #
                 elif ret.infEvento.cStat.valor == '136':
-                    arq = open(self.caminho + ret.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-ret-cce-sv.xml', 'w')
-                    arq.write(n.xml.encode('utf-8'))
+                    arq = open(nome_arq + '-ret-' + tipo_evento + '-sv.xml', 'w')
+                    arq.write(ret.xml.encode('utf-8'))
+                    arq.close
+
+                    #
+                    # Salva o processo do evento
+                    #
+                    arq = open(nome_arq + '-proc-' + tipo_evento + '.xml', 'w')
+                    arq.write(processo.resposta.dic_procEvento[chave].xml.encode('utf-8'))
                     arq.close
 
                 #
                 # O evento foi rejeitado
                 #
                 else:
-                    arq = open(self.caminho + ret.infEvento.chNFe.valor + '-' + unicode(cce.infEvento.nSeqEvento.valor).zfill(3) + '-ret-cce-rej.xml', 'w')
-                    arq.write(n.xml.encode('utf-8'))
+                    arq = open(nome_arq + '-ret-' + tipo_evento + '-rej.xml', 'w')
+                    arq.write(ret.xml.encode('utf-8'))
                     arq.close
+
+        return processo
+
+    def enviar_lote_cce(self, numero_lote=None, lista_eventos=[]):
+        return self._enviar_lote_evento('cce', numero_lote, lista_eventos)
+
+    def enviar_lote_cancelamento(self, numero_lote=None, lista_eventos=[]):
+        return self._enviar_lote_evento('can', numero_lote, lista_eventos)
+
+    def enviar_lote_confirmacao_recebimento(self, numero_lote=None, lista_eventos=[]):
+        return self._enviar_lote_evento('confrec', numero_lote, lista_eventos)
+
+    def consultar_notas_destinadas(self, consulta):
+        envio = consulta
+        resposta = RetConsNFeDest_101()
+
+        processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_DESTINADAS, envio=envio, resposta=resposta)
+
+        numero_lote = datetime.now().strftime('%Y%m%d%H%M%S')
+
+        envio.validar()
+        if self.salvar_arquivos:
+            arq = open(self.caminho + unicode(numero_lote).strip().rjust(15, '0') + '-consnfedest.xml', 'w')
+            arq.write(envio.xml.encode('utf-8'))
+            arq.close()
+
+        self._conectar_servico(WS_NFE_CONSULTA_DESTINADAS, envio, resposta, somente_ambiente_nacional=True)
+
+        #resposta.validar()
+        if self.salvar_arquivos:
+            arq = open(self.caminho + unicode(numero_lote).strip().rjust(15, '0') + '-consnfedest-resp.xml', 'w')
+            arq.write(resposta.original.encode('utf-8'))
+            arq.close()
+
+        return processo
+
+    def baixar_notas(self, downloadnfe):
+        envio = downloadnfe
+        resposta = RetDownloadNFe_100()
+
+        processo = ProcessoNFe(webservice=WS_NFE_DOWNLOAD, envio=envio, resposta=resposta)
+
+        numero_lote = datetime.now().strftime('%Y%m%d%H%M%S')
+
+        envio.validar()
+        if self.salvar_arquivos:
+            arq = open(self.caminho + unicode(numero_lote).strip().rjust(15, '0') + '-downloadnfe.xml', 'w')
+            arq.write(envio.xml.encode('utf-8'))
+            arq.close()
+
+        self._conectar_servico(WS_NFE_DOWNLOAD, envio, resposta)
+
+        #resposta.validar()
+        if self.salvar_arquivos:
+            arq = open(self.caminho + unicode(numero_lote).strip().rjust(15, '0') + '-downloadnfe-resp.xml', 'w')
+            arq.write(resposta.original.encode('utf-8'))
+            arq.close()
 
         return processo
