@@ -49,10 +49,10 @@ from pysped.nfe.leiaute.eventonfe_100 import *
 DIRNAME = os.path.dirname(__file__)
 
 
-CONF_RECEBIMENTO_CONFIRMAR_OPERACAO = 0
-CONF_RECEBIMENTO_CIENCIA_OPERACAO = 1
-CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO = 2
-CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA = 3
+CONF_RECEBIMENTO_CONFIRMAR_OPERACAO = '210200'
+CONF_RECEBIMENTO_CIENCIA_OPERACAO = '210210'
+CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO = '210220'
+CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA = '210240'
 
 DESCEVENTO_CONF_RECEBIMENTO = {
     CONF_RECEBIMENTO_CONFIRMAR_OPERACAO: 'Confirmacao da Operacao',
@@ -71,7 +71,13 @@ class DetEventoConfRecebimento(DetEvento):
         xml = XMLNFe.get_xml(self)
         xml += self.versao.xml
         xml += self.descEvento.xml
-        xml += self.xJust.xml
+
+        #
+        # A justificativa só deve ser enviada no evento CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
+        #
+        if self.descEvento.valor == DESCEVENTO_CONF_RECEBIMENTO[CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA]:
+            xml += self.xJust.xml
+
         xml += '</detEvento>'
         return xml
 
@@ -121,7 +127,7 @@ class EnvEventoConfRecebimento(EnvEvento):
     def __init__(self):
         super(EnvEventoConfRecebimento, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'envConfRecebto_V1.00.xsd'
+        self.arquivo_esquema = 'envConfRecebto_v1.00.xsd'
 
     def get_xml(self):
         return super(EnvEventoConfRecebimento, self).get_xml()
@@ -139,4 +145,4 @@ class RetEnvEventoConfRecebimento(RetEnvEvento):
     def __init__(self):
         super(RetEnvEventoConfRecebimento, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnvConfRecebto_V1.00.xsd'
+        self.arquivo_esquema = 'retEnvConfRecebto_v1.00.xsd'
