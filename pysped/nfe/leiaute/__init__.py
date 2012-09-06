@@ -49,7 +49,7 @@ from __future__ import division, print_function, unicode_literals
 #
 # O esquemar pl_006m contém os esquemas dos enventos da NF-e
 #
-ESQUEMA_ATUAL_VERSAO_2 = 'pl_006m'
+ESQUEMA_ATUAL_VERSAO_2 = 'pl_006n'
 
 #
 # Versão 1.00, usada até abril/2010
@@ -172,6 +172,7 @@ from evtconfrecebimento_100 import DESCEVENTO_CONF_RECEBIMENTO
 # Consulta NF-e destinadas
 #
 from consnfedest_101 import ConsNFeDest as ConsNFeDest_101
+from consnfedest_101 import RetConsNFeDest as RetConsNFeDest_101
 
 
 #
@@ -180,6 +181,12 @@ from consnfedest_101 import ConsNFeDest as ConsNFeDest_101
 from conssitnfe_201 import ConsSitNFe as ConsSitNFe_201
 from conssitnfe_201 import RetConsSitNFe as RetConsSitNFe_201
 
+#
+# Download de NF-e
+#
+from downloadnfe_100 import DownloadNFe as DownloadNFe_100
+from downloadnfe_100 import TagChNFe as TagChNFe_100
+from downloadnfe_100 import RetDownloadNFe as RetDownloadNFe_100
 
 #
 # Envelopes SOAP
