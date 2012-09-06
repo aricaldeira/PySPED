@@ -87,116 +87,44 @@ class ConsNFeDest(XMLNFe):
     xml = property(get_xml, set_xml)
 
 
-#class InfCancRecebido(XMLNFe):
-    #def __init__(self):
-        #super(InfCancRecebido, self).__init__()
-        #self.Id       = TagCaracter(nome='infCanc' , codigo='CR03' , tamanho=[17, 17]    , raiz='//retCancNFe', propriedade='Id', obrigatorio=False)
-        #self.tpAmb    = TagInteiro(nome='tpAmb'    , codigo='CR05' , tamanho=[1, 1, 1]   , raiz='//retCancNFe/infCanc', valor=2)
-        #self.verAplic = TagCaracter(nome='verAplic', codigo='CR06' , tamanho=[1, 20]     , raiz='//retCancNFe/infCanc')
-        #self.cStat    = TagCaracter(nome='cStat'    , codigo='CR07' , tamanho=[3, 3, 3]   , raiz='//retCancNFe/infCanc')
-        #self.xMotivo  = TagCaracter(nome='xMotivo' , codigo='CR08' , tamanho=[1, 255]    , raiz='//retCancNFe/infCanc')
-        #self.cUF      = TagInteiro(nome='cUF'      , codigo='CR08a', tamanho=[2, 2, 2]   , raiz='//retCancNFe/infCanc')
-        #self.chNFe    = TagCaracter(nome='chNFe'    , codigo='CR09' , tamanho=[44, 44, 44], raiz='//retcancNFe/infCanc', obrigatorio=False)
-        #self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='CR10' ,                       raiz='//retCancNFe/infCanc', obrigatorio=False)
-        #self.nProt    = TagCaracter(nome='nProt'    , codigo='CR11' , tamanho=[15, 15, 15], raiz='//retCancNFe/infCanc', obrigatorio=False)
+class RetConsNFeDest(XMLNFe):
+    def __init__(self):
+        super(RetConsNFeDest, self).__init__()
+        self.versao = TagDecimal(nome='retConsNFeDest', codigo='IR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.01', raiz='/')
+        self.tpAmb    = TagInteiro(nome='tpAmb'         , codigo='IR03', tamanho=[1,   1, 1], raiz='//retConsNFeDest')
+        self.verAplic = TagCaracter(nome='verAplic'     , codigo='IR04', tamanho=[1,  20]   , raiz='//retConsNFeDest')
+        self.cStat    = TagCaracter(nome='cStat'        , codigo='IR05', tamanho=[1,   3]   , raiz='//retConsNFeDest')
+        self.xMotivo  = TagCaracter(nome='xMotivo'      , codigo='IR06', tamanho=[1, 255]   , raiz='//retConsNFeDest')
+        self.dhResp   = TagDataHora(nome='dhResp'       , codigo='IR07',                      raiz='//retConsNFeDest')
+        self.indCont  = TagCaracter(nome='indCont'      , codigo='IR08', tamanho=[1,   1, 1], raiz='//retConsNFeDest', obrigatorio=False)
+        self.ultNSU   = TagCaracter(nome='ultNSU'       , codigo='IP09', tamanho=[1, 15]    , raiz='//retConsNFeDest', obrigatorio=False)
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'retConsNFeDest_v1.01.xsd'
 
-    #def get_xml(self):
-        #xml = XMLNFe.get_xml(self)
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += ABERTURA
+        xml += self.versao.xml
+        xml += self.tpAmb.xml
+        xml += self.verAplic.xml
+        xml += self.cStat.xml
+        xml += self.xMotivo.xml
+        xml += self.dhResp.xml
+        xml += self.indCont.xml
+        xml += self.ultNSU.xml
 
-        #if self.Id.xml:
-            #xml += self.Id.xml
-        #else:
-            #xml += '<infCanc>'
+        xml += '</retConsNFeDest>'
+        return xml
 
-        #xml += self.tpAmb.xml
-        #xml += self.verAplic.xml
-        #xml += self.cStat.xml
-        #xml += self.xMotivo.xml
-        #xml += self.cUF.xml
-        #xml += self.chNFe.xml
-        #xml += self.dhRecbto.xml
-        #xml += self.nProt.xml
-        #xml += '</infCanc>'
-        #return xml
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.versao.xml   = arquivo
+            self.tpAmb.xml   = arquivo
+            self.verAplic.xml   = arquivo
+            self.cStat.xml   = arquivo
+            self.xMotivo.xml   = arquivo
+            self.dhResp.xml   = arquivo
+            self.indCont.xml   = arquivo
+            self.ultNSU.xml   = arquivo
 
-    #def set_xml(self, arquivo):
-        #if self._le_xml(arquivo):
-            #self.Id.xml       = arquivo
-            #self.tpAmb.xml    = arquivo
-            #self.verAplic.xml = arquivo
-            #self.cStat.xml    = arquivo
-            #self.xMotivo.xml  = arquivo
-            #self.cUF.xml      = arquivo
-            #self.chNFe.xml    = arquivo
-            #self.dhRecbto.xml = arquivo
-            #self.nProt.xml    = arquivo
-
-    #xml = property(get_xml, set_xml)
-
-
-#class RetCancNFe(XMLNFe):
-    #def __init__(self):
-        #super(RetCancNFe, self).__init__()
-        #self.versao = TagDecimal(nome='retCancNFe', codigo='CR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
-        #self.infCanc = InfCancRecebido()
-        #self.Signature = Signature()
-        #self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        #self.arquivo_esquema = 'retCancNFe_v1.07.xsd'
-
-    #def get_xml(self):
-        #xml = XMLNFe.get_xml(self)
-        #xml += ABERTURA
-        #xml += self.versao.xml
-        #xml += self.infCanc.xml
-
-        #if len(self.Signature.URI) and (self.Signature.URI.strip() != '#'):
-            #xml += self.Signature.xml
-
-        #xml += '</retCancNFe>'
-        #return xml
-
-    #def set_xml(self, arquivo):
-        #if self._le_xml(arquivo):
-            #self.infCanc.xml   = arquivo
-            #self.Signature.xml = self._le_noh('//retCancNFe/sig:Signature')
-
-    #xml = property(get_xml, set_xml)
-
-    #def protocolo_formatado(self):
-        #if not self.infCanc.nProt.valor:
-            #return ''
-
-        #formatado = self.infCanc.nProt.valor
-        #formatado += ' - '
-        #formatado += self.infCanc.dhRecbto.formato_danfe()
-        #return formatado
-
-
-#class ProcCancNFe(XMLNFe):
-    #def __init__(self):
-        #super(ProcCancNFe, self).__init__()
-        ##
-        ## Atenção --- a tag procCancNFe tem que começar com letra minúscula, para
-        ## poder validar no XSD.
-        ##
-        #self.versao = TagDecimal(nome='procCancNFe', propriedade='versao', namespace=NAMESPACE_NFE, valor='1.07', raiz='/')
-        #self.cancNFe = CancNFe()
-        #self.retCancNFe = RetCancNFe()
-        #self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        #self.arquivo_esquema = 'procCancNFe_v1.07.xsd'
-
-    #def get_xml(self):
-        #xml = XMLNFe.get_xml(self)
-        #xml += ABERTURA
-        #xml += self.versao.xml
-        #xml += self.cancNFe.xml.replace(ABERTURA, '')
-        #xml += self.retCancNFe.xml.replace(ABERTURA, '')
-        #xml += '</procCancNFe>'
-        #return xml
-
-    #def set_xml(self, arquivo):
-        #if self._le_xml(arquivo):
-            #self.cancNFe.xml = arquivo
-            #self.retCancNFe.xml = arquivo
-
-    #xml = property(get_xml, set_xml)
+    xml = property(get_xml, set_xml)
