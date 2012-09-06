@@ -53,7 +53,7 @@ WS_NFE_CONSULTA_CADASTRO = 6
 WS_DPEC_RECEPCAO = 7
 WS_DPEC_CONSULTA = 8
 
-WS_NFE_RECEPCAO_ENVENTO = 9
+WS_NFE_RECEPCAO_EVENTO = 9
 WS_NFE_DOWNLOAD = 10
 WS_NFE_CONSULTA_DESTINADAS = 11
 
@@ -88,7 +88,8 @@ UF_CODIGO = {
     'SE': 28,
     'SP': 35,
     'TO': 17,
-    'RFB': 90, # Código especial para eventos
+    'SUFRAMA': 90, # Código especial para eventos
+    'RFB': 91, # Código especial para eventos
 }
 
 CODIGO_UF = {
@@ -119,6 +120,7 @@ CODIGO_UF = {
     28: 'SE',
     35: 'SP',
     17: 'TO',
-    90: 'RFB', # Código especial para eventos
+    90: 'SUFRAMA', # Código especial para eventos
+    91: 'RFB', # Código especial para eventos
 }
 
