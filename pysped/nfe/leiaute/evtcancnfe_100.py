@@ -79,6 +79,7 @@ class InfEventoCancNFe(InfEvento):
     def __init__(self):
         super(InfEventoCancNFe, self).__init__()
         self.detEvento  = DetEventoCancNFe()
+        self.tpEvento.valor = '110111'
 
 
 class EventoCancNFe(Evento):
@@ -112,7 +113,7 @@ class EnvEventoCancNFe(EnvEvento):
     def __init__(self):
         super(EnvEventoCancNFe, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'envEventoCancNFe_V1.00.xsd'
+        self.arquivo_esquema = 'envEventoCancNFe_v1.00.xsd'
 
     def get_xml(self):
         return super(EnvEventoCancNFe, self).get_xml()
@@ -130,4 +131,4 @@ class RetEnvEventoCancNFe(RetEnvEvento):
     def __init__(self):
         super(RetEnvEventoCancNFe, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnvEventoCanceNFe_V1.00.xsd'
+        self.arquivo_esquema = 'retEnvEventoCanceNFe_v1.00.xsd'
