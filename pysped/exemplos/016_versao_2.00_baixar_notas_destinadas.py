@@ -44,14 +44,26 @@ from __future__ import division, print_function, unicode_literals
 from os.path import abspath, dirname
 from pysped.nfe import ProcessadorNFe
 from pysped.nfe.webservices_flags import *
+from pysped.nfe.leiaute import *
 
 
 FILE_DIR = abspath(dirname(__file__))
 
+#
+#
+# ATENÇÃO!
+#
+# Em todas as consultas que eu tentei, a RFB sempre me diz que não
+# retorna as notas solicitadas, mesmo em produção.
+# Se alguém conseguir um resultado positivo da RFB, me avise, porque daí
+# vou poder dar a tratativa dos arquivos zipados que virão na resposta.
+#
+#
+
 
 if __name__ == '__main__':
     p = ProcessadorNFe()
-    p.versao              = '1.10'
+    p.versao              = '2.00'
     p.estado              = 'SP'
     #p.certificado.arquivo = 'certificado.pfx'
     #p.certificado.senha   = 'senha'
@@ -83,15 +95,12 @@ if __name__ == '__main__':
     #  .resposta.msg - msg da HTTPResponse
     #  .resposta.original - o texto do xml (SOAP) recebido do webservice
     #
-
-    #
-    # Inutilizar somente uma nota
-    #
-    processo = p.inutilizar_nota(
-        cnpj='11111111111111',
-        serie='101',
-        numero_inicial=18,
-        justificativa='Testando a inutilização de NF-e'
+    processo = p.baixar_notas_destinadas(
+        cnpj='34274233006488',
+        lista_chaves=[
+            '35120834274233006488550000005885641180809921',
+            '35120834274233006488550000005885642180809921',
+            ]
         )
 
     print(processo)
@@ -105,32 +114,3 @@ if __name__ == '__main__':
     print(processo.resposta.original)
     print()
     print(processo.resposta.reason)
-
-    #
-    # Inutilizar uma faixa de numeração
-    #
-    processo = p.inutilizar_nota(cnpj='11111111111111',
-        serie='101',
-        numero_inicial=18,
-        numero_final=28,
-        justificativa='Testando a inutilização de NF-e')
-
-    print(processo)
-    print()
-    print(processo.envio.xml)
-    print()
-    print(processo.envio.original)
-    print()
-    print(processo.resposta.xml)
-    print()
-    print(processo.resposta.original)
-    print()
-    print(processo.resposta.reason)
-
-    #
-    # O processo, quando autorizado, retorna também o arquivo do processo de
-    # inutilização (InutNFe + ProtInutNFe)
-    #
-    if processo.resposta.infInut.cStat.valor == '102':
-        print()
-        print(processo.processo_inutilizacao_nfe.xml)

@@ -51,7 +51,7 @@ FILE_DIR = abspath(dirname(__file__))
 
 if __name__ == '__main__':
     p = ProcessadorNFe()
-    p.versao              = '1.10'
+    p.versao              = '2.00'
     p.estado              = 'SP'
     #p.certificado.arquivo = 'certificado.pfx'
     #p.certificado.senha   = 'senha'
@@ -83,15 +83,10 @@ if __name__ == '__main__':
     #  .resposta.msg - msg da HTTPResponse
     #  .resposta.original - o texto do xml (SOAP) recebido do webservice
     #
-
-    #
-    # Inutilizar somente uma nota
-    #
-    processo = p.inutilizar_nota(
-        cnpj='11111111111111',
-        serie='101',
-        numero_inicial=18,
-        justificativa='Testando a inutilização de NF-e'
+    processo = p.cancelar_nota_evento(
+        chave_nfe='35100411111111111111551010000000271123456789',
+        numero_protocolo='135100018751878',
+        justificativa='Somente um teste de cancelamento'
         )
 
     print(processo)
@@ -107,30 +102,13 @@ if __name__ == '__main__':
     print(processo.resposta.reason)
 
     #
-    # Inutilizar uma faixa de numeração
+    # A resposta dos eventos contém ainda dois dicionários, cujas chaves são as
+    # são as chaves das NF-es enviadas nos evento;
+    #    . dic_retEvento - dicionário com os protocolos de cada evento
+    #    . dic_procEvento - dicionário com os processos (evento + protocolo) de cada
+    # evento
     #
-    processo = p.inutilizar_nota(cnpj='11111111111111',
-        serie='101',
-        numero_inicial=18,
-        numero_final=28,
-        justificativa='Testando a inutilização de NF-e')
-
-    print(processo)
     print()
-    print(processo.envio.xml)
+    print(processo.resposta.dic_retEvento)
     print()
-    print(processo.envio.original)
-    print()
-    print(processo.resposta.xml)
-    print()
-    print(processo.resposta.original)
-    print()
-    print(processo.resposta.reason)
-
-    #
-    # O processo, quando autorizado, retorna também o arquivo do processo de
-    # inutilização (InutNFe + ProtInutNFe)
-    #
-    if processo.resposta.infInut.cStat.valor == '102':
-        print()
-        print(processo.processo_inutilizacao_nfe.xml)
+    print(processo.resposta.dic_procEvento)

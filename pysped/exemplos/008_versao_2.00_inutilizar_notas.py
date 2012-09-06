@@ -41,16 +41,31 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from os.path import abspath, dirname
 from pysped.nfe import ProcessadorNFe
 from pysped.nfe.webservices_flags import *
+
+
+FILE_DIR = abspath(dirname(__file__))
 
 
 if __name__ == '__main__':
     p = ProcessadorNFe()
     p.versao              = '2.00'
     p.estado              = 'SP'
-    p.certificado.arquivo = 'certificado.pfx'
-    p.certificado.senha   = 'senha'
+    #p.certificado.arquivo = 'certificado.pfx'
+    #p.certificado.senha   = 'senha'
+
+    #
+    # arquivo 'certificado_caminho.txt' deve conter o caminho para o 'certificado.pfx'
+    #
+    p.certificado.arquivo = open(FILE_DIR+'/certificado_caminho.txt').read().strip()
+
+    #
+    # arquivo 'certificado_senha.txt' deve conter a senha para o 'certificado.pfx'
+    #
+    p.certificado.senha   = open(FILE_DIR+'/certificado_senha.txt').read().strip()
+
     p.salva_arquivos      = True
     p.contingencia_SCAN   = False
     p.caminho = ''
@@ -72,7 +87,8 @@ if __name__ == '__main__':
     #
     # Inutilizar somente uma nota
     #
-    processo = p.inutilizar_nota(cnpj='11111111111111',
+    processo = p.inutilizar_nota(
+        cnpj='11111111111111',
         serie='101',
         numero_inicial=18,
         justificativa='Testando a inutilização de NF-e')
@@ -92,11 +108,13 @@ if __name__ == '__main__':
     #
     # Inutilizar uma faixa de numeração
     #
-    processo = p.inutilizar_nota(cnpj='11111111111111',
+    processo = p.inutilizar_nota(
+        cnpj='11111111111111',
         serie='101',
         numero_inicial=18,
         numero_final=28,
-        justificativa='Testando a inutilização de NF-e')
+        justificativa='Testando a inutilização de NF-e'
+        )
 
     print(processo)
     print()
@@ -109,3 +127,11 @@ if __name__ == '__main__':
     print(processo.resposta.original)
     print()
     print(processo.resposta.reason)
+
+    #
+    # O processo, quando autorizado, retorna também o arquivo do processo de
+    # inutilização (InutNFe + ProtInutNFe)
+    #
+    if processo.resposta.infInut.cStat.valor == '102':
+        print()
+        print(processo.processo_inutilizacao_nfe.xml)

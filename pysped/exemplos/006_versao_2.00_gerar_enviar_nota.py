@@ -41,18 +41,33 @@
 
 from __future__ import division, print_function, unicode_literals
 
+from os.path import abspath, dirname
+from datetime import datetime
 from pysped.nfe import ProcessadorNFe
 from pysped.nfe.webservices_flags import *
 from pysped.nfe.leiaute import *
-from datetime import datetime
+
+
+FILE_DIR = abspath(dirname(__file__))
 
 
 if __name__ == '__main__':
     p = ProcessadorNFe()
     p.versao              = '2.00'
     p.estado              = 'SP'
-    p.certificado.arquivo = 'certificado.pfx'
-    p.certificado.senha   = 'senha'
+    #p.certificado.arquivo = 'certificado.pfx'
+    #p.certificado.senha   = 'senha'
+
+    #
+    # arquivo 'certificado_caminho.txt' deve conter o caminho para o 'certificado.pfx'
+    #
+    p.certificado.arquivo = open(FILE_DIR+'/certificado_caminho.txt').read().strip()
+
+    #
+    # arquivo 'certificado_senha.txt' deve conter a senha para o 'certificado.pfx'
+    #
+    p.certificado.senha   = open(FILE_DIR+'/certificado_senha.txt').read().strip()
+
     p.salva_arquivos      = True
     p.contingencia_SCAN   = False
     p.caminho = ''
@@ -233,3 +248,18 @@ if __name__ == '__main__':
         print(processo.resposta.original)
         print()
         print(processo.resposta.reason)
+
+        #
+        # A consulta dos recibos também retorna dois dicionários, cujas chaves
+        # são as chaves das NF-es enviadas;
+        #    . dic_protNFe - dicionário com os protocolos de cada NF-e
+        #    . dic_procNFe - dicionário com os processos (NF-e + protocolo) de cada NF-e
+        #    cada procNFe tem ainda uma propriedade:
+        #        .danfe_pdf - conteúdo binário do DANFE em PDF
+        #
+        if processo.webservice == WS_NFE_CONSULTA_RECIBO:
+            print()
+            print(processo.resposta.dic_protNFe)
+            print()
+            print(processo.resposta.dic_procNFe)
+
