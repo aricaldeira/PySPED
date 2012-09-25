@@ -501,7 +501,7 @@ class TagCSTPIS(TagCaracter):
 
         elif self.valor in ('04', '06', '07', '08', '09'):
             self.grupo_pis.nome_tag = 'PISNT'
-            self.grupo_pis.nome_tag = 'Q04'
+            self.grupo_pis.nome_tag_txt = 'Q04'
             self.grupo_pis.raiz_tag = '//det/imposto/PIS/PISNT'
             #self.grupo_pis.vBC.obrigatorio       = True
             #self.grupo_pis.pPIS.obrigatorio      = True
