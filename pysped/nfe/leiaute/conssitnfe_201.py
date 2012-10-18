@@ -64,7 +64,7 @@ class RetConsSitNFe(conssitnfe_200.RetConsSitNFe):
     def __init__(self):
         super(RetConsSitNFe, self).__init__()
         self.versao     = TagDecimal(nome='retConsSitNFe', codigo='ER01', propriedade='versao', namespace=NAMESPACE_NFE, valor='2.01', raiz='/')
-        self.tpAmb      = TagInteiro(nome='tpAm107b'        , codigo='ER03' , tamanho=[1,   1, 1], raiz='//retConsSitNFe')
+        self.tpAmb      = TagInteiro(nome='tpAmb'        , codigo='ER03' , tamanho=[1,   1, 1], raiz='//retConsSitNFe')
         self.verAplic   = TagCaracter(nome='verAplic'    , codigo='ER04' , tamanho=[1,  20]   , raiz='//retConsSitNFe')
         self.cStat      = TagCaracter(nome='cStat'       , codigo='ER05' , tamanho=[1,   3]   , raiz='//retConsSitNFe')
         self.xMotivo    = TagCaracter(nome='xMotivo'     , codigo='ER06' , tamanho=[1, 2000]   , raiz='//retConsSitNFe')
