@@ -1,0 +1,7 @@
+*.pyc
+*~
+.directory
+pysped/nfe/manual_300/schema/*-original
+pysped/nfe/manual_300/schema/*-original/*
+pysped/nfe/manual_401/schema/*-original
+pysped/nfe/manual_401/schema/*-original/*

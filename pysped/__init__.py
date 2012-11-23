@@ -40,3 +40,9 @@
 #
 
 from .nfe import *
+
+#
+# Não sei porquê, mas sem esse import explícito o módulo não está
+# sendo disponível quando dou um import pysped...
+#
+from .nfe import manual_300
