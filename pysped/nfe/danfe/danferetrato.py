@@ -91,29 +91,30 @@ class DANFERetrato(Report):
         #
         self.cabecalho_primeira_pagina = None
         self.cabecalho_primeira_pagina_filhos = None
+        self.remetente_filhos = None
         self.rodape_primeira_pagina = None
-        self.rodape_primeira_pagina_filhos = None
 
     def on_new_page(self, page, page_number, generator):
         if page_number == 1:
             if self.cabecalho_primeira_pagina is None:
                 self.cabecalho_primeira_pagina = self.band_page_header
-                self.cabecalho_primeira_pagina_filhos = self.band_page_header.child_bands
+                self.cabecalho_primeira_pagina_filhos = list(self.band_page_header.child_bands)
+                self.remetente_filhos = list(self.remetente.child_bands)
                 self.rodape_primeira_pagina = self.band_page_footer
-                self.rodape_primeira_pagina_filhos = self.band_page_footer.child_bands
             
             else:
                 self.band_page_header = self.cabecalho_primeira_pagina
+                #self.band_page_header.child_bands = []
                 self.band_page_header.child_bands = self.cabecalho_primeira_pagina_filhos
+                #self.remetente.child_bands = []
+                self.remetente.child_bands = self.remetente_filhos
                 self.band_page_footer = self.rodape_primeira_pagina
-                self.band_page_footer.child_bands = self.rodape_primeira_pagina_filhos
             
         else:
             self.band_page_footer = self.rodape_final
 
             self.band_page_header = self.remetente
-            self.band_page_header.child_bands = []
-            self.band_page_header.child_bands.append(self.cab_produto)
+            self.band_page_header.child_bands = [self.cab_produto]
 
     def format_date(self, data, formato):
         return  data.strftime(formato.encode('utf-8')).decode('utf-8')
