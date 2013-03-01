@@ -87,7 +87,14 @@ class DANFERetrato(Report):
         self.rodape_final     = RodapeFinalRetrato()
 
     def on_new_page(self, page, page_number, generator):
-        if generator._current_page_number <> 1:
+        if page_number == 1:
+            self.band_page_header = self.canhoto
+            self.band_page_header.child_bands = []
+            self.band_page_header.child_bands.append(self.remetente)
+
+            self.band_page_footer = self.dados_adicionais
+            
+        else:
             self.band_page_footer = self.rodape_final
 
             self.band_page_header = self.remetente
