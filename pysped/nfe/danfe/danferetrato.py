@@ -85,14 +85,28 @@ class DANFERetrato(Report):
         self.iss              = ISSRetrato()
         self.dados_adicionais = DadosAdicionaisRetrato()
         self.rodape_final     = RodapeFinalRetrato()
+        
+        #
+        # Guarda a definição do cabeçalho e rodapé da 1ª página
+        #
+        self.cabecalho_primeira_pagina = None
+        self.cabecalho_primeira_pagina_filhos = None
+        self.rodape_primeira_pagina = None
+        self.rodape_primeira_pagina_filhos = None
 
     def on_new_page(self, page, page_number, generator):
         if page_number == 1:
-            self.band_page_header = self.canhoto
-            self.band_page_header.child_bands = []
-            self.band_page_header.child_bands.append(self.remetente)
-
-            self.band_page_footer = self.dados_adicionais
+            if self.cabecalho_primeira_pagina is None:
+                self.cabecalho_primeira_pagina = self.band_page_header
+                self.cabecalho_primeira_pagina_filhos = self.band_page_header.child_bands
+                self.rodape_primeira_pagina = self.band_page_footer
+                self.rodape_primeira_pagina_filhos = self.band_page_footer.child_bands
+            
+            else:
+                self.band_page_header = self.cabecalho_primeira_pagina
+                self.band_page_header.child_bands = self.cabecalho_primeira_pagina_filhos
+                self.band_page_footer = self.rodape_primeira_pagina
+                self.band_page_footer.child_bands = self.rodape_primeira_pagina_filhos
             
         else:
             self.band_page_footer = self.rodape_final
