@@ -48,9 +48,15 @@ if __name__ == u'__main__':
     # Prepara a cadeia certificadora, separando individualmente cada um
     #
     #import pdb; pdb.set_trace()
-    arq_tmp = open('cadeia.pem')
-    cadeia = u''.join(arq_tmp.readlines())
-    arq_tmp.close()
+    arq_tmp1 = open('cadeia-1.pem')
+    arq_tmp2 = open('cadeia-2.pem')
+    arq_tmp3 = open('cadeia-3.pem')
+    cadeia = u''.join(arq_tmp1.readlines())
+    cadeia += u''.join(arq_tmp2.readlines())
+    cadeia += u''.join(arq_tmp3.readlines())
+    arq_tmp1.close()
+    arq_tmp2.close()
+    arq_tmp3.close()
     cadeia_certificados = cadeia.split(u'-----END CERTIFICATE-----')
 
     #
