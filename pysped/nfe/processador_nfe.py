@@ -68,7 +68,7 @@ from leiaute import CancNFe_107, RetCancNFe_107, ProcCancNFe_107
 from leiaute import InutNFe_107, RetInutNFe_107, ProcInutNFe_107
 from leiaute import ConsSitNFe_107, RetConsSitNFe_107
 from leiaute import ConsStatServ_107, RetConsStatServ_107
-#from leiaute import ConsCad_101, RetConsCad_101
+from leiaute import ConsCad_101, RetConsCad_101
 
 #
 # Manual do Contribuinte versão 4.01
@@ -82,7 +82,7 @@ from leiaute import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
 from leiaute import ConsSitNFe_200, RetConsSitNFe_200
 from leiaute import ConsSitNFe_201, RetConsSitNFe_201
 from leiaute import ConsStatServ_200, RetConsStatServ_200
-#from leiaute import ConsCad_200, RetConsCad_200
+from leiaute import ConsCad_200, RetConsCad_200
 
 from leiaute import EventoCCe_100, EnvEventoCCe_100, RetEnvEventoCCe_100, ProcEventoCCe_100
 from leiaute import EventoCancNFe_100, EnvEventoCancNFe_100, RetEnvEventoCancNFe_100, ProcEventoCancNFe_100
@@ -577,6 +577,7 @@ class ProcessadorNFe(object):
         if ambiente is None:
             ambiente = self.ambiente
 
+        caminho_original = self.caminho
         self.caminho = self.monta_caminho_nfe(ambiente, chave_nfe)
 
         envio.tpAmb.valor = ambiente
@@ -597,6 +598,7 @@ class ProcessadorNFe(object):
             arq.write(resposta.xml.encode('utf-8'))
             arq.close()
 
+        self.caminho = caminho_original
         #
         # Se a NF-e tiver sido informada, montar o processo da NF-e
         #
@@ -637,7 +639,7 @@ class ProcessadorNFe(object):
         #resposta.validar()
         if self.salvar_arquivos:
             arq = open(self.caminho + envio.data.strftime('%Y%m%dT%H%M%S') + '-sta.xml', 'w')
-            arq.write(envio.xml.encode('utf-8'))
+            arq.write(resposta.xml.encode('utf-8'))
             arq.close()
 
         return processo
@@ -1134,4 +1136,48 @@ class ProcessadorNFe(object):
         evento.infEvento.detEvento.xJust.valor = justificativa
 
         processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
+        return processo
+
+    def consultar_cadastro(self, estado=None, ie=None, cnpj_cpf=None):
+        if self.versao == '1.10':
+            envio = ConsCad_101()
+            resposta = RetConsCad_101()
+
+        elif self.versao == '2.00':
+            envio = ConsCad_200()
+            resposta = RetConsCad_200()
+
+        processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_CADASTRO, envio=envio, resposta=resposta)
+
+        if estado is None:
+            estado = self.estado
+
+        envio.infCons.UF.valor = estado
+        
+        if ie is not None:
+            envio.infCons.IE.valor = ie
+            nome = 'IE_' + ie
+        elif cnpj_cpf is not None:
+            if len(cnpj_cpf) == 11:
+                envio.infCons.CPF.valor = cnpj_cpf
+                nome = 'CPF_' + cnpj_cpf
+            else:
+                envio.infCons.CNPJ.valor = cnpj_cpf
+                nome = 'CNPJ_' + cnpj_cpf
+
+        envio.validar()
+        if self.salvar_arquivos:
+            arq = open(self.caminho + nome + '-cons-cad.xml', 'w')
+            arq.write(envio.xml.encode('utf-8'))
+            arq.close()
+
+        # Consulta de cadastro é sempre feita em ambiente de produção
+        self._conectar_servico(WS_NFE_CONSULTA_CADASTRO, envio, resposta, 1)
+
+        #resposta.validar()
+        if self.salvar_arquivos:
+            arq = open(self.caminho + nome + '-cad.xml', 'w')
+            arq.write(resposta.xml.encode('utf-8'))
+            arq.close()
+
         return processo
