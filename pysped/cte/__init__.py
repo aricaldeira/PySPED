@@ -38,3 +38,5 @@
 # juntamente com este programa. Caso esse não seja o caso, acesse:
 # <http://www.gnu.org/licenses/>
 #
+
+from .leiaute import *
