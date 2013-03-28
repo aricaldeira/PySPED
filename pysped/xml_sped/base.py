@@ -102,6 +102,8 @@ class NohXML(object):
             sigla_ns = '/' + sigla_ns + ':'
             tag = sigla_ns.join(tag.split('/')).replace(sigla_ns + sigla_ns, '/' + sigla_ns).replace(sigla_sig, 'sig')
 
+        return tag
+
     def _le_nohs(self, tag, ns=None, sigla_ns='nfe'):
         #
         # Tenta ler a tag sem os namespaces
