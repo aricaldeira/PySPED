@@ -52,6 +52,7 @@ import pytz
 
 
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
+NAMESPACE_CTE = 'http://www.portalfiscal.inf.br/cte'
 NAMESPACE_SIG = 'http://www.w3.org/2000/09/xmldsig#'
 NAMESPACE_NFSE = 'http://localhost:8080/WsNFe2/lote'
 ABERTURA = '<?xml version="1.0" encoding="utf-8"?>'
@@ -95,17 +96,13 @@ class NohXML(object):
 
         return False
 
-    def _preenche_namespace(self, tag):
-        #
-        # As tags da NFS-e já tem que vir com o namespace no caminho,
-        # e não dá certo acrescentar o ns a todos os nós com na NF-e
-        #
-        if 'nfse' not in tag:
-            tag = '/nfe:'.join(tag.split('/')).replace('/nfe:/nfe:', '//nfe:').replace('nfe:sig:', 'sig:')
+    def _preenche_namespace(self, tag, sigla_ns):
+        if sigla_ns != '':
+            sigla_sig = sigla_ns + ':sig'
+            sigla_ns = '/' + sigla_ns + ':'
+            tag = sigla_ns.join(tag.split('/')).replace(sigla_ns + sigla_ns, '/' + sigla_ns).replace(sigla_sig, 'sig')
 
-        return tag
-
-    def _le_nohs(self, tag, ns=None):
+    def _le_nohs(self, tag, ns=None, sigla_ns='nfe'):
         #
         # Tenta ler a tag sem os namespaces
         # Necessário para ler corretamente as tags de grupo reenraizadas
@@ -120,13 +117,18 @@ class NohXML(object):
         #
         # Não deu certo, tem que botar mesmo os namespaces
         #
-        namespaces = {'nfe': NAMESPACE_NFE, 'sig': NAMESPACE_SIG, 'nfse': NAMESPACE_NFSE}
+        namespaces = {'nfe': NAMESPACE_NFE, 'sig': NAMESPACE_SIG, 'nfse': NAMESPACE_NFSE, 'cte': NAMESPACE_CTE}
 
         if ns is not None:
             namespaces['res'] = ns
 
+        if '//NFe' in tag or ns == NAMESPACE_NFE:
+            sigla_ns = 'nfe'
+        elif '//CTe' in tag or ns == NAMESPACE_CTE:
+            sigla_ns = 'cte'
+
         if not tag.startswith('//*/res'):
-            tag = self._preenche_namespace(tag)
+            tag = self._preenche_namespace(tag, sigla_ns)
 
         nohs = self._xml.xpath(tag, namespaces=namespaces)
 
@@ -215,6 +217,7 @@ class TagCaracter(NohXML):
         self.tamanho = [None, None, None]
         self.propriedade = None
         self.namespace = None
+        self.namespace_obrigatorio = True
         self.alertas = []
         self.raiz = None
 
@@ -285,7 +288,7 @@ class TagCaracter(NohXML):
         else:
             texto = '<%s' % self.nome
 
-            if self.namespace:
+            if self.namespace and self.namespace_obrigatorio:
                 texto += ' xmlns="%s"' % self.namespace
 
             if self.propriedade:
@@ -798,15 +801,15 @@ class XMLNFe(NohXML):
         xml = tira_abertura(self.xml).encode('utf-8')
 
         esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-        esquema.assertValid(etree.fromstring(xml))
-        #esquema.validate(etree.fromstring(xml))
+        #esquema.assertValid(etree.fromstring(xml))
+        esquema.validate(etree.fromstring(xml))
 
         return esquema.error_log
 
-    def le_grupo(self, raiz_grupo, classe_grupo):
+    def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe'):
         tags = []
 
-        grupos = self._le_nohs(raiz_grupo)
+        grupos = self._le_nohs(raiz_grupo, sigla_ns=sigla_ns)
 
         if grupos is not None:
             tags = [classe_grupo() for g in grupos]
