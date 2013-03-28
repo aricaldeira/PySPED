@@ -193,6 +193,12 @@ from downloadnfe_100 import TagChNFe as TagChNFe_100
 from downloadnfe_100 import RetDownloadNFe as RetDownloadNFe_100
 
 #
+# Consulta cadastro
+#
+from conscad_200 import ConsCad as ConsCad_200
+from conscad_200 import RetConsCad as RetConsCad_200
+
+#
 # Envelopes SOAP
 #
 from soap_100 import SOAPEnvio as SOAPEnvio_110

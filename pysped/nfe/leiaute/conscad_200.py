@@ -41,36 +41,83 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from base import *
-from soap_100 import conectar_servico
-from soap_200 import SOAPEnvio, SOAPRetorno
-import conscad_101
+from pysped.xml_sped import *
+from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
+from pysped.nfe.leiaute import conscad_101
+import os
+
+
+DIRNAME = os.path.dirname(__file__)
 
 
 class ConsCad(conscad_101.ConsCad):
-    versao = TagDecimal(nome='ConsCad', codigo='GP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='2.00', raiz='/')
-    caminho_esquema = 'schema/pl_006e/'
-    arquivo_esquema = 'consCad_v2.00.xsd'
+    def __init__(self):
+        super(ConsCad, self).__init__()
+        self.versao = TagDecimal(nome='ConsCad', codigo='GP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='2.00', raiz='/')
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'consCad_v2.00.xsd'
 
 
-    def _servico(self):
-        envio = SOAPEnvio()
-        envio.wsdl = 'CadConsultaCadastro2'
-        envio.servico = 'consultaCadastro2'
-        envio.nfeCabecMsg.cUF.valor = 35
-        envio.nfeCabecMsg.versaoDados.valor = self.versao.valor
-        envio.nfeDadosMsg.dados = self
+class InfCadRecebido(conscad_101.InfCadRecebido):
+    def __init__(self):
+        super(InfCadRecebido, self).__init__()
+        self.indCredNFe = TagInteiro(nome='indCredNFe', codigo='GR12a' , tamanho=[1, 1, 1], raiz='//infCad')
+        self.indCredCTe = TagInteiro(nome='indCredCTe', codigo='GR12b' , tamanho=[1, 1, 1], raiz='//infCad')
 
-        retorno = SOAPRetorno()
-        retorno.wsdl = envio.wsdl
-        retorno.servico = envio.servico
-        self.retorno = RetConsCad()
-        retorno.resposta = self.retorno
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<infCad>'
+        xml += self.IE.xml
+        xml += self.CNPJ.xml
+        xml += self.CPF.xml
+        xml += self.UF.xml
+        xml += self.cSit.xml
+        xml += self.indCredNFe.xml
+        xml += self.indCredCTe.xml
+        xml += self.xNome.xml
+        xml += self.xFant.xml
+        xml += self.xRegApur.xml
+        xml += self.CNAE.xml
+        xml += self.dIniAtiv.xml
+        xml += self.dUltSit.xml
+        xml += self.dBaixa.xml
+        xml += self.IEUnica.xml
+        xml += self.IEAtual.xml
+        xml += self.ender.xml
+        xml += '</infCad>'
+        return xml
 
-        conectar_servico(envio, retorno, self.certificado, self.senha)
+    def set_xml(self, arquivo):
+        super(InfCadRecebido, self).set_xml(arquivo)
+
+        if self._le_xml(arquivo):
+            self.indCredNFe.xml = arquivo
+            self.indCredCTe.xml = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
+class InfConsRecebido(conscad_101.InfConsRecebido):
+    def __init__(self):
+        super(InfConsRecebido, self).__init__()
+
+    def get_xml(self):
+        return super(InfConsRecebido, self).get_xml()
+
+    def set_xml(self, arquivo):
+        super(InfConsRecebido, self).set_xml(arquivo)
+
+        if self._le_xml(arquivo):
+            if self._le_nohs('//retConsCad/infCons/infCad') is not None:
+                self.infCad = self.le_grupo('//retConsCad/infCons/infCad', InfCadRecebido)
+
+    xml = property(get_xml, set_xml)
 
 
 class RetConsCad(conscad_101.RetConsCad):
-    versao    = TagDecimal(nome='retConsCad', codigo='GR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='2.00', raiz='/')
-    caminho_esquema = 'schema/pl_006e/'
-    arquivo_esquema = 'retConsCad_v2.00.xsd'
+    def __init__(self):
+        super(RetConsCad, self).__init__()
+        self.versao    = TagDecimal(nome='retConsCad', codigo='GR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='2.00', raiz='/')
+        self.infCons = InfConsRecebido()
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'retConsCad_v2.00.xsd'
