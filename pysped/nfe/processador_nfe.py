@@ -971,7 +971,22 @@ class ProcessadorNFe(object):
                 # O evento foi aceito, mas não foi vinculado à NF-e
                 #
                 elif ret.infEvento.cStat.valor == '136':
-                    arq = open(nome_arq + '-ret-' + tipo_evento + '-sv.xml', 'w')
+                    arq = open(nome_arq + '-ret-' + tipo_evento + '-sv.xml', 'w') # -sv = sem vínculo
+                    arq.write(ret.xml.encode('utf-8'))
+                    arq.close
+
+                    #
+                    # Salva o processo do evento
+                    #
+                    arq = open(nome_arq + '-proc-' + tipo_evento + '.xml', 'w')
+                    arq.write(processo.resposta.dic_procEvento[chave].xml.encode('utf-8'))
+                    arq.close
+
+                #
+                # O evento foi aceito e vinculado à NF-e, é um cancelamento for do prazo
+                #
+                elif ret.infEvento.cStat.valor == '155':
+                    arq = open(nome_arq + '-ret-' + tipo_evento + '.xml', 'w')
                     arq.write(ret.xml.encode('utf-8'))
                     arq.close
 
