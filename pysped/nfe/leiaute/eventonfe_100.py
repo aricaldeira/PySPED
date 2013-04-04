@@ -254,6 +254,15 @@ class RetEvento(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
+    def protocolo_formatado(self):
+        if not self.infEvento.nProt.valor:
+            return ''
+
+        formatado = self.infEvento.nProt.valor
+        formatado += ' - '
+        formatado += self.infEvento.dhRegEvento.formato_danfe()
+        return formatado
+
 
 class ProcEvento(XMLNFe):
     def __init__(self):

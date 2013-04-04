@@ -42,6 +42,7 @@
 from StringIO import StringIO
 from danferetrato import *
 from pysped.nfe.leiaute import ProtNFe_200, RetCancNFe_200, ProcCancNFe_200
+from pysped.nfe.leiaute import ProcEventoCancNFe_100, EnvEventoCancNFe_100, RetEnvEventoCancNFe_100
 
 
 class DANFE(object):
@@ -60,6 +61,7 @@ class DANFE(object):
         self.protNFe     = None
         self.procCancNFe = None
         self.retCancNFe  = None
+        self.procEventoCancNFe = None
         self.danfe       = None
         self.conteudo_pdf = None
 
@@ -82,6 +84,9 @@ class DANFE(object):
 
         if self.procCancNFe is None:
             self.procCancNFe = ProcCancNFe_200()
+            
+        if self.procEventoCancNFe is None:
+            self.procEventoCancNFe = ProcEventoCancNFe_100()
 
         #
         # Prepara o queryset para impressão
@@ -95,6 +100,7 @@ class DANFE(object):
             detalhe.protNFe = self.protNFe
             detalhe.retCancNFe = self.retCancNFe
             detalhe.procCancNFe = self.procCancNFe
+            detalhe.procEventoCancNFe = self.procEventoCancNFe
 
         #
         # Prepara as bandas de impressão para cada formato
@@ -154,6 +160,13 @@ class DANFE(object):
                 self.danfe.remetente.obs_cancelamento_com_motivo()
             else:
                 self.danfe.remetente.obs_cancelamento()
+                
+        # A NF-e foi cancelada por um evento de cancelamento, , no DANFE imprimir o "carimbo" de cancelamento
+        if self.procEventoCancNFe.retEvento.infEvento.nProt.valor:
+            if self.procEventoCancNFe.evento.infEvento.detEvento.xJust.valor:
+              self.danfe.remetente.obs_cancelamento_com_motivo_evento()
+            else:
+              self.danfe.remetente.obs_cancelamento_evento()
 
         # Observação de ausência de valor fiscal
         # se não houver protocolo ou se o ambiente for de homologação
