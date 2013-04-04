@@ -320,7 +320,7 @@ class RemetenteRetrato(BandaDANFE):
         lbl.name = 'lbl_prot_cancelamento'
         lbl.text = u'PROTOCOLO<br />DE CANCELAMENTO'
         lbl.top = 5.35*cm
-        lbl.left = 6.05*cm
+        lbl.left = 5.2*cm
         lbl.width = 1.75*cm
         lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
         self.elements.insert(2, lbl)
@@ -329,7 +329,7 @@ class RemetenteRetrato(BandaDANFE):
         fld.name = 'fld_prot_cancelamento'
         fld.attribute_name = u'procEventoCancNFe.retEvento.protocolo_formatado'
         fld.top  = 5.15*cm
-        fld.left = 7.55*cm
+        fld.left = 6.85*cm
         fld.width = 6.3*cm
         fld.padding_top = 0.25*cm
         fld.style = DADO_VARIAVEL_CANCELAMENTO
@@ -404,7 +404,7 @@ class RemetenteRetrato(BandaDANFE):
         lbl.name = 'lbl_prot_cancelamento'
         lbl.text = u'PROTOCOLO<br />DE CANCELAMENTO'
         lbl.top = 5.72*cm
-        lbl.left = 6.05*cm
+        lbl.left = 5.2*cm
         lbl.width = 1.75*cm
         lbl.style = DESCRITIVO_CAMPO_CANCELAMENTO
         self.elements.insert(2, lbl)
@@ -413,8 +413,8 @@ class RemetenteRetrato(BandaDANFE):
         fld.name = 'fld_prot_cancelamento'
         fld.attribute_name = u'procEventoCancNFe.retEvento.protocolo_formatado'
         fld.top  = 5.52*cm
-        fld.left = 7.55*cm
-        fld.width = 6.3*cm
+        fld.left = 6.85*cm
+        fld.width = 7.5*cm
         fld.padding_top = 0.25*cm
         fld.style = DADO_VARIAVEL_CANCELAMENTO
         self.elements.insert(3, fld)
