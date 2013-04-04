@@ -60,17 +60,12 @@ from cte_104 import InfOutros as InfOutros_104
 from cte_104 import Pass as Pass_104
 from cte_104 import ObsCont as ObsCont_104
 from cte_104 import ObsFisco as ObsFisco_104
-#from cte_104 import NFRef as NFRef_104
-#from cte_104 import Det as Det_104
-#from cte_104 import DI as DI_104
-#from cte_104 import Adi as Adi_104
-#from cte_104 import Med as Med_104
-#from cte_104 import Arma as Arma_104
-#from cte_104 import Reboque as Reboque_104
-#from cte_104 import Vol as Vol_104
-#from cte_104 import Lacres as Lacres_104
-#from cte_104 import Dup as Dup_104
-#from cte_104 import ProcRef as ProcRef_104
+from cte_104 import InfQ as InfQ_104
+#from cte_104 import ContQt as ContQt_104
+#from cte_104 import Seg as Seg_104
+#from cte_104 import Peri as Peri_104
+#from cte_104 import VeicNovos as VeicNovos_104
+from cte_104 import Dup as Dup_104
 
 #
 # Envio de lote de CT-e
