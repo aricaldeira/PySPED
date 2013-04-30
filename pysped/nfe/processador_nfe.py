@@ -129,7 +129,15 @@ class ConexaoHTTPS(HTTPSConnection):
     def connect(self):
         "Connect to a host on a given (SSL) port."
 
-        sock = socket.create_connection((self.host, self.port), self.timeout, self.source_address)
+        #
+        # source_address é atributo incluído na versão 2.7 do Python
+        # Verificando a existência para funcionar em versões anteriores à 2.7
+        #
+        if hasattr(self, 'source_address'):
+            sock = socket.create_connection((self.host, self.port), self.timeout, self.source_address)
+        else:
+            sock = socket.create_connection((self.host, self.port), self.timeout)
+            
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
