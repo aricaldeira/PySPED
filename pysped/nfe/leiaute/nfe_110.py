@@ -2267,7 +2267,7 @@ class ProcRef(XMLNFe):
 class ObsFisco(XMLNFe):
     def __init__(self):
         super(ObsFisco, self).__init__()
-        self.xCampo = TagCaracter(nome='xCampo', codigo='Z08', tamanho=[1, 20], raiz='//obsFisco')
+        self.xCampo = TagCaracter(nome='obsFisco', codigo='Z08', propriedade='xCampo', tamanho=[1, 20], raiz='/')
         self.xTexto = TagCaracter(nome='xTexto', codigo='Z09', tamanho=[1, 60], raiz='//obsFisco')
 
     def get_xml(self):
@@ -2275,7 +2275,6 @@ class ObsFisco(XMLNFe):
             return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += '<obsFisco>'
         xml += self.xCampo.xml
         xml += self.xTexto.xml
         xml += '</obsFisco>'
@@ -2304,7 +2303,7 @@ class ObsFisco(XMLNFe):
 class ObsCont(XMLNFe):
     def __init__(self):
         super(ObsCont, self).__init__()
-        self.xCampo = TagCaracter(nome='xCampo', codigo='Z05', tamanho=[1, 20], raiz='//obsCont')
+        self.xCampo = TagCaracter(nome='obsCont', codigo='Z05', propriedade='xCampo', tamanho=[1, 20], raiz='/')
         self.xTexto = TagCaracter(nome='xTexto', codigo='Z06', tamanho=[1, 60], raiz='//obsCont')
 
     def get_xml(self):
@@ -2312,7 +2311,6 @@ class ObsCont(XMLNFe):
             return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += '<obsCont>'
         xml += self.xCampo.xml
         xml += self.xTexto.xml
         xml += '</obsCont>'
