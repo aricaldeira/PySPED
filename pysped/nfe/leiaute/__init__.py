@@ -49,7 +49,7 @@ from __future__ import division, print_function, unicode_literals
 #
 # O esquema pl_006m contém os esquemas dos enventos da NF-e
 #
-ESQUEMA_ATUAL_VERSAO_2 = 'pl_006q'
+ESQUEMA_ATUAL_VERSAO_2 = 'pl_006r'
 
 #
 # Versão 1.00, usada até abril/2010
