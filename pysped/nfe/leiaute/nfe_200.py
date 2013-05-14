@@ -1167,12 +1167,14 @@ class ICMS(nfe_110.ICMS):
 class Imposto(nfe_110.Imposto):
     def __init__(self):
         super(Imposto, self).__init__()
+        self.vTotTrib = TagDecimal(nome='vTotTrib', codigo='M02', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//det/imposto', obrigatorio=False)
         self.ICMS     = ICMS()
         self.ISSQN    = ISSQN()
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<imposto>'
+        xml += self.vTotTrib.xml
 
         # Enviar ICMS, IPI e II somente quando não for serviço
         if not self.ISSQN.cSitTrib.valor:
@@ -1191,18 +1193,19 @@ class Imposto(nfe_110.Imposto):
         xml += '</imposto>'
         return xml
 
-    #def set_xml(self, arquivo):
-        #if self._le_xml(arquivo):
-            #self.ICMS.xml     = arquivo
-            #self.IPI.xml      = arquivo
-            #self.II.xml       = arquivo
-            #self.PIS.xml      = arquivo
-            #self.PISST.xml    = arquivo
-            #self.COFINS.xml   = arquivo
-            #self.COFINSST.xml = arquivo
-            #self.ISSQN.xml    = arquivo
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.vTotTrib.xml = arquivo
+            self.ICMS.xml     = arquivo
+            self.IPI.xml      = arquivo
+            self.II.xml       = arquivo
+            self.PIS.xml      = arquivo
+            self.PISST.xml    = arquivo
+            self.COFINS.xml   = arquivo
+            self.COFINSST.xml = arquivo
+            self.ISSQN.xml    = arquivo
 
-    #xml = property(get_xml, set_xml)
+    xml = property(get_xml, set_xml)
 
     def get_txt(self):
         txt = 'M|\n'
@@ -1719,6 +1722,48 @@ class ISSQNTot(nfe_110.ISSQNTot):
 class ICMSTot(nfe_110.ICMSTot):
     def __init__(self):
         super(ICMSTot, self).__init__()
+        self.vTotTrib = TagDecimal(nome='vTotTrib', codigo='W16a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<ICMSTot>'
+        xml += self.vBC.xml
+        xml += self.vICMS.xml
+        xml += self.vBCST.xml
+        xml += self.vST.xml
+        xml += self.vProd.xml
+        xml += self.vFrete.xml
+        xml += self.vSeg.xml
+        xml += self.vDesc.xml
+        xml += self.vII.xml
+        xml += self.vIPI.xml
+        xml += self.vPIS.xml
+        xml += self.vCOFINS.xml
+        xml += self.vOutro.xml
+        xml += self.vNF.xml
+        xml += self.vTotTrib.xml
+        xml += '</ICMSTot>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.vBC.xml     = arquivo
+            self.vICMS.xml   = arquivo
+            self.vBCST.xml   = arquivo
+            self.vST.xml     = arquivo
+            self.vProd.xml   = arquivo
+            self.vFrete.xml  = arquivo
+            self.vSeg.xml    = arquivo
+            self.vDesc.xml   = arquivo
+            self.vII.xml     = arquivo
+            self.vIPI.xml    = arquivo
+            self.vPIS.xml    = arquivo
+            self.vCOFINS.xml = arquivo
+            self.vOutro.xml  = arquivo
+            self.vNF.xml     = arquivo
+            self.vTotTrib.xml = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class Total(nfe_110.Total):
