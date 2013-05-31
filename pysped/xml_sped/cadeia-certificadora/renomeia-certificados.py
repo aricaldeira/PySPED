@@ -40,34 +40,34 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from __future__ import division, print_function, unicode_literals
+#from __future__ import division, print_function, unicode_literals
+
+from M2Crypto import X509
+import os
+
+DIRNAME = os.path.dirname(__file__)
 
 
-if __name__ == u'__main__':
-    #
-    # Prepara a cadeia certificadora, separando individualmente cada um
-    #
-    #import pdb; pdb.set_trace()
-    arq_tmp1 = open('cadeia-1.pem')
-    arq_tmp2 = open('cadeia-2.pem')
-    arq_tmp3 = open('cadeia-3.pem')
-    cadeia = u''.join(arq_tmp1.readlines())
-    cadeia += u''.join(arq_tmp2.readlines())
-    cadeia += u''.join(arq_tmp3.readlines())
-    arq_tmp1.close()
-    arq_tmp2.close()
-    arq_tmp3.close()
-    cadeia_certificados = cadeia.split(u'-----END CERTIFICATE-----')
+if __name__ == '__main__':
+    certificados = os.listdir(DIRNAME + 'certificados-candidatos')
+    impressao_digital = []
 
-    #
-    # Burramente, temos que salvar cada um num arquivo, para poder ler
-    # no xmlsec...
-    #
-    i = 1
-    for certificado in cadeia_certificados:
-        if certificado.replace(u'\n', u'').strip() != '':
-            certificado = u'-----BEGIN CERTIFICATE-----%s-----END CERTIFICATE-----\n' % certificado.split(u'-----BEGIN CERTIFICATE-----')[1]
-            arq_tmp = open('certificados-candidatos/cert-' + str(i).zfill(2) + '.pem', 'w')
-            arq_tmp.write(certificado)
-            arq_tmp.close()
-            i += 1
+    for certificado in certificados:
+        try:
+            x509 = X509.load_cert(DIRNAME + 'certificados-candidatos/' + certificado, X509.FORMAT_PEM)
+        except:
+            x509 = X509.load_cert(DIRNAME + 'certificados-candidatos/' + certificado, X509.FORMAT_DER)
+                
+        fp = x509.get_fingerprint('sha512')
+        
+        if fp in impressao_digital:
+            print('repetido: ' + fp)
+            os.remove(DIRNAME + 'certificados-candidatos/' + certificado)
+        else:
+            impressao_digital.append(fp)
+            os.rename(DIRNAME + 'certificados-candidatos/' + certificado, DIRNAME + 'certificados-candidatos/' + fp + '.pem')
+            
+        #fp = ':'.join(fp[pos:pos+2] for pos in xrange(0, len(fp), 2))
+        print('\nSHA1 fingerprint:' + fp)
+        #print(fp)
+
