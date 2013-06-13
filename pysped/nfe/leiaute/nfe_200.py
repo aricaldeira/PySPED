@@ -1924,7 +1924,12 @@ class Dest(nfe_110.Dest):
         xml = XMLNFe.get_xml(self)
         xml += '<dest>'
 
-        if self.CPF.valor:
+        #
+        # Força o uso da tag CNPJ quando a nota for em homologação
+        #
+        if self.CNPJ.valor == '99999999000191':
+            xml += self.CNPJ.xml
+        elif self.CPF.valor:
             xml += self.CPF.xml
         else:
             xml += self.CNPJ.xml

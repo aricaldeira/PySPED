@@ -550,7 +550,7 @@ class PIS(XMLNFe):
         self.CST.valor = '07'
         self.nome_tag = 'PISNT'
         self.nome_tag_txt = 'Q04'
-        self.raiz_tag = '//det/imposto/PIS/PISAliq'
+        self.raiz_tag = '//det/imposto/PIS/PISNT'
 
     def get_xml(self):
         #
@@ -3345,7 +3345,12 @@ class Dest(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += '<dest>'
 
-        if self.CPF.valor:
+        #
+        # Força o uso da tag CNPJ quando a nota for em homologação
+        #
+        if self.CNPJ.valor == '99999999000191':
+            xml += self.CNPJ.xml
+        elif self.CPF.valor:
             xml += self.CPF.xml
         else:
             xml += self.CNPJ.xml
