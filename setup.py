@@ -11,7 +11,7 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: Plugins',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
+        'License :: OSI Approved :: GNU Library General Public License v3 or later (AGPLv3+)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
@@ -29,7 +29,7 @@ setup(
         'pysped.relato_sped': ['fonts/*'],
     },
     url = 'https://github.com/aricaldeira/PySPED',
-    license = 'AGPL-v3',
+    license = 'LGPL-v2.1+',
     description = 'PySPED is a library to implement all requirements of the public system of bookkeeping digital',
     long_description = open('README.rst').read(),
     install_requires=[
