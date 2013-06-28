@@ -1,11 +1,11 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name = "PySPED",
     version = "0.9.0",
     author = "Aristides Caldeira",
     author_email = 'aristides.caldeira@tauga.com.br',
-    test_suite = 'tests',
+    test_suite='tests',
     keywords = ['nfe', 'nfse', 'cte', 'sped', 'edf', 'ecd'],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -35,5 +35,8 @@ setup(
     install_requires=[
         'Geraldo >= 0.4.16',
         'PyXMLSec >= 0.3.0'
+    ],
+    tests_require=[
+        'pyflakes>=0.6.1',
     ],
 )
