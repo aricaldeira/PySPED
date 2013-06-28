@@ -43,8 +43,6 @@ from __future__ import division, print_function, unicode_literals
 
 from os.path import abspath, dirname
 from pysped.nfe import ProcessadorNFe
-from pysped.nfe.webservices_flags import *
-from pysped.nfe.leiaute import *
 
 
 FILE_DIR = abspath(dirname(__file__))

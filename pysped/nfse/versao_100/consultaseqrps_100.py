@@ -41,10 +41,9 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import ABERTURA, TagCaracter, TagInteiro, XMLNFe
 from pysped.nfse.versao_100 import ESQUEMA_ATUAL
 import os
-from lxml.etree import tounicode
 
 DIRNAME = os.path.dirname(__file__)
 

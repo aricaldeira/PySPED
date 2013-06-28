@@ -41,7 +41,9 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from webservices_flags import *
+from webservices_flags import (NFSE_AMBIENTE_HOMOLOGACAO,
+                               NFSE_AMBIENTE_PRODUCAO,
+                               SIAFI_SOROCABA_SP)
 
 
 WS_NFSE_ENVIO_LOTE = 0

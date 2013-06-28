@@ -42,16 +42,25 @@
 from __future__ import division, print_function, unicode_literals
 
 from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-from reportlab.lib.colors import HexColor
 
-from geraldo import Report, ReportBand, SubReport
-from geraldo import ObjectValue, SystemField, Label, Line, Rect, Image
-from geraldo.barcodes import BarCode
-from geraldo.generators import PDFGenerator
+from geraldo import Report
+from geraldo import SystemField, Line, Image
 
-from pysped.relato_sped.base_rps import *
+from pysped.relato_sped.base_rps import (BandaRPS,
+                                         Campo,
+                                         DADO_CAMPO_NORMAL,
+                                         DADO_PRODUTO,
+                                         DADO_PRODUTO_CENTRALIZADO,
+                                         DESCRITIVO_DANFE,
+                                         DESCRICAO_VALOR_TOTAL,
+                                         FONTES_ADICIONAIS,
+                                         MARGEM_DIREITA,
+                                         MARGEM_ESQUERDA,
+                                         MARGEM_INFERIOR,
+                                         MARGEM_SUPERIOR,
+                                         RETRATO,
+                                         Titulo,
+                                         VALOR_TOTAL)
 
 
 class RPSRetrato(Report):

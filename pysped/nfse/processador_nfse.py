@@ -5,8 +5,8 @@ from __future__ import division, print_function, unicode_literals
 #
 # RPS
 #
-from rps.rpsretrato import *
-from StringIO import StringIO
+from rps.rpsretrato import RPSRetrato
+from geraldo.generators import PDFGenerator
 
 class _Prestador(object):
     pass
@@ -109,11 +109,12 @@ class RPS(object):
 #
 # Mensagens SOAP
 #
-from soap_100 import *
-from httplib import HTTPConnection, HTTPResponse
+from soap_100 import SOAPEnvio, SOAPRetorno
+from httplib import HTTPConnection
+from pysped.xml_sped.base import por_acentos
 from pysped.xml_sped.certificado import Certificado
-from webservices_flags import *
-from webservices import *
+from webservices_flags import SIAFI_SOROCABA_SP
+from webservices import CIDADE_WS, METODO_WS, WS_NFSE_ENVIO_LOTE
 
 
 class ProcessoNFSe(object):

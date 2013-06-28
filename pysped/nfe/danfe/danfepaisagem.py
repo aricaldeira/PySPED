@@ -42,12 +42,9 @@
 from __future__ import division, print_function, unicode_literals
 
 from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-from reportlab.lib.colors import HexColor
 
-from geraldo import Report, ReportBand
-from geraldo import ObjectValue, SystemField, Label, Line
+from geraldo import Report
+from geraldo import Line
 from geraldo.generators import PDFGenerator
 
 import os
@@ -56,7 +53,18 @@ cur_dir = '/home/ari/django/danfe/'
 
 from registrafontes import registra_fontes
 
-from base import *
+from base import (BandaDANFE,
+                  DADO_CHAVE,
+                  DADO_VARIAVEL,
+                  DESCRITIVO_CAMPO,
+                  DESCRITIVO_NUMERO,
+                  OBS_CONTINGENCIA,
+                  OBS_HOMOLOGACAO,
+                  MARGEM_DIREITA,
+                  MARGEM_ESQUERDA,
+                  MARGEM_INFERIOR,
+                  MARGEM_SUPERIOR,
+                  PAISAGEM)
 
 
 class DANFEPaisagem(Report):
@@ -332,19 +340,19 @@ class DetProdutoPaisagem(BandaDANFE):
         super(DetProdutoPaisagem, self).__init__()
         self.elements = []
 
-        txt = self.inclui_texto_produto(nome='', texto='MMMMMMMMMMMMMM', top=0*cm, left=0*cm, width=2.6*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='999999999', top=0*cm, left=2.6*cm, width=1*cm)
-        txt = self.inclui_texto_produto(nome='', texto='1<br />2<br />3<br />4<br />5', top=0*cm, left=3.6*cm, width=6.31*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='999', top=0*cm, left=9.91*cm, width=0.44*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='9999', top=0*cm, left=10.35*cm, width=0.54*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='MMMMMM', top=0*cm, left=10.89*cm, width=1.15*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999', top=0*cm, left=12.04*cm, width=1.4*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=13.44*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=14.64*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=15.84*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=17.04*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
+        self.inclui_texto_produto(nome='', texto='MMMMMMMMMMMMMM', top=0*cm, left=0*cm, width=2.6*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='999999999', top=0*cm, left=2.6*cm, width=1*cm)
+        self.inclui_texto_produto(nome='', texto='1<br />2<br />3<br />4<br />5', top=0*cm, left=3.6*cm, width=6.31*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='999', top=0*cm, left=9.91*cm, width=0.44*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='9999', top=0*cm, left=10.35*cm, width=0.54*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='MMMMMM', top=0*cm, left=10.89*cm, width=1.15*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999', top=0*cm, left=12.04*cm, width=1.4*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=13.44*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=14.64*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=15.84*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=17.04*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
         #self.height = 0.28*cm
         self.auto_expand_height = True

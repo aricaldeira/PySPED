@@ -48,3 +48,24 @@ from base import ABERTURA, NAMESPACE_NFE, NAMESPACE_SIG, \
 
 
 from assinatura import Signature
+
+# Pyflakes
+
+ABERTURA
+NAMESPACE_CTE
+NAMESPACE_NFE
+NAMESPACE_SIG
+Signature
+TagBoolean
+TagCaracter
+TagData
+TagDataHora
+TagDataHoraUTC
+TagDecimal
+TagHora
+TagInteiro
+XMLNFe
+por_acentos
+somente_ascii
+tira_abertura
+tirar_acentos

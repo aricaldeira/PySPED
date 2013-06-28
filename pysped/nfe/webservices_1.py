@@ -41,7 +41,17 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from .webservices_flags import *
+from .webservices_flags import (NFE_AMBIENTE_PRODUCAO,
+                                NFE_AMBIENTE_HOMOLOGACAO,
+                                WS_DPEC_CONSULTA,
+                                WS_DPEC_RECEPCAO,
+                                WS_NFE_CANCELAMENTO,
+                                WS_NFE_CONSULTA,
+                                WS_NFE_CONSULTA_CADASTRO,
+                                WS_NFE_CONSULTA_RECIBO,
+                                WS_NFE_ENVIO_LOTE,
+                                WS_NFE_INUTILIZACAO,
+                                WS_NFE_SITUACAO)
 
 
 METODO_WS = {

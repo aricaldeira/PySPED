@@ -42,8 +42,7 @@
 from __future__ import division, print_function, unicode_literals
 
 from lxml import etree
-from StringIO import StringIO
-from datetime import datetime, date, time, tzinfo
+from datetime import datetime, date, time
 from decimal import Decimal
 import locale
 import unicodedata

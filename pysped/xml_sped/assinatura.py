@@ -41,12 +41,8 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import XMLNFe, NAMESPACE_SIG, ABERTURA, tira_abertura
-import libxml2
-import xmlsec
+from pysped.xml_sped import XMLNFe
 import os
-from datetime import datetime
-from time import mktime
 
 
 DIRNAME = os.path.dirname(__file__)

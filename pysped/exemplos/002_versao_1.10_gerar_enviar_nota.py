@@ -44,8 +44,10 @@ from __future__ import division, print_function, unicode_literals
 from os.path import abspath, dirname
 from datetime import datetime
 from pysped.nfe import ProcessadorNFe
-from pysped.nfe.webservices_flags import *
-from pysped.nfe.leiaute import *
+from pysped.nfe.webservices_flags import (Det_110,
+                                          NFe_110,
+                                          UF_CODIGO,
+                                          WS_NFE_CONSULTA_RECIBO)
 
 
 FILE_DIR = abspath(dirname(__file__))

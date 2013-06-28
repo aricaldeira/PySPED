@@ -43,16 +43,44 @@ from __future__ import division, print_function, unicode_literals
 
 
 from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 
-from geraldo import Report, ReportBand, SubReport
-from geraldo import ObjectValue, SystemField, Label, Line, Rect, Image
-from geraldo.generators import PDFGenerator
+from geraldo import Report, SubReport
+from geraldo import SystemField, Line, Rect, Image
 from geraldo.barcodes import BarCode
 
-from pysped.relato_sped import *
+from pysped.relato_sped.base import (BandaDANFE,
+                                     Campo,
+                                     DADO_CAMPO_NEGRITO,
+                                     DADO_CAMPO_NUMERICO_NEGRITO,
+                                     DADO_CHAVE,
+                                     DADO_COMPLEMENTAR,
+                                     DADO_PRODUTO,
+                                     DADO_PRODUTO_CENTRALIZADO,
+                                     DADO_VARIAVEL_CANCELAMENTO,
+                                     DADO_VARIAVEL,
+                                     DESCRITIVO_CAMPO,
+                                     DESCRITIVO_CAMPO_CANCELAMENTO,
+                                     DESCRITIVO_CAMPO_NEGRITO,
+                                     DESCRITIVO_DANFE,
+                                     DESCRITIVO_DANFE_ES,
+                                     DESCRITIVO_DANFE_GERAL,
+                                     DESCRITIVO_NUMERO,
+                                     DESCRITIVO_PRODUTO,
+                                     EMIT_DADOS,
+                                     EMIT_NOME,
+                                     FONTES_ADICIONAIS,
+                                     LabelMargemEsquerda,
+                                     OBS_CANCELAMENTO,
+                                     OBS_DENEGACAO,
+                                     OBS_HOMOLOGACAO,
+                                     OBS_CONTINGENCIA,
+                                     MARGEM_DIREITA,
+                                     MARGEM_ESQUERDA,
+                                     MARGEM_INFERIOR,
+                                     MARGEM_SUPERIOR,
+                                     RETRATO,
+                                     Texto)
 from pysped.nfe.manual_401 import Vol_200
 
 
@@ -986,20 +1014,20 @@ class DetProdutoRetrato(BandaDANFE):
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
-        txt = self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2*cm)
-        txt = self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2*cm, width=5.1*cm)
-        txt = self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=7.1*cm, width=1*cm)
-        txt = self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=8.1*cm, width=0.6*cm)
-        txt = self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=8.7*cm, width=0.54*cm)
-        txt = self.inclui_campo_centralizado_produto(nome=u'prod_unidade', conteudo=u'prod.uCom.valor', top=0*cm, left=9.24*cm, width=1.1*cm)
-        txt = self.inclui_campo_numerico_produto(nome='prod_quantidade', conteudo=u'prod.qCom.formato_danfe', top=0*cm, left=10.34*cm, width=1.4*cm)
-        txt = self.inclui_campo_numerico_produto(nome='vr_unitario', conteudo=u'prod.vUnCom.formato_danfe', top=0*cm, left=11.74*cm, width=2*cm)
-        txt = self.inclui_campo_numerico_produto(nome='', conteudo='prod.vProd.formato_danfe', top=0*cm, left=13.74*cm, width=1.2*cm)
-        txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vBC.formato_danfe', top=0*cm, left=14.94*cm, width=1.2*cm)
-        txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vICMS.formato_danfe', top=0*cm, left=16.14*cm, width=1.05*cm)
-        txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.vIPI.formato_danfe', top=0*cm, left=17.19*cm, width=1.05*cm)
-        txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.pICMS.formato_danfe', top=0*cm, left=18.24*cm, width=0.58*cm)
-        txt = self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.pIPI.formato_danfe', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
+        self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2*cm)
+        self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2*cm, width=5.1*cm)
+        self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=7.1*cm, width=1*cm)
+        self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=8.1*cm, width=0.6*cm)
+        self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=8.7*cm, width=0.54*cm)
+        self.inclui_campo_centralizado_produto(nome=u'prod_unidade', conteudo=u'prod.uCom.valor', top=0*cm, left=9.24*cm, width=1.1*cm)
+        self.inclui_campo_numerico_produto(nome='prod_quantidade', conteudo=u'prod.qCom.formato_danfe', top=0*cm, left=10.34*cm, width=1.4*cm)
+        self.inclui_campo_numerico_produto(nome='vr_unitario', conteudo=u'prod.vUnCom.formato_danfe', top=0*cm, left=11.74*cm, width=2*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='prod.vProd.formato_danfe', top=0*cm, left=13.74*cm, width=1.2*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vBC.formato_danfe', top=0*cm, left=14.94*cm, width=1.2*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vICMS.formato_danfe', top=0*cm, left=16.14*cm, width=1.05*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.vIPI.formato_danfe', top=0*cm, left=17.19*cm, width=1.05*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.pICMS.formato_danfe', top=0*cm, left=18.24*cm, width=0.58*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.pIPI.formato_danfe', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
         #self.height = 0.28*cm
         self.auto_expand_height = True

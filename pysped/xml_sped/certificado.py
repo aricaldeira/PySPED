@@ -55,7 +55,6 @@ import os
 from datetime import datetime
 from time import mktime
 from OpenSSL import crypto
-import unicodedata
 import base64
 
 
@@ -119,7 +118,7 @@ class Certificado(object):
                 return self._chave
             else:
                 raise AttributeError("'chave' precisa ser regenerada")
-        except AttributeError, e:
+        except AttributeError:
             if self.arquivo:    # arquivo disponível
                 self.prepara_certificado_arquivo_pfx()
                 return self._chave  # agora já disponível
@@ -137,7 +136,7 @@ class Certificado(object):
                 return self._certificado
             else:
                 raise AttributeError("'certificado' precisa ser regenerado")
-        except AttributeError, e:
+        except AttributeError:
             if self.arquivo:    # arquivo disponível
                 self.prepara_certificado_arquivo_pfx()
                 return self._certificado  # agora já disponível
@@ -161,7 +160,7 @@ class Certificado(object):
             try:
                 self.prepara_certificado_arquivo_pfx()
                 return self.proprietario['CN'].rsplit(':',1)[0]
-            except IOError, e:  # arquivo do certificado não disponível
+            except IOError:  # arquivo do certificado não disponível
                 return ''
 
     @property
@@ -179,7 +178,7 @@ class Certificado(object):
             try:
                 self.prepara_certificado_arquivo_pfx()
                 return self.proprietario['CN'].rsplit(':',1)[1]
-            except IOError, e:  # arquivo do certificado não disponível
+            except IOError:  # arquivo do certificado não disponível
                 return ''
 
     @property
@@ -190,7 +189,7 @@ class Certificado(object):
             try:
                 self.prepara_certificado_arquivo_pfx()
                 return self._proprietario
-            except IOError, e:  # arquivo do certificado não disponível
+            except IOError:  # arquivo do certificado não disponível
                 return dict()
 
     @property
@@ -201,7 +200,7 @@ class Certificado(object):
             try:
                 self.prepara_certificado_arquivo_pfx()
                 return self._emissor
-            except IOError, e:  # arquivo do certificado não disponível
+            except IOError:  # arquivo do certificado não disponível
                 return dict()
 
     @property
@@ -212,7 +211,7 @@ class Certificado(object):
             try:
                 self.prepara_certificado_arquivo_pfx()
                 return self._data_inicio_validade
-            except IOError, e:  # arquivo do certificado não disponível
+            except IOError:  # arquivo do certificado não disponível
                 return None
 
     @property
@@ -223,7 +222,7 @@ class Certificado(object):
             try:
                 self.prepara_certificado_arquivo_pfx()
                 return self._data_fim_validade
-            except IOError, e:  # arquivo do certificado não disponível
+            except IOError:  # arquivo do certificado não disponível
                 return None
 
     def _inicia_funcoes_externas(self):

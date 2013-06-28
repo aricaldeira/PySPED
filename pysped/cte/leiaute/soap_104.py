@@ -41,8 +41,8 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
-from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_104 as ESQUEMA_ATUAL
+from pysped.xml_sped import (ABERTURA, TagDecimal, TagInteiro, XMLNFe,
+                             tira_abertura)
 import os
 
 DIRNAME = os.path.dirname(__file__)

@@ -41,8 +41,11 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, Signature,
+                             TagDecimal, TagCaracter, TagDataHoraUTC,
+                             TagInteiro, XMLNFe, tira_abertura)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
+
 import os
 
 
@@ -315,7 +318,7 @@ class EnvEvento(XMLNFe):
         if self._le_xml(arquivo):
             self.versao.xml    = arquivo
             self.idLote.xml    = arquivo
-            self.evento = self.le_grupo('//envEvento/evento', Evento100)
+            self.evento = self.le_grupo('//envEvento/evento', Evento)
 
     xml = property(get_xml, set_xml)
 

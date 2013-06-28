@@ -115,3 +115,41 @@ from pysped.nfe.leiaute.consstatserv_107 import RetConsStatServ as RetConsStatSe
 #
 from pysped.nfe.leiaute.conscad_101 import ConsCad as ConsCad_101
 from pysped.nfe.leiaute.conscad_101 import RetConsCad as RetConsCad_101
+
+# Pyflakes
+
+Adi_110
+Arma_110
+CancNFe_107
+ConsCad_101
+ConsReciNFe_110
+ConsSitNFe_107
+ConsStatServ_107
+DI_110
+Det_110
+Dup_110
+ESQUEMA_ATUAL
+EnviNFe_110
+InutNFe_107
+Lacres_110
+Med_110
+NFRef_110
+NFe_110
+ObsCont_110
+ObsFisco_110
+ProcCancNFe_107
+ProcInutNFe_107
+ProcNFe_110
+ProcRef_110
+ProtNFe_110
+Reboque_110
+RetCancNFe_107
+RetConsCad_101
+RetConsReciNFe_110
+RetConsSitNFe_107
+RetConsStatServ_107
+RetEnviNFe_110
+RetInutNFe_107
+SOAPEnvio_110
+SOAPRetorno_110
+Vol_110

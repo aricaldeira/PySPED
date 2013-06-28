@@ -41,7 +41,8 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, TagCaracter, TagDecimal,
+                             TagDataHora, TagInteiro, XMLNFe)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 import os
 

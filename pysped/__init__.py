@@ -39,13 +39,136 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from .nfe import *
+from pysped.cte.leiaute.canccte_104 import CancCTe as CancCTe_104
+from pysped.cte.leiaute.canccte_104 import ProcCancCTe as ProcCancCTe_104
+from pysped.cte.leiaute.canccte_104 import RetCancCTe as RetCancCTe_104
+from pysped.cte.leiaute.consrecicte_104 import ConsReciCTe as ConsReciCTe_104
+from pysped.cte.leiaute.consrecicte_104 import ProcCTe as ProcCTe_104
+from pysped.cte.leiaute.consrecicte_104 import ProtCTe as ProtCTe_104
+from pysped.cte.leiaute.consrecicte_104 import RetConsReciCTe as RetConsReciCTe_104
+from pysped.cte.leiaute.conssitcte_104 import ConsSitCTe as ConsSitCTe_104
+from pysped.cte.leiaute.conssitcte_104 import RetConsSitCTe as RetConsSitCTe_104
+from pysped.cte.leiaute.consstatserv_104 import ConsStatServCTe as ConsStatServCTe_104
+from pysped.cte.leiaute.consstatserv_104 import RetConsStatServCTe as RetConsStatServCTe_104
+from pysped.cte.leiaute.cte_104 import CTe as CTe_104
+from pysped.cte.leiaute.cte_104 import Dup as Dup_104
+from pysped.cte.leiaute.cte_104 import InfNF as InfNF_104
+from pysped.cte.leiaute.cte_104 import InfNFe as InfNFe_104
+from pysped.cte.leiaute.cte_104 import InfOutros as InfOutros_104
+from pysped.cte.leiaute.cte_104 import InfQ as InfQ_104
+from pysped.cte.leiaute.cte_104 import ObsCont as ObsCont_104
+from pysped.cte.leiaute.cte_104 import ObsFisco as ObsFisco_104
+from pysped.cte.leiaute.cte_104 import Pass as Pass_104
+from pysped.cte.leiaute.envicte_104 import EnviCTe as EnviCTe_104
+from pysped.cte.leiaute.envicte_104 import RetEnviCTe as RetEnviCTe_104
+from pysped.cte.leiaute.inutcte_104 import InutCTe as InutCTe_104
+from pysped.cte.leiaute.inutcte_104 import ProcInutCTe as ProcInutCTe_104
+from pysped.cte.leiaute.inutcte_104 import RetInutCTe as RetInutCTe_104
+from pysped.cte.leiaute.soap_104 import SOAPEnvio as SOAPEnvio_104
+from pysped.cte.leiaute.soap_104 import SOAPRetorno as SOAPRetorno_104
+from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
+from pysped.nfe.leiaute.cancnfe_107 import CancNFe as CancNFe_107
+from pysped.nfe.leiaute.cancnfe_107 import ProcCancNFe as ProcCancNFe_107
+from pysped.nfe.leiaute.cancnfe_107 import RetCancNFe as RetCancNFe_107
+from pysped.nfe.leiaute.conscad_101 import ConsCad as ConsCad_101
+from pysped.nfe.leiaute.conscad_101 import RetConsCad as RetConsCad_101
+from pysped.nfe.leiaute.consrecinfe_110 import ConsReciNFe as ConsReciNFe_110
+from pysped.nfe.leiaute.consrecinfe_110 import ProcNFe as ProcNFe_110
+from pysped.nfe.leiaute.consrecinfe_110 import ProtNFe as ProtNFe_110
+from pysped.nfe.leiaute.consrecinfe_110 import RetConsReciNFe as RetConsReciNFe_110
+from pysped.nfe.leiaute.conssitnfe_107 import ConsSitNFe as ConsSitNFe_107
+from pysped.nfe.leiaute.conssitnfe_107 import RetConsSitNFe as RetConsSitNFe_107
+from pysped.nfe.leiaute.consstatserv_107 import ConsStatServ as ConsStatServ_107
+from pysped.nfe.leiaute.consstatserv_107 import RetConsStatServ as RetConsStatServ_107
+from pysped.nfe.leiaute.envinfe_110 import EnviNFe as EnviNFe_110
+from pysped.nfe.leiaute.envinfe_110 import RetEnviNFe as RetEnviNFe_110
+from pysped.nfe.leiaute.inutnfe_107 import InutNFe as InutNFe_107
+from pysped.nfe.leiaute.inutnfe_107 import ProcInutNFe as ProcInutNFe_107
+from pysped.nfe.leiaute.inutnfe_107 import RetInutNFe as RetInutNFe_107
+from pysped.nfe.leiaute.nfe_110 import Adi as Adi_110
+from pysped.nfe.leiaute.nfe_110 import Arma as Arma_110
+from pysped.nfe.leiaute.nfe_110 import DI as DI_110
+from pysped.nfe.leiaute.nfe_110 import Det as Det_110
+from pysped.nfe.leiaute.nfe_110 import Dup as Dup_110
+from pysped.nfe.leiaute.nfe_110 import Lacres as Lacres_110
+from pysped.nfe.leiaute.nfe_110 import Med as Med_110
+from pysped.nfe.leiaute.nfe_110 import NFRef as NFRef_110
+from pysped.nfe.leiaute.nfe_110 import NFe as NFe_110
+from pysped.nfe.leiaute.nfe_110 import ObsCont as ObsCont_110
+from pysped.nfe.leiaute.nfe_110 import ObsFisco as ObsFisco_110
+from pysped.nfe.leiaute.nfe_110 import ProcRef as ProcRef_110
+from pysped.nfe.leiaute.nfe_110 import Reboque as Reboque_110
+from pysped.nfe.leiaute.nfe_110 import Vol as Vol_110
+from pysped.nfe.leiaute.soap_100 import SOAPEnvio as SOAPEnvio_110
+from pysped.nfe.leiaute.soap_100 import SOAPRetorno as SOAPRetorno_110
+from pysped.nfe.processador_nfe import ProcessadorNFe, DANFE, Certificado
 
-#
-# Não sei porquê, mas sem esse import explícito o módulo não está
-# sendo disponível quando dou um import pysped...
-#
-#from .nfe import manual_300
 
+# Pyflakes
 
-from .cte import *
+Adi_110
+Arma_110
+CTe_104
+CancCTe_104
+CancNFe_107
+Certificado
+ConsCad_101
+ConsReciCTe_104
+ConsReciNFe_110
+ConsSitCTe_104
+ConsSitNFe_107
+ConsStatServCTe_104
+ConsStatServ_107
+DANFE
+DI_110
+Det_110
+Dup_104
+Dup_110
+ESQUEMA_ATUAL
+EnviCTe_104
+EnviNFe_110
+InfNF_104
+InfNFe_104
+InfOutros_104
+InfQ_104
+InutCTe_104
+InutNFe_107
+Lacres_110
+Med_110
+NFRef_110
+NFe_110
+ObsCont_104
+ObsCont_110
+ObsFisco_104
+ObsFisco_110
+Pass_104
+ProcCTe_104
+ProcCancCTe_104
+ProcCancNFe_107
+ProcInutCTe_104
+ProcInutNFe_107
+ProcNFe_110
+ProcRef_110
+ProcessadorNFe
+ProtCTe_104
+ProtNFe_110
+Reboque_110
+RetCancCTe_104
+RetCancNFe_107
+RetConsCad_101
+RetConsReciCTe_104
+RetConsReciNFe_110
+RetConsSitCTe_104
+RetConsSitNFe_107
+RetConsStatServCTe_104
+RetConsStatServ_107
+RetEnviCTe_104
+RetEnviNFe_110
+RetInutCTe_104
+RetInutNFe_107
+SOAPEnvio_104
+SOAPEnvio_110
+SOAPRetorno_104
+SOAPRetorno_110
+Vol_110
+

@@ -41,7 +41,9 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import (ABERTURA, Signature, TagBoolean, TagCaracter,
+                             TagData, TagDataHora, TagDecimal, TagInteiro,
+                             XMLNFe, somente_ascii)
 from pysped.nfse.versao_100 import ESQUEMA_ATUAL
 import os
 from decimal import Decimal as D

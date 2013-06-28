@@ -41,9 +41,9 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import (ABERTURA, TagInteiro, TagCaracter, XMLNFe,
+                             _Alerta, _Erro, )
 from pysped.nfse.versao_100 import ESQUEMA_ATUAL
-from pysped.nfse.versao_100.evento_100 import Alerta, Erro
 import os
 
 DIRNAME = os.path.dirname(__file__)

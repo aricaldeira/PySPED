@@ -41,17 +41,25 @@
 
 from __future__ import division, print_function, unicode_literals
 
-import sys
 import os
-from httplib import HTTPSConnection, HTTPResponse
-from OpenSSL import crypto
+from httplib import HTTPSConnection
 import socket
 import ssl
 from datetime import datetime
 import time
 from uuid import uuid4
 
-from webservices_flags import *
+from webservices_flags import (UF_CODIGO,
+                               WS_NFE_CANCELAMENTO,
+                               WS_NFE_CONSULTA,
+                               WS_NFE_CONSULTA_CADASTRO,
+                               WS_NFE_CONSULTA_RECIBO,
+                               WS_NFE_CONSULTA_DESTINADAS,
+                               WS_NFE_DOWNLOAD,
+                               WS_NFE_RECEPCAO_EVENTO,
+                               WS_NFE_SITUACAO,
+                               WS_NFE_ENVIO_LOTE,
+                               WS_NFE_INUTILIZACAO)
 import webservices_1
 import webservices_2
 
@@ -76,10 +84,9 @@ from leiaute import ConsCad_101, RetConsCad_101
 #
 from leiaute import SOAPEnvio_200, SOAPRetorno_200
 from leiaute import EnviNFe_200, RetEnviNFe_200
-from leiaute import ConsReciNFe_200, RetConsReciNFe_200, ProtNFe_200, ProcNFe_200
+from leiaute import ConsReciNFe_200, RetConsReciNFe_200, ProcNFe_200
 from leiaute import CancNFe_200, RetCancNFe_200, ProcCancNFe_200
 from leiaute import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
-from leiaute import ConsSitNFe_200, RetConsSitNFe_200
 from leiaute import ConsSitNFe_201, RetConsSitNFe_201
 from leiaute import ConsStatServ_200, RetConsStatServ_200
 from leiaute import ConsCad_200, RetConsCad_200
@@ -754,14 +761,14 @@ class ProcessadorNFe(object):
         #
         if protnfe_consulta_110 is not None:
             protnfe_recibo = ProtNFe_110()
-            protnfe_recibo.infProt.tpAmb.valor = protnfe_consulta.infProt.tpAmb.valor
-            protnfe_recibo.infProt.verAplic.valor = protnfe_consulta.infProt.verAplic.valor
-            protnfe_recibo.infProt.chNFe.valor = protnfe_consulta.infProt.chNFe.valor
-            protnfe_recibo.infProt.dhRecbto.valor = protnfe_consulta.infProt.dhRecbto.valor
-            protnfe_recibo.infProt.cStat.valor = protnfe_consulta.infProt.cStat.valor
-            protnfe_recibo.infProt.xMotivo.valor = protnfe_consulta.infProt.xMotivo.valor
-            protnfe_recibo.infProt.nProt.valor = protnfe_consulta.infProt.nProt.valor
-            protnfe_recibo.infProt.digVal.valor = protnfe_consulta.infProt.digVal.valor
+            protnfe_recibo.infProt.tpAmb.valor = protnfe_consulta_110.infProt.tpAmb.valor
+            protnfe_recibo.infProt.verAplic.valor = protnfe_consulta_110.infProt.verAplic.valor
+            protnfe_recibo.infProt.chNFe.valor = protnfe_consulta_110.infProt.chNFe.valor
+            protnfe_recibo.infProt.dhRecbto.valor = protnfe_consulta_110.infProt.dhRecbto.valor
+            protnfe_recibo.infProt.cStat.valor = protnfe_consulta_110.infProt.cStat.valor
+            protnfe_recibo.infProt.xMotivo.valor = protnfe_consulta_110.infProt.xMotivo.valor
+            protnfe_recibo.infProt.nProt.valor = protnfe_consulta_110.infProt.nProt.valor
+            protnfe_recibo.infProt.digVal.valor = protnfe_consulta_110.infProt.digVal.valor
 
         caminho_original = self.caminho
         self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)

@@ -41,9 +41,11 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import (ABERTURA, NAMESPACE_CTE, TagCaracter,
+                             TagDecimal, TagInteiro, XMLNFe, tira_abertura)
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_104 as ESQUEMA_ATUAL
-from pysped.cte.leiaute import ProtCTe_104, RetCancCTe_104
+from pysped.cte.leiaute.consrecicte_104 import ProtCTe as ProtCTe_104
+from pysped.cte.leiaute.canccte_104 import RetCancCTe as RetCancCTe_104
 import os
 
 
@@ -123,11 +125,11 @@ class RetConsSitCTe(XMLNFe):
             self.cUF.xml       = arquivo
 
             if self._le_noh('//retConsSitCTe/protCTe') is not None:
-                self.protCTe = ProtCTe_200()
+                self.protCTe = ProtCTe_104()
                 self.protCTe.xml = arquivo
 
             if self._le_noh('//retConsSitCTe/retCancCTe') is not None:
-                self.retCancCTe = RetCancCTe_200()
+                self.retCancCTe = RetCancCTe_104()
                 self.retCancCTe.xml = arquivo
 
     xml = property(get_xml, set_xml)

@@ -41,8 +41,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
-from pysped.nfse.versao_100 import ESQUEMA_ATUAL
+from pysped.xml_sped import TagCaracter, TagDataHora, TagInteiro, XMLNFe
 import os
 
 DIRNAME = os.path.dirname(__file__)

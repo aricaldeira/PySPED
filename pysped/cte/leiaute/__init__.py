@@ -107,3 +107,32 @@ from conssitcte_104 import RetConsSitCTe as RetConsSitCTe_104
 from consstatserv_104 import ConsStatServCTe as ConsStatServCTe_104
 from consstatserv_104 import RetConsStatServCTe as RetConsStatServCTe_104
 
+# Pyflakes
+
+CTe_104
+CancCTe_104
+ConsReciCTe_104
+ConsSitCTe_104
+ConsStatServCTe_104
+Dup_104
+EnviCTe_104
+InfNF_104
+InfNFe_104
+InfOutros_104
+InfQ_104
+InutCTe_104
+ObsCont_104
+ObsFisco_104
+Pass_104
+ProcCTe_104
+ProcCancCTe_104
+ProcInutCTe_104
+ProtCTe_104
+RetCancCTe_104
+RetConsReciCTe_104
+RetConsSitCTe_104
+RetConsStatServCTe_104
+RetEnviCTe_104
+RetInutCTe_104
+SOAPEnvio_104
+SOAPRetorno_104

@@ -41,11 +41,11 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from pysped.xml_sped import *
+from pysped.xml_sped import (NAMESPACE_NFE, TagDecimal,
+                             TagDataHora, XMLNFe)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import envinfe_110
 import os
-from nfe_200 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
