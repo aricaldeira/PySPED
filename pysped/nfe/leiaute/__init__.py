@@ -6,16 +6,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
+# it under the terms of the GNU Library General Public License as
+# published by the Free Software Foundation, either version 2.1 of the
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU Library General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
+# You should have received a copy of the GNU Library General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # PySPED - Bibliotecas Python para o
@@ -25,16 +25,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
 #
 # Este programa é um software livre: você pode redistribuir e/ou modificar
-# este programa sob os termos da licença GNU Affero General Public License,
-# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# este programa sob os termos da licença GNU Library General Public License,
+# publicada pela Free Software Foundation, em sua versão 2.1 ou, de acordo
 # com sua opção, qualquer versão posterior.
 #
 # Este programa é distribuido na esperança de que venha a ser útil,
 # porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
 # COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
-# GNU Affero General Public License para mais detalhes.
+# GNU Library General Public License para mais detalhes.
 #
-# Você deve ter recebido uma cópia da GNU Affero General Public License
+# Você deve ter recebido uma cópia da GNU Library General Public License
 # juntamente com este programa. Caso esse não seja o caso, acesse:
 # <http://www.gnu.org/licenses/>
 #
@@ -268,3 +268,110 @@ from consstatserv_107 import RetConsStatServ as RetConsStatServ_107
 from conscad_101 import ConsCad as ConsCad_101
 from conscad_101 import RetConsCad as RetConsCad_101
 
+# Pyflakes
+
+Adi_110
+Adi_200
+Arma_110
+Arma_200
+CONF_RECEBIMENTO_CIENCIA_OPERACAO
+CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
+CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
+CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
+CONS_NFE_EMISSAO_SOMENTE_TERCEIROS
+CONS_NFE_EMISSAO_TODOS_EMITENTES
+CONS_NFE_SEM_CIENCIA_OPERACAO
+CONS_NFE_SEM_CONFIRMACAO_OPERACAO
+CONS_NFE_TODAS
+CancNFe_107
+CancNFe_200
+ConsCad_101
+ConsCad_200
+ConsNFeDest_101
+ConsReciNFe_110
+ConsReciNFe_200
+ConsSitNFe_107
+ConsSitNFe_200
+ConsSitNFe_201
+ConsStatServ_107
+ConsStatServ_200
+DESCEVENTO_CONF_RECEBIMENTO
+DI_110
+DI_200
+Det_110
+Det_200
+DownloadNFe_100
+Dup_110
+Dup_200
+EnvEventoCCe_100
+EnvEventoCancNFe_100
+EnvEventoConfRecebimento_100
+EnvEvento_100
+EnviNFe_110
+EnviNFe_200
+EventoCCe_100
+EventoCancNFe_100
+EventoConfRecebimento_100
+Evento_100
+InutNFe_107
+InutNFe_200
+Lacres_110
+Lacres_200
+Med_110
+Med_200
+NFRef_110
+NFRef_200
+NFe_110
+NFe_200
+ObsCont_110
+ObsCont_200
+ObsFisco_110
+ObsFisco_200
+ProcCancNFe_107
+ProcCancNFe_200
+ProcEventoCCe_100
+ProcEventoCancNFe_100
+ProcEventoConfRecebimento_100
+ProcEvento_100
+ProcInutNFe_107
+ProcInutNFe_200
+ProcNFe_110
+ProcNFe_200
+ProcRef_110
+ProcRef_200
+ProtNFe_110
+ProtNFe_200
+Reboque_110
+Reboque_200
+RetCancNFe_107
+RetCancNFe_200
+RetConsCad_101
+RetConsCad_200
+RetConsNFeDest_101
+RetConsReciNFe_110
+RetConsReciNFe_200
+RetConsSitNFe_107
+RetConsSitNFe_200
+RetConsSitNFe_201
+RetConsStatServ_107
+RetConsStatServ_200
+RetDownloadNFe_100
+RetEnvEventoCCe_100
+RetEnvEventoCancNFe_100
+RetEnvEventoConfRecebimento_100
+RetEnvEvento_100
+RetEnviNFe_110
+RetEnviNFe_200
+RetEventoCCe_100
+RetEventoCancNFe_100
+RetEventoConfRecebimento_100
+RetEvento_100
+RetInutNFe_107
+RetInutNFe_200
+SOAPEnvio_110
+SOAPEnvio_200
+SOAPRetorno_110
+SOAPRetorno_200
+TagChNFe_100
+Vol_110
+Vol_200
