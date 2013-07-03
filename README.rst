@@ -13,3 +13,5 @@ Install
 -------
 
 sudo python setup.py install
+
+This version uses the AGPL license, and will not receive maintenance anymore.
