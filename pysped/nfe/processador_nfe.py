@@ -6,16 +6,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
+# it under the terms of the GNU Library General Public License as
+# published by the Free Software Foundation, either version 2.1 of the
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU Library General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
+# You should have received a copy of the GNU Library General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # PySPED - Bibliotecas Python para o
@@ -25,40 +25,48 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
 #
 # Este programa é um software livre: você pode redistribuir e/ou modificar
-# este programa sob os termos da licença GNU Affero General Public License,
-# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# este programa sob os termos da licença GNU Library General Public License,
+# publicada pela Free Software Foundation, em sua versão 2.1 ou, de acordo
 # com sua opção, qualquer versão posterior.
 #
 # Este programa é distribuido na esperança de que venha a ser útil,
 # porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
 # COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
-# GNU Affero General Public License para mais detalhes.
+# GNU Library General Public License para mais detalhes.
 #
-# Você deve ter recebido uma cópia da GNU Affero General Public License
+# Você deve ter recebido uma cópia da GNU Library General Public License
 # juntamente com este programa. Caso esse não seja o caso, acesse:
 # <http://www.gnu.org/licenses/>
 #
 
 from __future__ import division, print_function, unicode_literals
 
-import sys
 import os
-from httplib import HTTPSConnection, HTTPResponse
-from OpenSSL import crypto
+from httplib import HTTPSConnection
 import socket
 import ssl
 from datetime import datetime
 import time
 from uuid import uuid4
 
-from webservices_flags import *
+from webservices_flags import (UF_CODIGO,
+                               WS_NFE_CANCELAMENTO,
+                               WS_NFE_CONSULTA,
+                               WS_NFE_CONSULTA_CADASTRO,
+                               WS_NFE_CONSULTA_RECIBO,
+                               WS_NFE_CONSULTA_DESTINADAS,
+                               WS_NFE_DOWNLOAD,
+                               WS_NFE_RECEPCAO_EVENTO,
+                               WS_NFE_SITUACAO,
+                               WS_NFE_ENVIO_LOTE,
+                               WS_NFE_INUTILIZACAO)
 import webservices_1
 import webservices_2
 
 from pysped.xml_sped.certificado import Certificado
 
 #
-# Manual do Contribuinte versão 3.00
+# Manual do Contribuinte versão 2.1.00
 # NF-e leiaute 1.10
 #
 from leiaute import SOAPEnvio_110, SOAPRetorno_110
@@ -76,10 +84,9 @@ from leiaute import ConsCad_101, RetConsCad_101
 #
 from leiaute import SOAPEnvio_200, SOAPRetorno_200
 from leiaute import EnviNFe_200, RetEnviNFe_200
-from leiaute import ConsReciNFe_200, RetConsReciNFe_200, ProtNFe_200, ProcNFe_200
+from leiaute import ConsReciNFe_200, RetConsReciNFe_200, ProcNFe_200
 from leiaute import CancNFe_200, RetCancNFe_200, ProcCancNFe_200
 from leiaute import InutNFe_200, RetInutNFe_200, ProcInutNFe_200
-from leiaute import ConsSitNFe_200, RetConsSitNFe_200
 from leiaute import ConsSitNFe_201, RetConsSitNFe_201
 from leiaute import ConsStatServ_200, RetConsStatServ_200
 from leiaute import ConsCad_200, RetConsCad_200
@@ -754,14 +761,14 @@ class ProcessadorNFe(object):
         #
         if protnfe_consulta_110 is not None:
             protnfe_recibo = ProtNFe_110()
-            protnfe_recibo.infProt.tpAmb.valor = protnfe_consulta.infProt.tpAmb.valor
-            protnfe_recibo.infProt.verAplic.valor = protnfe_consulta.infProt.verAplic.valor
-            protnfe_recibo.infProt.chNFe.valor = protnfe_consulta.infProt.chNFe.valor
-            protnfe_recibo.infProt.dhRecbto.valor = protnfe_consulta.infProt.dhRecbto.valor
-            protnfe_recibo.infProt.cStat.valor = protnfe_consulta.infProt.cStat.valor
-            protnfe_recibo.infProt.xMotivo.valor = protnfe_consulta.infProt.xMotivo.valor
-            protnfe_recibo.infProt.nProt.valor = protnfe_consulta.infProt.nProt.valor
-            protnfe_recibo.infProt.digVal.valor = protnfe_consulta.infProt.digVal.valor
+            protnfe_recibo.infProt.tpAmb.valor = protnfe_consulta_110.infProt.tpAmb.valor
+            protnfe_recibo.infProt.verAplic.valor = protnfe_consulta_110.infProt.verAplic.valor
+            protnfe_recibo.infProt.chNFe.valor = protnfe_consulta_110.infProt.chNFe.valor
+            protnfe_recibo.infProt.dhRecbto.valor = protnfe_consulta_110.infProt.dhRecbto.valor
+            protnfe_recibo.infProt.cStat.valor = protnfe_consulta_110.infProt.cStat.valor
+            protnfe_recibo.infProt.xMotivo.valor = protnfe_consulta_110.infProt.xMotivo.valor
+            protnfe_recibo.infProt.nProt.valor = protnfe_consulta_110.infProt.nProt.valor
+            protnfe_recibo.infProt.digVal.valor = protnfe_consulta_110.infProt.digVal.valor
 
         caminho_original = self.caminho
         self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)

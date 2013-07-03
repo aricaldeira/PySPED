@@ -6,16 +6,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
+# it under the terms of the GNU Library General Public License as
+# published by the Free Software Foundation, either version 2.1 of the
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU Library General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
+# You should have received a copy of the GNU Library General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # PySPED - Bibliotecas Python para o
@@ -25,16 +25,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
 #
 # Este programa é um software livre: você pode redistribuir e/ou modificar
-# este programa sob os termos da licença GNU Affero General Public License,
-# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# este programa sob os termos da licença GNU Library General Public License,
+# publicada pela Free Software Foundation, em sua versão 2.1 ou, de acordo
 # com sua opção, qualquer versão posterior.
 #
 # Este programa é distribuido na esperança de que venha a ser útil,
 # porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
 # COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
-# GNU Affero General Public License para mais detalhes.
+# GNU Library General Public License para mais detalhes.
 #
-# Você deve ter recebido uma cópia da GNU Affero General Public License
+# Você deve ter recebido uma cópia da GNU Library General Public License
 # juntamente com este programa. Caso esse não seja o caso, acesse:
 # <http://www.gnu.org/licenses/>
 #
@@ -42,12 +42,9 @@
 from __future__ import division, print_function, unicode_literals
 
 from reportlab.lib.units import cm
-from reportlab.lib.pagesizes import A4, landscape
-from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
-from reportlab.lib.colors import HexColor
 
-from geraldo import Report, ReportBand
-from geraldo import ObjectValue, SystemField, Label, Line
+from geraldo import Report
+from geraldo import Line
 from geraldo.generators import PDFGenerator
 
 import os
@@ -56,7 +53,18 @@ cur_dir = '/home/ari/django/danfe/'
 
 from registrafontes import registra_fontes
 
-from base import *
+from base import (BandaDANFE,
+                  DADO_CHAVE,
+                  DADO_VARIAVEL,
+                  DESCRITIVO_CAMPO,
+                  DESCRITIVO_NUMERO,
+                  OBS_CONTINGENCIA,
+                  OBS_HOMOLOGACAO,
+                  MARGEM_DIREITA,
+                  MARGEM_ESQUERDA,
+                  MARGEM_INFERIOR,
+                  MARGEM_SUPERIOR,
+                  PAISAGEM)
 
 
 class DANFEPaisagem(Report):
@@ -332,19 +340,19 @@ class DetProdutoPaisagem(BandaDANFE):
         super(DetProdutoPaisagem, self).__init__()
         self.elements = []
 
-        txt = self.inclui_texto_produto(nome='', texto='MMMMMMMMMMMMMM', top=0*cm, left=0*cm, width=2.6*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='999999999', top=0*cm, left=2.6*cm, width=1*cm)
-        txt = self.inclui_texto_produto(nome='', texto='1<br />2<br />3<br />4<br />5', top=0*cm, left=3.6*cm, width=6.31*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='999', top=0*cm, left=9.91*cm, width=0.44*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='9999', top=0*cm, left=10.35*cm, width=0.54*cm)
-        txt = self.inclui_texto_centralizado_produto(nome='', texto='MMMMMM', top=0*cm, left=10.89*cm, width=1.15*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999', top=0*cm, left=12.04*cm, width=1.4*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=13.44*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=14.64*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=15.84*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=17.04*cm, width=1.2*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
-        txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
+        self.inclui_texto_produto(nome='', texto='MMMMMMMMMMMMMM', top=0*cm, left=0*cm, width=2.6*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='999999999', top=0*cm, left=2.6*cm, width=1*cm)
+        self.inclui_texto_produto(nome='', texto='1<br />2<br />3<br />4<br />5', top=0*cm, left=3.6*cm, width=6.31*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='999', top=0*cm, left=9.91*cm, width=0.44*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='9999', top=0*cm, left=10.35*cm, width=0.54*cm)
+        self.inclui_texto_centralizado_produto(nome='', texto='MMMMMM', top=0*cm, left=10.89*cm, width=1.15*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,9999', top=0*cm, left=12.04*cm, width=1.4*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=13.44*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=14.64*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=15.84*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='9.999.999,99', top=0*cm, left=17.04*cm, width=1.2*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
+        self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
         #self.height = 0.28*cm
         self.auto_expand_height = True

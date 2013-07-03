@@ -6,16 +6,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
+# it under the terms of the GNU Library General Public License as
+# published by the Free Software Foundation, either version 2.1 of the
 # License, or (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU Library General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
+# You should have received a copy of the GNU Library General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # PySPED - Bibliotecas Python para o
@@ -25,16 +25,16 @@
 # Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
 #
 # Este programa é um software livre: você pode redistribuir e/ou modificar
-# este programa sob os termos da licença GNU Affero General Public License,
-# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# este programa sob os termos da licença GNU Library General Public License,
+# publicada pela Free Software Foundation, em sua versão 2.1 ou, de acordo
 # com sua opção, qualquer versão posterior.
 #
 # Este programa é distribuido na esperança de que venha a ser útil,
 # porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
 # COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
-# GNU Affero General Public License para mais detalhes.
+# GNU Library General Public License para mais detalhes.
 #
-# Você deve ter recebido uma cópia da GNU Affero General Public License
+# Você deve ter recebido uma cópia da GNU Library General Public License
 # juntamente com este programa. Caso esse não seja o caso, acesse:
 # <http://www.gnu.org/licenses/>
 #
@@ -152,3 +152,59 @@ from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_CIENCIA_O
 from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
 from pysped.nfe.leiaute.evtconfrecebimento_100 import CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
 from pysped.nfe.leiaute.evtconfrecebimento_100 import DESCEVENTO_CONF_RECEBIMENTO
+
+# Pyflakes
+
+Adi_200
+Arma_200
+CONF_RECEBIMENTO_CIENCIA_OPERACAO
+CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
+CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
+CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
+CancNFe_200
+ConsReciNFe_200
+ConsSitNFe_200
+ConsStatServ_200
+DESCEVENTO_CONF_RECEBIMENTO
+DI_200
+Det_200
+Dup_200
+ESQUEMA_ATUAL
+EnvEventoCCe_100
+EnvEventoCancNFe_100
+EnvEventoConfRecebimento_100
+EnviNFe_200
+EventoCCe_100
+EventoCancNFe_100
+EventoConfRecebimento_100
+InutNFe_200
+Lacres_200
+Med_200
+NFRef_200
+NFe_200
+ObsCont_200
+ObsFisco_200
+ProcCancNFe_200
+ProcEventoCCe_100
+ProcEventoCancNFe_100
+ProcEventoConfRecebimento_100
+ProcInutNFe_200
+ProcNFe_200
+ProcRef_200
+ProtNFe_200
+Reboque_200
+RetCancNFe_200
+RetConsReciNFe_200
+RetConsSitNFe_200
+RetConsStatServ_200
+RetEnvEventoCCe_100
+RetEnvEventoCancNFe_100
+RetEnvEventoConfRecebimento_100
+RetEnviNFe_200
+RetEventoCCe_100
+RetEventoCancNFe_100
+RetEventoConfRecebimento_100
+RetInutNFe_200
+SOAPEnvio_200
+SOAPRetorno_200
+Vol_200
