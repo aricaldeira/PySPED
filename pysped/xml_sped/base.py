@@ -603,8 +603,11 @@ class TagDataHoraUTC(TagData):
             valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S %Z (%z)')
             #
             # Troca as siglas:
-            # BRT - Brazilian Time -> HOB - Horário Oficial do Brasil
-            # BRST - Brazilian Summer Time -> HVOB - Horário de Verão Oficial do Brasil
+            # BRT - Brasília Time -> HOB - Horário Oficial de Brasília
+            # BRST - Brasília Summer Time -> HVOB - Horário de Verão Oficial de Brasília
+            # AMT - Amazon Time -> HOA - Horário Oficial da Amazônia
+            # AMST - Amazon Summer Time -> HVOA - Horário de Verão Oficial da Amazônia
+            # FNT - Fernando de Noronha Time -> HOFN - Horário Oficial de Fernando de Noronha
             #
             valor = valor.replace('(-0100)', '(-01:00)')
             valor = valor.replace('(-0200)', '(-02:00)')
@@ -612,6 +615,9 @@ class TagDataHoraUTC(TagData):
             valor = valor.replace('(-0400)', '(-04:00)')
             valor = valor.replace('BRT', 'HOB')
             valor = valor.replace('BRST', 'HVOB')
+            valor = valor.replace('AMT', 'HOA')
+            valor = valor.replace('AMST', 'HVOA')
+            valor = valor.replace('FNT', 'HOFN')
             return valor
 
 
