@@ -42,12 +42,12 @@
 from __future__ import division, print_function, unicode_literals
 
 #
-# Versão 2.00, usada a partir de maio/2010
+# Versão 3.00, usada a partir de março/2013
 #
-#
+ESQUEMA_ATUAL_VERSAO_3 = 'pl_006r'
 
 #
-# O esquema pl_006m contém os esquemas dos enventos da NF-e
+# Versão 2.00, usada a partir de maio/2010
 #
 ESQUEMA_ATUAL_VERSAO_2 = 'pl_006r'
 
