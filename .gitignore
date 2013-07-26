@@ -5,6 +5,7 @@ pysped/nfe/manual_300/schema/*-original
 pysped/nfe/manual_300/schema/*-original/*
 pysped/nfe/manual_401/schema/*-original
 pysped/nfe/manual_401/schema/*-original/*
+.kateproject*
 
 # build artifacts from python setup.py build or python setup.py install
 build/
