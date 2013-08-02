@@ -59,10 +59,10 @@ class InfInutEnviado(inutnfe_200.InfInutEnviado):
 class InutNFe(inutnfe_200.InutNFe):
     def __init__(self):
         super(InutNFe, self).__init__()
-        self.versao  = TagDecimal(nome='inutNFe', codigo='DP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao  = TagDecimal(nome='inutNFe', codigo='DP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.infInut = InfInutEnviado()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'inutNFe_v3.00.xsd'
+        self.arquivo_esquema = 'inutNFe_v3.10.xsd'
 
 
 class InfInutRecebido(inutnfe_200.InfInutRecebido):
@@ -73,10 +73,10 @@ class InfInutRecebido(inutnfe_200.InfInutRecebido):
 class RetInutNFe(inutnfe_200.RetInutNFe):
     def __init__(self):
         super(RetInutNFe, self).__init__()
-        self.versao = TagDecimal(nome='retInutNFe', codigo='DR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao = TagDecimal(nome='retInutNFe', codigo='DR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.infInut = InfInutRecebido()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retInutNFe_v3.00.xsd'
+        self.arquivo_esquema = 'retInutNFe_v3.10.xsd'
 
 
 class ProcInutNFe(inutnfe_200.ProcInutNFe):
@@ -87,8 +87,8 @@ class ProcInutNFe(inutnfe_200.ProcInutNFe):
         # poder validar no XSD. Os outros arquivos proc, procCancNFe, e procNFe
         # começam com minúscula mesmo
         #
-        self.versao = TagDecimal(nome='ProcInutNFe', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao = TagDecimal(nome='ProcInutNFe', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.inutNFe = InutNFe()
         self.retInutNFe = RetInutNFe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'procInutNFe_v3.00.xsd'
+        self.arquivo_esquema = 'procInutNFe_v3.10.xsd'

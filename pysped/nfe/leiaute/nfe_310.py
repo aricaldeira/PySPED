@@ -366,7 +366,7 @@ class Ide(nfe_200.Ide):
         xml += self.dhSaiEnt.xml
         xml += self.tpNF.xml
         xml += self.idDest.xml
-        
+
         xml += self.cMunFG.xml
 
         for nr in self.NFref:
@@ -377,10 +377,10 @@ class Ide(nfe_200.Ide):
         xml += self.cDV.xml
         xml += self.tpAmb.xml
         xml += self.finNFe.xml
-        
+
         xml += self.indFinal.xml
         xml += self.indPres.xml
-        
+
         xml += self.procEmi.xml
         xml += self.verProc.xml
         xml += self.dhCont.xml
@@ -432,7 +432,7 @@ class Ide(nfe_200.Ide):
 class InfNFe(nfe_200.InfNFe):
     def __init__(self):
         super(InfNFe, self).__init__()
-        self.versao   = TagDecimal(nome='infNFe' , codigo='A01', propriedade='versao', raiz='//NFe', namespace=NAMESPACE_NFE, valor='3.00')
+        self.versao   = TagDecimal(nome='infNFe' , codigo='A01', propriedade='versao', raiz='//NFe', namespace=NAMESPACE_NFE, valor='3.10')
         self.ide      = Ide()
         self.emit     = Emit()
         self.avulsa   = Avulsa()
@@ -537,4 +537,4 @@ class NFe(nfe_200.NFe):
         self.infNFe = InfNFe()
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'nfe_v3.00.xsd'
+        self.arquivo_esquema = 'nfe_v3.10.xsd'

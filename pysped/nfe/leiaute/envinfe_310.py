@@ -54,9 +54,9 @@ DIRNAME = os.path.dirname(__file__)
 class EnviNFe(envinfe_200.EnviNFe):
     def __init__(self):
         super(EnviNFe, self).__init__()
-        self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'enviNFe_v3.00.xsd'
+        self.arquivo_esquema = 'enviNFe_v3.10.xsd'
 
 
 class InfRec(envinfe_200.InfRec):
@@ -67,7 +67,7 @@ class InfRec(envinfe_200.InfRec):
 class RetEnviNFe(envinfe_200.RetEnviNFe):
     def __init__(self):
         super(RetEnviNFe, self).__init__()
-        self.versao   = TagDecimal(nome='retEnviNFe', codigo='AR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao   = TagDecimal(nome='retEnviNFe', codigo='AR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.infRec   = InfRec()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnviNFe_v3.00.xsd'
+        self.arquivo_esquema = 'retEnviNFe_v3.10.xsd'

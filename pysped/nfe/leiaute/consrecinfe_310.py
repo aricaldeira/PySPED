@@ -54,9 +54,9 @@ DIRNAME = os.path.dirname(__file__)
 class ConsReciNFe(consrecinfe_200.ConsReciNFe):
     def __init__(self):
         super(ConsReciNFe, self).__init__()
-        self.versao  = TagDecimal(nome='consReciNFe', codigo='BP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao  = TagDecimal(nome='consReciNFe', codigo='BP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'consReciNFe_v3.00.xsd'
+        self.arquivo_esquema = 'consReciNFe_v3.10.xsd'
 
 
 class InfProt(consrecinfe_200.InfProt):
@@ -67,22 +67,22 @@ class InfProt(consrecinfe_200.InfProt):
 class ProtNFe(consrecinfe_200.ProtNFe):
     def __init__(self):
         super(ProtNFe, self).__init__()
-        self.versao  = TagDecimal(nome='protNFe', codigo='PR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao  = TagDecimal(nome='protNFe', codigo='PR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
 
 
 class RetConsReciNFe(consrecinfe_200.RetConsReciNFe):
     def __init__(self):
         super(RetConsReciNFe, self).__init__()
-        self.versao   = TagDecimal(nome='retConsReciNFe', codigo='BR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao   = TagDecimal(nome='retConsReciNFe', codigo='BR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retConsReciNFe_v3.00.xsd'
+        self.arquivo_esquema = 'retConsReciNFe_v3.10.xsd'
 
 
 class ProcNFe(consrecinfe_200.ProcNFe):
     def __init__(self):
         super(ProcNFe, self).__init__()
-        self.versao  = TagDecimal(nome='nfeProc', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao  = TagDecimal(nome='nfeProc', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.NFe     = NFe()
         self.protNFe = ProtNFe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'procNFe_v3.00.xsd'
+        self.arquivo_esquema = 'procNFe_v3.10.xsd'

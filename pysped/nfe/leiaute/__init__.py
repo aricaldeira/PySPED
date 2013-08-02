@@ -42,7 +42,8 @@
 from __future__ import division, print_function, unicode_literals
 
 #
-# Versão 3.00, usada a partir de março/2013
+# Versão 3.10, usada a partir de novembro/2013 para a NFC-e, e
+# março/2014 para a NF-e
 #
 ESQUEMA_ATUAL_VERSAO_3 = 'pl_006r'
 

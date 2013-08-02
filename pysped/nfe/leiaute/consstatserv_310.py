@@ -53,13 +53,13 @@ DIRNAME = os.path.dirname(__file__)
 class ConsStatServ(consstatserv_200.ConsStatServ):
     def __init__(self):
         super(ConsStatServ, self).__init__()
-        self.versao = TagDecimal(nome='consStatServ', codigo='FP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao = TagDecimal(nome='consStatServ', codigo='FP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'consStatServ_v3.00.xsd'
+        self.arquivo_esquema = 'consStatServ_v3.10.xsd'
 
 class RetConsStatServ(consstatserv_200.RetConsStatServ):
     def __init__(self):
         super(RetConsStatServ, self).__init__()
-        self.versao    = TagDecimal(nome='retConsStatServ', codigo='FR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao    = TagDecimal(nome='retConsStatServ', codigo='FR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retConsStatServ_v3.00.xsd'
+        self.arquivo_esquema = 'retConsStatServ_v3.10.xsd'

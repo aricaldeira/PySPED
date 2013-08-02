@@ -55,17 +55,17 @@ DIRNAME = os.path.dirname(__file__)
 class ConsSitNFe(conssitnfe_201.ConsSitNFe):
     def __init__(self):
         super(ConsSitNFe, self).__init__()
-        self.versao = TagDecimal(nome='consSitNFe', codigo='EP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao = TagDecimal(nome='consSitNFe', codigo='EP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'consSitNFe_v3.00.xsd'
+        self.arquivo_esquema = 'consSitNFe_v3.10.xsd'
 
 
 class RetConsSitNFe(conssitnfe_201.RetConsSitNFe):
     def __init__(self):
         super(RetConsSitNFe, self).__init__()
-        self.versao     = TagDecimal(nome='retConsSitNFe', codigo='ER01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.00', raiz='/')
+        self.versao     = TagDecimal(nome='retConsSitNFe', codigo='ER01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retConsSitNFe_v3.00.xsd'
+        self.arquivo_esquema = 'retConsSitNFe_v3.10.xsd'
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
