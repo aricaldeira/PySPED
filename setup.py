@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "PySPED",
-    version = "0.1.0",
+    version = "0.1.1",
     author = "Aristides Caldeira",
     author_email = 'aristides.caldeira@tauga.com.br',
     test_suite='tests',
@@ -39,6 +39,7 @@ setup(
         'pysped.relato_sped': ['fonts/*'],
         'pysped.nfe.leiaute': ['schema/*/*'],
         'pysped.cte.leiaute': ['schema/*/*'],
+        'pysped.xml_sped': ['cadeia-certificadora/*/*']
     },
     url = 'https://github.com/aricaldeira/PySPED',
     license = 'LGPL-v2.1+',
