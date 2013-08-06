@@ -1412,6 +1412,7 @@ class Prod(nfe_110.Prod):
         self.indTot   = TagInteiro(nome='indTot'   , codigo='I17b', tamanho=[1,  1, 1],                      raiz='//det/prod', valor=1)
         self.xPed     = TagCaracter(nome='xPed'    , codigo='I30' , tamanho=[1, 15],                         raiz='//det/prod', obrigatorio=False)
         self.nItemPed = TagCaracter(nome='nItemPed', codigo='I31' , tamanho=[1,  6],                         raiz='//det/prod', obrigatorio=False)
+        self.nFCI     = TagCaracter(nome='nFCI'    , codigo='I70' , tamanho=[36, 36, 36],                    raiz='//det/prod', obrigatorio=False)
         self.veicProd = VeicProd()
         self.comb     = Comb()
 
@@ -1444,6 +1445,7 @@ class Prod(nfe_110.Prod):
 
         xml += self.xPed.xml
         xml += self.nItemPed.xml
+        xml += self.nFCI.xml
         xml += self.veicProd.xml
 
         for m in self.med:
@@ -1489,6 +1491,7 @@ class Prod(nfe_110.Prod):
 
             self.xPed.xml     = arquivo
             self.nItemPed.xml = arquivo
+            self.nFCI.xml     = arquivo
             self.veicProd.xml = arquivo
 
             #
@@ -1724,7 +1727,7 @@ class ICMSTot(nfe_110.ICMSTot):
     def __init__(self):
         super(ICMSTot, self).__init__()
         self.vTotTrib = TagDecimal(nome='vTotTrib', codigo='W16a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
-        
+
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<ICMSTot>'
