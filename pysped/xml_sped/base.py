@@ -744,14 +744,19 @@ class TagDecimal(TagCaracter):
         if self._testa_tamanho_maximo(inteiro):
             self.alertas.append(self._testa_tamanho_maximo(inteiro))
 
-        if self._testa_decimais_minimo(decimal):
-            self.alertas.append(self._testa_decimais_minimo(decimal))
+        #
+        # Analisando as exp.reg. de validação das tags com decimais,
+        # parece haver um número máximo de casas decimais, mas as tags
+        # podem ser enviadas sem nenhuma casa decimal, então, não
+        # há um mínimo de casas decimais
+        #
+        #if self._testa_decimais_minimo(decimal):
+        #    self.alertas.append(self._testa_decimais_minimo(decimal))
 
         if self._testa_decimais_maximo(decimal):
             self.alertas.append(self._testa_decimais_maximo(decimal))
 
         return self.alertas == []
-
 
     def set_valor(self, novo_valor):
         if isinstance(novo_valor, basestring):
