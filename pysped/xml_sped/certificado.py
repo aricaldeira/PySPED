@@ -55,6 +55,7 @@ import os
 from datetime import datetime
 from time import mktime
 from OpenSSL import crypto
+from pytz import UTC
 import base64
 
 
@@ -71,6 +72,8 @@ class Certificado(object):
         self._proprietario = {}
         self._data_inicio_validade = None
         self._data_fim_validade    = None
+        self._numero_serie = None
+        self._extensoes = {}
         self._doc_xml    = None
 
     def prepara_certificado_arquivo_pfx(self):
@@ -103,11 +106,19 @@ class Certificado(object):
         self.certificado = ''.join(linhas_certificado)
 
         cert_openssl = crypto.load_certificate(crypto.FILETYPE_PEM, self.certificado)
+        self.cert_openssl = cert_openssl
 
         self._emissor = dict(cert_openssl.get_issuer().get_components())
         self._proprietario = dict(cert_openssl.get_subject().get_components())
+        self._numero_serie = cert_openssl.get_serial_number()
         self._data_inicio_validade = datetime.strptime(cert_openssl.get_notBefore(), '%Y%m%d%H%M%SZ')
+        self._data_inicio_validade = UTC.localize(self._data_inicio_validade)
         self._data_fim_validade    = datetime.strptime(cert_openssl.get_notAfter(), '%Y%m%d%H%M%SZ')
+        self._data_fim_validade    = UTC.localize(self._data_fim_validade)
+
+        for i in range(cert_openssl.get_extension_count()):
+            extensao = cert_openssl.get_extension(i)
+            self._extensoes[extensao.get_short_name()] = extensao.get_data()
 
     def _set_chave(self, chave):
         self._chave = chave
@@ -224,6 +235,28 @@ class Certificado(object):
                 return self._data_fim_validade
             except IOError:  # arquivo do certificado não disponível
                 return None
+
+    @property
+    def numero_serie(self):
+        if self._numero_serie:
+            return self._numero_serie
+        else:
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self._numero_serie
+            except IOError:  # arquivo do certificado não disponível
+                return None
+
+    @property
+    def extensoes(self):
+        if self._extensoes:
+            return self._extensoes
+        else:
+            try:
+                self.prepara_certificado_arquivo_pfx()
+                return self._extensoes
+            except IOError:  # arquivo do certificado não disponível
+                return dict()
 
     def _inicia_funcoes_externas(self):
         # Ativa as funções de análise de arquivos XML
@@ -532,9 +565,9 @@ class Certificado(object):
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
         assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha1')
-        
+
         return base64.encode(assinatura)
-        
+
     def verifica_assinatura_texto(self, texto, assinatura):
         #
         # Carrega o arquivo do certificado
@@ -545,6 +578,6 @@ class Certificado(object):
             crypto.verify(pkcs12.get_certificate(), assinatura, texto, 'sha1')
         except:
             return False
-            
+
         return True
-        
+
