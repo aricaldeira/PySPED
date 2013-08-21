@@ -3275,7 +3275,7 @@ class EnderDest(XMLNFe):
         self.xMun    = TagCaracter(nome='xMun'   , codigo='E11', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/dest/enderDest')
         self.UF      = TagCaracter(nome='UF'     , codigo='E12', tamanho=[ 2,  2]   , raiz='//NFe/infNFe/dest/enderDest')
         self.CEP     = TagCaracter(nome='CEP'    , codigo='E13', tamanho=[ 8,  8, 8], raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
-        self.cPais   = TagInteiro(nome='cPais'   , codigo='E14', tamanho=[ 4,  4, 4], raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
+        self.cPais   = TagCaracter(nome='cPais'  , codigo='E14', tamanho=[ 4,  4, 4], raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.xPais   = TagCaracter(nome='xPais'  , codigo='E15', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.fone    = TagInteiro(nome='fone'    , codigo='E16', tamanho=[ 1, 10]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
 
@@ -3476,7 +3476,7 @@ class EnderEmit(XMLNFe):
         self.xMun    = TagCaracter(nome='xMun'   , codigo='C11', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/emit/enderEmit')
         self.UF      = TagCaracter(nome='UF'     , codigo='C12', tamanho=[ 2,  2]   , raiz='//NFe/infNFe/emit/enderEmit')
         self.CEP     = TagCaracter(nome='CEP'    , codigo='C13', tamanho=[ 8,  8, 8], raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
-        self.cPais   = TagInteiro(nome='cPais'   , codigo='C14', tamanho=[ 4,  4, 4], raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
+        self.cPais   = TagCaracter(nome='cPais'  , codigo='C14', tamanho=[ 4,  4, 4], raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.xPais   = TagCaracter(nome='xPais'  , codigo='C15', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.fone    = TagInteiro(nome='fone'    , codigo='C16', tamanho=[ 1, 10]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
 
