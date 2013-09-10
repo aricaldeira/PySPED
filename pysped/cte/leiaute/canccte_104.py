@@ -53,12 +53,12 @@ DIRNAME = os.path.dirname(__file__)
 class InfCancEnviado(XMLNFe):
     def __init__(self):
         super(InfCancEnviado, self).__init__()
-        self.Id    = TagCaracter(nome='infCanc', codigo='CP03', tamanho=[46, 46]    , raiz='//cancCTe', propriedade='Id')
-        self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='CP05', tamanho=[ 1,  1, 1] , raiz='//cancCTe/infCanc', valor=2)
-        self.xServ = TagCaracter(nome='xServ'  , codigo='CP06', tamanho=[ 8,  8]    , raiz='//cancCTe/infCanc', valor='CANCELAR')
-        self.chCTe = TagCaracter(nome='chCTe'   , codigo='CP07', tamanho=[44, 44, 44], raiz='//cancCTe/infCanc')
-        self.nProt = TagCaracter(nome='nProt'   , codigo='CP08', tamanho=[15, 15, 15], raiz='//cancCTe/infCanc')
-        self.xJust = TagCaracter(nome='xJust'  , codigo='CP09', tamanho=[15, 255]   , raiz='//cancCTe/infCanc')
+        self.Id    = TagCaracter(nome='infCanc', codigo='CP03', tamanho=[46, 46]    , raiz='//cancCTe', namespace=NAMESPACE_CTE, propriedade='Id')
+        self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='CP05', tamanho=[ 1,  1, 1] , raiz='//cancCTe/infCanc', namespace=NAMESPACE_CTE, valor=2)
+        self.xServ = TagCaracter(nome='xServ'  , codigo='CP06', tamanho=[ 8,  8]    , raiz='//cancCTe/infCanc', namespace=NAMESPACE_CTE, valor='CANCELAR')
+        self.chCTe = TagCaracter(nome='chCTe'   , codigo='CP07', tamanho=[44, 44, 44], raiz='//cancCTe/infCanc', namespace=NAMESPACE_CTE)
+        self.nProt = TagCaracter(nome='nProt'   , codigo='CP08', tamanho=[15, 15, 15], raiz='//cancCTe/infCanc', namespace=NAMESPACE_CTE)
+        self.xJust = TagCaracter(nome='xJust'  , codigo='CP09', tamanho=[15, 255]   , raiz='//cancCTe/infCanc', namespace=NAMESPACE_CTE)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -121,15 +121,15 @@ class CancCTe(XMLNFe):
 class InfCancRecebido(XMLNFe):
     def __init__(self):
         super(InfCancRecebido, self).__init__()
-        self.Id       = TagCaracter(nome='infCanc' , codigo='CR03' , tamanho=[17, 17]    , raiz='//retCancCTe', propriedade='Id', obrigatorio=False)
-        self.tpAmb    = TagInteiro(nome='tpAmb'    , codigo='CR05' , tamanho=[1, 1, 1]   , raiz='//retCancCTe/infCanc', valor=2)
-        self.verAplic = TagCaracter(nome='verAplic', codigo='CR06' , tamanho=[1, 20]     , raiz='//retCancCTe/infCanc')
-        self.cStat    = TagCaracter(nome='cStat'    , codigo='CR07' , tamanho=[3, 3, 3]   , raiz='//retCancCTe/infCanc')
-        self.xMotivo  = TagCaracter(nome='xMotivo' , codigo='CR08' , tamanho=[1, 255]    , raiz='//retCancCTe/infCanc')
-        self.cUF      = TagInteiro(nome='cUF'      , codigo='CR08a', tamanho=[2, 2, 2]   , raiz='//retCancCTe/infCanc')
-        self.chCTe    = TagCaracter(nome='chCTe'    , codigo='CR09' , tamanho=[44, 44, 44], raiz='//retcancCTe/infCanc', obrigatorio=False)
-        self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='CR10' ,                       raiz='//retCancCTe/infCanc', obrigatorio=False)
-        self.nProt    = TagCaracter(nome='nProt'    , codigo='CR11' , tamanho=[15, 15, 15], raiz='//retCancCTe/infCanc', obrigatorio=False)
+        self.Id       = TagCaracter(nome='infCanc' , codigo='CR03' , tamanho=[17, 17]    , raiz='//retCancCTe', namespace=NAMESPACE_CTE, propriedade='Id', obrigatorio=False)
+        self.tpAmb    = TagInteiro(nome='tpAmb'    , codigo='CR05' , tamanho=[1, 1, 1]   , raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE, valor=2)
+        self.verAplic = TagCaracter(nome='verAplic', codigo='CR06' , tamanho=[1, 20]     , raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE)
+        self.cStat    = TagCaracter(nome='cStat'    , codigo='CR07' , tamanho=[3, 3, 3]   , raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE)
+        self.xMotivo  = TagCaracter(nome='xMotivo' , codigo='CR08' , tamanho=[1, 255]    , raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE)
+        self.cUF      = TagInteiro(nome='cUF'      , codigo='CR08a', tamanho=[2, 2, 2]   , raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE)
+        self.chCTe    = TagCaracter(nome='chCTe'    , codigo='CR09' , tamanho=[44, 44, 44], raiz='//retcancCTe/infCanc', namespace=NAMESPACE_CTE, obrigatorio=False)
+        self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='CR10' ,                       raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE, obrigatorio=False)
+        self.nProt    = TagCaracter(nome='nProt'    , codigo='CR11' , tamanho=[15, 15, 15], raiz='//retCancCTe/infCanc', namespace=NAMESPACE_CTE, obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
