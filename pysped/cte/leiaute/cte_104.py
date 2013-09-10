@@ -183,10 +183,10 @@ class InfCarga(XMLNFe):
         xml += self.vCarga.xml
         xml += self.proPred.xml
         xml += self.xOutCat.xml
-        
+
         for i in self.infQ:
             xml += i.xml
-            
+
         xml += '</infCarga>'
         return xml
 
@@ -223,7 +223,7 @@ class InfCTeNorm(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += '<infCTeNorm>'
         xml += self.infCarga.xml
-        
+
         for q in self.contQt:
             xml += q.xml
 
@@ -231,15 +231,15 @@ class InfCTeNorm(XMLNFe):
 
         for s in self.seg:
             xml += s.xml
-            
-        #xml += self.infModal.xml    
-            
+
+        #xml += self.infModal.xml
+
         for p in self.peri:
             xml += p.xml
-            
+
         for v in self.veicNovos:
             xml += v.xml
-            
+
         xml += self.cobr.xml
         xml += '</infCTeNorm>'
         return xml
@@ -259,7 +259,7 @@ class InfCTeNorm(XMLNFe):
             #self.seg       = self.le_grupo('//CTe/infCte/infCTeNorm/seg'      , Seg      , sigla_ns='cte')
             #self.peri      = self.le_grupo('//CTe/infCte/infCTeNorm/peri'     , Peri     , sigla_ns='cte')
             #self.veicNovos = self.le_grupo('//CTe/infCte/infCTeNorm/veicNovos', VeicNovos, sigla_ns='cte')
-            
+
     xml = property(get_xml, set_xml)
 
 
@@ -552,7 +552,7 @@ class LocEnt(XMLNFe):
             xml += self.CPF.xml
         else:
             xml += self.CNPJ.xml
-        
+
         xml += self.xNome.xml
         xml += self.xLgr.xml
         xml += self.nro.xml
@@ -659,7 +659,7 @@ class Dest(XMLNFe):
         xml += self.email.xml
         xml += self.locEnt.xml
         xml += '</dest>'
-            
+
         return xml
 
     def set_xml(self, arquivo):
@@ -752,7 +752,7 @@ class Receb(XMLNFe):
         xml += self.enderReceb.xml
         xml += self.email.xml
         xml += '</receb>'
-            
+
         return xml
 
     def set_xml(self, arquivo):
@@ -843,7 +843,7 @@ class Exped(XMLNFe):
         xml += self.enderExped.xml
         xml += self.email.xml
         xml += '</exped>'
-            
+
         return xml
 
     def set_xml(self, arquivo):
@@ -867,7 +867,7 @@ class InfOutros(XMLNFe):
         self.nDoc   = TagInteiro(nome='nDoc'  , codigo='B20', tamanho=[ 1, 20]   , raiz='//infOutros', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.dEmi   = TagData(nome='dEmi'     , codigo='B09',                      raiz='//infOutros', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.vDocFisc = TagDecimal(nome='vDocFisc', codigo='W16', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//infOutros', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
-        
+
     def get_xml(self):
         if not self.mod.valor:
             return ''
@@ -898,7 +898,7 @@ class InfNFe(XMLNFe):
         super(InfNFe, self).__init__()
         self.chave  = TagCaracter(nome='chave', codigo='B16', tamanho=[44, 44]   , raiz='//infNFe', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.PIN    = TagInteiro(nome='PIN'   , codigo='B20', tamanho=[ 2, 9]    , raiz='//infNFe', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
-        
+
     def get_xml(self):
         if not self.chave.valor:
             return ''
@@ -938,12 +938,12 @@ class LocRet(XMLNFe):
 
         xml = XMLNFe.get_xml(self)
         xml += '<locRet>'
-        
+
         if self.CPF.valor:
             xml += self.CPF.xml
         else:
             xml += self.CNPJ.xml
-        
+
         xml += self.xNome.xml
         xml += self.xLgr.xml
         xml += self.nro.xml
@@ -990,7 +990,7 @@ class InfNF(XMLNFe):
         self.nPeso  = TagDecimal(nome='nPeso' , codigo='W16', tamanho=[1, 12, 1], decimais=[0, 3, 3], raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
         self.PIN    = TagInteiro(nome='PIN'   , codigo='B20', tamanho=[ 2, 9]    , raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
         self.locRet = LocRet()
-        
+
     def get_xml(self):
         if not self.mod.valor:
             return ''
@@ -1117,7 +1117,7 @@ class Rem(XMLNFe):
         xml += self.fone.xml
         xml += self.enderReme.xml
         xml += self.email.xml
-        
+
         for inf in self.infNF:
             xml += inf.xml
 
@@ -1126,9 +1126,9 @@ class Rem(XMLNFe):
 
         for iou in self.infOutros:
             xml += iou.xml
-        
+
         xml += '</rem>'
-            
+
         return xml
 
     def set_xml(self, arquivo):
@@ -1153,7 +1153,7 @@ class Rem(XMLNFe):
             self.infOutros = self.le_grupo('//CTe/infCte/rem/infOutros', InfOutros, sigla_ns='cte')
 
     xml = property(get_xml, set_xml)
-    
+
 
 class EnderEmit(XMLNFe):
     def __init__(self):
@@ -1339,7 +1339,7 @@ class Entrega(XMLNFe):
         self.tpHorNoInter = TagCaracter(nome='tpHor', tamanho=[1, 1, 1], raiz='//CTe/infCte/compl/Entrega/noInter', obrigatorio=False)
         self.hIni = TagHora(nome='hIni', raiz='//CTe/infCte/compl/Entrega/noInter')
         self.hFim = TagHora(nome='hFim', raiz='//CTe/infCte/compl/Entrega/noInter')
-        
+
 
     def get_xml(self):
         if not (self.tpPer.valor and self.tpHor.valor):
@@ -1347,18 +1347,18 @@ class Entrega(XMLNFe):
 
         xml = XMLNFe.get_xml(self)
         xml += '<Entrega>'
-        
+
         if self.tpPer.valor == '0':
             xml += '<semData>'
             xml += self.tpPer.xml
             xml += '</semData>'
-            
+
         elif self.tpPer.valor <= '3':
             xml += '<comData>'
             xml += self.tpPer.xml
             xml += self.dProg.xml
             xml += '</comData>'
-            
+
         else:
             xml += '<noPeriodo>'
             xml += self.tpPer.xml
@@ -1370,26 +1370,26 @@ class Entrega(XMLNFe):
             xml += '<semHora>'
             xml += self.tpHor.xml
             xml += '</semHora>'
-            
+
         elif self.tpHor.valor <= '3':
             xml += '<comHora>'
             xml += self.tpHor.xml
             xml += self.hProg.xml
             xml += '</comHora>'
-            
+
         else:
             xml += '<noInter>'
             xml += self.tpHor.xml
             xml += self.hIni.xml
             xml += self.hFim.xml
             xml += '</noInter>'
-            
+
         xml += '</Entrega>'
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            
+
             if self._le_noh('//CTe/infCte/compl/Entrega/semData') is not None:
                 self.tpPerSemData.xml = arquivo
                 self.tpPer.valor = self.tpPerSemData.valor
@@ -1399,7 +1399,7 @@ class Entrega(XMLNFe):
             else:
                 self.tpPerNoPeriodo.xml = arquivo
                 self.tpPer.valor = self.tpPerNoPeriodo.valor
-            
+
             self.dProg.xml = arquivo
             self.dIni.xml = arquivo
             self.dFim.xml = arquivo
@@ -1441,7 +1441,7 @@ class Pass(XMLNFe):
             self.xPass.xml = arquivo
 
     xml = property(get_xml, set_xml)
-      
+
 
 class Fluxo(XMLNFe):
     def __init__(self):
@@ -1458,11 +1458,11 @@ class Fluxo(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += '<fluxo>'
         xml += self.xOrig.xml
-        
+
         if len(self.passagem):
             for p in self.passagem:
                 xml += p.xml
-        
+
         xml += self.xDest.xml
         xml += self.xRota.xml
         xml += '</fluxo>'
@@ -1471,7 +1471,7 @@ class Fluxo(XMLNFe):
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.xOrig.xml = arquivo
-            
+
             #
             # Técnica para leitura de tags múltiplas
             # As classes dessas tags, e suas filhas, devem ser
@@ -1479,7 +1479,7 @@ class Fluxo(XMLNFe):
             # lidas corretamente
             #
             self.passagem = self.le_grupo('//CTe/infCte/compl/fluxo/pass', Pass, sigla_ns='cte')
-            
+
             self.xDest.xml = arquivo
             self.xRota.xml = arquivo
 
@@ -1501,7 +1501,7 @@ class Compl(XMLNFe):
         self.ObsFisco = []
 
     def get_xml(self):
-        if not (self.xCaracAd.valor or self.xCaracSer.valor or self.xEmi.valor or self.origCalc.valor or self.destCalc.valor or 
+        if not (self.xCaracAd.valor or self.xCaracSer.valor or self.xEmi.valor or self.origCalc.valor or self.destCalc.valor or
             self.xObs.valor or len(self.ObsCont) or len(self.ObsFisco) or self.fluxo is not None or self.Entrega is not None):
             return ''
 
@@ -1515,7 +1515,7 @@ class Compl(XMLNFe):
         xml += self.origCalc.xml
         xml += self.destCalc.xml
         xml += self.xObs.xml
-        
+
         for o in self.ObsCont:
             xml += o.xml
 
@@ -1535,7 +1535,7 @@ class Compl(XMLNFe):
             self.origCalc.xml = arquivo
             self.destCalc.xml = arquivo
             self.xObs.xml = arquivo
-            
+
             #
             # Técnica para leitura de tags múltiplas
             # As classes dessas tags, e suas filhas, devem ser
@@ -1611,7 +1611,7 @@ class Tomador(XMLNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        
+
         if self.toma.valor < 4:
             xml += '<toma03>'
             xml += self.toma.xml
@@ -1633,7 +1633,7 @@ class Tomador(XMLNFe):
             xml += self.enderToma.xml
             xml += self.email.xml
             xml += '</toma4>'
-            
+
         return xml
 
     def set_xml(self, arquivo):
@@ -1647,7 +1647,7 @@ class Tomador(XMLNFe):
             self.enderToma.xml = arquivo
             self.email.xml     = arquivo
 
-            if self._le_noh('//CTe/infCte/ide/toma03/toma') is not None:            
+            if self._le_noh('//CTe/infCte/ide/toma03/toma') is not None:
                 self.toma03.xml = arquivo
                 self.toma.valor = self.toma03.valor
             else:
@@ -1836,6 +1836,38 @@ class InfCTe(XMLNFe):
             self.vPrest.xml   = arquivo
             self.imp.xml      = arquivo
             self.infCTeNorm.xml = arquivo
+
+            if self.ide.tomador.toma.valor != 4:
+                if self.ide.tomador.toma.valor == 0:
+                    tomador = self.rem
+                    endertoma = self.rem.enderReme
+                elif self.ide.tomador.toma.valor == 1:
+                    tomador = self.exped
+                    endertoma = self.exped.enderExped
+                elif self.ide.tomador.toma.valor == 2:
+                    tomador = self.receb
+                    endertoma = self.receb.enderReceb
+                elif self.ide.tomador.toma.valor == 3:
+                    tomador = self.dest
+                    endertoma = self.dest.enderDest
+
+                self.ide.tomador.CNPJ.valor = tomador.CNPJ.valor
+                self.ide.tomador.CPF.valor = tomador.CPF.valor
+                self.ide.tomador.IE.valor = tomador.IE.valor
+                self.ide.tomador.xNome.valor = tomador.xNome.valor
+                self.ide.tomador.xFant.valor = tomador.xFant.valor
+                self.ide.tomador.fone.valor = tomador.fone.valor
+                self.ide.tomador.email.valor = tomador.email.valor
+                self.ide.tomador.enderToma.xLgr.valor = endertoma.xLgr.valor
+                self.ide.tomador.enderToma.nro.valor = endertoma.nro.valor
+                self.ide.tomador.enderToma.xCpl.valor = endertoma.xCpl.valor
+                self.ide.tomador.enderToma.xBairro.valor = endertoma.xBairro.valor
+                self.ide.tomador.enderToma.cMun.valor = endertoma.cMun.valor
+                self.ide.tomador.enderToma.xMun.valor = endertoma.xMun.valor
+                self.ide.tomador.enderToma.CEP.valor = endertoma.CEP.valor
+                self.ide.tomador.enderToma.UF.valor = endertoma.UF.valor
+                self.ide.tomador.enderToma.cPais.valor = endertoma.cPais.valor
+                self.ide.tomador.enderToma.xPais.valor = endertoma.xPais.valor
 
             #
             # Técnica para leitura de tags múltiplas
