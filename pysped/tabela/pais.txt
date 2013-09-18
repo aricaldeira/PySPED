@@ -1,0 +1,248 @@
+NOME|CODIGO_BACEN|CODIGO_ANP|CODIGO_SISCOMEX|NOME_FRANCES|NOME_INGLES|ISO_3166_ALFA_2|ISO_3166_ALFA_3|ISO_3166_NUMERICO_3
+Afeganistão|0132|116|013|Afghanistan|Afghanistan|AF|AFG|004
+África do Sul|7560|167|756|Afrique du Sud|South Africa|ZA|ZAF|710
+Albânia|0175|272|017|Albanie|Albania|AL|ALB|008
+Alemanha|0230|9904|023|Allemagne|Germany|DE|DEU|276
+Andorra|0370|493|037|Andorre|Andorra|AD|AND|020
+Angola|0400|558|040|Angola|Angola|AO|AGO|024
+Anguila|0418|9905|041|Anguilla|Anguilla|AI|AIA|660
+Antígua e Barbuda|0434|9906|043|Antigua-et-Barbuda|Antigua and Barbuda|AG|ATG|028
+Arábia Saudita|0531|604|053|Arabie Saoudite|Saudi Arabia|SA|SAU|682
+Argélia|0590|655|059|Algérie|Algeria|DZ|DZA|012
+Argentina|0639|728|063|Argentine|Argentina|AR|ARG|032
+Armênia|0647|779|064|Arménie|Armenia|AM|ARM|051
+Aruba|0655|9907|065|Aruba|Aruba|AW|ABW|533
+Austrália|0698|825|069|Australie|Australia|AU|AUS|036
+Áustria|0728|884|072|Autriche|Austria|AT|AUT|040
+Azerbaijão|0736|930|073|Azerbaïdjan|Azerbaijan|AZ|AZE|031
+Bahamas|0779|981|077|Bahamas|Bahamas|BS|BHS|044
+Bangladeche|0817|1104|081|Bangladesh|Bangladesh|BD|BGD|050
+Barbados|0833|1155|083|Barbade|Barbados|BB|BRB|052
+Barêin|0809|1058|080|Bahreïn|Bahrain|BH|BHR|048
+Bélgica|0876|1228|087|Belgique|Belgium|BE|BEL|056
+Belize|0884|9909|088|Belize|Belize|BZ|BLZ|084
+Benin|2291|1279|229|Bénin|Benin|BJ|BEN|204
+Bermudas|0906|1295|090|Bermudes|Bermuda|BM|BMU|060
+Bielorrússia|0850|9908|085|Bélarus|Belarus|BY|BLR|112
+Bolívia|0973|1430|097|Bolivie, lʼÉtat Plurinational de|Bolivia, Plurinational State of|BO|BOL|068
+Bonaire, Santo Eustáquio e Saba|0477|574|047|Bonaire, Saint-Eustache et Saba|Bonaire, Sint Eustatius and Saba|BQ|BES|535
+Bósnia Herzegóvina|0981|9910|098|Bosnie-Herzégovine|Bosnia and Herzegovina|BA|BIH|070
+Botsuana|1015|1481|101|Botswana|Botswana|BW|BWA|072
+Brasil|1058|1554|105|Brésil|Brazil|BR|BRA|076
+Brunei|1082|1589|108|Brunei Darussalam|Brunei Darussalam|BN|BRN|096
+Bulgária|1112|1600|111|Bulgarie|Bulgaria|BG|BGR|100
+Burquina Fasso|0310|9911|031|Burkina Faso|Burkina Faso|BF|BFA|854
+Burúndi|1155|1651|115|Burundi|Burundi|BI|BDI|108
+Butão|1198|1716|119|Bhoutan|Bhutan|BT|BTN|064
+Cabo Verde|1279|1767|127|Cap-Vert|Cape Verde|CV|CPV|132
+Caimã, Ilhas|1376|1996|137|Caïmans, Îles|Cayman Islands|KY|CYM|136
+Camarões|1457|1813|145|Cameroun|Cameroon|CM|CMR|120
+Camboja|1414|1872|141|Cambodge|Cambodia|KH|KHM|116
+Canadá|1490|1929|149|Canada|Canada|CA|CAN|124
+Canárias, Ilhas|1511|9912|151|Espagne|Spain|ES|ESP|724
+Catar|1546|9913|154|Qatar|Qatar|QA|QAT|634
+Cazaquistão|1538|1988|153|Kazakhstan|Kazakhstan|KZ|KAZ|398
+Chade|7889|2046|788|Tchad|Chad|TD|TCD|148
+Chile|1589|2097|158|Chili|Chile|CL|CHL|152
+China|1600|2143|160|Chine|China|CN|CHN|156
+Chipre|1635|2208|163|Chypre|Cyprus|CY|CYP|196
+Christmas, Ilha|5118|9914|511|Christmas, Île|Christmas Island|CX|CXR|162
+Cocos (Keeling), Ilhas|1651|9915|165|Cocos (Keeling), Îles|Cocos (Keeling) Islands|CC|CCK|166
+Colômbia|1694|2305|169|Colombie|Colombia|CO|COL|170
+Comores|1732|4626|173|Comores|Comoros|KM|COM|174
+Congo Brazavile|1775|9917|177|Congo|Congo|CG|COG|178
+Congo Quinxassa|8885|9916|888|Congo, la République Démocratique du|Congo, the Democratic Republic of the|CD|COD|180
+Cook, Ilhas|1830|9918|183|Cook, Îles|Cook Islands|CK|COK|184
+Coreia do Norte|1872|9919|187|Corée, République de|Korea, Republic of|KR|KOR|410
+Coreia do Sul|1902|9920|190|Corée, République Populaire Démocratique de|Korea, Democratic People's Republic of|KP|PRK|408
+Costa do Marfim|1937|2534|193|Côte dʼIvoire|Côte d'Ivoire|CI|CIV|384
+Costa Rica|1961|2585|196|Costa Rica|Costa Rica|CR|CRI|188
+Croácia|1953|9922|195|Croatie|Croatia|HR|HRV|191
+Cuba|1996|2631|199|Cuba|Cuba|CU|CUB|192
+Curaçao|0477|574|047|Curaçao|Curaçao|CW|CUW|531
+Dinamarca|2321|2690|232|Danemark|Denmark|DK|DNK|208
+Djibúti|7838|2747|783|Djibouti|Djibouti|DJ|DJI|262
+Dominica|2356|2801|235|Dominique|Dominica|DM|DMA|212
+Egito|2402|2917|240|Égypte|Egypt|EG|EGY|818
+El Salvador|6874|2976|687|El Salvador|El Salvador|SV|SLV|222
+Emirados Árabes Unidos|2445|9923|244|Émirats Arabes Unis|United Arab Emirates|AE|ARE|784
+Equador|2399|3034|239|Équateur|Ecuador|EC|ECU|218
+Eritreia|2437|9924|243|Érythrée|Eritrea|ER|ERI|232
+Eslováquia|2470|9925|247|Slovaquie|Slovakia|SK|SVK|703
+Eslovênia|2461|9926|246|Slovénie|Slovenia|SI|SVN|705
+Espanha|2453|3131|245|Espagne|Spain|ES|ESP|724
+Estados Unidos|2496|3190|249|États-Unis|United States|US|USA|840
+Estônia|2518|3247|251|Estonie|Estonia|EE|EST|233
+Etiópia|2534|3301|253|Éthiopie|Ethiopia|ET|ETH|231
+Falkland, Ilhas|2550|9927|255|Falkland, Îles (Malvinas)|Falkland Islands (Malvinas)|FK|FLK|238
+Faroe, Ilhas|2593|9928|259|Féroé, Îles|Faroe Islands|FO|FRO|234
+Fiji|8702|3360|870|Fidji|Fiji|FJ|FJI|242
+Filipinas|2674|3417|267|Philippines|Philippines|PH|PHL|608
+Finlândia|2712|3476|271|Finlande|Finland|FI|FIN|246
+França|2755|3646|275|France|France|FR|FRA|250
+Gabão|2810|3697|281|Gabon|Gabon|GA|GAB|266
+Gâmbia|2852|3743|285|Gambie|Gambia|GM|GMB|270
+Gana|2895|3808|289|Ghana|Ghana|GH|GHA|288
+Geórgia|2917|3859|291|Géorgie|Georgia|GE|GEO|268
+Gibraltar|2933|9929|293|Gibraltar|Gibraltar|GI|GIB|292
+Granada|2976|3905|297|Grenade|Grenada|GD|GRD|308
+Grécia|3018|3964|301|Grèce|Greece|GR|GRC|300
+Groenlândia|3050|9930|305|Groenland|Greenland|GL|GRL|304
+Guadalupe|3093|9931|309|Guadeloupe|Guadeloupe|GP|GLP|312
+Guam|3131|9932|313|Guam|Guam|GU|GUM|316
+Guatemala|3174|4014|317|Guatemala|Guatemala|GT|GTM|320
+Guérnesei|1504|9933|150|Guernesey|Guernsey|GG|GGY|831
+Guiana|3379|4065|337|Guyana|Guyana|GY|GUY|328
+Guiana Francesa|3255|9934|325|Guyane Française|French Guiana|GF|GUF|254
+Guiné|3298|4138|329|Guinée|Guinea|GN|GIN|324
+Guiné Equatorial|3310|4235|331|Guinée Équatoriale|Equatorial Guinea|GQ|GNQ|226
+Guiné-Bissau|3344|4189|334|Guinée-Bissau|Guinea-Bissau|GW|GNB|624
+Haiti|3417|4294|341|Haïti|Haiti|HT|HTI|332
+Honduras|3450|4391|345|Honduras|Honduras|HN|HND|340
+Hong Kong|3514|4405|351|Hong Kong|Hong Kong|HK|HKG|344
+Hungria|3557|4456|355|Hongrie|Hungary|HU|HUN|348
+Iêmen|3573|4502|357|Yémen|Yemen|YE|YEM|887
+Índia|3611|4782|361|Inde|India|IN|IND|356
+Indonésia|3654|4839|365|Indonésie|Indonesia|ID|IDN|360
+Irã|3727|4952|372|Iran, République Islamique dʼ|Iran, Islamic Republic of|IR|IRN|364
+Iraque|3697|5002|369|Iraq|Iraq|IQ|IRQ|368
+Irlanda|3751|5053|375|Irlande|Ireland|IE|IRL|372
+Islândia|3794|5177|379|Islande|Iceland|IS|ISL|352
+Israel|3832|5223|383|Israël|Israel|IL|ISR|376
+Itália|3867|5282|386|Italie|Italy|IT|ITA|380
+Jamaica|3913|5398|391|Jamaïque|Jamaica|JM|JAM|388
+Japão|3999|5452|399|Japon|Japan|JP|JPN|392
+Jérsei|1508|9935|150|Jersey|Jersey|JE|JEY|832
+Johnston, Ilhas|3964|9936|396|Îles mineures éloignées des États-Unis|United States Minor Outlying Islands|UM|UMI|581
+Jordânia|4030|5509|403|Jordanie|Jordan|JO|JOR|400
+Kuwait|1988|9921|198|Koweït|Kuwait|KW|KWT|414
+Laos|4200|5665|420|Lao, République Démocratique Populaire|Lao People's Democratic Republic|LA|LAO|418
+Lesoto|4260|5738|426|Lesotho|Lesotho|LS|LSO|426
+Letônia|4278|5789|427|Lettonie|Latvia|LV|LVA|428
+Líbano|4316|5835|431|Liban|Lebanon|LB|LBN|422
+Libéria|4340|5894|434|Libéria|Liberia|LR|LBR|430
+Líbia|4383|5940|438|Libye|Libya|LY|LBY|434
+Liechtenstein|4405|5991|440|Liechtenstein|Liechtenstein|LI|LIE|438
+Lituânia|4421|6041|442|Lituanie|Lithuania|LT|LTU|440
+Luxemburgo|4456|6106|445|Luxembourg|Luxembourg|LU|LUX|442
+Macau|4472|9938|447|Macao|Macao|MO|MAC|446
+Macedônia|4499|9939|449|Macédoine, lʼex-République Yougoslave de|Macedonia, the Former Yugoslav Republic of|MK|MKD|807
+Madagascar|4502|6157|450|Madagascar|Madagascar|MG|MDG|450
+Madeira, Ilha da|4525|7706|452|Portugal|Portugal|PT|PRT|620
+Malásia|4553|6211|455|Malaisie|Malaysia|MY|MYS|458
+Malawi|4588|6270|458|Malawi|Malawi|MW|MWI|454
+Maldivas|4618|6289|461|Maldives|Maldives|MV|MDV|462
+Máli|4642|6327|464|Mali|Mali|ML|MLI|466
+Malta|4677|6386|467|Malte|Malta|MT|MLT|470
+Man, Ilha de|3595|9940|359|Île de Man|Isle of Man|IM|IMN|833
+Marianas do Norte, Ilhas|4723|9941|472|Mariannes du Nord, Îles|Northern Mariana Islands|MP|MNP|580
+Marrocos|4740|6432|474|Maroc|Morocco|MA|MAR|504
+Marshall, Ilhas|4766|9942|476|Marshall, Îles|Marshall Islands|MH|MHL|584
+Martinica|4774|9943|477|Martinique|Martinique|MQ|MTQ|474
+Maurício|4855|6483|485|Maurice|Mauritius|MU|MUS|480
+Mauritânia|4880|6548|488|Mauritanie|Mauritania|MR|MRT|478
+Mayotte|4885||488|Mayotte|Mayotte|YT|MYT|175
+México|4936|6599|493|Mexique|Mexico|MX|MEX|484
+Mianmar|0930|9944|093|Myanmar|Myanmar|MM|MMR|104
+Micronésia|4995|9945|499|Micronésie, États Fédérés de|Micronesia, Federated States of|FM|FSM|583
+Midway, Ilhas|4901|9946|490|Îles mineures éloignées des États-Unis|United States Minor Outlying Islands|UM|UMI|581
+Moçambique|5053|6645|505|Mozambique|Mozambique|MZ|MOZ|508
+Moldávia|4944|6718|494|Moldova, République de|Moldova, Republic of|MD|MDA|498
+Mônaco|4952|6769|495|Monaco|Monaco|MC|MCO|492
+Mongólia|4979|6815|497|Mongolie|Mongolia|MN|MNG|496
+Montenegro|4985||498|Monténégro|Montenegro|ME|MNE|499
+Montserrat|5010|9947|501|Montserrat|Montserrat|MS|MSR|500
+Namíbia|5070|9948|507|Namibie|Namibia|NA|NAM|516
+Nauru|5088|6874|508|Nauru|Nauru|NR|NRU|520
+Nepal|5177|6920|517|Népal|Nepal|NP|NPL|524
+Nicarágua|5215|6971|521|Nicaragua|Nicaragua|NI|NIC|558
+Níger|5258|7048|525|Niger|Niger|NE|NER|562
+Nigéria|5282|7099|528|Nigéria|Nigeria|NG|NGA|566
+Niue|5312|9949|531|Niué|Niue|NU|NIU|570
+Norfolk, Ilha|5355|9950|535|Norfolk, Île|Norfolk Island|NF|NFK|574
+Noruega|5380|7145|538|Norvège|Norway|NO|NOR|578
+Nova Caledônia|5428|9951|542|Nouvelle-Calédonie|New Caledonia|NC|NCL|540
+Nova Zelândia|5487|7218|548|Nouvelle-Zélande|New Zealand|NZ|NZL|554
+Omã|5568|7269|556|Oman|Oman|OM|OMN|512
+Pacífico, Ilhas do (Possessão dos EUA)|5665|9978|566|Îles mineures éloignées des États-Unis|United States Minor Outlying Islands|UM|UMI|581
+Países Baixos (Holanda)|5738|9952|573|Pays-Bas|Netherlands|NL|NLD|528
+Palau|5754|9953|575|Palaos|Palau|PW|PLW|585
+Palestina|5780||578|Palestine, État de|Palestine, State of|PS|PSE|275
+Panamá|5800|7374|580|Panama|Panama|PA|PAN|591
+Papua Nova Guiné|5452|7420|545|Papouasie-Nouvelle-Guinée|Papua New Guinea|PG|PNG|598
+Paquistão|5762|7471|576|Pakistan|Pakistan|PK|PAK|586
+Paraguai|5860|7544|586|Paraguay|Paraguay|PY|PRY|600
+Peru|5894|7595|589|Pérou|Peru|PE|PER|604
+Pitcairn|5932|9955|593|Pitcairn|Pitcairn|PN|PCN|612
+Polinésia Francesa|5991|9956|599|Polynésie Française|French Polynesia|PF|PYF|258
+Polônia|6033|7641|603|Pologne|Poland|PL|POL|616
+Porto Rico|6114|7650|611|Porto Rico|Puerto Rico|PR|PRI|630
+Portugal|6076|7706|607|Portugal|Portugal|PT|PRT|620
+Quênia|6238|7811|623|Kenya|Kenya|KE|KEN|404
+Quirguistão|6254|7870|625|Kirghizistan|Kyrgyzstan|KG|KGZ|417
+Quiribati|4111|5568|411|Kiribati|Kiribati|KI|KIR|296
+Reino Unido|6289|7986|628|Royaume-Uni|United Kingdom|GB|GBR|826
+República Centro-Africana|6408|8044|640|Centrafricaine, République|Central African Republic|CF|CAF|140
+República Dominicana|6475|8095|647|Dominicaine, République|Dominican Republic|DO|DOM|214
+República Tcheca|7919|9966|791|Tchèque, République|Czech Republic|CZ|CZE|203
+Reunião|6602|9957|660|Réunion|Réunion|RE|REU|638
+Romênia|6700|8192|670|Roumanie|Romania|RO|ROU|642
+Ruanda|6750|8230|675|Rwanda|Rwanda|RW|RWA|646
+Rússia|6769|8273|676|Russie, Fédération de|Russian Federation|RU|RUS|643
+Saara Ocidental|6858|9958|685|Sahara Occidental|Western Sahara|EH|ESH|732
+Salomão, Ilhas|6777|4723|677|Salomon, Îles|Solomon Islands|SB|SLB|090
+Samoa|6904|9960|690|Samoa|Samoa|WS|WSM|882
+Samoa Americana|6912|9961|691|Samoa Américaines|American Samoa|AS|ASM|016
+San Marino|6971|8370|697|Saint-Marin|San Marino|SM|SMR|674
+Santa Helena, Ascensão e Tristão da Cunha|7102|9962|710|Sainte-Hélène, Ascension et Tristan da Cunha|Saint Helena, Ascension and Tristan da Cunha|SH|SHN|654
+Santa Lúcia|7153|8419|715|Sainte-Lucie|Saint Lucia|LC|LCA|662
+Santa Sé (Estado da Cidade do Vaticano)|8486|9776|848|Saint-Siège (État de la Cité du Vatican)|Holy See (Vatican City State)|VA|VAT|336
+São Bartolomeu|2755|3646|275|Saint-Barthélemy|Saint Barthélemy|BL|BLM|652
+São Cristóvão e Neves, Ilhas|6955|9963|695|Saint-Christophe-et-Niévès|Saint Kitts and Nevis|KN|KNA|659
+São Martinho (parte francesa)|2755|3646|275|Saint-Martin (partie française)|Saint Martin (French part)|MF|MAF|663
+São Martinho (parte neerlandesa)|0477|574|047|Saint-Martin (partie néerlandaise)|Sint Maarten (Dutch part)|SX|SXM|534
+São Pedro e Miquelon|7005|9964|700|Saint-Pierre-et-Miquelon|Saint Pierre and Miquelon|PM|SPM|666
+São Tomé e Príncipe, Ilhas|7200|8451|720|Sao Tomé-et-Principe|Sao Tome and Principe|ST|STP|678
+São Vicente e Granadinas|7056|9965|705|Saint-Vincent-et-les Grenadines|Saint Vincent and the Grenadines|VC|VCT|670
+Senegal|7285|8508|728|Sénégal|Senegal|SN|SEN|686
+Serra Leoa|7358|8540|735|Sierra Leone|Sierra Leone|SL|SLE|694
+Sérvia|7370||737|Serbie|Serbia|RS|SRB|688
+Seychelles|7315|8583|731|Seychelles|Seychelles|SC|SYC|690
+Singapura|7412|2259|741|Singapour|Singapore|SG|SGP|702
+Síria|7447|8672|744|Syrienne, République Arabe|Syrian Arab Republic|SY|SYR|760
+Somália|7480|8710|748|Somalie|Somalia|SO|SOM|706
+Sri Lanka|7501|8753|750|Sri Lanka|Sri Lanka|LK|LKA|144
+Suazilândia|7544|8818|754|Swaziland|Swaziland|SZ|SWZ|748
+Sudão|7595|8850|759|Soudan|Sudan|SD|SDN|729
+Sudão do Sul||||Soudan du Sud|South Sudan|SS|SSD|728
+Suécia|7641|8893|764|Suède|Sweden|SE|SWE|752
+Suíça|7676|8931|767|Suisse|Switzerland|CH|CHE|756
+Suriname|7706|8982|770|Suriname|Suriname|SR|SUR|740
+Tailândia|7765|9067|776|Thaïlande|Thailand|TH|THA|764
+Taiwan|1619|3522|161|Taïwan, Province de Chine|Taiwan, Province of China|TW|TWN|158
+Tajiquistão|7722|9024|772|Tadjikistan|Tajikistan|TJ|TJK|762
+Tanzânia|7803|9105|780|Tanzanie, République-Unie de|Tanzania, United Republic of|TZ|TZA|834
+Território Britânico no Oceano Índico|7820|9967|782|Océan Indien, Territoire Britannique de lʼ|British Indian Ocean Territory|IO|IOT|086
+Timor Leste|7951|9968|795|Timor-Leste|Timor-Leste|TL|TLS|626
+Togo|8001|9199|800|Togo|Togo|TG|TGO|768
+Tonga|8109|9237|810|Tonga|Tonga|TO|TON|776
+Toquelau|8052|9969|805|Tokelau|Tokelau|TK|TKL|772
+Trinidade e Tobago|8150|9288|815|Trinité-et-Tobago|Trinidad and Tobago|TT|TTO|780
+Tunísia|8206|9334|820|Tunisie|Tunisia|TN|TUN|788
+Turcas e Caicos, Ilhas|8230|9979|823|Turks-et-Caïcos, Îles|Turks and Caicos Islands|TC|TCA|796
+Turcomenistão|8249|9970|824|Turkménistan|Turkmenistan|TM|TKM|795
+Turquia|8273|9415|827|Turquie|Turkey|TR|TUR|792
+Tuvalu|8281|9971|828|Tuvalu|Tuvalu|TV|TUV|798
+Ucrânia|8311|9466|831|Ukraine|Ukraine|UA|UKR|804
+Uganda|8338|9504|833|Ouganda|Uganda|UG|UGA|800
+Uruguai|8451|9687|845|Uruguay|Uruguay|UY|URY|858
+Usbequistão|8478|9725|847|Ouzbékistan|Uzbekistan|UZ|UZB|860
+Vanuatu|5517|9972|551|Vanuatu|Vanuatu|VU|VUT|548
+Venezuela|8508|9814|850|Venezuela, République Bolivarienne du|Venezuela, Bolivarian Republic of|VE|VEN|862
+Vietnã|8583|9857|858|Viet Nam|Viet Nam|VN|VNM|704
+Virgens, Ilhas (Britânicas)|8630|9973|863|Îles Vierges Britanniques|Virgin Islands, British|VG|VGB|092
+Virgens, Ilhas (EUA)|8664|9974|866|Îles Vierges des États-Unis|Virgin Islands, U.S.|VI|VIR|850
+Wake, Ilha|8737|9975|873|Îles mineures éloignées des États-Unis|United States Minor Outlying Islands|UM|UMI|581
+Wallis e Futuna|2755|3646|875|Wallis et Futuna|Wallis and Futuna|WF|WLF|876
+Zâmbia|8907|9954|890|Zambie|Zambia|ZM|ZMB|894
+Zimbábue|6653|9976|665|Zimbabwe|Zimbabwe|ZW|ZWE|716

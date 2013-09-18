@@ -1,0 +1,31 @@
+SIGLA|NOME|CODIGO_IBGE|FUSO_HORARIO|GEOIP
+AC|Acre|12|America/Rio_Branco|01
+AL|Alagoas|27|America/Maceio|02
+AM|Amazonas|13|America/Manaus|04
+AP|Amapá|16|America/Belem|03
+BA|Bahia|29|America/Bahia|05
+CE|Ceará|23|America/Fortaleza|06
+DF|Distrito Federal|53|America/Sao_Paulo|07
+ES|Espírito Santo|32|America/Sao_Paulo|08
+GO|Goiás|52|America/Sao_Paulo|29
+MA|Maranhão|21|America/Belem|13
+MG|Minas Gerais|31|America/Sao_Paulo|15
+MS|Mato Grosso do Sul|50|America/Campo_Grande|11
+MT|Mato Grosso|51|America/Cuiaba|14
+PA|Pará|15|America/Belem|16
+PB|Paraíba|25|America/Recife|17
+PE|Pernambuco|26|America/Recife|30
+PI|Piauí|22|America/Fortaleza|20
+PR|Paraná|41|America/Sao_Paulo|18
+RJ|Rio de Janeiro|33|America/Sao_Paulo|21
+RN|Rio Grande do Norte|24|America/Recife|22
+RO|Rondônia|11|America/Porto_Velho|24
+RR|Roraima|14|America/Boa_Vista|25
+RS|Rio Grande do Sul|43|America/Sao_Paulo|23
+SC|Santa Catarina|42|America/Sao_Paulo|26
+SE|Sergipe|28|America/Maceio|28
+SP|São Paulo|35|America/Sao_Paulo|27
+TO|Tocantins|17|America/Araguaina|31
+EX|Exterior|99|UTC|
+SUFRAMA|SUFRAMA|90|America/Manaus|
+RFB|Receita Federal do Brasil|91|America/Sao_Paulo|
