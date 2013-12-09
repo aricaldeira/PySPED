@@ -300,7 +300,7 @@ class EnvEvento(XMLNFe):
         self.idLote = TagInteiro(nome='idLote'     , codigo='HP03', tamanho=[1, 15, 1], raiz='//envEvento')
         self.evento = []
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'envEvento_V1.00.xsd'
+        self.arquivo_esquema = 'envEvento_v1.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -345,7 +345,7 @@ class RetEnvEvento(XMLNFe):
         self.dic_procEvento = {}
 
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnvEvento_V1.00.xsd'
+        self.arquivo_esquema = 'retEnvEvento_v1.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)

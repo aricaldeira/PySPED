@@ -138,4 +138,4 @@ class RetEnvEventoCCe(RetEnvEvento):
     def __init__(self):
         super(RetEnvEventoCCe, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnvCCe_V1.00.xsd'
+        self.arquivo_esquema = 'retEnvCCe_v1.00.xsd'

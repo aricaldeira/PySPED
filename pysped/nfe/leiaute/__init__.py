@@ -50,7 +50,7 @@ ESQUEMA_ATUAL_VERSAO_3 = 'pl_006r'
 #
 # Versão 2.00, usada a partir de maio/2010
 #
-ESQUEMA_ATUAL_VERSAO_2 = 'pl_006r'
+ESQUEMA_ATUAL_VERSAO_2 = 'pl_006s'
 
 #
 # Versão 1.00, usada até abril/2010

@@ -108,7 +108,7 @@ class RetConsNFeDest(XMLNFe):
         self.indCont  = TagCaracter(nome='indCont'      , codigo='IR08', tamanho=[1,   1, 1], raiz='//retConsNFeDest', obrigatorio=False)
         self.ultNSU   = TagCaracter(nome='ultNSU'       , codigo='IP09', tamanho=[1, 15]    , raiz='//retConsNFeDest', obrigatorio=False)
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retConsNFeDest_v1.01.xsd'
+        self.arquivo_esquema = 'retconsNFeDest_v1.01.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)

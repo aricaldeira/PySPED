@@ -136,4 +136,4 @@ class RetEnvEventoCancNFe(RetEnvEvento):
     def __init__(self):
         super(RetEnvEventoCancNFe, self).__init__()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnvEventoCanceNFe_v1.00.xsd'
+        self.arquivo_esquema = 'retEnvEventoCancNFe_v1.00.xsd'
