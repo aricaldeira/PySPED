@@ -268,7 +268,7 @@ class ProcInutCTe(XMLNFe):
         self.inutCTe = InutCTe()
         self.retInutCTe = RetInutCTe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'procInutCte_v1.04.xsd'
+        self.arquivo_esquema = 'procInutCTe_v1.04.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)

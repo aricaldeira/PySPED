@@ -69,7 +69,7 @@ class ConsSitCTe(XMLNFe):
         xml += self.tpAmb.xml
         xml += self.xServ.xml
         xml += self.chNFe.xml
-        xml += '</consSitNFe>'
+        xml += '</consSitCTe>'
         return xml
 
     def set_xml(self, arquivo):

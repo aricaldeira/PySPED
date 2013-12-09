@@ -869,7 +869,7 @@ class InfOutros(XMLNFe):
         self.vDocFisc = TagDecimal(nome='vDocFisc', codigo='W16', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//infOutros', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
 
     def get_xml(self):
-        if not self.mod.valor:
+        if not (self.tpDoc.valor or self.descOutros.valor or self.nDoc.valor or self.dEmi.valor or self.vDocFisc.valor):
             return ''
 
         xml = XMLNFe.get_xml(self)
@@ -1855,7 +1855,12 @@ class InfCTe(XMLNFe):
                 self.ide.tomador.CPF.valor = tomador.CPF.valor
                 self.ide.tomador.IE.valor = tomador.IE.valor
                 self.ide.tomador.xNome.valor = tomador.xNome.valor
-                self.ide.tomador.xFant.valor = tomador.xFant.valor
+
+                try:
+                    self.ide.tomador.xFant.valor = tomador.xFant.valor4
+                except:
+                    pass
+
                 self.ide.tomador.fone.valor = tomador.fone.valor
                 self.ide.tomador.email.valor = tomador.email.valor
                 self.ide.tomador.enderToma.xLgr.valor = endertoma.xLgr.valor

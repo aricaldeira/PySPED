@@ -214,7 +214,7 @@ class ProcCancCTe(XMLNFe):
         self.cancCTe = CancCTe()
         self.retCancCTe = RetCancCTe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'procCancCte_v1.04.xsd'
+        self.arquivo_esquema = 'procCancCTe_v1.04.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
