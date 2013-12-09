@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "PySPED",
-    version = "0.1.1",
+    version = "0.1.2",
     author = "Aristides Caldeira",
     author_email = 'aristides.caldeira@tauga.com.br',
     test_suite='tests',
@@ -45,7 +45,7 @@ setup(
     license = 'LGPL-v2.1+',
     description = 'PySPED is a library to implement all requirements of the public system of bookkeeping digital',
     long_description = open('README.rst').read(),
-    install_requires=[
+    requires=[
         'Geraldo >= 0.4.16',
         'PyXMLSec >= 0.3.0'
     ],
