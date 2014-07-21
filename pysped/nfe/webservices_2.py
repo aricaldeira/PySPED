@@ -187,11 +187,13 @@ AN = {
         'servidor': 'www.nfe.fazenda.gov.br',
         WS_NFE_RECEPCAO_EVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
         WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
+        WS_NFE_DOWNLOAD: 'NfeDownloadNF/NfeDownloadNF.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor': 'hom.nfe.fazenda.gov.br',
         WS_NFE_RECEPCAO_EVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
         WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
+        WS_NFE_DOWNLOAD: 'NfeDownloadNF/NfeDownloadNF.asmx',
     },
 }
 
@@ -490,7 +492,7 @@ ESTADO_WS = {
     'BA': UFBA,
     'CE': UFCE,
     'DF': SVRS,
-    'ES': SVAN,
+    'ES': SVRS,
     'GO': UFGO,
     'MA': SVAN,
     'MG': UFMG,
@@ -502,7 +504,7 @@ ESTADO_WS = {
     'PI': SVAN,
     'PR': UFPR,
     'RJ': SVRS,
-    'RN': SVAN,
+    'RN': SVRS,
     'RO': SVRS,
     'RR': SVRS,
     'RS': UFRS,
