@@ -102,6 +102,7 @@ class SOAPEnvio(XMLNFe):
         self.nfeCabecMsg = NFeCabecMsg()
         self.nfeDadosMsg = NFeDadosMsg()
         self._header = {b'content-type': b'application/soap+xml; charset=utf-8'}
+        self.soap_action_webservice_e_metodo = False
 
     def get_xml(self):
         self.nfeCabecMsg.webservice = self.webservice
@@ -111,7 +112,10 @@ class SOAPEnvio(XMLNFe):
         self.nfeDadosMsg.webservice = self.webservice
         self.nfeDadosMsg.dados = self.envio
 
-        self._header[b'content-type'] = b'application/soap+xml; charset=utf-8; action="http://www.portalfiscal.inf.br/nfe/wsdl/' + self.webservice.encode('utf-8') + b'"'
+        if self.soap_action_webservice_e_metodo:
+            self._header[b'content-type'] = b'application/soap+xml; charset=utf-8; action="http://www.portalfiscal.inf.br/nfe/wsdl/' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8') + b'"'
+        else:
+            self._header[b'content-type'] = b'application/soap+xml; charset=utf-8; action="http://www.portalfiscal.inf.br/nfe/wsdl/' + self.webservice.encode('utf-8') + b'"'
 
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA

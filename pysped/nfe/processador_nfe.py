@@ -144,7 +144,7 @@ class ConexaoHTTPS(HTTPSConnection):
             sock = socket.create_connection((self.host, self.port), self.timeout, self.source_address)
         else:
             sock = socket.create_connection((self.host, self.port), self.timeout)
-            
+
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
@@ -163,6 +163,7 @@ class ProcessadorNFe(object):
         self.danfe = DANFE()
         self.caminho_temporario = ''
         self.maximo_tentativas_consulta_recibo = 5
+        self.consulta_servico_ao_enviar = False
 
         self._servidor     = ''
         self._url          = ''
@@ -220,6 +221,13 @@ class ProcessadorNFe(object):
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
         self._soap_envio.envio      = envio
 
+        #
+        # Ceará começou a dar pau, e não aceita o SOAPAction como os demais
+        # estados...
+        #
+        if self.estado == 'CE':
+            self._soap_envio.soap_action_webservice_e_metodo = True
+
         self._soap_retorno.webservice = self._soap_envio.webservice
         self._soap_retorno.metodo     = self._soap_envio.metodo
         self._soap_retorno.resposta   = resposta
@@ -244,6 +252,11 @@ class ProcessadorNFe(object):
         arq_tmp = open(nome_arq_certificado, 'w')
         arq_tmp.write(self.certificado.certificado)
         arq_tmp.close()
+        #import StringIO
+        #nome_arq_chave = StringIO.StringIO()
+        #nome_arq_chave.write(self.certificado.chave)
+        #nome_arq_certificado = StringIO.StringIO()
+        #nome_arq_certificado.write(self.certificado.certificado)
 
         #con = HTTPSConnection(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
         con = ConexaoHTTPS(self._servidor, key_file=nome_arq_chave, cert_file=nome_arq_certificado)
@@ -670,75 +683,89 @@ class ProcessadorNFe(object):
         ambiente = nfe.infNFe.ide.tpAmb.valor
         self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
 
-        proc_servico = self.consultar_servico(ambiente=ambiente)
-        yield proc_servico
+        if self.consulta_servico_ao_enviar:
+            proc_servico = self.consultar_servico(ambiente=ambiente)
+            yield proc_servico
+            #
+            # Se o serviço não estiver em operação
+            #
+            if proc_servico.resposta.cStat.valor != '107':
+                #
+                # Interrompe todo o processo
+                #
+                return
 
         #
-        # Serviço em operação?
+        # Verificar se as notas já não foram emitadas antes
         #
-        if proc_servico.resposta.cStat.valor == '107':
-            #
-            # Verificar se as notas já não foram emitadas antes
-            #
-            for nfe in lista_nfes:
-                nfe.monta_chave()
-                self.caminho = caminho_original
-                proc_consulta = self.consultar_nota(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
-                yield proc_consulta
-
-                #
-                # Se a nota já constar na SEFAZ
-                #
-                if not (
-                    ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
-                    or
-                    ((self.versao == '2.00') and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
-                ):
-                    #
-                    # Interrompe todo o processo
-                    #
-                    return
-
-            #
-            # Nenhuma das notas estava já enviada, enviá-las então
-            #
-            nfe = lista_nfes[0]
+        for nfe in lista_nfes:
             nfe.monta_chave()
             self.caminho = caminho_original
-            self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
-            proc_envio = self.enviar_lote(lista_nfes=lista_nfes)
-            yield proc_envio
-
-            ret_envi_nfe = proc_envio.resposta
+            proc_consulta = self.consultar_nota(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
+            yield proc_consulta
 
             #
-            # Deu certo?
+            # Se a nota já constar na SEFAZ
             #
-            if ret_envi_nfe.cStat.valor == '103':
+            if not (
+                ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
+                or
+                ((self.versao == '2.00') and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
+            ):
                 #
-                # Aguarda o tempo do processamento antes da consulta
+                # Interrompe todo o processo
                 #
-                time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.3)
+                return
 
-                proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+        #
+        # Nenhuma das notas estava já enviada, enviá-las então
+        #
+        nfe = lista_nfes[0]
+        nfe.monta_chave()
+        self.caminho = caminho_original
+        self.caminho = self.monta_caminho_nfe(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
+        proc_envio = self.enviar_lote(lista_nfes=lista_nfes)
+        yield proc_envio
 
-                #
-                # Tenta receber o resultado do processamento do lote
-                #
-                tentativa = 0
-                while proc_recibo.resposta.cStat.valor == '105' and tentativa < self.maximo_tentativas_consulta_recibo:
-                    time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.5)
-                    tentativa += 1
-                    proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+        ret_envi_nfe = proc_envio.resposta
 
-                # Montar os processos das NF-es
-                dic_protNFe = proc_recibo.resposta.dic_protNFe
-                dic_procNFe = proc_recibo.resposta.dic_procNFe
+        #
+        # Deu errado?
+        #
+        if ret_envi_nfe.cStat.valor != '103':
+            #
+            # Interrompe o processo
+            #
+            return
 
-                self.caminho = caminho_original
-                self.montar_processo_lista_notas(lista_nfes, dic_protNFe, dic_procNFe)
+        #
+        # Aguarda o tempo do processamento antes da consulta
+        #
+        time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.3)
 
-                yield proc_recibo
+        #
+        # Consulta o recibo do lote, para ver o que aconteceu
+        #
+        proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+
+        #
+        # Tenta receber o resultado do processamento do lote, caso ainda
+        # esteja em processamento
+        #
+        tentativa = 0
+        while proc_recibo.resposta.cStat.valor == '105' and tentativa < self.maximo_tentativas_consulta_recibo:
+            time.sleep(ret_envi_nfe.infRec.tMed.valor * 1.5)
+            tentativa += 1
+            proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+
+        # Montar os processos das NF-es
+        dic_protNFe = proc_recibo.resposta.dic_protNFe
+        dic_procNFe = proc_recibo.resposta.dic_procNFe
+
+        self.caminho = caminho_original
+        self.montar_processo_lista_notas(lista_nfes, dic_protNFe, dic_procNFe)
+
+        yield proc_recibo
 
     def montar_processo_lista_notas(self, lista_nfes, dic_protNFe, dic_procNFe):
         for nfe in lista_nfes:
@@ -1183,7 +1210,7 @@ class ProcessadorNFe(object):
             estado = self.estado
 
         envio.infCons.UF.valor = estado
-        
+
         if ie is not None:
             envio.infCons.IE.valor = ie
             nome = 'IE_' + ie
