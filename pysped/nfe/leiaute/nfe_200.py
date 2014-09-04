@@ -1398,7 +1398,7 @@ class Adi(nfe_110.Adi):
 class DI(nfe_110.DI):
     def __init__(self):
         super(DI, self).__init__()
-
+        self.adi = []
 
 class Prod(nfe_110.Prod):
     def __init__(self):
