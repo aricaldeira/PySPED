@@ -1168,7 +1168,7 @@ class ICMS(nfe_110.ICMS):
 class Imposto(nfe_110.Imposto):
     def __init__(self):
         super(Imposto, self).__init__()
-        self.vTotTrib = TagDecimal(nome='vTotTrib', codigo='M02', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//det/imposto', obrigatorio=False)
+        self.vTotTrib = TagDecimal(nome='vTotTrib', codigo='M02', tamanho=[1, 15, 1], decimais=[0,  2,  2], raiz='//det/imposto', obrigatorio=False)
         self.ICMS     = ICMS()
         self.ISSQN    = ISSQN()
 
