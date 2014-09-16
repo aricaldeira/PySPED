@@ -83,15 +83,15 @@ class ConsReciCTe(XMLNFe):
 class InfProt(XMLNFe):
     def __init__(self):
         super(InfProt, self).__init__()
-        self.Id        = TagCaracter(nome='infProt' , codigo='PR04', propriedade='Id'  , raiz='/'        , obrigatorio=False)
-        self.tpAmb     = TagInteiro(nome='tpAmb'    , codigo='PR05', tamanho=[1,   1, 1], raiz='//infProt')
-        self.verAplic  = TagCaracter(nome='verAplic', codigo='PR06', tamanho=[1,  20]   , raiz='//infProt')
-        self.chCTe     = TagCaracter(nome='chCTe'   , codigo='PR07', tamanho=[44, 44]   , raiz='//infProt')
-        self.dhRecbto  = TagDataHora(nome='dhRecbto', codigo='PR08'                     , raiz='//infProt')
-        self.nProt     = TagCaracter(nome='nProt'   , codigo='PR09', tamanho=[15, 15]   , raiz='//infProt', obrigatorio=False)
-        self.digVal    = TagCaracter(nome='digVal'  , codigo='PR10', tamanho=[28, 28]   , raiz='//infProt', obrigatorio=False)
-        self.cStat     = TagCaracter(nome='cStat'   , codigo='PR11' , tamanho=[1,   3]  , raiz='//infProt')
-        self.xMotivo   = TagCaracter(nome='xMotivo' , codigo='PR12' , tamanho=[1, 255]  , raiz='//infProt')
+        self.Id        = TagCaracter(nome='infProt' , codigo='PR04', propriedade='Id'  , raiz='/'        , obrigatorio=False, namespace=NAMESPACE_CTE)
+        self.tpAmb     = TagInteiro(nome='tpAmb'    , codigo='PR05', tamanho=[1,   1, 1], raiz='//infProt', namespace=NAMESPACE_CTE)
+        self.verAplic  = TagCaracter(nome='verAplic', codigo='PR06', tamanho=[1,  20]   , raiz='//infProt', namespace=NAMESPACE_CTE)
+        self.chCTe     = TagCaracter(nome='chCTe'   , codigo='PR07', tamanho=[44, 44]   , raiz='//infProt', namespace=NAMESPACE_CTE)
+        self.dhRecbto  = TagDataHora(nome='dhRecbto', codigo='PR08'                     , raiz='//infProt', namespace=NAMESPACE_CTE)
+        self.nProt     = TagCaracter(nome='nProt'   , codigo='PR09', tamanho=[15, 15]   , raiz='//infProt', obrigatorio=False, namespace=NAMESPACE_CTE)
+        self.digVal    = TagCaracter(nome='digVal'  , codigo='PR10', tamanho=[28, 28]   , raiz='//infProt', obrigatorio=False, namespace=NAMESPACE_CTE)
+        self.cStat     = TagCaracter(nome='cStat'   , codigo='PR11' , tamanho=[1,   3]  , raiz='//infProt', namespace=NAMESPACE_CTE)
+        self.xMotivo   = TagCaracter(nome='xMotivo' , codigo='PR12' , tamanho=[1, 255]  , raiz='//infProt', namespace=NAMESPACE_CTE)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -153,7 +153,8 @@ class ProtCTe(XMLNFe):
             # por isso, a raiz dele não pode ser assumida como sendo sempre o grupo
             # protCTe
             #
-            self.infProt.xml = self._le_noh('//protCTe/infProt')
+            print('aqui:', self._le_noh('//protCTe/infProt', ns=NAMESPACE_CTE))
+            self.infProt.xml = self._le_noh('//protCTe/infProt', ns=NAMESPACE_CTE)
             self.Signature.xml = self._le_noh('//protCTe/sig:Signature')
 
     xml = property(get_xml, set_xml)
@@ -250,6 +251,6 @@ class ProcCTe(XMLNFe):
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.CTe.xml     = arquivo
-            self.protCTe.xml = arquivo
+            self.protCTe.xml = self._le_noh('//cteProc/protCTe', ns=NAMESPACE_CTE)
 
     xml = property(get_xml, set_xml)
