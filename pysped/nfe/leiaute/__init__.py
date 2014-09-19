@@ -45,17 +45,41 @@ from __future__ import division, print_function, unicode_literals
 # Versão 3.10, usada a partir de novembro/2013 para a NFC-e, e
 # março/2014 para a NF-e
 #
-ESQUEMA_ATUAL_VERSAO_3 = 'pl_006r'
+ESQUEMA_ATUAL_VERSAO_3 = 'pl_008e'
 
 #
 # Versão 2.00, usada a partir de maio/2010
 #
-ESQUEMA_ATUAL_VERSAO_2 = 'pl_006s'
+ESQUEMA_ATUAL_VERSAO_2 = 'pl_006v'
 
 #
 # Versão 1.00, usada até abril/2010
 #
 ESQUEMA_ATUAL_VERSAO_1 = 'pl_005f'
+
+#
+# Emissão de NFC-e
+#
+from nfce_310 import NFCe as NFCe_310
+
+#
+# Emissão de NF-e
+#
+from nfe_310 import NFe as NFe_310
+from nfe_310 import NFRef as NFRef_310
+from nfe_310 import Det as Det_310
+from nfe_310 import DI as DI_310
+from nfe_310 import Adi as Adi_310
+from nfe_310 import Med as Med_310
+from nfe_310 import Arma as Arma_310
+from nfe_310 import Reboque as Reboque_310
+from nfe_310 import Vol as Vol_310
+from nfe_310 import Lacres as Lacres_310
+from nfe_310 import Dup as Dup_310
+from nfe_310 import ObsCont as ObsCont_310
+from nfe_310 import ObsFisco as ObsFisco_310
+from nfe_310 import ProcRef as ProcRef_310
+from nfe_310 import AutXML as AutXML_310
 
 
 #
