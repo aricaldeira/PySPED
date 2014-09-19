@@ -44,7 +44,7 @@ from __future__ import division, print_function, unicode_literals
 import os
 from pysped.xml_sped import *
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
-from pysped.nfe.leiaute import ProtNFe_300
+from pysped.nfe.leiaute import ProtNFe_310
 from pysped.nfe.leiaute import ProcEventoCancNFe_100, ProcEventoCCe_100
 from pysped.nfe.leiaute import ProcEventoConfRecebimento_100, ProcEvento_100
 from pysped.nfe.leiaute import conssitnfe_201
@@ -64,8 +64,34 @@ class RetConsSitNFe(conssitnfe_201.RetConsSitNFe):
     def __init__(self):
         super(RetConsSitNFe, self).__init__()
         self.versao     = TagDecimal(nome='retConsSitNFe', codigo='ER01', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
+        self.dhRecbto   = TagDataHoraUTC(nome='dhRecbto', codigo='FR08', raiz='//retConsSitNFe', obrigatorio=False)
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'retConsSitNFe_v3.10.xsd'
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += ABERTURA
+        xml += self.versao.xml
+        xml += self.tpAmb.xml
+        xml += self.verAplic.xml
+        xml += self.cStat.xml
+        xml += self.xMotivo.xml
+        xml += self.cUF.xml
+        xml += self.dhRecbto.xml
+        xml += self.chNFe.xml
+
+        if self.protNFe is not None:
+            xml += self.protNFe.xml
+
+        if self.retCancNFe is not None:
+            xml += tira_abertura(self.retCancNFe.xml)
+
+        if self.procEventoNFe is not None:
+            for pen in self.procEventoNFe:
+                xml += tira_abertura(pen.xml)
+
+        xml += '</retConsSitNFe>'
+        return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
@@ -75,10 +101,11 @@ class RetConsSitNFe(conssitnfe_201.RetConsSitNFe):
             self.cStat.xml     = arquivo
             self.xMotivo.xml   = arquivo
             self.cUF.xml       = arquivo
+            self.dhRecbto.xml  = arquivo
             self.chNFe.xml     = arquivo
 
             if self._le_noh('//retConsSitNFe/protNFe') is not None:
-                self.protNFe = ProtNFe_300()
+                self.protNFe = ProtNFe_310()
                 self.protNFe.xml = arquivo
 
             #if self._le_noh('//retConsSitNFe/retCancNFe') is not None:
@@ -87,3 +114,5 @@ class RetConsSitNFe(conssitnfe_201.RetConsSitNFe):
 
             if self._le_nohs('//retConsSitNFe/procEventoNFe') is not None:
                 self.procEventoNFe = self.le_grupo('//retConsSitNFe/procEventoNFe')
+
+    xml = property(get_xml, set_xml)
