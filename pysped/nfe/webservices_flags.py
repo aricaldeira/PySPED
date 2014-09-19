@@ -44,6 +44,14 @@ from __future__ import division, print_function, unicode_literals
 
 WS_NFE_ENVIO_LOTE = 0
 WS_NFE_CONSULTA_RECIBO = 1
+
+#
+# Novos webservices na versão 3.10, para as mesmas
+# funções dos antigos
+#
+WS_NFE_AUTORIZACAO = WS_NFE_ENVIO_LOTE
+WS_NFE_CONSULTA_AUTORIZACAO = WS_NFE_CONSULTA_RECIBO
+
 WS_NFE_CANCELAMENTO = 2
 WS_NFE_INUTILIZACAO = 3
 WS_NFE_CONSULTA = 4
