@@ -45,7 +45,7 @@ from pysped.xml_sped import *
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import consrecinfe_200
 import os
-from nfe_300 import NFe
+from nfe_310 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -62,6 +62,7 @@ class ConsReciNFe(consrecinfe_200.ConsReciNFe):
 class InfProt(consrecinfe_200.InfProt):
     def __init__(self):
         super(InfProt, self).__init__()
+        self.dhRecbto = TagDataHoraUTC(nome='dhRecbto', codigo='PR08', raiz='//infProt')
 
 
 class ProtNFe(consrecinfe_200.ProtNFe):
