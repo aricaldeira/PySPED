@@ -45,7 +45,7 @@ from pysped.xml_sped import *
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import envinfe_200
 import os
-from nfe_300 import NFe
+from nfe_310 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
