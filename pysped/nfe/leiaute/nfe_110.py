@@ -3960,7 +3960,13 @@ class NFe(XMLNFe):
 
     def gera_nova_chave(self):
         chave = unicode(self.infNFe.ide.cUF.valor).zfill(2)
-        chave += unicode(self.infNFe.ide.dEmi.valor.strftime('%y%m')).zfill(4)
+
+        if str(self.infNFe.versao.valor) == '3.10':
+            chave += unicode(self.infNFe.ide.dhEmi.valor.strftime('%y%m')).zfill(4)
+
+        else:
+            chave += unicode(self.infNFe.ide.dEmi.valor.strftime('%y%m')).zfill(4)
+
         chave += unicode(self.infNFe.emit.CNPJ.valor).zfill(14)
         chave += unicode(self.infNFe.ide.mod.valor).zfill(2)
         chave += unicode(self.infNFe.ide.serie.valor).zfill(3)
