@@ -109,6 +109,15 @@ from leiaute import DownloadNFe_100, RetDownloadNFe_100, TagChNFe_100
 
 
 #
+# NF-e leiaute 3.10
+#
+from leiaute import EnviNFe_310, RetEnviNFe_310
+from leiaute import ConsReciNFe_310, RetConsReciNFe_310, ProcNFe_310
+from leiaute import InutNFe_310, RetInutNFe_310, ProcInutNFe_310
+from leiaute import ConsSitNFe_310, RetConsSitNFe_310
+from leiaute import ConsStatServ_310, RetConsStatServ_310
+
+#
 # DANFE
 #
 from danfe import DANFE
@@ -164,7 +173,6 @@ class ProcessadorNFe(object):
         self.caminho = ''
         self.salvar_arquivos = True
         self.contingencia_SCAN = False
-        self.contingencia = False
         self.danfe = DANFE()
         self.caminho_temporario = ''
         self.maximo_tentativas_consulta_recibo = 5
@@ -637,6 +645,10 @@ class ProcessadorNFe(object):
             envio = ConsSitNFe_201()
             resposta = RetConsSitNFe_201()
 
+        elif self.versao == '3.10':
+            envio = ConsSitNFe_310()
+            resposta = RetConsSitNFe_310()
+
         processo = ProcessoNFe(webservice=WS_NFE_CONSULTA, envio=envio, resposta=resposta)
 
         if ambiente is None:
@@ -682,8 +694,8 @@ class ProcessadorNFe(object):
             resposta = RetConsStatServ_200()
 
         elif self.versao == '3.10':
-            envio = ConsStatServ_200()
-            resposta = RetConsStatServ_200()
+            envio = ConsStatServ_310()
+            resposta = RetConsStatServ_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_SITUACAO, envio=envio, resposta=resposta)
 
@@ -1242,6 +1254,10 @@ class ProcessadorNFe(object):
             resposta = RetConsCad_101()
 
         elif self.versao == '2.00':
+            envio = ConsCad_200()
+            resposta = RetConsCad_200()
+
+        elif self.versao == '3.10':
             envio = ConsCad_200()
             resposta = RetConsCad_200()
 
