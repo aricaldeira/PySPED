@@ -120,7 +120,7 @@ from leiaute import ConsStatServ_310, RetConsStatServ_310
 #
 # DANFE
 #
-from danfe import DANFE
+from danfe import DANFE, DAEDE
 
 
 class ProcessoNFe(object):
@@ -174,6 +174,7 @@ class ProcessadorNFe(object):
         self.salvar_arquivos = True
         self.contingencia_SCAN = False
         self.danfe = DANFE()
+        self.daede = DAEDE()
         self.caminho_temporario = ''
         self.maximo_tentativas_consulta_recibo = 5
         self.consulta_servico_ao_enviar = False
@@ -349,11 +350,15 @@ class ProcessadorNFe(object):
             envio = EnviNFe_200()
             resposta = RetEnviNFe_200()
 
-            if self.ambiente == 2: # Homologação tem detalhes especificos desde a NT2011_002
-                for nfe in lista_nfes:
-                    nfe.infNFe.dest.CNPJ.valor = '99999999000191'
-                    nfe.infNFe.dest.xNome.valor = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
-                    nfe.infNFe.dest.IE.valor = ''
+        elif self.versao == '3.10':
+            envio = EnviNFe_310()
+            resposta = RetEnviNFe_310()
+
+        if self.ambiente == 2: # Homologação tem detalhes especificos desde a NT2011_002
+            for nfe in lista_nfes:
+                nfe.infNFe.dest.CNPJ.valor = '99999999000191'
+                nfe.infNFe.dest.xNome.valor = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+                nfe.infNFe.dest.IE.valor = ''
 
         processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
 
@@ -409,6 +414,10 @@ class ProcessadorNFe(object):
         elif self.versao == '2.00':
             envio = ConsReciNFe_200()
             resposta = RetConsReciNFe_200()
+
+        elif self.versao == '3.10':
+            envio = ConsReciNFe_310()
+            resposta = RetConsReciNFe_310()
 
         processo = ProcessoNFe(webservice=WS_NFE_CONSULTA_RECIBO, envio=envio, resposta=resposta)
 
@@ -554,6 +563,10 @@ class ProcessadorNFe(object):
             envio = InutNFe_200()
             resposta = RetInutNFe_200()
 
+        elif self.versao == '3.10':
+            envio = InutNFe_310()
+            resposta = RetInutNFe_310()
+
         processo = ProcessoNFe(webservice=WS_NFE_INUTILIZACAO, envio=envio, resposta=resposta)
 
         if ambiente is None:
@@ -600,6 +613,9 @@ class ProcessadorNFe(object):
 
             elif self.versao == '2.00':
                 processo_inutilizacao_nfe = ProcInutNFe_200()
+
+            elif self.versao == '3.10':
+                processo_inutilizacao_nfe = ProcInutNFe_310()
 
             processo_inutilizacao_nfe.inutNFe = envio
             processo_inutilizacao_nfe.retInutNFe = resposta
@@ -763,7 +779,7 @@ class ProcessadorNFe(object):
             if not (
                 ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
                 or
-                ((self.versao == '2.00') and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
+                ((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
             ):
                 #
                 # Interrompe todo o processo
@@ -868,6 +884,9 @@ class ProcessadorNFe(object):
 
             elif self.versao == '2.00':
                 processo = ProcNFe_200()
+
+            elif self.versao == '3.10':
+                processo = ProcNFe_310()
 
             processo.NFe     = nfe
             processo.protNFe = protnfe_recibo
