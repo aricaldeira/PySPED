@@ -126,7 +126,7 @@ class ISSQN(nfe_200.ISSQN):
         self.indISS  = TagCaracter(nome='indISS', codigo='U07', tamanho=[1,  1], raiz='//det/imposto/ISSQN')
         self.cServico = TagInteiro(nome='cListServ', codigo='U06', tamanho=[1, 20], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.cMun     = TagInteiro(nome='cMun'   , codigo='U05', tamanho=[7, 7, 7], raiz='//det/imposto/ISSQN', obrigatorio=False)
-        self.cPasi    = TagInteiro(nome='cPais'  , codigo='U05', tamanho=[4, 4, 4], raiz='//det/imposto/ISSQN', obrigatorio=False)
+        self.cPais    = TagInteiro(nome='cPais'  , codigo='U05', tamanho=[4, 4, 4], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.nProcesso = TagCaracter(nome='indISS', codigo='U07', tamanho=[1, 30], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.indIncentivo = TagCaracter(nome='indIncentivo', codigo='U07', tamanho=[1, 1], raiz='//det/imposto/ISSQN', valor='2')
 
@@ -1350,7 +1350,14 @@ class Ide(nfe_200.Ide):
         xml += self.serie.xml
         xml += self.nNF.xml
         xml += self.dhEmi.xml
+
+        self.dEmi.valor = self.dhEmi.valor
+
         xml += self.dhSaiEnt.xml
+
+        self.dSaiEnt.valor = self.dhSaiEnt.valor
+        self.hSaiEnt.valor = self.hSaiEnt.valor
+
         xml += self.tpNF.xml
         xml += self.idDest.xml
 
@@ -1392,6 +1399,10 @@ class Ide(nfe_200.Ide):
             self.tpNF.xml    = arquivo
             self.idDest.xml  = arquivo
             self.cMunFG.xml  = arquivo
+
+            self.dEmi.valor = self.dhEmi.valor
+            self.dSaiEnt.valor = self.dhSaiEnt.valor
+            self.hSaiEnt.valor = self.hSaiEnt.valor
 
             #
             # Técnica para leitura de tags múltiplas
@@ -1542,3 +1553,48 @@ class NFe(nfe_200.NFe):
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'nfe_v3.10.xsd'
+
+    def monta_chave(self):
+        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, '0')
+        chave += unicode(self.infNFe.ide.dhEmi.valor.strftime('%y%m')).strip().rjust(4, '0')
+        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, '0')
+        chave += '55'
+        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, '0')
+        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, '0')
+
+        #
+        # Inclui agora o tipo da emissão
+        #
+        chave += unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, '0')
+
+        chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, '0')
+        chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
+        self.chave = chave
+
+    def monta_dados_contingencia_fsda(self):
+        dados = unicode(self.infNFe.ide.cUF.valor).zfill(2)
+        dados += unicode(self.infNFe.ide.tpEmis.valor).zfill(1)
+        dados += unicode(self.infNFe.emit.CNPJ.valor).zfill(14)
+        dados += unicode(int(self.infNFe.total.ICMSTot.vNF.valor * 100)).zfill(14)
+
+        #
+        # Há ICMS próprio?
+        #
+        if self.infNFe.total.ICMSTot.vICMS.valor:
+            dados += '1'
+        else:
+            dados += '2'
+
+        #
+        # Há ICMS ST?
+        #
+        if self.infNFe.total.ICMSTot.vST.valor:
+            dados += '1'
+        else:
+            dados += '2'
+
+        dados += self.infNFe.ide.dhEmi.valor.strftime('%d').zfill(2)
+
+        digito = self._calcula_dv(dados)
+        dados += unicode(digito)
+        self.dados_contingencia_fsda = dados
