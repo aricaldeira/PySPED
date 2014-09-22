@@ -72,6 +72,10 @@ class DetEvento(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
+    @property
+    def texto_formatado(self):
+        return u''
+
 
 class InfEvento(XMLNFe):
     def __init__(self):
