@@ -68,6 +68,7 @@ class InutNFe(inutnfe_200.InutNFe):
 class InfInutRecebido(inutnfe_200.InfInutRecebido):
     def __init__(self):
         super(InfInutRecebido, self).__init__()
+        self.dhRecbto = TagDataHoraUTC(nome='dhRecbto', codigo='DR16', raiz='//retInutNFe/infInut', obrigatorio=False)
 
 
 class RetInutNFe(inutnfe_200.RetInutNFe):
