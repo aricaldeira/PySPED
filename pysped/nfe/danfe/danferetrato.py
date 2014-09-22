@@ -113,7 +113,7 @@ class DANFERetrato(Report):
         self.iss              = ISSRetrato()
         self.dados_adicionais = DadosAdicionaisRetrato()
         self.rodape_final     = RodapeFinalRetrato()
-        
+
         #
         # Guarda a definição do cabeçalho e rodapé da 1ª página
         #
@@ -129,7 +129,7 @@ class DANFERetrato(Report):
                 self.cabecalho_primeira_pagina_filhos = list(self.band_page_header.child_bands)
                 self.remetente_filhos = list(self.remetente.child_bands)
                 self.rodape_primeira_pagina = self.band_page_footer
-            
+
             else:
                 self.band_page_header = self.cabecalho_primeira_pagina
                 #self.band_page_header.child_bands = []
@@ -137,7 +137,7 @@ class DANFERetrato(Report):
                 #self.remetente.child_bands = []
                 self.remetente.child_bands = self.remetente_filhos
                 self.band_page_footer = self.rodape_primeira_pagina
-            
+
         else:
             self.band_page_footer = self.rodape_final
 
