@@ -168,11 +168,12 @@ class ProcessadorNFe(object):
     def __init__(self):
         self.ambiente = 2
         self.estado = 'SP'
-        self.versao = '2.00'
+        self.versao = '3.10'
         self.certificado = Certificado()
         self.caminho = ''
         self.salvar_arquivos = True
         self.contingencia_SCAN = False
+        self.contingencia = False
         self.danfe = DANFE()
         self.daede = DAEDE()
         self.caminho_temporario = ''
@@ -214,9 +215,9 @@ class ProcessadorNFe(object):
                 self._servidor = webservices_2.SVAN[ambiente]['servidor']
                 self._url      = webservices_2.SVAN[ambiente][servico]
 
-            elif self.contingencia_SCAN:
-                self._servidor = webservices_2.SCAN[ambiente]['servidor']
-                self._url      = webservices_2.SCAN[ambiente][servico]
+            elif self.contingencia_SCAN or self.contingencia:
+                self._servidor = webservices_2.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
+                self._url      = webservices_2.ESTADO_WS_CONTINGENCIA[ambiente][servico]
 
             else:
                 #
@@ -245,9 +246,9 @@ class ProcessadorNFe(object):
                 self._servidor = webservices_3.SVAN[ambiente]['servidor']
                 self._url      = webservices_3.SVAN[ambiente][servico]
 
-            elif self.contingencia_SCAN:
-                self._servidor = webservices_3.SCAN[ambiente]['servidor']
-                self._url      = webservices_3.SCAN[ambiente][servico]
+            elif self.contingencia_SCAN or self.contingencia:
+                self._servidor = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
+                self._url      = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente][servico]
 
             else:
                 #
