@@ -79,6 +79,12 @@ class DetEventoCancNFe(DetEvento):
 
     xml = property(get_xml, set_xml)
 
+    @property
+    def texto_formatado(self):
+        txt = '<b>Motivo do cancelamento:</b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + self.xJust.valor
+        txt += '<br/><br/>'
+        return txt
+
 
 class InfEventoCancNFe(InfEvento):
     def __init__(self):

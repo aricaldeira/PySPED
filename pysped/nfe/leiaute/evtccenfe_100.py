@@ -55,6 +55,8 @@ DIRNAME = os.path.dirname(__file__)
 
 
 _TEXTO_FIXO = 'A Carta de Correção é disciplinada pelo § 1º-A do art. 7º do Convênio S/N, de 15 de dezembro de 1970 e pode ser utilizada para regularização de erro ocorrido na emissão de documento fiscal, desde que o erro não esteja relacionado com: I - as variáveis que determinam o valor do imposto tais como: base de cálculo, alíquota, diferença de preço, quantidade, valor da operação ou da prestação; II - a correção de dados cadastrais que implique mudança do remetente ou do destinatário; III - a data de emissão ou de saída.'
+_TEXTO_FIXO_FORMATADO = 'A Carta de Correção é disciplinada pelo § 1º-A do art. 7º do Convênio S/N, de 15 de dezembro de 1970 e pode ser utilizada para re- gularização de erro ocorrido na emissão de documento fiscal, desde que o erro não esteja relacionado com:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>I</b> - as variáveis que determinam o valor do imposto tais como: base de cálculo, alíquota, diferença de preço, quantidade, valor da operação ou da prestação;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>II</b> - a correção de dados cadastrais que implique mudança do remetente ou do destinatário;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>III</b> - a data de emissão ou de saída.<br/><br/>'
+
 
 class DetEventoCCe(DetEvento):
     def __init__(self):
@@ -80,6 +82,12 @@ class DetEventoCCe(DetEvento):
             self.xCondUso.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+    @property
+    def texto_formatado(self):
+        txt = '<b>Correção a ser considerada:</b><br/>     ' + self.xCorrecao.valor
+        txt += '<br/><br/><b>Condições de uso:</b><br/>' + _TEXTO_FIXO_FORMATADO
+        return txt
 
 
 class InfEventoCCe(InfEvento):
