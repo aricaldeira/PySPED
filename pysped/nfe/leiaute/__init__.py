@@ -42,45 +42,85 @@
 from __future__ import division, print_function, unicode_literals
 
 #
-# Versão 3.10, usada a partir de novembro/2013 para a NFC-e, e
-# março/2014 para a NF-e
-#
-ESQUEMA_ATUAL_VERSAO_3 = 'pl_008e'
-
-#
-# Versão 2.00, usada a partir de maio/2010
-#
-ESQUEMA_ATUAL_VERSAO_2 = 'pl_006v'
-
-#
 # Versão 1.00, usada até abril/2010
 #
 ESQUEMA_ATUAL_VERSAO_1 = 'pl_005f'
 
 #
-# Emissão de NFC-e
+# Envelopes SOAP
 #
-from nfce_310 import NFCe as NFCe_310
+from soap_100 import SOAPEnvio as SOAPEnvio_110
+from soap_100 import SOAPRetorno as SOAPRetorno_110
 
 #
 # Emissão de NF-e
 #
-from nfe_310 import NFe as NFe_310
-from nfe_310 import NFRef as NFRef_310
-from nfe_310 import Det as Det_310
-from nfe_310 import DI as DI_310
-from nfe_310 import Adi as Adi_310
-from nfe_310 import Med as Med_310
-from nfe_310 import Arma as Arma_310
-from nfe_310 import Reboque as Reboque_310
-from nfe_310 import Vol as Vol_310
-from nfe_310 import Lacres as Lacres_310
-from nfe_310 import Dup as Dup_310
-from nfe_310 import ObsCont as ObsCont_310
-from nfe_310 import ObsFisco as ObsFisco_310
-from nfe_310 import ProcRef as ProcRef_310
-from nfe_310 import AutXML as AutXML_310
+from nfe_110 import NFe as NFe_110
+from nfe_110 import NFRef as NFRef_110
+from nfe_110 import Det as Det_110
+from nfe_110 import DI as DI_110
+from nfe_110 import Adi as Adi_110
+from nfe_110 import Med as Med_110
+from nfe_110 import Arma as Arma_110
+from nfe_110 import Reboque as Reboque_110
+from nfe_110 import Vol as Vol_110
+from nfe_110 import Lacres as Lacres_110
+from nfe_110 import Dup as Dup_110
+from nfe_110 import ObsCont as ObsCont_110
+from nfe_110 import ObsFisco as ObsFisco_110
+from nfe_110 import ProcRef as ProcRef_110
 
+#
+# Envio de lote de NF-e
+#
+from envinfe_110 import EnviNFe as EnviNFe_110
+from envinfe_110 import RetEnviNFe as RetEnviNFe_110
+
+#
+# Consulta do recibo do lote de NF-e
+#
+from consrecinfe_110 import ConsReciNFe as ConsReciNFe_110
+from consrecinfe_110 import RetConsReciNFe as RetConsReciNFe_110
+from consrecinfe_110 import ProtNFe as ProtNFe_110
+from consrecinfe_110 import ProcNFe as ProcNFe_110
+
+#
+# Cancelamento de NF-e
+#
+from cancnfe_107 import CancNFe as CancNFe_107
+from cancnfe_107 import RetCancNFe as RetCancNFe_107
+from cancnfe_107 import ProcCancNFe as ProcCancNFe_107
+
+#
+# Inutilização de NF-e
+#
+from inutnfe_107 import InutNFe as InutNFe_107
+from inutnfe_107 import RetInutNFe as RetInutNFe_107
+from inutnfe_107 import ProcInutNFe as ProcInutNFe_107
+
+#
+# Consulta a situação de NF-e
+#
+from conssitnfe_107 import ConsSitNFe as ConsSitNFe_107
+from conssitnfe_107 import RetConsSitNFe as RetConsSitNFe_107
+
+#
+# Consulta a situação do serviço
+#
+from consstatserv_107 import ConsStatServ as ConsStatServ_107
+from consstatserv_107 import RetConsStatServ as RetConsStatServ_107
+
+#
+# Consulta cadastro
+#
+from conscad_101 import ConsCad as ConsCad_101
+from conscad_101 import RetConsCad as RetConsCad_101
+
+
+#
+# Versão 2.00, usada a partir de maio/2010
+#
+ESQUEMA_ATUAL_VERSAO_2 = 'pl_006v'
 
 #
 # Envelopes SOAP
@@ -145,12 +185,6 @@ from conssitnfe_200 import RetConsSitNFe as RetConsSitNFe_200
 #
 from consstatserv_200 import ConsStatServ as ConsStatServ_200
 from consstatserv_200 import RetConsStatServ as RetConsStatServ_200
-
-#
-# Consulta cadastro
-#
-#from conscad_101 import ConsCad as ConsCad_101
-#from conscad_101 import RetConsCad as RetConsCad_101
 
 #
 # Eventos da NF-e - classes básicas
@@ -223,180 +257,66 @@ from downloadnfe_100 import RetDownloadNFe as RetDownloadNFe_100
 from conscad_200 import ConsCad as ConsCad_200
 from conscad_200 import RetConsCad as RetConsCad_200
 
+
 #
-# Envelopes SOAP
+# Versão 3.10, usada a partir de novembro/2013 para a NFC-e, e
+# março/2014 para a NF-e
 #
-from soap_100 import SOAPEnvio as SOAPEnvio_110
-from soap_100 import SOAPRetorno as SOAPRetorno_110
+ESQUEMA_ATUAL_VERSAO_3 = 'pl_008e'
+
+#
+# Emissão de NFC-e
+#
+from nfce_310 import NFCe as NFCe_310
 
 #
 # Emissão de NF-e
 #
-from nfe_110 import NFe as NFe_110
-from nfe_110 import NFRef as NFRef_110
-from nfe_110 import Det as Det_110
-from nfe_110 import DI as DI_110
-from nfe_110 import Adi as Adi_110
-from nfe_110 import Med as Med_110
-from nfe_110 import Arma as Arma_110
-from nfe_110 import Reboque as Reboque_110
-from nfe_110 import Vol as Vol_110
-from nfe_110 import Lacres as Lacres_110
-from nfe_110 import Dup as Dup_110
-from nfe_110 import ObsCont as ObsCont_110
-from nfe_110 import ObsFisco as ObsFisco_110
-from nfe_110 import ProcRef as ProcRef_110
+from nfe_310 import NFe as NFe_310
+from nfe_310 import NFRef as NFRef_310
+from nfe_310 import Det as Det_310
+from nfe_310 import DI as DI_310
+from nfe_310 import Adi as Adi_310
+from nfe_310 import Med as Med_310
+from nfe_310 import Arma as Arma_310
+from nfe_310 import Reboque as Reboque_310
+from nfe_310 import Vol as Vol_310
+from nfe_310 import Lacres as Lacres_310
+from nfe_310 import Dup as Dup_310
+from nfe_310 import ObsCont as ObsCont_310
+from nfe_310 import ObsFisco as ObsFisco_310
+from nfe_310 import ProcRef as ProcRef_310
+from nfe_310 import AutXML as AutXML_310
 
 #
 # Envio de lote de NF-e
 #
-from envinfe_110 import EnviNFe as EnviNFe_110
-from envinfe_110 import RetEnviNFe as RetEnviNFe_110
+from envinfe_310 import EnviNFe as EnviNFe_310
+from envinfe_310 import RetEnviNFe as RetEnviNFe_310
 
 #
 # Consulta do recibo do lote de NF-e
 #
-from consrecinfe_110 import ConsReciNFe as ConsReciNFe_110
-from consrecinfe_110 import RetConsReciNFe as RetConsReciNFe_110
-from consrecinfe_110 import ProtNFe as ProtNFe_110
-from consrecinfe_110 import ProcNFe as ProcNFe_110
-
-#
-# Cancelamento de NF-e
-#
-from cancnfe_107 import CancNFe as CancNFe_107
-from cancnfe_107 import RetCancNFe as RetCancNFe_107
-from cancnfe_107 import ProcCancNFe as ProcCancNFe_107
+from consrecinfe_310 import ConsReciNFe as ConsReciNFe_310
+from consrecinfe_310 import RetConsReciNFe as RetConsReciNFe_310
+from consrecinfe_310 import ProtNFe as ProtNFe_310
+from consrecinfe_310 import ProcNFe as ProcNFe_310
 
 #
 # Inutilização de NF-e
 #
-from inutnfe_107 import InutNFe as InutNFe_107
-from inutnfe_107 import RetInutNFe as RetInutNFe_107
-from inutnfe_107 import ProcInutNFe as ProcInutNFe_107
+from inutnfe_310 import InutNFe as InutNFe_310
+from inutnfe_310 import RetInutNFe as RetInutNFe_310
+from inutnfe_310 import ProcInutNFe as ProcInutNFe_310
 
 #
 # Consulta a situação de NF-e
 #
-from conssitnfe_107 import ConsSitNFe as ConsSitNFe_107
-from conssitnfe_107 import RetConsSitNFe as RetConsSitNFe_107
+from conssitnfe_310 import ConsSitNFe as ConsSitNFe_310
+from conssitnfe_310 import RetConsSitNFe as RetConsSitNFe_310
 
 #
 # Consulta a situação do serviço
 #
-from consstatserv_107 import ConsStatServ as ConsStatServ_107
-from consstatserv_107 import RetConsStatServ as RetConsStatServ_107
-
-#
-# Consulta cadastro
-#
-from conscad_101 import ConsCad as ConsCad_101
-from conscad_101 import RetConsCad as RetConsCad_101
-
-# Pyflakes
-
-Adi_110
-Adi_200
-Arma_110
-Arma_200
-CONF_RECEBIMENTO_CIENCIA_OPERACAO
-CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
-CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
-CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
-CONS_NFE_EMISSAO_SOMENTE_TERCEIROS
-CONS_NFE_EMISSAO_TODOS_EMITENTES
-CONS_NFE_SEM_CIENCIA_OPERACAO
-CONS_NFE_SEM_CONFIRMACAO_OPERACAO
-CONS_NFE_TODAS
-CancNFe_107
-CancNFe_200
-ConsCad_101
-ConsCad_200
-ConsNFeDest_101
-ConsReciNFe_110
-ConsReciNFe_200
-ConsSitNFe_107
-ConsSitNFe_200
-ConsSitNFe_201
-ConsStatServ_107
-ConsStatServ_200
-DESCEVENTO_CONF_RECEBIMENTO
-DI_110
-DI_200
-Det_110
-Det_200
-DownloadNFe_100
-Dup_110
-Dup_200
-EnvEventoCCe_100
-EnvEventoCancNFe_100
-EnvEventoConfRecebimento_100
-EnvEvento_100
-EnviNFe_110
-EnviNFe_200
-EventoCCe_100
-EventoCancNFe_100
-EventoConfRecebimento_100
-Evento_100
-InutNFe_107
-InutNFe_200
-Lacres_110
-Lacres_200
-Med_110
-Med_200
-NFRef_110
-NFRef_200
-NFe_110
-NFe_200
-ObsCont_110
-ObsCont_200
-ObsFisco_110
-ObsFisco_200
-ProcCancNFe_107
-ProcCancNFe_200
-ProcEventoCCe_100
-ProcEventoCancNFe_100
-ProcEventoConfRecebimento_100
-ProcEvento_100
-ProcInutNFe_107
-ProcInutNFe_200
-ProcNFe_110
-ProcNFe_200
-ProcRef_110
-ProcRef_200
-ProtNFe_110
-ProtNFe_200
-Reboque_110
-Reboque_200
-RetCancNFe_107
-RetCancNFe_200
-RetConsCad_101
-RetConsCad_200
-RetConsNFeDest_101
-RetConsReciNFe_110
-RetConsReciNFe_200
-RetConsSitNFe_107
-RetConsSitNFe_200
-RetConsSitNFe_201
-RetConsStatServ_107
-RetConsStatServ_200
-RetDownloadNFe_100
-RetEnvEventoCCe_100
-RetEnvEventoCancNFe_100
-RetEnvEventoConfRecebimento_100
-RetEnvEvento_100
-RetEnviNFe_110
-RetEnviNFe_200
-RetEventoCCe_100
-RetEventoCancNFe_100
-RetEventoConfRecebimento_100
-RetEvento_100
-RetInutNFe_107
-RetInutNFe_200
-SOAPEnvio_110
-SOAPEnvio_200
-SOAPRetorno_110
-SOAPRetorno_200
-TagChNFe_100
-Vol_110
-Vol_200
+from consstatserv_310 import ConsStatServ as ConsStatServ_310
+from consstatserv_310 import RetConsStatServ as RetConsStatServ_310
