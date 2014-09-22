@@ -42,7 +42,7 @@
 from StringIO import StringIO
 from geraldo.generators import PDFGenerator
 from pysped.nfe.danfe.danferetrato import DANFERetrato
-from pysped.nfe.leiaute import ProtNFe_200, RetCancNFe_200, ProcCancNFe_200
+from pysped.nfe.leiaute import ProtNFe_310, RetCancNFe_200, ProcCancNFe_200
 from pysped.nfe.leiaute import ProcEventoCancNFe_100
 
 
@@ -81,10 +81,10 @@ class DANFE(object):
             self.protNFe = ProtNFe_310()
 
         if self.retCancNFe is None:
-            self.retCancNFe = RetCancNFe_310()
+            self.retCancNFe = RetCancNFe_200()
 
         if self.procCancNFe is None:
-            self.procCancNFe = ProcCancNFe_310()
+            self.procCancNFe = ProcCancNFe_200()
 
         if self.procEventoCancNFe is None:
             self.procEventoCancNFe = ProcEventoCancNFe_100()
