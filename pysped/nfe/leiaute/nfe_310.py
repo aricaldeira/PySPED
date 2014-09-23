@@ -249,7 +249,7 @@ class TagCSTICMS(nfe_200.TagCSTICMS):
         self.grupo_icms.vICMSDeson.obrigatorio = False
         self.grupo_icms.vICMSOp.obrigatorio = False
         self.grupo_icms.pDif.obrigatorio = False
-        self.grupo_icms.pICMSDif.obrigatorio = False
+        self.grupo_icms.vICMSDif.obrigatorio = False
 
 
         #
@@ -260,7 +260,7 @@ class TagCSTICMS(nfe_200.TagCSTICMS):
         self.grupo_icms.vICMSDeson.valor = '0.00'
         self.grupo_icms.vICMSOp.valor = '0.00'
         self.grupo_icms.pDif.valor = '0.00'
-        self.grupo_icms.pICMSDif.valor = '0.00'
+        self.grupo_icms.vICMSDif.valor = '0.00'
 
         #
         # Redefine a raiz para todas as tags do grupo ICMS
@@ -268,7 +268,7 @@ class TagCSTICMS(nfe_200.TagCSTICMS):
         self.grupo_icms.vICMSDeson.raiz  = self.grupo_icms.raiz_tag
         self.grupo_icms.vICMSOp.raiz     = self.grupo_icms.raiz_tag
         self.grupo_icms.pDif.raiz        = self.grupo_icms.raiz_tag
-        self.grupo_icms.pICMSDif.raiz    = self.grupo_icms.raiz_tag
+        self.grupo_icms.vICMSDif.raiz    = self.grupo_icms.raiz_tag
 
     def get_valor(self):
         return self._valor_string
@@ -285,7 +285,7 @@ class ICMS(nfe_200.ICMS):
         self.vICMSDeson = TagDecimal(nome='vICMSDeson', codigo='N27a', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
         self.vICMSOp = TagDecimal(nome='vICMSOp', codigo='P16a', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
         self.pDif = TagDecimal(nome='pDif', codigo='P16b', tamanho=[1, 7, 1], decimais=[0, 2, 4], raiz='', obrigatorio=False)
-        self.pICMSDif = TagDecimal(nome='vICMSDif', codigo='P16b', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
+        self.vICMSDif = TagDecimal(nome='vICMSDif', codigo='P16b', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
 
 
     def get_xml(self):
@@ -574,7 +574,7 @@ class ICMS(nfe_200.ICMS):
             self.vICMSDeson.xml = arquivo
             self.vICMSOp.xml    = arquivo
             self.pDif.xml       = arquivo
-            self.pICMSDif.xml   = arquivo
+            self.vICMSDif.xml   = arquivo
 
             if self.regime_tributario == 1:
                 self.CSOSN.xml       = arquivo
