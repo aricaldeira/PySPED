@@ -1272,6 +1272,42 @@ class Transporta(nfe_200.Transporta):
 class Transp(nfe_200.Transp):
     def __init__(self):
         super(Transp, self).__init__()
+        self.retTransp  = RetTransp()
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<transp>'
+        xml += self.modFrete.xml
+        xml += self.transporta.xml
+        xml += self.retTransp.xml
+        xml += self.veicTransp.xml
+
+        for r in self.reboque:
+            xml += r.xml
+
+        for v in self.vol:
+            xml += v.xml
+
+        xml += '</transp>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.modFrete.xml   = arquivo
+            self.transporta.xml = arquivo
+            self.retTransp.xml  = arquivo
+            self.veicTransp.xml = arquivo
+
+            #
+            # Técnica para leitura de tags múltiplas
+            # As classes dessas tags, e suas filhas, devem ser
+            # "reenraizadas" (propriedade raiz) para poderem ser
+            # lidas corretamente
+            #
+            self.reboque = self.le_grupo('//NFe/infNFe/transp/reboque', Reboque)
+            self.vol = self.le_grupo('//NFe/infNFe/transp/vol', Vol)
+
+    xml = property(get_xml, set_xml)
 
 
 class RetTrib(nfe_200.RetTrib):
