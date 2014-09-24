@@ -977,7 +977,7 @@ class InfNF(XMLNFe):
         self.nRoma  = TagCaracter(nome='nRoma', codigo='B16', tamanho=[ 1, 20]   , raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
         self.nPed   = TagCaracter(nome='nPed' , codigo='B16', tamanho=[ 1, 20]   , raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
         self.mod    = TagCaracter(nome='mod'  , codigo='B18', tamanho=[ 2,  2, 2], raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
-        self.serie  = TagInteiro(nome='serie' , codigo='B19', tamanho=[ 1,  3, 1], raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.serie  = TagCaracter(nome='serie' , codigo='B19', tamanho=[ 1,  3, 1], raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.nDoc   = TagInteiro(nome='nDoc'  , codigo='B20', tamanho=[ 1, 20]   , raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.dEmi   = TagData(nome='dEmi'     , codigo='B09',                      raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.vBC    = TagDecimal(nome='vBC'   , codigo='W03', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//infNF', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
