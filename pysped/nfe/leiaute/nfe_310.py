@@ -190,6 +190,68 @@ class TagCSTCOFINS(nfe_200.TagCSTCOFINS):
 class COFINS(nfe_200.COFINS):
     def __init__(self):
         super(COFINS, self).__init__()
+        self.pCOFINS   = TagDecimal(nome='pCOFINS'  , codigo='S08', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+
+    def get_xml(self):
+        #
+        # Define as tags baseado no código da situação tributária
+        #
+        xml = XMLNFe.get_xml(self)
+        xml += '<COFINS>'
+        xml += '<' + self.nome_tag + '>'
+        xml += self.CST.xml
+
+        if self.CST.valor in ('01', '02'):
+            xml += self.vBC.xml
+            xml += self.pCOFINS.xml
+            xml += self.vCOFINS.xml
+
+        elif self.CST.valor == '03':
+            xml += self.qBCProd.xml
+            xml += self.vAliqProd.xml
+            xml += self.vCOFINS.xml
+
+        elif self.CST.valor in ('04', '06', '07', '08', '09'):
+            pass
+
+        else:
+            if self.qBCProd.valor or self.vAliqProd.valor:
+                xml += self.qBCProd.xml
+                xml += self.vAliqProd.xml
+            else:
+                xml += self.vBC.xml
+                xml += self.pCOFINS.xml
+            xml += self.vCOFINS.xml
+
+        xml += '</' + self.nome_tag + '></COFINS>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            #
+            # Para ler corretamente o COFINS, primeiro temos que descobrir em
+            # qual grupo de situação tributária ele está
+            #
+            if self._le_noh('//det/imposto/COFINS/COFINSAliq') is not None:
+                self.CST.valor = '01'
+            elif self._le_noh('//det/imposto/COFINS/COFINSQtde') is not None:
+                self.CST.valor = '03'
+            elif self._le_noh('//det/imposto/COFINS/COFINSNT') is not None:
+                self.CST.valor = '04'
+            else:
+                self.CST.valor = '99'
+
+            #
+            # Agora podemos ler os valores tranquilamente...
+            #
+            self.CST.xml       = arquivo
+            self.vBC.xml       = arquivo
+            self.pCOFINS.xml   = arquivo
+            self.vCOFINS.xml   = arquivo
+            self.qBCProd.xml   = arquivo
+            self.vAliqProd.xml = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class PISST(nfe_200.PISST):
@@ -205,6 +267,68 @@ class TagCSTPIS(nfe_200.TagCSTPIS):
 class PIS(nfe_200.PIS):
     def __init__(self):
         super(PIS, self).__init__()
+        self.pPIS      = TagDecimal(nome='pPIS'     , codigo='Q08', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+
+    def get_xml(self):
+        #
+        # Define as tags baseado no código da situação tributária
+        #
+        xml = XMLNFe.get_xml(self)
+        xml += '<PIS>'
+        xml += '<' + self.nome_tag + '>'
+        xml += self.CST.xml
+
+        if self.CST.valor in ('01', '02'):
+            xml += self.vBC.xml
+            xml += self.pPIS.xml
+            xml += self.vPIS.xml
+
+        elif self.CST.valor == '03':
+            xml += self.qBCProd.xml
+            xml += self.vAliqProd.xml
+            xml += self.vPIS.xml
+
+        elif self.CST.valor in ('04', '06', '07', '08', '09'):
+            pass
+
+        else:
+            if self.qBCProd.valor or self.vAliqProd.valor:
+                xml += self.qBCProd.xml
+                xml += self.vAliqProd.xml
+            else:
+                xml += self.vBC.xml
+                xml += self.pPIS.xml
+            xml += self.vPIS.xml
+
+        xml += '</' + self.nome_tag + '></PIS>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            #
+            # Para ler corretamente o PIS, primeiro temos que descobrir em
+            # qual grupo de situação tributária ele está
+            #
+            if self._le_noh('//det/imposto/PIS/PISAliq') is not None:
+                self.CST.valor = '01'
+            elif self._le_noh('//det/imposto/PIS/PISQtde') is not None:
+                self.CST.valor = '03'
+            elif self._le_noh('//det/imposto/PIS/PISNT') is not None:
+                self.CST.valor = '04'
+            else:
+                self.CST.valor = '99'
+
+            #
+            # Agora podemos ler os valores tranquilamente...
+            #
+            self.CST.xml       = arquivo
+            self.vBC.xml       = arquivo
+            self.pPIS.xml      = arquivo
+            self.vPIS.xml      = arquivo
+            self.qBCProd.xml   = arquivo
+            self.vAliqProd.xml = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class II(nfe_200.II):
@@ -220,6 +344,66 @@ class TagCSTIPI(nfe_200.TagCSTIPI):
 class IPI(nfe_200.IPI):
     def __init__(self):
         super(IPI, self).__init__()
+        self.pIPI = TagDecimal(nome='pIPI', codigo='O13', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+
+    def get_xml(self):
+        if not ((self.CST.valor in ('00', '49', '50', '99')) or
+           (self.qUnid.valor or self.vUnid.valor or self.vBC.valor or self.pIPI.valor or self.vIPI.valor)):
+            return ''
+
+        #
+        # Define as tags baseado no código da situação tributária
+        #
+        xml = XMLNFe.get_xml(self)
+        xml += '<IPI>'
+        xml += self.clEnq.xml
+        xml += self.CNPJProd.xml
+        xml += self.cSelo.xml
+        xml += self.qSelo.xml
+        xml += self.cEnq.xml
+
+        xml += '<' + self.nome_tag + '>'
+        xml += self.CST.xml
+
+        if self.CST.valor in ('00', '49', '50', '99'):
+            if self.qUnid.valor or self.vUnid.valor:
+                xml += self.qUnid.xml
+                xml += self.vUnid.xml
+            else:
+                xml += self.vBC.xml
+                xml += self.pIPI.xml
+            xml += self.vIPI.xml
+
+        xml += '</' + self.nome_tag + '></IPI>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            #
+            # Para ler corretamente o IPI, primeiro temos que descobrir em
+            # qual grupo de situação tributária ele está
+            #
+            if self._le_noh('//det/imposto/IPI/IPINT') is not None:
+                self.CST.valor = '01'
+            else:
+                self.CST.valor = '00'
+
+            #
+            # Agora podemos ler os valores tranquilamente...
+            #
+            self.CST.xml      = arquivo
+            self.clEnq.xml    = arquivo
+            self.CNPJProd.xml = arquivo
+            self.cSelo.xml    = arquivo
+            self.qSelo.xml    = arquivo
+            self.cEnq.xml     = arquivo
+            self.vBC.xml      = arquivo
+            self.qUnid.xml    = arquivo
+            self.vUnid.xml    = arquivo
+            self.pIPI.xml     = arquivo
+            self.vIPI.xml     = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class TagCSOSN(nfe_200.TagCSOSN):
@@ -279,6 +463,12 @@ class TagCSTICMS(nfe_200.TagCSTICMS):
 class ICMS(nfe_200.ICMS):
     def __init__(self):
         super(ICMS, self).__init__()
+        self.pRedBC   = TagDecimal(nome='pRedBC'  , codigo='N14', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pICMS    = TagDecimal(nome='pICMS'   , codigo='N16', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pMVAST   = TagDecimal(nome='pMVAST'  , codigo='N19', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pRedBCST = TagDecimal(nome='pRedBCST', codigo='N20', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pICMSST  = TagDecimal(nome='pICMSST' , codigo='N22', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pCredSN  = TagDecimal(nome='pCredSN' , codigo='N29', tamanho=[1, 15, 1], decimais=[0, 4, 4], raiz='')
         #
         # Novos campos para o ICMS desonerado
         #
@@ -594,6 +784,9 @@ class Imposto(nfe_200.Imposto):
     def __init__(self):
         super(Imposto, self).__init__()
         self.ICMS     = ICMS()
+        self.IPI      = IPI()
+        self.PIS      = PIS()
+        self.COFINS   = COFINS()
         self.ISSQN    = ISSQN()
 
 
