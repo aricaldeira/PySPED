@@ -113,11 +113,10 @@ class ImpostoDevol(XMLNFe):
 class ISSQN(nfe_200.ISSQN):
     def __init__(self):
         super(ISSQN, self).__init__()
-        #self.vBC       = TagDecimal(nome='vBC'      , codigo='U02', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN')
-        #self.vAliq     = TagDecimal(nome='vAliq'    , codigo='U03', tamanho=[1,  5, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN')
-        #self.vISSQN    = TagDecimal(nome='vISSQN'   , codigo='U04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN')
-        #self.cMunFG    = TagInteiro(nome='cMunFG'   , codigo='U05', tamanho=[7,  7, 7],                     raiz='//det/imposto/ISSQN')
-        #self.cListServ = TagInteiro(nome='cListServ', codigo='U06', tamanho=[3,  4]   ,                     raiz='//det/imposto/ISSQN')
+        self.vAliq     = TagDecimal(nome='vAliq'    , codigo='U03', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ISSQN')
+        #
+        # Campos novos da versão 3.10
+        #
         self.vDeducao = TagDecimal(nome='vDeducao', codigo='U04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.vOutro = TagDecimal(nome='vOutro', codigo='U04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.vDescIncond = TagDecimal(nome='vDescIncond', codigo='U04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN', obrigatorio=False)
@@ -1236,6 +1235,33 @@ class VeicTransp(nfe_200.VeicTransp):
 class RetTransp(nfe_200.RetTransp):
     def __init__(self):
         super(RetTransp, self).__init__()
+        self.pICMSRet = TagDecimal(nome='vICMSRet', codigo='X14', tamanho=[1, 15, 1], decimais=[0, 4, 4], raiz='//NFe/infNFe/transp/retTransp')
+
+    def get_xml(self):
+        if not (self.vServ.valor or self.vBCRet.valor or self.pICMSRet.valor or self.vICMSRet.valor or self.CFOP.valor or self.cMunFG.valor):
+            return ''
+
+        xml = XMLNFe.get_xml(self)
+        xml += '<retTransp>'
+        xml += self.vServ.xml
+        xml += self.vBCRet.xml
+        xml += self.pICMSRet.xml
+        xml += self.vICMSRet.xml
+        xml += self.CFOP.xml
+        xml += self.cMunFG.xml
+        xml += '</retTransp>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.vServ.xml    = arquivo
+            self.vBCRet.xml   = arquivo
+            self.pICMSRet.xml = arquivo
+            self.vICMSRet.xml = arquivo
+            self.CFOP.xml     = arquivo
+            self.cMunFG.xml   = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class Transporta(nfe_200.Transporta):
