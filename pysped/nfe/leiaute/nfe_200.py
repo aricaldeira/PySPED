@@ -920,7 +920,12 @@ class ICMS(nfe_110.ICMS):
             # Agora podemos ler os valores tranquilamente...
             #
             self.orig.xml       = arquivo
-            self.CST.xml        = arquivo
+
+            if self.regime_tributario == 1:
+                self.CSOSN.xml       = arquivo
+            else:
+                self.CST.xml        = arquivo
+
             self.modBC.xml      = arquivo
             self.vBC.xml        = arquivo
             self.pRedBC.xml     = arquivo
@@ -936,7 +941,6 @@ class ICMS(nfe_110.ICMS):
             self.vICMSSTRet.xml = arquivo
 
             if self.regime_tributario == 1:
-                self.CSOSN.xml       = arquivo
                 self.pCredSN.xml     = arquivo
                 self.vCredICMSSN.xml = arquivo
             else:
