@@ -41,6 +41,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
+import os
 import re
 from lxml import etree
 
@@ -109,6 +110,8 @@ def correcoes_xml(xml):
         ('<nfeProc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe">', '<nfeProc versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe">'),
 
         ('<nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" versao="2.00">', '<nfeProc versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe">'),
+
+        ('<nfeProc versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">', '<nfeProc versao="2.00" xmlns="http://www.portalfiscal.inf.br/nfe">'),
     ]
 
     for errado, certo in CORRECOES:
