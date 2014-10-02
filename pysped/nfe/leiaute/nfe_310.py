@@ -1622,10 +1622,6 @@ class Ide(nfe_200.Ide):
         xml += self.idDest.xml
 
         xml += self.cMunFG.xml
-
-        for nr in self.NFref:
-            xml += nr.xml
-
         xml += self.tpImp.xml
         xml += self.tpEmis.xml
         xml += self.cDV.xml
@@ -1639,6 +1635,10 @@ class Ide(nfe_200.Ide):
         xml += self.verProc.xml
         xml += self.dhCont.xml
         xml += self.xJust.xml
+
+        for nr in self.NFref:
+            xml += nr.xml
+
         xml += '</ide>'
         return xml
 

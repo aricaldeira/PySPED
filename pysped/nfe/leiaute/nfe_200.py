@@ -2278,10 +2278,6 @@ class Ide(nfe_110.Ide):
         xml += self.hSaiEnt.xml
         xml += self.tpNF.xml
         xml += self.cMunFG.xml
-
-        for nr in self.NFref:
-            xml += nr.xml
-
         xml += self.tpImp.xml
         xml += self.tpEmis.xml
         xml += self.cDV.xml
@@ -2291,6 +2287,10 @@ class Ide(nfe_110.Ide):
         xml += self.verProc.xml
         xml += self.dhCont.xml
         xml += self.xJust.xml
+
+        for nr in self.NFref:
+            xml += nr.xml
+
         xml += '</ide>'
         return xml
 
