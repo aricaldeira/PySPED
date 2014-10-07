@@ -27,7 +27,7 @@ setup(
         'pysped.cte.leiaute',
         'pysped.cte.dacte',
         'pysped.efd',
-        'pysped.nfse',
+#        'pysped.nfse',
         'pysped.xml_sped',
         'pysped.ecd',
         'pysped.nf_paulista',
@@ -45,7 +45,7 @@ setup(
     license = 'LGPL-v2.1+',
     description = 'PySPED is a library to implement all requirements of the public system of bookkeeping digital',
     long_description = open('README.rst').read(),
-    requires=[
+    install_requires=[
         'Geraldo >= 0.4.16',
         'PyXMLSec >= 0.3.0'
     ],
