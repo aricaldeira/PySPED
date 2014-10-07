@@ -50,6 +50,7 @@ from datetime import datetime
 from pytz import UTC
 from pysped.xml_sped import XMLNFe, NAMESPACE_SIG, ABERTURA, tira_abertura
 from pysped.xml_sped.assinatura import Signature
+from uuid import uuid4
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -57,6 +58,7 @@ DIRNAME = os.path.dirname(__file__)
 
 class Certificado(object):
     def __init__(self):
+        self.stream_certificado = None
         self.arquivo     = ''
         self.senha       = ''
         self.chave       = ''
@@ -75,7 +77,9 @@ class Certificado(object):
             return
 
         # Lendo o arquivo pfx no formato pkcs12 como binário
-        pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
+        if self.stream_certificado is None:
+            self.stream_certificado = open(self.arquivo, 'rb').read()
+        pkcs12 = crypto.load_pkcs12(self.stream_certificado, self.senha)
 
         # Retorna a string decodificada da chave privada
         self.chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
@@ -89,7 +93,9 @@ class Certificado(object):
         if self._certificado_preparado:
             return
 
-        self.prepara_certificado_txt(open(self.arquivo, 'rb').read())
+        if self.stream_certificado is None:
+            self.stream_certificado = open(self.arquivo, 'rb').read()
+        self.prepara_certificado_txt(self.stream_certificado)
 
         self._certificado_preparado = True
 
@@ -283,6 +289,13 @@ class Certificado(object):
     def assina_xmlnfe(self, doc):
         if not isinstance(doc, XMLNFe):
             raise ValueError('O documento nao e do tipo esperado: XMLNFe')
+
+        if self.stream_certificado:
+            caminho_temporario = '/tmp/'
+            self.arquivo = caminho_temporario + uuid4().hex
+            arq_tmp = open(self.arquivo, 'w')
+            arq_tmp.write(self.stream_certificado)
+            arq_tmp.close()
 
         # Realiza a assinatura
         xml = self.assina_xml(doc.xml)
