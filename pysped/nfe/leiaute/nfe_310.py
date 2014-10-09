@@ -346,9 +346,7 @@ class IPI(nfe_200.IPI):
         self.pIPI = TagDecimal(nome='pIPI', codigo='O13', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
 
     def get_xml(self):
-        if (self.CST.valor not in ('01', '02', '03', '04', '51', '52', '53', '54', '55')) or \
-           ((self.CST.valor in ('00', '49', '50', '99')) and \
-           not (self.qUnid.valor or self.vUnid.valor or self.vBC.valor or self.pIPI.valor or self.vIPI.valor)):
+        if self.CST.valor not in ('01', '02', '03', '04', '51', '52', '53', '54', '55'):
             return ''
 
         #
