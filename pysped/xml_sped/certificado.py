@@ -57,7 +57,6 @@ from time import mktime
 from OpenSSL import crypto
 from pytz import UTC
 import base64
-from uuid import uuid4
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -289,14 +288,20 @@ class Certificado(object):
             raise ValueError('O documento nao e do tipo esperado: XMLNFe')
 
         if self.stream_certificado:
-            caminho_temporario = '/tmp/'
-            self.arquivo = caminho_temporario + uuid4().hex
-            arq_tmp = open(self.arquivo, 'w')
-            arq_tmp.write(self.stream_certificado)
-            arq_tmp.close()
+            from tempfile import NamedTemporaryFile
+            pfx_file = NamedTemporaryFile()
+            pfx_file.seek(0)
+            pfx_file.write(self.stream_certificado)
+            pfx_file.flush()
 
-        # Realiza a assinatura
-        xml = self.assina_xml(doc.xml)
+            self.arquivo = pfx_file.name
+
+            with pfx_file as NamedTemporaryFile:
+            # Mantem o arquivo em disco enquanto realiza a assinatura
+                xml = self.assina_xml(doc.xml)
+        else:
+            # Realiza a assinatura
+            xml = self.assina_xml(doc.xml)
 
         # Devolve os valores para a instância doc
         doc.Signature.xml = xml
