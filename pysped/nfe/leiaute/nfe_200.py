@@ -1186,14 +1186,14 @@ class Imposto(nfe_110.Imposto):
             xml += self.ICMS.xml
             xml += self.IPI.xml
             xml += self.II.xml
+        else:
+            # ISSQN é esperado antes de PIS e COFINS
+            xml += self.ISSQN.xml
 
         xml += self.PIS.xml
         xml += self.PISST.xml
         xml += self.COFINS.xml
         xml += self.COFINSST.xml
-
-        if self.ISSQN.cSitTrib.valor:
-            xml += self.ISSQN.xml
 
         xml += '</imposto>'
         return xml
