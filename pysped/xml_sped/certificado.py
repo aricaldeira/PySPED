@@ -64,6 +64,7 @@ DIRNAME = os.path.dirname(__file__)
 
 class Certificado(object):
     def __init__(self):
+        self.stream_certificado = None
         self.arquivo     = ''
         self.senha       = ''
         self.chave       = ''
@@ -78,7 +79,9 @@ class Certificado(object):
 
     def prepara_certificado_arquivo_pfx(self):
         # Lendo o arquivo pfx no formato pkcs12 como binário
-        pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
+        if self.stream_certificado is None:
+            self.stream_certificado = open(self.arquivo, 'rb').read()
+        pkcs12 = crypto.load_pkcs12(self.stream_certificado, self.senha)
 
         # Retorna a string decodificada da chave privada
         self.chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
@@ -87,7 +90,9 @@ class Certificado(object):
         self.prepara_certificado_txt(crypto.dump_certificate(crypto.FILETYPE_PEM, pkcs12.get_certificate()))
 
     def prepara_certificado_arquivo_pem(self):
-        self.prepara_certificado_txt(open(self.arquivo, 'rb').read())
+        if self.stream_certificado is None:
+            self.stream_certificado = open(self.arquivo, 'rb').read()
+        self.prepara_certificado_txt(self.stream_certificado)
 
     def prepara_certificado_txt(self, cert_txt):
         #
@@ -282,8 +287,21 @@ class Certificado(object):
         if not isinstance(doc, XMLNFe):
             raise ValueError('O documento nao e do tipo esperado: XMLNFe')
 
-        # Realiza a assinatura
-        xml = self.assina_xml(doc.xml)
+        if self.stream_certificado:
+            from tempfile import NamedTemporaryFile
+            pfx_file = NamedTemporaryFile()
+            pfx_file.seek(0)
+            pfx_file.write(self.stream_certificado)
+            pfx_file.flush()
+
+            self.arquivo = pfx_file.name
+
+            with pfx_file as NamedTemporaryFile:
+            # Mantem o arquivo em disco enquanto realiza a assinatura
+                xml = self.assina_xml(doc.xml)
+        else:
+            # Realiza a assinatura
+            xml = self.assina_xml(doc.xml)
 
         # Devolve os valores para a instância doc
         doc.Signature.xml = xml
