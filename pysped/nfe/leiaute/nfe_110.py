@@ -3333,7 +3333,7 @@ class EnderDest(XMLNFe):
 class Dest(XMLNFe):
     def __init__(self):
         super(Dest, self).__init__()
-        self.CNPJ      = TagCaracter(nome='CNPJ' , codigo='E02', tamanho=[0 , 14]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
+        self.CNPJ      = TagCaracter(nome='CNPJ' , codigo='E02', tamanho=[0 , 14]   , raiz='//NFe/infNFe/dest', obrigatorio=True)
         self.CPF       = TagCaracter(nome='CPF'  , codigo='E03', tamanho=[11, 11]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
         self.xNome     = TagCaracter(nome='xNome', codigo='E04', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/dest')
         self.enderDest = EnderDest()
