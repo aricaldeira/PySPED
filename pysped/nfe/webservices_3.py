@@ -417,7 +417,7 @@ UFPR = {
         WS_NFE_RECEPCAO_EVENTO  : 'nfe-evento/NFeRecepcaoEvento',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'              : 'homologacao.nfe3.fazenda.pr.gov.br',
+        'servidor'              : 'homologacao.nfe.fazenda.pr.gov.br',
         WS_NFE_AUTORIZACAO       : 'nfe/NFeAutorizacao3',
         WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe/NFeRetAutorizacao3',
         WS_NFE_INUTILIZACAO     : 'nfe/NFeInutilizacao3',
