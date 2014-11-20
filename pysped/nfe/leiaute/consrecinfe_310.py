@@ -64,6 +64,39 @@ class InfProt(consrecinfe_200.InfProt):
         super(InfProt, self).__init__()
         self.dhRecbto = TagDataHoraUTC(nome='dhRecbto', codigo='PR08', raiz='//infProt')
 
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+
+        if self.Id.valor:
+            xml += self.Id.xml
+        else:
+            xml += '<infProt>'
+
+        xml += self.tpAmb.xml
+        xml += self.verAplic.xml
+        xml += self.chNFe.xml
+        xml += self.dhRecbto.xml
+        xml += self.nProt.xml
+        xml += self.digVal.xml
+        xml += self.cStat.xml
+        xml += self.xMotivo.xml
+        xml += '</infProt>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.Id.xml        = arquivo
+            self.tpAmb.xml     = arquivo
+            self.verAplic.xml  = arquivo
+            self.chNFe.xml     = arquivo
+            self.dhRecbto.xml  = arquivo
+            self.nProt.xml     = arquivo
+            self.digVal.xml    = arquivo
+            self.cStat.xml     = arquivo
+            self.xMotivo.xml   = arquivo
+
+    xml = property(get_xml, set_xml)
+
 
 class ProtNFe(consrecinfe_200.ProtNFe):
     def __init__(self):
