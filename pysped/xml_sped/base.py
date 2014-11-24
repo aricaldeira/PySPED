@@ -48,6 +48,7 @@ import locale
 import unicodedata
 import re
 import pytz
+from time import strftime
 
 
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
@@ -489,6 +490,13 @@ class TagDataHora(TagData):
     def set_valor(self, novo_valor):
         if isinstance(novo_valor, basestring):
             if novo_valor:
+                #
+                # Força a ignorar os microssegundos enviados pelo webservice
+                # de distribuição de DF-e
+                #
+                if '.' in novo_valor:
+                    novo_valor = novo_valor.split('.')[0]
+
                 novo_valor = datetime.strptime(novo_valor, '%Y-%m-%dT%H:%M:%S')
             else:
                 novo_valor = None
@@ -516,6 +524,18 @@ class TagDataHora(TagData):
             return ''
         else:
             return self._valor_data.strftime('%d/%m/%Y %H:%M:%S')
+
+
+def fuso_horario_sistema():
+    diferenca = int(strftime('%z')) // 100
+
+    if diferenca < 0:
+        return pytz.timezone('Etc/GMT+' + str(diferenca * -1))
+
+    if diferenca > 0:
+        return pytz.timezone('Etc/GMT-' + str(diferenca))
+
+    return pytz.UTC
 
 
 class TagDataHoraUTC(TagData):
@@ -550,6 +570,12 @@ class TagDataHoraUTC(TagData):
                 novo_valor = None
 
         if isinstance(novo_valor, datetime) and self._valida(novo_valor):
+
+            if not novo_valor.tzinfo:
+                novo_valor = fuso_horario_sistema().localize(novo_valor)
+                novo_valor = pytz.UTC.normalize(novo_valor)
+                novo_valor = self._brasilia.normalize(novo_valor)
+
             self._valor_data = novo_valor
             self._valor_data = self._valor_data.replace(microsecond=0)
             try:
