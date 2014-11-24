@@ -53,7 +53,8 @@ from .webservices_flags import (NFE_AMBIENTE_PRODUCAO,
                                 WS_NFE_DOWNLOAD,
                                 WS_NFE_INUTILIZACAO,
                                 WS_NFE_SITUACAO,
-                                WS_NFE_RECEPCAO_EVENTO)
+                                WS_NFE_RECEPCAO_EVENTO,
+                                WS_DFE_DISTRIBUICAO)
 
 
 METODO_WS = {
@@ -93,6 +94,10 @@ METODO_WS = {
         'webservice': 'NfeConsultaDest',
         'metodo'    : 'nfeConsultaNFDest',
     },
+    WS_DFE_DISTRIBUICAO: {
+        'webservice': 'NFeDistribuicaoDFe',
+        'metodo'    : 'nfeDistDFeInteresse'
+    }
 }
 
 SVRS = {
@@ -221,12 +226,14 @@ AN = {
         WS_NFE_RECEPCAO_EVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
         WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
         WS_NFE_DOWNLOAD: 'NfeDownloadNF/NfeDownloadNF.asmx',
+        WS_DFE_DISTRIBUICAO: 'NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor': 'hom.nfe.fazenda.gov.br',
         WS_NFE_RECEPCAO_EVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
         WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
         WS_NFE_DOWNLOAD: 'NfeDownloadNF/NfeDownloadNF.asmx',
+        WS_DFE_DISTRIBUICAO: 'NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
     },
 }
 

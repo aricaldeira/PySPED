@@ -62,6 +62,7 @@ from webservices_flags import (UF_CODIGO,
                                WS_NFE_INUTILIZACAO,
                                WS_NFE_AUTORIZACAO,
                                WS_NFE_CONSULTA_AUTORIZACAO,
+                               WS_DFE_DISTRIBUICAO,
                                )
 import webservices_1
 import webservices_2
@@ -117,6 +118,8 @@ from leiaute import InutNFe_310, RetInutNFe_310, ProcInutNFe_310
 from leiaute import ConsSitNFe_310, RetConsSitNFe_310
 from leiaute import ConsStatServ_310, RetConsStatServ_310
 
+from leiaute import DistDFeInt_100, RetDistDFeInt_100, SOAPEnvioDistDFe_100, SOAPRetornoDistDFe_100
+
 #
 # DANFE
 #
@@ -130,7 +133,7 @@ class ProcessoNFe(object):
         self.resposta = resposta
 
     def __repr__(self):
-        return 'Processo: ' + webservices_2.METODO_WS[self.webservice]['metodo']
+        return 'Processo: ' + webservices_3.METODO_WS[self.webservice]['metodo']
 
     def __unicode__(self):
         return unicode(self.__repr__())
@@ -234,8 +237,15 @@ class ProcessadorNFe(object):
 
         elif self.versao == '3.10':
             metodo_ws = webservices_3.METODO_WS
-            self._soap_envio   = SOAPEnvio_200()
-            self._soap_retorno = SOAPRetorno_200()
+
+            if servico == WS_DFE_DISTRIBUICAO:
+                self._soap_envio   = SOAPEnvioDistDFe_100()
+                self._soap_retorno = SOAPRetornoDistDFe_100()
+
+            else:
+                self._soap_envio   = SOAPEnvio_200()
+                self._soap_retorno = SOAPRetorno_200()
+
             self._soap_envio.cUF = UF_CODIGO[self.estado]
 
             if somente_ambiente_nacional:
@@ -271,7 +281,7 @@ class ProcessadorNFe(object):
         # Ceará começou a dar pau, e não aceita o SOAPAction como os demais
         # estados...
         #
-        if self.estado == 'CE':
+        if self.estado == 'CE' or servico == WS_DFE_DISTRIBUICAO:
             self._soap_envio.soap_action_webservice_e_metodo = True
 
         self._soap_retorno.webservice = self._soap_envio.webservice
@@ -1191,78 +1201,78 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def cancelar_nota_evento(self, ambiente=None, chave_nfe=None, numero_protocolo=None, justificativa=None):
+    def cancelar_nota_evento(self, ambiente=None, chave_nfe=None, numero_protocolo=None, justificativa=None, data=None):
         evento = EventoCancNFe_100()
         evento.infEvento.tpAmb.valor = ambiente or self.ambiente
         evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
         evento.infEvento.CNPJ.valor = chave_nfe[6:20] # Extrai o CNPJ da própria chave da NF-e
         evento.infEvento.chNFe.valor = chave_nfe
-        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.dhEvento.valor = data or datetime.now()
         evento.infEvento.detEvento.nProt.valor = numero_protocolo
         evento.infEvento.detEvento.xJust.valor = justificativa
 
         processo = self.enviar_lote_cancelamento(lista_eventos=[evento])
         return processo
 
-    def corrigir_nota_evento(self, ambiente=None, chave_nfe=None, numero_sequencia=None, correcao=None):
+    def corrigir_nota_evento(self, ambiente=None, chave_nfe=None, numero_sequencia=None, correcao=None, data=None):
         evento = EventoCCe_100()
         evento.infEvento.tpAmb.valor = ambiente or self.ambiente
         evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
         evento.infEvento.CNPJ.valor = chave_nfe[6:20] # Extrai o CNPJ da própria chave da NF-e
         evento.infEvento.chNFe.valor = chave_nfe
-        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.dhEvento.valor = data or datetime.now()
         evento.infEvento.detEvento.xCorrecao.valor = correcao
         evento.infEvento.nSeqEvento.valor = numero_sequencia or 1
 
         processo = self.enviar_lote_cce(lista_eventos=[evento])
         return processo
 
-    def confirmar_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None):
+    def confirmar_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None, data=None):
         evento = EventoConfRecebimento_100()
         evento.infEvento.tpAmb.valor = ambiente or self.ambiente
         evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
         evento.infEvento.CNPJ.valor = cnpj
         evento.infEvento.chNFe.valor = chave_nfe
-        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.dhEvento.valor = data or datetime.now()
         evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_CONFIRMAR_OPERACAO
         evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
 
         processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
         return processo
 
-    def conhecer_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None):
+    def conhecer_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None, data=None):
         evento = EventoConfRecebimento_100()
         evento.infEvento.tpAmb.valor = ambiente or self.ambiente
         evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
         evento.infEvento.CNPJ.valor = cnpj
         evento.infEvento.chNFe.valor = chave_nfe
-        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.dhEvento.valor = data or datetime.now()
         evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_CIENCIA_OPERACAO
         evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
 
         processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
         return processo
 
-    def desconhecer_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None):
+    def desconhecer_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None, data=None):
         evento = EventoConfRecebimento_100()
         evento.infEvento.tpAmb.valor = ambiente or self.ambiente
         evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
         evento.infEvento.CNPJ.valor = cnpj
         evento.infEvento.chNFe.valor = chave_nfe
-        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.dhEvento.valor = data or datetime.now()
         evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_DESCONHECIMENTO_OPERACAO
         evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
 
         processo = self.enviar_lote_confirmacao_recebimento(lista_eventos=[evento])
         return processo
 
-    def nao_realizar_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None, justificativa=None):
+    def nao_realizar_operacao_evento(self, ambiente=None, chave_nfe=None, cnpj=None, justificativa=None, data=None):
         evento = EventoConfRecebimento_100()
         evento.infEvento.tpAmb.valor = ambiente or self.ambiente
         evento.infEvento.cOrgao.valor = UF_CODIGO[self.estado]
         evento.infEvento.CNPJ.valor = cnpj
         evento.infEvento.chNFe.valor = chave_nfe
-        evento.infEvento.dhEvento.valor = datetime.now()
+        evento.infEvento.dhEvento.valor = data or datetime.now()
         evento.infEvento.tpEvento.valor = CONF_RECEBIMENTO_OPERACAO_NAO_REALIZADA
         evento.infEvento.detEvento.descEvento.valor = DESCEVENTO_CONF_RECEBIMENTO[evento.infEvento.tpEvento.valor]
         evento.infEvento.detEvento.xJust.valor = justificativa
@@ -1314,6 +1324,42 @@ class ProcessadorNFe(object):
         if self.salvar_arquivos:
             arq = open(self.caminho + nome + '-cad.xml', 'w')
             arq.write(resposta.xml.encode('utf-8'))
+            arq.close()
+
+        return processo
+
+    def consultar_distribuicao(self, estado=None, cnpj_cpf=None, ultimo_nsu=None, nsu=None, ambiente=None):
+        envio = DistDFeInt_100()
+        resposta = RetDistDFeInt_100()
+
+        envio.tpAmb.valor = ambiente or self.ambiente
+        envio.cUFAutor.valor = UF_CODIGO[estado or self.estado]
+
+        if len(cnpj_cpf) == 14:
+            envio.CNPJ.valor = cnpj_cpf
+        else:
+            envio.CPF.valor = cnpj_cpf
+
+        if ultimo_nsu is not None:
+            envio.distNSU.ultNSU.valor = unicode(ultimo_nsu)
+        else:
+            envio.consNSU.NSU.valor = unicode(nsu)
+
+        processo = ProcessoNFe(webservice=WS_DFE_DISTRIBUICAO, envio=envio, resposta=resposta)
+
+        envio.validar()
+        nome_arq = self.caminho + datetime.now().strftime('%Y%m%dT%H%M%S')
+        if self.salvar_arquivos:
+            arq = open(nome_arq + '-cons-dist-dfe.xml', 'w')
+            arq.write(envio.xml.encode('utf-8'))
+            arq.close()
+
+        self._conectar_servico(WS_DFE_DISTRIBUICAO, envio, resposta, somente_ambiente_nacional=True)
+
+        #resposta.validar()
+        if self.salvar_arquivos:
+            arq = open(nome_arq + '-ret-dist-dfe.xml', 'w')
+            arq.write(resposta.original.encode('utf-8'))
             arq.close()
 
         return processo
