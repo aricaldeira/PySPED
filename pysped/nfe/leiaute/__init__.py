@@ -320,3 +320,11 @@ from conssitnfe_310 import RetConsSitNFe as RetConsSitNFe_310
 #
 from consstatserv_310 import ConsStatServ as ConsStatServ_310
 from consstatserv_310 import RetConsStatServ as RetConsStatServ_310
+
+#
+# Distribuição de DF-e
+#
+from distdfeint_100 import DistDFeInt as DistDFeInt_100
+from distdfeint_100 import RetDistDFeInt as RetDistDFeInt_100
+from distdfeint_100 import SOAPEnvio as SOAPEnvioDistDFe_100
+from distdfeint_100 import SOAPRetorno as SOAPRetornoDistDFe_100
