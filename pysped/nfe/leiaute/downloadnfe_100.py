@@ -45,6 +45,7 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, TagCaracter, TagDecimal,
                              TagDataHora, TagInteiro, XMLNFe)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 import os
+from lxml import etree
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -125,6 +126,8 @@ class RetNFe(XMLNFe):
         self.chNFe    = TagCaracter(nome='chNFe'    , codigo='CR09' , tamanho=[44, 44, 44], raiz='//retNFe', obrigatorio=False)
         self.cStat    = TagCaracter(nome='cStat'    , codigo='CR07' , tamanho=[3, 3, 3]   , raiz='//retNFe')
         self.xMotivo  = TagCaracter(nome='xMotivo' , codigo='CR08' , tamanho=[1, 255]    , raiz='//retNFe')
+        self.schema  = TagCaracter(nome='procNFe', propriedade='schema', raiz='//retNFe', obrigatorio=False)
+        self.procNFe  = TagCaracter(nome='procNFe', codigo='JR12', raiz='//retNFe', obrigatorio=False)
         self.procNFeZip = TagCaracter(nome='procNFeZip', codigo='JR13', raiz='//retNFe', obrigatorio=False)
         self.procNFeGrupoZip = ProcNFeGrupoZip()
 
@@ -134,6 +137,12 @@ class RetNFe(XMLNFe):
         xml += self.chNFe.xml
         xml += self.cStat.xml
         xml += self.xMotivo.xml
+
+        if self.procNFe.valor:
+            xml += self.schema.xml
+            xml += self.procNFe.valor
+            xml += '</procNFe>'
+
         xml += self.procNFeZip.xml
         xml += self.procNFeGrupoZip.xml
         xml += '</retNFe>'
@@ -144,6 +153,17 @@ class RetNFe(XMLNFe):
             self.chNFe.xml    = arquivo
             self.cStat.xml    = arquivo
             self.xMotivo.xml  = arquivo
+            self.schema.xml = arquivo
+
+            procNFe = self._le_noh('//retNFe/procNFe')
+            if procNFe is not None and len(procNFe):
+                procNFe = etree.tostring(procNFe, encoding='unicode')
+                procNFe = procNFe.split('<')
+                procNFe = '<' + '<'.join(procNFe[2:-1])
+                self.procNFe.valor = procNFe
+            else:
+                self.procNFe.valor = ''
+
             self.procNFeZip.xml = arquivo
             self.procNFeGrupoZip.xml = arquivo
 
