@@ -297,6 +297,9 @@ class ProcessadorNFe(object):
                 else:
                     self._servidor = ws_a_usar[ambiente]['servidor']
                 self._url      = ws_a_usar[ambiente][servico]
+                
+                if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
+                    self._servidor = 'sef.sefaz.rs.gov.br'
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
