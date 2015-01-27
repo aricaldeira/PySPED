@@ -54,7 +54,7 @@ DIRNAME = os.path.dirname(__file__)
 class DistNSU(XMLNFe):
     def __init__(self):
         super(DistNSU, self).__init__()
-        self.ultNSU = TagCaracter(nome='ultNSU', tamanho=[1, 15], raiz='//distDFeInt/distNSU', valor='0')
+        self.ultNSU = TagCaracter(nome='ultNSU', tamanho=[1, 15], raiz='//distDFeInt/distNSU', valor='0000000000000000')
 
     def get_xml(self):
         if not self.ultNSU.valor:
