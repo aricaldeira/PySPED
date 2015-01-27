@@ -279,6 +279,9 @@ class ProcessadorNFe(object):
                 else:
                     self._servidor = ws_a_usar[ambiente]['servidor']
                 self._url      = ws_a_usar[ambiente][servico]
+                
+                if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
+                    self._servidor = 'sef.sefaz.rs.gov.br'
 
             elif self.modelo == '65':
                 if self.contingencia_SCAN or self.contingencia:
