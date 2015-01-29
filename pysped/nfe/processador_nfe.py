@@ -298,6 +298,9 @@ class ProcessadorNFe(object):
                     self._servidor = ws_a_usar[ambiente]['servidor']
                 self._url      = ws_a_usar[ambiente][servico]
                 
+                if ambiente == 1 and servico == WS_DFE_DISTRIBUICAO:
+                    self._servidor = 'www1.nfe.fazenda.gov.br'
+                
                 if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
                     self._servidor = 'sef.sefaz.rs.gov.br'
 
