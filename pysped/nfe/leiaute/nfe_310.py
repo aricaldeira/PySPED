@@ -1669,7 +1669,7 @@ class Ide(nfe_200.Ide):
             # "reenraizadas" (propriedade raiz) para poderem ser
             # lidas corretamente
             #
-            self.NFRef = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
+            self.NFref = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
 
             self.tpImp.xml   = arquivo
             self.tpEmis.xml  = arquivo
