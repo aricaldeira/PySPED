@@ -3650,12 +3650,11 @@ class RefNF(XMLNFe):
 
     txt = property(get_txt)
 
-
-
 class NFRef(XMLNFe):
     def __init__(self):
         super(NFRef, self).__init__()
-        self.refNFe = TagCaracter(nome='refNFe', codigo='B13', tamanho=[44, 44], raiz='//NFRef', obrigatorio=False)
+        self.refNFe = TagCaracter(nome='refNFe', codigo='B13', tamanho=[44,
+                                                                        44], raiz='//NFref', obrigatorio=False)
         self.refNF  = RefNF()
 
     def get_xml(self):
