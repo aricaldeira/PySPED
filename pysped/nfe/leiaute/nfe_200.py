@@ -1802,6 +1802,7 @@ class ICMSTot(nfe_110.ICMSTot):
 class Total(nfe_110.Total):
     def __init__(self):
         super(Total, self).__init__()
+        self.ICMSTot = ICMSTot()
 
 
 class Entrega(nfe_110.Entrega):
