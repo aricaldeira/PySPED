@@ -1088,9 +1088,9 @@ class Adi(nfe_200.Adi):
 class DI(nfe_200.DI):
     def __init__(self):
         super(DI, self).__init__()
-        self.tpViaTransp = TagCaracter(nome='tpViaTransp', codigo='I23a', tamanho=[1,  1], raiz='//DI')
-        self.vAFRMM      = TagDecimal(nome='vAFRMM'      , codigo='I23b', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//DI', obrigatorio=False)
-        self.tpIntermedio = TagCaracter(nome='tpIntermedio', codigo='I23c', tamanho=[1,  1], raiz='//DI')
+        self.tpViaTransp = TagCaracter(nome='tpViaTransp', codigo='I23a', tamanho=[2,  2], raiz='//DI')
+        self.vAFRMM      = TagDecimal(nome='vafrmm'      , codigo='I23b', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//DI', obrigatorio=False)
+        self.tpIntermedio = TagCaracter(nome='tpIntermedio', codigo='I23c', tamanho=[2,  2], raiz='//DI')
         self.CNPJ = TagCaracter(nome='CNPJ'  , codigo='I23d', tamanho=[14, 14], raiz='//DI', obrigatorio=False)
         self.UFTerceiro = TagCaracter(nome='UFTerceiro', codigo='I23e', tamanho=[2, 2], raiz='//DI', obrigatorio=False)
 
