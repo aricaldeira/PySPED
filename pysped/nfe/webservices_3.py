@@ -284,29 +284,28 @@ UFBA = {
     }
 }
 
-
-UFCE = {
-    NFE_AMBIENTE_PRODUCAO: {
-        'servidor'              : 'nfe.sefaz.ce.gov.br',
-        WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeAutorizacao',
-        WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetAutorizacao',
-        WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
-        WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
-        WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
-        WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro2',
-        WS_NFE_RECEPCAO_EVENTO  : 'nfe2/services/RecepcaoEvento',
-    },
-    NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'              : 'nfeh.sefaz.ce.gov.br',
-        WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeAutorizacao',
-        WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetAutorizacao',
-        WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
-        WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
-        WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
-        WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro2',
-        WS_NFE_RECEPCAO_EVENTO  : 'nfe2/services/RecepcaoEvento',
-    }
-}
+#UFCE = {
+    #NFE_AMBIENTE_PRODUCAO: {
+        #'servidor'              : 'nfe.sefaz.ce.gov.br',
+        #WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeRecepcao2',
+        #WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetRecepcao2',
+        #WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
+        #WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
+        #WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
+        #WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro2',
+        #WS_NFE_RECEPCAO_EVENTO  : 'nfe2/services/RecepcaoEvento',
+    #},
+    #NFE_AMBIENTE_HOMOLOGACAO: {
+        #'servidor'              : 'nfeh.sefaz.ce.gov.br',
+        #WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeRecepcao2',
+        #WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetRecepcao2',
+        #WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
+        #WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
+        #WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
+        #WS_NFE_CONSULTA_CADASTRO: 'nfe2/services/CadConsultaCadastro2',
+        #WS_NFE_RECEPCAO_EVENTO  : 'nfe2/services/RecepcaoEvento',
+    #}
+#}
 
 
 UFGO = {
