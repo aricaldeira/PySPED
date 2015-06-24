@@ -838,11 +838,11 @@ class XMLNFe(NohXML):
         # para evitar erros de conversão unicode para ascii
         xml = tira_abertura(self.xml).encode('utf-8')
 
-        esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-        #esquema.assertValid(etree.fromstring(xml))
+        esquema = etree.XMLSchema(etree.parse(arquivo_esquema)) 
         esquema.validate(etree.fromstring(xml))
 
-        return esquema.error_log
+        namespace = '{http://www.portalfiscal.inf.br/nfe}'
+        return "\n".join([x.message.replace(namespace, '') for x in esquema.error_log])
 
     def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe'):
         tags = []
