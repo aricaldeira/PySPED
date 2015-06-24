@@ -874,10 +874,8 @@ class XMLNFe(NohXML):
         xml = tira_abertura(self.xml).encode('utf-8')
 
         esquema = etree.XMLSchema(etree.parse(arquivo_esquema))
-        #esquema.assertValid(etree.fromstring(xml))
         esquema.validate(etree.fromstring(xml))
 
-        #return esquema.error_log
         namespace = '{http://www.portalfiscal.inf.br/nfe}'
         return "\n".join([x.message.replace(namespace, '') for x in esquema.error_log])
 
