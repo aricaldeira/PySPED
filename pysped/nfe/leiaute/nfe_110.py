@@ -661,7 +661,7 @@ class II(XMLNFe):
     def __init__(self):
         super(II, self).__init__()
         self.vBC      = TagDecimal(nome='vBC'     , codigo='P02', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/II')
-        self.vDespAdu = TagDecimal(nome='vDespAd', codigo='P03', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/II')
+        self.vDespAdu = TagDecimal(nome='vDespAdu', codigo='P03', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/II')
         self.vII      = TagDecimal(nome='vII'     , codigo='P04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/II')
         self.vIOF     = TagDecimal(nome='vIOF'    , codigo='P05', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/II')
 
