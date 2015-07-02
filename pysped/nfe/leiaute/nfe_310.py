@@ -1302,11 +1302,6 @@ class Det(nfe_200.Det):
 class Compra(nfe_200.Compra):
     def __init__(self):
         super(Compra, self).__init__()
-
-
-class Exporta(nfe_200.Exporta):
-    def __init__(self):
-        super(Exporta, self).__init__()
         self.UFSaidaPais = TagCaracter(nome='UFSaidaPais'  , codigo='ZA02', tamanho=[2,  2], raiz='//NFe/infNFe/exporta', obrigatorio=False)
         self.xLocExporta = TagCaracter(nome='xLocExporta', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
         self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA04', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
