@@ -463,8 +463,7 @@ UFPE = {
 
 UFRS = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'              : 'nfe.sefazrs.rs.gov.br',
-        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'cad.sefazrs.rs.gov.br',
+        'servidor'              : 'nfe.sefaz.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO       : 'ws/NfeAutorizacao/NFeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO  : 'ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
@@ -476,7 +475,7 @@ UFRS = {
         WS_NFE_SITUACAO         : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homologacao.nfe.sefaz.rs.gov.br',
+        'servidor'             : 'nfe-homologacao.sefazrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO       : 'ws/NfeAutorizacao/NFeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO  : 'ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
