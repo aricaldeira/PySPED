@@ -164,7 +164,7 @@ class ConexaoHTTPS(HTTPSConnection):
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
-        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3)
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3, do_handshake_on_connect=False)
 
 
 class ProcessadorNFe(object):
@@ -272,13 +272,19 @@ class ProcessadorNFe(object):
                 else:
                     ws_a_usar = webservices_3.ESTADO_WS[self.estado]
 
-                self._servidor = ws_a_usar[ambiente]['servidor']
+                if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                else:
+                    self._servidor = ws_a_usar[ambiente]['servidor']
+
                 self._url      = ws_a_usar[ambiente][servico]                
                 
                 if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
                     self._servidor = 'sef.sefaz.rs.gov.br'
                 if (self.estado == 'SC' or self.estado == 'RJ') and servico == WS_NFE_CONSULTA_CADASTRO:
                     self._servidor = 'cad.svrs.rs.gov.br'
+
+                self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
