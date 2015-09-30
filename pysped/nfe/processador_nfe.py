@@ -251,6 +251,8 @@ class ProcessadorNFe(object):
             if somente_ambiente_nacional:
                 self._servidor = webservices_3.AN[ambiente]['servidor']
                 self._url      = webservices_3.AN[ambiente][servico]
+                if ambiente == 1 and servico == WS_DFE_DISTRIBUICAO:
+                    self._servidor = 'www1.nfe.fazenda.gov.br'
 
             elif servico == WS_NFE_DOWNLOAD:
                 self._servidor = webservices_3.SVAN[ambiente]['servidor']
@@ -271,13 +273,12 @@ class ProcessadorNFe(object):
                     ws_a_usar = webservices_3.ESTADO_WS[self.estado]
 
                 self._servidor = ws_a_usar[ambiente]['servidor']
-                self._url      = ws_a_usar[ambiente][servico]
-                
-                if ambiente == 1 and servico == WS_DFE_DISTRIBUICAO:
-                    self._servidor = 'www1.nfe.fazenda.gov.br'
+                self._url      = ws_a_usar[ambiente][servico]                
                 
                 if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
                     self._servidor = 'sef.sefaz.rs.gov.br'
+                if (self.estado == 'SC' or self.estado == 'RJ') and servico == WS_NFE_CONSULTA_CADASTRO:
+                    self._servidor = 'cad.svrs.rs.gov.br'
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
