@@ -795,13 +795,18 @@ class ProcessadorNFe(object):
             yield proc_consulta
 
             #
-            # Se a nota já constar na SEFAZ
+            # Se a nota já constar na SEFAZ (autorizada ou denegada)
             #
-            if not (
-                ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
-                or
-                ((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
-            ):
+            #if not (
+                #((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
+                #or
+                #((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
+            #):
+            if (
+                 ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
+                 or
+                ((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('100', '150', '110', '301', '302')))
+             ):
                 #
                 # Interrompe todo o processo
                 #
