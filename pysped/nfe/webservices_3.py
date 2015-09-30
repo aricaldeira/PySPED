@@ -104,7 +104,7 @@ SVRS = {
 # o servidor da consulta de cadastro é diferente dos demais...
 #NfeConsultaCadastro 2.00    https://svp-ws.sefazvirtual.rs.gov.br/ws/CadConsultaCadastro/CadConsultaCadastro2.asmx
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.sefazvirtual.rs.gov.br',
+        'servidor'             : 'nfe.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
@@ -114,7 +114,7 @@ SVRS = {
         WS_NFE_SITUACAO        : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homologacao.nfe.sefazvirtual.rs.gov.br',
+        'servidor'             : 'nfe-homologacao.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
@@ -190,7 +190,7 @@ SVC_AN = {
 
 SVC_RS = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfe.sefazvirtual.rs.gov.br',
+        'servidor'             : 'nfe.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
@@ -198,7 +198,7 @@ SVC_RS = {
         WS_NFE_SITUACAO        : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homologacao.nfe.sefazvirtual.rs.gov.br',
+        'servidor'             : 'nfe-homologacao.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
@@ -461,7 +461,7 @@ UFPE = {
 
 UFRS = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'              : 'nfe.sefaz.rs.gov.br',
+        'servidor'              : 'nfe.sefazrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO       : 'ws/NfeAutorizacao/NFeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO  : 'ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
@@ -473,7 +473,7 @@ UFRS = {
         WS_NFE_SITUACAO         : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'homologacao.nfe.sefaz.rs.gov.br',
+        'servidor'             : 'nfe-homologacao.sefazrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO       : 'ws/NfeAutorizacao/NFeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO  : 'ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
