@@ -105,6 +105,7 @@ SVRS = {
 #NfeConsultaCadastro 2.00    https://svp-ws.sefazvirtual.rs.gov.br/ws/CadConsultaCadastro/CadConsultaCadastro2.asmx
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'             : 'nfe.svrs.rs.gov.br',
+        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'svp-ws.sefazvirtual.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
@@ -283,11 +284,12 @@ UFBA = {
     }
 }
 
+
 UFCE = {
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'              : 'nfe.sefaz.ce.gov.br',
-        WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeRecepcao2',
-        WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetRecepcao2',
+        WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeAutorizacao',
+        WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetAutorizacao',
         WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
         WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
@@ -296,8 +298,8 @@ UFCE = {
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'              : 'nfeh.sefaz.ce.gov.br',
-        WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeRecepcao2',
-        WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetRecepcao2',
+        WS_NFE_AUTORIZACAO       : 'nfe2/services/NfeAutorizacao',
+        WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe2/services/NfeRetAutorizacao',
         WS_NFE_INUTILIZACAO     : 'nfe2/services/NfeInutilizacao2',
         WS_NFE_CONSULTA         : 'nfe2/services/NfeConsulta2',
         WS_NFE_SITUACAO         : 'nfe2/services/NfeStatusServico2',
