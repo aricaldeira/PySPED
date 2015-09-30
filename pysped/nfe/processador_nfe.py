@@ -276,14 +276,6 @@ class ProcessadorNFe(object):
                     self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
                 else:
                     self._servidor = ws_a_usar[ambiente]['servidor']
-
-                self._url      = ws_a_usar[ambiente][servico]                
-                
-                if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
-                    self._servidor = 'sef.sefaz.rs.gov.br'
-                if (self.estado == 'SC' or self.estado == 'RJ') and servico == WS_NFE_CONSULTA_CADASTRO:
-                    self._servidor = 'cad.svrs.rs.gov.br'
-
                 self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
@@ -1345,7 +1337,7 @@ class ProcessadorNFe(object):
     def consultar_distribuicao(self, estado=None, cnpj_cpf=None, ultimo_nsu=None, nsu=None, ambiente=None):
         envio = DistDFeInt_100()
         resposta = RetDistDFeInt_100()
-        
+
         envio.tpAmb.valor = ambiente or self.ambiente
         envio.cUFAutor.valor = UF_CODIGO[estado or self.estado]
 
@@ -1362,7 +1354,7 @@ class ProcessadorNFe(object):
         processo = ProcessoNFe(webservice=WS_DFE_DISTRIBUICAO, envio=envio, resposta=resposta)
 
         envio.validar()
-        
+
         #Monta caminhos
         if (ambiente or self.ambiente) == 1:
             self.caminho = os.path.join(self.caminho, 'producao/dfe/')
@@ -1373,7 +1365,7 @@ class ProcessadorNFe(object):
             os.makedirs(self.caminho)
         except:
             pass
-        
+
         nome_arq = self.caminho + datetime.now().strftime('%Y%m%dT%H%M%S')
         if self.salvar_arquivos:
             arq = open(nome_arq + '-cons-dist-dfe.xml', 'w')
