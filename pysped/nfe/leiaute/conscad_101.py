@@ -42,7 +42,7 @@
 from __future__ import division, print_function, unicode_literals
 
 from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, TagCaracter,
-                             TagData, TagDataHora, TagDecimal, TagInteiro,
+                             TagData, TagDataHoraUTC, TagDecimal, TagInteiro,
                              XMLNFe)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
 import os
@@ -215,7 +215,7 @@ class InfConsRecebido(XMLNFe):
         self.IE       = TagCaracter(nome='IE'      , codigo='GR06b', tamanho=[2, 14]  , raiz='//retConsCad/infCons', obrigatorio=False)
         self.CNPJ     = TagCaracter(nome='CNPJ'    , codigo='GR06c', tamanho=[3, 14]  , raiz='//retConsCad/infCons', obrigatorio=False)
         self.CPF      = TagCaracter(nome='CPF'     , codigo='GR06d', tamanho=[3, 11]  , raiz='//retConsCad/infCons', obrigatorio=False)
-        self.dhCons   = TagDataHora(nome='dhCons'  , codigo='GR06e',                    raiz='//retConsCad/infCons')
+        self.dhCons   = TagDataHoraUTC(nome='dhCons'  , codigo='GR06e',                    raiz='//retConsCad/infCons')
         self.cUF      = TagInteiro(nome='cUF'      , codigo='GR06f', tamanho=[2, 2, 2], raiz='//retConsCad/infCons')
         self.infCad   = []
 
