@@ -124,7 +124,7 @@ class ISSQN(nfe_200.ISSQN):
         self.vDescCond = TagDecimal(nome='vDescCond', codigo='U04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.vISSRet = TagDecimal(nome='vISSRet', codigo='U04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.indISS  = TagCaracter(nome='indISS', codigo='U07', tamanho=[1,  1], raiz='//det/imposto/ISSQN')
-        self.cServico = TagInteiro(nome='cServico', codigo='U06', tamanho=[1, 20], raiz='//det/imposto/ISSQN', obrigatorio=False)
+        self.cServico = TagCaracter(nome='cServico', codigo='U06', tamanho=[1, 20], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.cMun     = TagInteiro(nome='cMun'   , codigo='U05', tamanho=[7, 7, 7], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.cPais    = TagInteiro(nome='cPais'  , codigo='U05', tamanho=[4, 4, 4], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.nProcesso = TagCaracter(nome='indISS', codigo='U07', tamanho=[1, 30], raiz='//det/imposto/ISSQN', obrigatorio=False)
