@@ -42,7 +42,7 @@
 from __future__ import division, print_function, unicode_literals
 
 from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, Signature, TagCaracter,
-                             TagDataHora, TagDecimal, TagInteiro, XMLNFe)
+                             TagDataHora, TagDecimal, TagInteiro, XMLNFe, TagDataHoraUTC)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
 import os
 from nfe_110 import NFe
@@ -87,7 +87,7 @@ class InfProt(XMLNFe):
         self.tpAmb     = TagInteiro(nome='tpAmb'    , codigo='PR05', tamanho=[1,   1, 1], raiz='//infProt')
         self.verAplic  = TagCaracter(nome='verAplic', codigo='PR06', tamanho=[1,  20]   , raiz='//infProt')
         self.chNFe     = TagCaracter(nome='chNFe'   , codigo='PR07', tamanho=[44, 44]   , raiz='//infProt')
-        self.dhRecbto  = TagDataHora(nome='dhRecbto', codigo='PR08'                     , raiz='//infProt')
+        self.dhRecbto  = TagDataHoraUTC(nome='dhRecbto', codigo='PR08'                     , raiz='//infProt')
         self.nProt     = TagCaracter(nome='nProt'   , codigo='PR09', tamanho=[15, 15]   , raiz='//infProt', obrigatorio=False)
         self.digVal    = TagCaracter(nome='digVal'  , codigo='PR10', tamanho=[28, 28]   , raiz='//infProt', obrigatorio=False)
         self.cStat     = TagCaracter(nome='cStat'   , codigo='PR11' , tamanho=[1,   3]  , raiz='//infProt')
