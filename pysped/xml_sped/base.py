@@ -546,7 +546,7 @@ class TagDataHoraUTC(TagData):
         # Alterada para tornar a informação do fuso horário opcional
         #
         self._validacao = re.compile(r'(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))T(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d(-0[1-4]:00)?')
-        self._valida_fuso = re.compile(r'.*-0[0-9]:00$')
+        self._valida_fuso = re.compile(r'.*[-+]0[0-9]:00$')
         self._brasilia = pytz.timezone('America/Sao_Paulo')
         self.fuso_horario = 'America/Sao_Paulo'
 
