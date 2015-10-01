@@ -3142,14 +3142,14 @@ class Total(XMLNFe):
 class Entrega(XMLNFe):
     def __init__(self):
         super(Entrega, self).__init__()
-        self.CNPJ    = TagCaracter(nome='CNPJ'   , codigo='G01', tamanho=[14, 14]   , raiz='//NFe/infNFe/entrega')
-        self.xLgr    = TagCaracter(nome='xLgr'   , codigo='G02', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/entrega')
-        self.nro     = TagCaracter(nome='nro'    , codigo='G03', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/entrega')
-        self.xCpl    = TagCaracter(nome='xCpl'   , codigo='G04', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/entrega', obrigatorio=False)
-        self.xBairro = TagCaracter(nome='xBairro', codigo='G05', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/entrega')
-        self.cMun    = TagInteiro(nome='cMun'    , codigo='G06', tamanho=[ 7,  7, 7], raiz='//NFe/infNFe/entrega')
-        self.xMun    = TagCaracter(nome='xMun'   , codigo='G07', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/entrega')
-        self.UF      = TagCaracter(nome='UF'     , codigo='G08', tamanho=[ 2,  2]   , raiz='//NFe/infNFe/entrega')
+        self.CNPJ    = TagCaracter(nome='CNPJ'   , codigo='G02', tamanho=[14, 14]   , raiz='//NFe/infNFe/entrega')
+        self.xLgr    = TagCaracter(nome='xLgr'   , codigo='G03', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/entrega')
+        self.nro     = TagCaracter(nome='nro'    , codigo='G04', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/entrega')
+        self.xCpl    = TagCaracter(nome='xCpl'   , codigo='G05', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/entrega', obrigatorio=False)
+        self.xBairro = TagCaracter(nome='xBairro', codigo='G06', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/entrega')
+        self.cMun    = TagInteiro(nome='cMun'    , codigo='G07', tamanho=[ 7,  7, 7], raiz='//NFe/infNFe/entrega')
+        self.xMun    = TagCaracter(nome='xMun'   , codigo='G08', tamanho=[ 2, 60]   , raiz='//NFe/infNFe/entrega')
+        self.UF      = TagCaracter(nome='UF'     , codigo='G09', tamanho=[ 2,  2]   , raiz='//NFe/infNFe/entrega')
 
 
     def get_xml(self):
