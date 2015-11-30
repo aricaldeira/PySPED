@@ -1473,8 +1473,8 @@ class Total(nfe_200.Total):
 class AutXML(XMLNFe):
     def __init__(self):
         super(AutXML, self).__init__()
-        self.CNPJ = TagCaracter(nome='CNPJ'  , codigo='X04', tamanho=[14, 14], raiz='/', obrigatorio=False)
-        self.CPF  = TagCaracter(nome='CPF'   , codigo='X05', tamanho=[11, 11], raiz='/', obrigatorio=False)
+        self.CNPJ = TagCaracter(nome='CNPJ'  , codigo='GA02', tamanho=[14, 14],  raiz='/', obrigatorio=False)
+        self.CPF  = TagCaracter(nome='CPF'   , codigo='GA03', tamanho=[11, 11], raiz='/', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
