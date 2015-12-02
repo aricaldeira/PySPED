@@ -876,10 +876,11 @@ class CalculoImpostoRetrato(BandaDANFE):
         self.inclui_descritivo(nome='clc', titulo=u'CÁLCULO DO IMPOSTO', top=0*cm, left=0*cm, width=19.4*cm)
 
         # 1ª linha
-        lbl, fld = self.inclui_campo_numerico(nome='clc_bip', titulo=u'BASE DE CÁLCULO DO ICMS', conteudo=u'NFe.infNFe.total.ICMSTot.vBC.formato_danfe', top=0.42*cm, left=0*cm, width=3.88*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='clc_vip', titulo=u'VALOR DO ICMS', conteudo=u'NFe.infNFe.total.ICMSTot.vICMS.formato_danfe', top=0.42*cm, left=3.88*cm, width=3.88*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='clc_bis', titulo=u'BASE DE CÁLCULO DO ICMS ST', conteudo=u'NFe.infNFe.total.ICMSTot.vBCST.formato_danfe', top=0.42*cm, left=7.76*cm, width=3.88*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='clc_vis', titulo=u'VALOR DO ICMS ST', conteudo=u'NFe.infNFe.total.ICMSTot.vST.formato_danfe', top=0.42*cm, left=11.64*cm, width=3.88*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='clc_bip', titulo=u'BASE DE CÁLCULO DO ICMS', conteudo=u'NFe.infNFe.total.ICMSTot.vBC.formato_danfe', top=0.42*cm, left=0*cm, width=3.104*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='clc_vip', titulo=u'VALOR DO ICMS', conteudo=u'NFe.infNFe.total.ICMSTot.vICMS.formato_danfe', top=0.42*cm, left=3.104*cm, width=3.104*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='clc_bis', titulo=u'BASE DE CÁLCULO DO ICMS ST', conteudo=u'NFe.infNFe.total.ICMSTot.vBCST.formato_danfe', top=0.42*cm, left=6.208*cm, width=3.104*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='clc_vis', titulo=u'VALOR DO ICMS ST', conteudo=u'NFe.infNFe.total.ICMSTot.vST.formato_danfe', top=0.42*cm, left=9.312*cm, width=3.104*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='clc_vet', titulo=u'TOTAL ESTIMADO TRIBUTOS', conteudo=u'NFe.infNFe.total.ICMSTot.vTotTrib.formato_danfe', top=0.42*cm, left=12.416*cm, width=3.104*cm)
         lbl, fld = self.inclui_campo_numerico(nome='clc_vpn', titulo=u'VALOR TOTAL DOS PRODUTOS', conteudo=u'NFe.infNFe.total.ICMSTot.vProd.formato_danfe', top=0.42*cm, left=15.52*cm, width=3.88*cm, margem_direita=True)
         #fld.style = DADO_CAMPO_NUMERICO_NEGRITO
 
