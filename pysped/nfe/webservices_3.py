@@ -105,7 +105,7 @@ SVRS = {
 #NfeConsultaCadastro 2.00    https://svp-ws.sefazvirtual.rs.gov.br/ws/CadConsultaCadastro/CadConsultaCadastro2.asmx
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'             : 'nfe.svrs.rs.gov.br',
-        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'svp-ws.sefazvirtual.rs.gov.br',
+        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'cad.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
