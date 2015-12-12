@@ -1524,7 +1524,7 @@ class Dest(nfe_200.Dest):
         self.modelo = '55'
         self.enderDest = EnderDest()
         self.idEstrangeiro = TagCaracter(nome='idEstrangeiro' , codigo='E03a', tamanho=[0 , 20]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
-        self.indIEDest = TagCaracter(nome='indIEDest', codigo='E16a', tamanho=[1 , 1], raiz='//NFe/infNFe/dest', obrigatorio=False, valor='9')
+        self.indIEDest = TagCaracter(nome='indIEDest', codigo='E16a', tamanho=[1 , 1], raiz='//NFe/infNFe/dest', obrigatorio=True)
         self.IE        = TagCaracter(nome='IE'   , codigo='E17', tamanho=[ 2, 14]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
         self.IM        = TagCaracter(nome='IM', codigo='E18a', tamanho=[ 1, 15]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
 
@@ -1552,9 +1552,7 @@ class Dest(nfe_200.Dest):
             xml += self.xNome.xml
 
         xml += self.enderDest.xml
-
-        if self.indIEDest.valor:
-            xml += self.indIEDest.xml
+        xml += self.indIEDest.xml
 
         if (not self.idEstrangeiro.valor) or (self.indIEDest.valor != '2' and self.IE.valor):
             xml += self.IE.xml
@@ -1572,6 +1570,7 @@ class Dest(nfe_200.Dest):
             self.idEstrangeiro.xml = arquivo
             self.xNome.xml     = arquivo
             self.enderDest.xml = arquivo
+            self.indIEDest.xml = arquivo
             self.IE.xml        = arquivo
             self.ISUF.xml      = arquivo
             self.IM.xml     = arquivo
