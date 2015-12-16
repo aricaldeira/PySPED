@@ -844,17 +844,19 @@ class ICMSUFDest(XMLNFe):
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
 
-        if self.pDevol.valor:
-            xml += '<ICMSUFDest>'
-            xml += self.vBCUFDest.xml
-            xml += self.pFCPUFDest.xml
-            xml += self.pICMSUFDest.xml
-            xml += self.pICMSInter.xml
-            xml += self.pICMSInterPart.xml
-            xml += self.vFCPUFDest.xml
-            xml += self.vICMSUFDest.xml
-            xml += self.vICMSUFRemet.xml
-            xml += '</ICMSUFDest>'
+        if not self.pICMSInter.valor:
+            return ''
+
+        xml += '<ICMSUFDest>'
+        xml += self.vBCUFDest.xml
+        xml += self.pFCPUFDest.xml
+        xml += self.pICMSUFDest.xml
+        xml += self.pICMSInter.xml
+        xml += self.pICMSInterPart.xml
+        xml += self.vFCPUFDest.xml
+        xml += self.vICMSUFDest.xml
+        xml += self.vICMSUFRemet.xml
+        xml += '</ICMSUFDest>'
 
         return xml
 
