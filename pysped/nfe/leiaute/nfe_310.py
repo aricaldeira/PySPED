@@ -949,6 +949,7 @@ class Imposto(nfe_200.Imposto):
             xml += self.IPI.xml
             xml += self.II.xml
         else:
+            # ISSQN é esperado antes de PIS e COFINS
             xml += self.ISSQN.xml
 
         xml += self.PIS.xml
