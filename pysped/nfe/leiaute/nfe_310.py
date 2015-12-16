@@ -887,6 +887,9 @@ class Imposto(nfe_200.Imposto):
             xml += self.ICMS.xml
             xml += self.IPI.xml
             xml += self.II.xml
+        else:
+            # ISSQN é esperado antes de PIS e COFINS
+            xml += self.ISSQN.xml
 
         xml += self.PIS.xml
         xml += self.PISST.xml
@@ -894,9 +897,6 @@ class Imposto(nfe_200.Imposto):
         xml += self.COFINSST.xml
         if self.ICMSUFDest.vBCUFDest.valor:
             xml += self.ICMSUFDest.xml
-
-        if self.ISSQN.cSitTrib.valor:
-            xml += self.ISSQN.xml
 
         xml += '</imposto>'
         return xml
