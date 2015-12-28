@@ -177,6 +177,51 @@ class ISSQN(nfe_200.ISSQN):
     xml = property(get_xml, set_xml)
 
 
+class ICMSUFDest(XMLNFe):
+    def __init__(self):
+        super(ICMSUFDest, self).__init__()
+        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='NA03', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='NA05', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='NA07', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInter = TagDecimal(nome='pICMSInter', codigo='NA09', tamanho=[1,  5, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='NA11', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest', valor=40)
+        
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        
+
+    def get_xml(self):
+        if not (self.vBCUFDest.valor):
+            return ''
+
+        xml = XMLNFe.get_xml(self)
+        xml += '<ICMSUFDest>'
+        xml += self.vBCUFDest.xml
+        xml += self.pFCPUFDest.xml
+        xml += self.pICMSUFDest.xml
+        xml += self.pICMSInter.xml
+        xml += self.pICMSInterPart.xml
+        xml += self.vFCPUFDest.xml
+        xml += self.vICMSUFDest.xml
+        xml += self.vICMSUFRemet.xml
+        xml += '</ICMSUFDest>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.vBCUFDest.xml       = arquivo
+            self.pFCPUFDest.xml       = arquivo
+            self.pICMSUFDest.xml       = arquivo
+            self.pICMSInter.xml       = arquivo
+            self.pICMSInterPart.xml       = arquivo
+            self.vFCPUFDest.xml       = arquivo
+            self.vICMSUFDest.xml       = arquivo
+            self.vICMSUFRemet.xml       = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
 class COFINSST(nfe_200.COFINSST):
     def __init__(self):
         super(COFINSST, self).__init__()
@@ -791,6 +836,45 @@ class Imposto(nfe_200.Imposto):
         self.PIS      = PIS()
         self.COFINS   = COFINS()
         self.ISSQN    = ISSQN()
+        self.ICMSUFDest = ICMSUFDest()
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<imposto>'
+        xml += self.vTotTrib.xml
+
+        # Enviar ICMS, IPI e II somente quando não for serviço
+        if not self.ISSQN.cSitTrib.valor:
+            xml += self.ICMS.xml
+            xml += self.IPI.xml
+            xml += self.II.xml
+
+        xml += self.PIS.xml
+        xml += self.PISST.xml
+        xml += self.COFINS.xml
+        xml += self.COFINSST.xml
+        xml += self.ICMSUFDest.xml
+
+        if self.ISSQN.cSitTrib.valor:
+            xml += self.ISSQN.xml
+
+        xml += '</imposto>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.vTotTrib.xml = arquivo
+            self.ICMS.xml     = arquivo
+            self.IPI.xml      = arquivo
+            self.II.xml       = arquivo
+            self.PIS.xml      = arquivo
+            self.PISST.xml    = arquivo
+            self.COFINS.xml   = arquivo
+            self.COFINSST.xml = arquivo
+            self.ICMSUFDest.xml = arquivo
+            self.ISSQN.xml    = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class CIDE(nfe_200.CIDE):
@@ -978,6 +1062,7 @@ class Prod(nfe_200.Prod):
         #self.nItemPed = TagCaracter(nome='nItemPed', codigo='I31' , tamanho=[1,  6],                         raiz='//det/prod', obrigatorio=False)
         #self.nFCI     = TagCaracter(nome='nFCI'    , codigo='I70' , tamanho=[36, 36, 36],                    raiz='//det/prod', obrigatorio=False)
         self.NVE = TagCaracter(nome='NVE', codigo='I05', tamanho=[0, 8], raiz='//det/prod', obrigatorio=False)
+        self.CEST = TagCaracter(nome='CEST', codigo='I05c', tamanho=[7, 7], raiz='//det/prod', obrigatorio=False)
         self.detExport = DetExport()
         self.veicProd = VeicProd()
         self.comb     = Comb()
@@ -992,6 +1077,7 @@ class Prod(nfe_200.Prod):
         xml += self.xProd.xml
         xml += self.NCM.xml
         xml += self.NVE.xml
+        xml += self.CEST.xml
         xml += self.EXTIPI.xml
         #xml += self.genero.xml
         xml += self.CFOP.xml
@@ -1375,6 +1461,10 @@ class ICMSTot(nfe_200.ICMSTot):
     def __init__(self):
         super(ICMSTot, self).__init__()
         self.vICMSDeson = TagDecimal(nome='vICMSDeson', codigo='W04a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -1382,6 +1472,9 @@ class ICMSTot(nfe_200.ICMSTot):
         xml += self.vBC.xml
         xml += self.vICMS.xml
         xml += self.vICMSDeson.xml
+        xml += self.vFCPUFDest.xml
+        xml += self.vICMSUFDest.xml
+        xml += self.vICMSUFRemet.xml
         xml += self.vBCST.xml
         xml += self.vST.xml
         xml += self.vProd.xml
