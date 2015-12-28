@@ -188,7 +188,7 @@ class ICMSUFDest(XMLNFe):
         
         self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
         self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
         
 
     def get_xml(self):
@@ -1463,7 +1463,7 @@ class ICMSTot(nfe_200.ICMSTot):
         self.vICMSDeson = TagDecimal(nome='vICMSDeson', codigo='W04a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
         self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
         self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
 
 
     def get_xml(self):
