@@ -227,15 +227,14 @@ class ISSQN(nfe_200.ISSQN):
 class ICMSUFDest(XMLNFe):
     def __init__(self):
         super(ICMSUFDest, self).__init__()
-        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1,  13, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='AI02', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='AI03', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSInter = TagDecimal(nome='pICMSInter', codigo='AI04', tamanho=[1,  3, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='AI05', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest', valor=40)
-        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='AI06', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='AI07', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='AI08', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-
+        self.pICMSInter= TagDecimal(nome='pICMSInter', codigo='AI04', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='AI05', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='AI06', tamanho=[1,  13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='AI07', tamanho=[1,  13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='AI08', tamanho=[1,  13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
 
     def get_xml(self):
         if not (self.vBCUFDest.valor):
@@ -252,18 +251,19 @@ class ICMSUFDest(XMLNFe):
         xml += self.vICMSUFDest.xml
         xml += self.vICMSUFRemet.xml
         xml += '</ICMSUFDest>'
+
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.vBCUFDest.xml       = arquivo
-            self.pFCPUFDest.xml       = arquivo
-            self.pICMSUFDest.xml       = arquivo
-            self.pICMSInter.xml       = arquivo
-            self.pICMSInterPart.xml       = arquivo
-            self.vFCPUFDest.xml       = arquivo
-            self.vICMSUFDest.xml       = arquivo
-            self.vICMSUFRemet.xml       = arquivo
+            self.vBCUFDest.xml      = arquivo
+            self.pFCPUFDest.xml     = arquivo
+            self.pICMSUFDest.xml    = arquivo
+            self.pICMSInter.xml     = arquivo
+            self.pICMSInterPart.xml = arquivo
+            self.vFCPUFDest.xml     = arquivo
+            self.vICMSUFDest.xml    = arquivo
+            self.vICMSUFRemet.xml   = arquivo
 
     xml = property(get_xml, set_xml)
 
