@@ -1494,9 +1494,9 @@ class ICMSTot(nfe_200.ICMSTot):
     def __init__(self):
         super(ICMSTot, self).__init__()
         self.vICMSDeson = TagDecimal(nome='vICMSDeson', codigo='W04a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
-        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='W04b', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
-        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='W04c', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='W04d', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='W04b', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='W04c', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='W04d', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
