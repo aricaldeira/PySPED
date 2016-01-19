@@ -952,17 +952,17 @@ class CabProdutoRetrato(BandaDANFE):
         self.elements = []
         self.inclui_descritivo(nome='cabprod', titulo=u'DADOS DOS PRODUTOS/SERVIÇOS', top=0*cm, left=0*cm, width=19.4*cm)
 
-        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DO PRODUTO', top=0.42*cm, left=0*cm, width=1.8*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='CÓDIGO DO PRODUTO', top=0.42*cm, left=0*cm, width=2*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='DESCRIÇÃO DO PRODUTO/SERVIÇO', top=0.42*cm, left=1.8*cm, width=5.1*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='DESCRIÇÃO DO PRODUTO/SERVIÇO', top=0.42*cm, left=2*cm, width=4.3*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='NCM/SH', top=0.42*cm, left=6.9*cm, width=1*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='NCM/SH', top=0.42*cm, left=6.3*cm, width=1*cm)
         lbl.padding_top = 0.15*cm
 
         #lbl = self.inclui_descritivo_produto(nome='', titulo='CST', top=0.42*cm, left=8.75*cm, width=0.55*cm)
         #lbl.padding_top = 0.15*cm
 
-        fld = self.inclui_campo_sem_borda(nome='cst_descricao', conteudo=u'NFe.cst_descricao', top=0.42*cm, left=7.9*cm, width=0.6*cm)
+        fld = self.inclui_campo_sem_borda(nome='cst_descricao', conteudo=u'NFe.cst_descricao', top=0.42*cm, left=7.3*cm, width=0.6*cm)
         fld.style = DESCRITIVO_PRODUTO
         fld.padding_top = 0.15*cm
         fld.padding_left = 0.05*cm
@@ -971,25 +971,27 @@ class CabProdutoRetrato(BandaDANFE):
         fld.borders = {'top': 0.1, 'right': 0.1, 'bottom': 0.1, 'left': False}
         fld.height = 0.52*cm
 
-        lbl = self.inclui_descritivo_produto(nome='', titulo='CFOP', top=0.42*cm, left=8.5*cm, width=0.54*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='CFOP', top=0.42*cm, left=7.9*cm, width=0.54*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='UNIDADE', top=0.42*cm, left=9.04*cm, width=0.9*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='UN', top=0.42*cm, left=8.44*cm, width=0.7*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='QUANTIDADE', top=0.42*cm, left=9.94*cm, width=1.4*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='QUANTIDADE', top=0.42*cm, left=9.14*cm, width=1.2*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR UNITÁRIO', top=0.42*cm, left=11.34*cm, width=2*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR UNITÁRIO', top=0.42*cm, left=10.34*cm, width=1.5*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR TOTAL', top=0.42*cm, left=13.34*cm, width=1.2*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR TOTAL', top=0.42*cm, left=11.84*cm, width=1.2*cm)
         lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='BASE CÁLC. DO ICMS', top=0.42*cm, left=14.54*cm, width=1.2*cm)
-        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR DO ICMS', top=0.42*cm, left=15.74*cm, width=1.05*cm)
-        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR DO IPI', top=0.42*cm, left=16.79*cm, width=1.05*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='BASE CÁLC. DO ICMS', top=0.42*cm, left=13.04*cm, width=1.1*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR DO ICMS', top=0.42*cm, left=14.14*cm, width=1*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR DO IPI', top=0.42*cm, left=15.14*cm, width=1*cm)
         #lbl.padding_top = 0.15*cm
-        lbl = self.inclui_descritivo_produto(nome='', titulo='ALÍQUOTAS', top=0.42*cm, left=17.84*cm, width=1.36*cm, height=0.26*cm, margem_direita=True)
-        lbl = self.inclui_descritivo_produto(nome='', titulo='ICMS', top=0.68*cm, left=17.84*cm, width=0.78*cm, height=0.26*cm)
-        lbl = self.inclui_descritivo_produto(nome='', titulo='IPI', top=0.68*cm, left=18.62*cm, width=0.78*cm, height=0.26*cm, margem_direita=True)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='ALÍQUOTAS', top=0.42*cm, left=16.14*cm, width=1.56*cm, height=0.26*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='ICMS', top=0.68*cm, left=16.14*cm, width=0.78*cm, height=0.26*cm)
+        lbl = self.inclui_descritivo_produto(nome='', titulo='IPI', top=0.68*cm, left=16.92*cm, width=0.78*cm, height=0.26*cm)
 
         self.height = 0.94*cm
+
+        lbl = self.inclui_descritivo_produto(nome='', titulo='VALOR ESTIMADO DOS TRIBUTOS', top=0.42*cm, left=17.70*cm, width=1.7*cm, margem_direita=True)
 
 
 class DetProdutoRetrato(BandaDANFE):
@@ -1015,23 +1017,24 @@ class DetProdutoRetrato(BandaDANFE):
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.24*cm, width=0.58*cm)
         #txt = self.inclui_texto_numerico_produto(nome='', texto='99,99', top=0*cm, left=18.82*cm, width=0.58*cm, margem_direita=True)
 
-        self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=1.8*cm)
-        self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=1.8*cm, width=5.1*cm)
-        self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=6.9*cm, width=1*cm)
-        self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=7.9*cm, width=0.6*cm)
-        self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=8.5*cm, width=0.54*cm)
-        self.inclui_campo_centralizado_produto(nome=u'prod_unidade', conteudo=u'prod.uCom.valor', top=0*cm, left=9.04*cm, width=0.9*cm)
-        self.inclui_campo_numerico_produto(nome='prod_quantidade', conteudo=u'prod.qCom.formato_danfe', top=0*cm, left=9.94*cm, width=1.4*cm)
-        self.inclui_campo_numerico_produto(nome='vr_unitario', conteudo=u'prod.vUnCom.formato_danfe', top=0*cm, left=11.34*cm, width=2*cm)
-        self.inclui_campo_numerico_produto(nome='', conteudo='prod.vProd.formato_danfe', top=0*cm, left=13.34*cm, width=1.2*cm)
-        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vBC.formato_danfe', top=0*cm, left=14.54*cm, width=1.2*cm)
-        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vICMS.formato_danfe', top=0*cm, left=15.74*cm, width=1.05*cm)
-        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.vIPI.formato_danfe', top=0*cm, left=16.79*cm, width=1.05*cm)
-        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.pICMS.formato_danfe', top=0*cm, left=17.84*cm, width=0.78*cm)
-        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.pIPI.formato_danfe', top=0*cm, left=18.62*cm, width=0.78*cm, margem_direita=True)
+        self.inclui_campo_produto(nome=u'prod_codigo', conteudo=u'prod.cProd.valor', top=0*cm, left=0*cm, width=2*cm)
+        self.inclui_campo_produto(nome=u'prod_descricaco', conteudo=u'descricao_produto_formatada', top=0*cm, left=2*cm, width=4.3*cm)
+        self.inclui_campo_centralizado_produto(nome=u'prod_ncm', conteudo=u'prod.NCM.valor', top=0*cm, left=6.3*cm, width=1*cm)
+        self.inclui_campo_centralizado_produto(nome='prod_cst', conteudo='cst_formatado', top=0*cm, left=7.3*cm, width=0.6*cm)
+        self.inclui_campo_centralizado_produto(nome=u'prod_cfop', conteudo=u'prod.CFOP.valor', top=0*cm, left=7.9*cm, width=0.54*cm)
+        self.inclui_campo_centralizado_produto(nome=u'prod_unidade', conteudo=u'prod.uCom.valor', top=0*cm, left=8.44*cm, width=0.7*cm)
+        self.inclui_campo_numerico_produto(nome='prod_quantidade', conteudo=u'prod.qCom.formato_danfe', top=0*cm, left=9.14*cm, width=1.2*cm)
+        self.inclui_campo_numerico_produto(nome='vr_unitario', conteudo=u'prod.vUnCom.formato_danfe', top=0*cm, left=10.34*cm, width=1.5*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='prod.vProd.formato_danfe', top=0*cm, left=11.84*cm, width=1.2*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vBC.formato_danfe', top=0*cm, left=13.04*cm, width=1.1*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.vICMS.formato_danfe', top=0*cm, left=14.14*cm, width=1*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.vIPI.formato_danfe', top=0*cm, left=15.14*cm, width=1*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.ICMS.pICMS.formato_danfe', top=0*cm, left=16.14*cm, width=0.78*cm)
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.IPI.pIPI.formato_danfe', top=0*cm, left=16.92*cm, width=0.78*cm, margem_direita=True)
 
         #self.height = 0.28*cm
         self.auto_expand_height = True
+        self.inclui_campo_numerico_produto(nome='', conteudo='imposto.vTotTrib.formato_danfe', top=0*cm, left=17.7*cm, width=1.7*cm, margem_direita=True)
 
 
 class ISSRetrato(BandaDANFE):
