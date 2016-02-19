@@ -887,7 +887,7 @@ class CalculoImpostoRetrato(BandaDANFE):
         # 2ª linha
         lbl, fld = self.inclui_campo_numerico(nome='clc_vfrete', titulo=u'VALOR DO FRETE', conteudo=u'NFe.infNFe.total.ICMSTot.vFrete.formato_danfe', top=1.12*cm, left=0*cm, width=3.104*cm)
         lbl, fld = self.inclui_campo_numerico(nome='clc_vseguro', titulo=u'VALOR DO SEGURO', conteudo=u'NFe.infNFe.total.ICMSTot.vSeg.formato_danfe', top=1.12*cm, left=3.104*cm, width=3.104*cm)
-        lbl, fld = self.inclui_campo_numerico(nome='clc_vdesconto', titulo=u'DESCONTO', conteudo=u'NFe.infNFe.total.ICMSTot.vDesc.formato_danfe', top=1.12*cm, left=6.208*cm, width=3.104*cm)
+        lbl, fld = self.inclui_campo_numerico(nome='clc_vdesconto', titulo=u'DESCONTO', conteudo=u'NFe.crt_desconto', top=1.12*cm, left=6.208*cm, width=3.104*cm)
         lbl, fld = self.inclui_campo_numerico(nome='clc_voutras', titulo=u'OUTRAS DESPESAS ACESSÓRIAS', conteudo=u'NFe.infNFe.total.ICMSTot.vOutro.formato_danfe', top=1.12*cm, left=9.312*cm, width=3.104*cm)
         lbl, fld = self.inclui_campo_numerico(nome='clc_vipi', titulo=u'VALOR TOTAL DO IPI', conteudo=u'NFe.infNFe.total.ICMSTot.vIPI.formato_danfe', top=1.12*cm, left=12.416*cm, width=3.104*cm)
 
