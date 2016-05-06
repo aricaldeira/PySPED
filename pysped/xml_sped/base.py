@@ -842,7 +842,9 @@ class XMLNFe(NohXML):
         #esquema.assertValid(etree.fromstring(xml))
         esquema.validate(etree.fromstring(xml))
 
-        return esquema.error_log
+        #return esquema.error_log
+        namespace = '{http://www.portalfiscal.inf.br/nfe}'
+        return "\n".join([x.message.replace(namespace, '') for x in esquema.error_log])
 
     def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe'):
         tags = []
