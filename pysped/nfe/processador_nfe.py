@@ -164,7 +164,7 @@ class ConexaoHTTPS(HTTPSConnection):
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
-        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3)
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv3, do_handshake_on_connect=False)
 
 
 class ProcessadorNFe(object):
@@ -272,13 +272,19 @@ class ProcessadorNFe(object):
                 else:
                     ws_a_usar = webservices_3.ESTADO_WS[self.estado]
 
-                self._servidor = ws_a_usar[ambiente]['servidor']
+                if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                else:
+                    self._servidor = ws_a_usar[ambiente]['servidor']
+
                 self._url      = ws_a_usar[ambiente][servico]                
                 
                 if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
                     self._servidor = 'sef.sefaz.rs.gov.br'
                 if (self.estado == 'SC' or self.estado == 'RJ') and servico == WS_NFE_CONSULTA_CADASTRO:
                     self._servidor = 'cad.svrs.rs.gov.br'
+
+                self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
@@ -290,6 +296,11 @@ class ProcessadorNFe(object):
         #
         if self.estado == 'CE' or servico == WS_DFE_DISTRIBUICAO:
             self._soap_envio.soap_action_webservice_e_metodo = True
+
+            if servico == WS_NFE_AUTORIZACAO:
+                self._soap_envio.metodo = 'nfeAutorizacaoLote'
+            elif servico == WS_NFE_CONSULTA_AUTORIZACAO:
+                self._soap_envio.metodo = 'nfeRetAutorizacaoLote'
 
         self._soap_retorno.webservice = self._soap_envio.webservice
         self._soap_retorno.metodo     = self._soap_envio.metodo
@@ -374,7 +385,6 @@ class ProcessadorNFe(object):
 
         if self.ambiente == 2: # Homologação tem detalhes especificos desde a NT2011_002
             for nfe in lista_nfes:
-                nfe.infNFe.dest.CNPJ.valor = '99999999000191'
                 nfe.infNFe.dest.xNome.valor = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
 
         processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
@@ -791,13 +801,18 @@ class ProcessadorNFe(object):
             yield proc_consulta
 
             #
-            # Se a nota já constar na SEFAZ
+            # Se a nota já constar na SEFAZ (autorizada ou denegada)
             #
-            if not (
-                ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
-                or
-                ((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
-            ):
+            #if not (
+                #((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
+                #or
+                #((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
+            #):
+            if (
+                 ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
+                 or
+                ((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('100', '150', '110', '301', '302')))
+             ):
                 #
                 # Interrompe todo o processo
                 #
