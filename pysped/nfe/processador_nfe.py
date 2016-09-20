@@ -946,11 +946,6 @@ class ProcessadorNFe(object):
                 arq.write(processo.xml.encode('utf-8'))
                 arq.close()
 
-                nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '.pdf'
-                arq = open(nome_arq, 'w')
-                arq.write(processo.danfe_pdf)
-                arq.close()
-
         self.caminho = caminho_original
         return processo
 
