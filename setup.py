@@ -27,7 +27,7 @@ setup(
         'pysped.cte.leiaute',
         'pysped.cte.dacte',
         'pysped.efd',
-        'pysped.nfse',
+        #'pysped.nfse',
         'pysped.xml_sped',
         'pysped.ecd',
         'pysped.nf_paulista',
