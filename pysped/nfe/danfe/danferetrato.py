@@ -765,6 +765,7 @@ class DestinatarioRetrato(BandaDANFE):
 
         # 2ª linha
         lbl, fld = self.inclui_campo(nome='remetente_nome', titulo=u'ENDEREÇO', conteudo=u'NFe.endereco_destinatario_formatado', top=1.12*cm, left=0*cm, width=10.9*cm)
+        fld.truncate_overflow = True
         lbl, fld = self.inclui_campo(nome='remetente_bairro', titulo=u'BAIRRO/DISTRITO', conteudo=u'NFe.infNFe.dest.enderDest.xBairro.valor', top=1.12*cm, left=10.9*cm, width=4.5*cm)
         lbl, fld = self.inclui_campo(nome='remetente_cep', titulo=u'CEP', conteudo=u'NFe.cep_destinatario_formatado', top=1.12*cm, left=15.4*cm, width=1.8*cm)
         lbl, fld = self.inclui_campo(nome='remetente_data_entradasaida', titulo=u'DATA DA ENTRADA/SAÍDA', conteudo=u'NFe.infNFe.ide.dSaiEnt.formato_danfe', top=1.12*cm, left=17.2*cm, width=2.2*cm, margem_direita=True)
