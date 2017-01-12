@@ -114,7 +114,7 @@ SVRS = {
         WS_NFE_SITUACAO        : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'nfe-homologacao.srvs.rs.gov.br',
+        'servidor'             : 'nfe-homologacao.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
