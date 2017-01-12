@@ -224,6 +224,51 @@ class ISSQN(nfe_200.ISSQN):
     xml = property(get_xml, set_xml)
 
 
+class ICMSUFDest(XMLNFe):
+    def __init__(self):
+        super(ICMSUFDest, self).__init__()
+        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='NA03', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='NA05', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='NA07', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInter = TagDecimal(nome='pICMSInter', codigo='NA09', tamanho=[1,  5, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='NA11', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest', valor=40)
+
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+
+
+    def get_xml(self):
+        if not (self.vBCUFDest.valor):
+            return ''
+
+        xml = XMLNFe.get_xml(self)
+        xml += '<ICMSUFDest>'
+        xml += self.vBCUFDest.xml
+        xml += self.pFCPUFDest.xml
+        xml += self.pICMSUFDest.xml
+        xml += self.pICMSInter.xml
+        xml += self.pICMSInterPart.xml
+        xml += self.vFCPUFDest.xml
+        xml += self.vICMSUFDest.xml
+        xml += self.vICMSUFRemet.xml
+        xml += '</ICMSUFDest>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.vBCUFDest.xml       = arquivo
+            self.pFCPUFDest.xml       = arquivo
+            self.pICMSUFDest.xml       = arquivo
+            self.pICMSInter.xml       = arquivo
+            self.pICMSInterPart.xml       = arquivo
+            self.vFCPUFDest.xml       = arquivo
+            self.vICMSUFDest.xml       = arquivo
+            self.vICMSUFRemet.xml       = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
 class COFINSST(nfe_200.COFINSST):
     def __init__(self):
         super(COFINSST, self).__init__()
@@ -1338,6 +1383,26 @@ class Pag(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
+    @property
+    def pagamento_formatado(self):
+        TIPOS = {
+            '01': 'Dinheiro',
+            '02': 'Cheque',
+            '03': 'Cartão de crédito',
+            '04': 'Cartão de débito',
+            '05': 'Crédito loja',
+            '10': 'Vale alimentação',
+            '11': 'Vale refeição',
+            '12': 'Vale presente',
+            '13': 'Vale combustível',
+            '99': 'Outros',
+        }
+
+        if self.tPag.valor not in TIPOS:
+            return ''
+
+        return TIPOS[self.tPag.valor]
+
 
 class Dup(nfe_200.Dup):
     def __init__(self):
@@ -1653,10 +1718,17 @@ class Dest(nfe_200.Dest):
             xml += self.xNome.xml
 
         xml += self.enderDest.xml
-        xml += self.indIEDest.xml
 
-        if (not self.idEstrangeiro.valor) or (self.indIEDest.valor != '2' and self.IE.valor):
-            xml += self.IE.xml
+        if self.modelo == '55':
+            if self.indIEDest.valor:
+                xml += self.indIEDest.xml
+
+            if (not self.idEstrangeiro.valor) or (self.indIEDest.valor != '2' and self.IE.valor):
+                xml += self.IE.xml
+
+        else:
+            self.indIEDest.valor = '9'
+            xml += self.indIEDest.xml
 
         xml += self.ISUF.xml
         xml += self.IM.xml
@@ -1758,7 +1830,8 @@ class Ide(nfe_200.Ide):
 
         self.dEmi.valor = self.dhEmi.valor
 
-        xml += self.dhSaiEnt.xml
+        if self.mod.valor == '55':
+            xml += self.dhSaiEnt.xml
 
         self.dSaiEnt.valor = self.dhSaiEnt.valor
         self.hSaiEnt.valor = self.hSaiEnt.valor
@@ -1873,7 +1946,9 @@ class InfNFe(nfe_200.InfNFe):
 
         xml += self.total.xml
         xml += self.transp.xml
-        xml += self.cobr.xml
+
+        if self.ide.mod.valor == '55':
+            xml += self.cobr.xml
 
         if self.ide.mod.valor == '65':
             for p in self.pag:
