@@ -67,6 +67,7 @@ from webservices_flags import (UF_CODIGO,
 import webservices_1
 import webservices_2
 import webservices_3
+import webservices_nfce_3
 
 from pysped.xml_sped.certificado import Certificado
 
@@ -123,7 +124,7 @@ from leiaute import DistDFeInt_100, RetDistDFeInt_100, SOAPEnvioDistDFe_100, SOA
 #
 # DANFE
 #
-from danfe import DANFE, DAEDE
+from danfe import DANFE, DAEDE, DANFCE
 
 
 class ProcessoNFe(object):
@@ -156,6 +157,7 @@ class ConexaoHTTPS(HTTPSConnection):
         # source_address é atributo incluído na versão 2.7 do Python
         # Verificando a existência para funcionar em versões anteriores à 2.7
         #
+        print(self.host, self.port, self.source_address)
         if hasattr(self, 'source_address'):
             sock = socket.create_connection((self.host, self.port), self.timeout, self.source_address)
         else:
@@ -172,6 +174,7 @@ class ProcessadorNFe(object):
         self.ambiente = 2
         self.estado = 'SP'
         self.versao = '3.10'
+        self.modelo = '55'
         self.certificado = Certificado()
         self.caminho = ''
         self.salvar_arquivos = True
@@ -179,6 +182,7 @@ class ProcessadorNFe(object):
         self.contingencia = False
         self.danfe = DANFE()
         self.daede = DAEDE()
+        self.danfce = DANFCE()
         self.caminho_temporario = ''
         self.maximo_tentativas_consulta_recibo = 5
         self.consulta_servico_ao_enviar = False
@@ -248,35 +252,55 @@ class ProcessadorNFe(object):
 
             self._soap_envio.cUF = UF_CODIGO[self.estado]
 
-            if somente_ambiente_nacional:
-                self._servidor = webservices_3.AN[ambiente]['servidor']
-                self._url      = webservices_3.AN[ambiente][servico]
-                if ambiente == 1 and servico == WS_DFE_DISTRIBUICAO:
-                    self._servidor = 'www1.nfe.fazenda.gov.br'
+            if self.modelo == '55':
+                if somente_ambiente_nacional:
+                    self._servidor = webservices_3.AN[ambiente]['servidor']
+                    self._url      = webservices_3.AN[ambiente][servico]
 
-            elif servico == WS_NFE_DOWNLOAD:
-                self._servidor = webservices_3.SVAN[ambiente]['servidor']
-                self._url      = webservices_3.SVAN[ambiente][servico]
+                elif servico == WS_NFE_DOWNLOAD:
+                    self._servidor = webservices_3.SVAN[ambiente]['servidor']
+                    self._url      = webservices_3.SVAN[ambiente][servico]
 
-            elif self.contingencia_SCAN or self.contingencia:
-                self._servidor = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
-                self._url      = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente][servico]
+                elif self.contingencia_SCAN or self.contingencia:
+                    self._servidor = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
+                    self._url      = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente][servico]
 
-            else:
-                #
-                # Testa a opção de um estado, para determinado serviço, usar o WS
-                # de outro estado
-                #
-                if type(webservices_3.ESTADO_WS[self.estado][ambiente][servico]) == dict:
-                    ws_a_usar = webservices_3.ESTADO_WS[self.estado][ambiente][servico]
                 else:
-                    ws_a_usar = webservices_3.ESTADO_WS[self.estado]
+                    #
+                    # Testa a opção de um estado, para determinado serviço, usar o WS
+                    # de outro estado
+                    #
+                    if type(webservices_3.ESTADO_WS[self.estado][ambiente][servico]) == dict:
+                        ws_a_usar = webservices_3.ESTADO_WS[self.estado][ambiente][servico]
+                    else:
+                        ws_a_usar = webservices_3.ESTADO_WS[self.estado]
 
-                if 'servidor%s' % servico in ws_a_usar[ambiente]:
-                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                    if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                        self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                    else:
+                        self._servidor = ws_a_usar[ambiente]['servidor']
+                    self._url      = ws_a_usar[ambiente][servico]
+
+            elif self.modelo == '65':
+                if self.contingencia_SCAN or self.contingencia:
+                    self._servidor = webservices_nfce_3.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
+                    self._url      = webservices_nfce_3.ESTADO_WS_CONTINGENCIA[ambiente][servico]
+
                 else:
-                    self._servidor = ws_a_usar[ambiente]['servidor']
-                self._url      = ws_a_usar[ambiente][servico]
+                    #
+                    # Testa a opção de um estado, para determinado serviço, usar o WS
+                    # de outro estado
+                    #
+                    if type(webservices_nfce_3.ESTADO_WS[self.estado][ambiente][servico]) == dict:
+                        ws_a_usar = webservices_nfce_3.ESTADO_WS[self.estado][ambiente][servico]
+                    else:
+                        ws_a_usar = webservices_nfce_3.ESTADO_WS[self.estado]
+
+                    if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                        self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                    else:
+                        self._servidor = ws_a_usar[ambiente]['servidor']
+                    self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
@@ -377,6 +401,11 @@ class ProcessadorNFe(object):
 
         if self.ambiente == 2: # Homologação tem detalhes especificos desde a NT2011_002
             for nfe in lista_nfes:
+                if nfe.infNFe.ide.mod.valor != 55:
+                    if (not nfe.infNFe.dest.CNPJ.valor) and (not nfe.infNFe.dest.CPF.valor) and (not nfe.infNFe.dest.idEstrangeiro.valor):
+                        continue
+
+                nfe.infNFe.dest.CNPJ.valor = '99999999000191'
                 nfe.infNFe.dest.xNome.valor = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
 
         processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
@@ -387,6 +416,10 @@ class ProcessadorNFe(object):
         #
         for nfe in lista_nfes:
             self.certificado.assina_xmlnfe(nfe)
+
+            if nfe.infNFe.ide.mod._valor_string == '65':
+                nfe.monta_qrcode()
+
             nfe.validar()
 
         envio.NFe = lista_nfes
@@ -606,7 +639,7 @@ class ProcessadorNFe(object):
         envio.infInut.cUF.valor    = codigo_estado
         envio.infInut.ano.valor    = ano
         envio.infInut.CNPJ.valor   = cnpj
-        #envio.infInut.mod.valor    = 55
+        envio.infInut.mod.valor    = int(self.modelo)
         envio.infInut.serie.valor  = serie
         envio.infInut.nNFIni.valor = numero_inicial
         envio.infInut.nNFFin.valor = numero_final
@@ -915,11 +948,20 @@ class ProcessadorNFe(object):
             processo.NFe     = nfe
             processo.protNFe = protnfe_recibo
 
-            self.danfe.NFe     = nfe
-            self.danfe.protNFe = protnfe_recibo
-            self.danfe.salvar_arquivo = False
-            self.danfe.gerar_danfe()
-            processo.danfe_pdf = self.danfe.conteudo_pdf
+            if nfe.infNFe.ide.mod.valor == 55:
+                self.danfe.NFe     = nfe
+                self.danfe.protNFe = protnfe_recibo
+                self.danfe.salvar_arquivo = False
+                self.danfe.gerar_danfe()
+                processo.danfe_pdf = self.danfe.conteudo_pdf
+            elif nfe.infNFe.ide.mod.valor == 65:
+                print('vai gerar o danfce', nfe, protnfe_recibo)
+
+                self.danfce.NFe     = nfe
+                self.danfce.protNFe = protnfe_recibo
+                self.danfce.salvar_arquivo = False
+                self.danfce.gerar_danfce()
+                processo.danfce_pdf = self.danfce.conteudo_pdf
 
             if self.salvar_arquivos:
                 nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '-proc-nfe.xml'
@@ -936,6 +978,16 @@ class ProcessadorNFe(object):
 
                 arq = open(nome_arq, 'w')
                 arq.write(processo.xml.encode('utf-8'))
+                arq.close()
+
+                nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '.pdf'
+                arq = open(nome_arq, 'w')
+
+                if nfe.infNFe.ide.mod.valor == 55:
+                    arq.write(processo.danfe_pdf)
+                elif nfe.infNFe.ide.mod.valor == 65:
+                    arq.write(processo.danfce_pdf)
+
                 arq.close()
 
         self.caminho = caminho_original
