@@ -472,7 +472,7 @@ class TagHora(TagData):
     def set_valor(self, novo_valor):
         if isinstance(novo_valor, basestring):
             if novo_valor:
-                novo_valor = datetime.strptime(novo_valor, '%H:%M:%S')
+                novo_valor = datetime.strptime(novo_valor[:8], '%H:%M:%S')
             else:
                 novo_valor = None
 
