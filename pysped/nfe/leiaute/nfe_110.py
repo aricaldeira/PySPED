@@ -4076,23 +4076,26 @@ class NFe(XMLNFe):
     #
     # Funções para formatar campos para o DANFE
     #
-
+    @property
     def chave_formatada(self):
         chave = self.chave
         chave_formatada = ' '.join((chave[0:4], chave[4:8], chave[8:12], chave[12:16], chave[16:20], chave[20:24], chave[24:28], chave[28:32], chave[32:36], chave[36:40], chave[40:44]))
         return chave_formatada
 
+    @property
     def dados_contingencia_fsda_formatados(self):
         self.monta_dados_contingencia_fsda()
         dados = self.dados_contingencia_fsda
         dados_formatados = ' '.join((dados[0:4], dados[4:8], dados[8:12], dados[12:16], dados[16:20], dados[20:24], dados[24:28], dados[28:32], dados[32:36]))
         return dados_formatados
 
+    @property
     def numero_formatado(self):
         num = unicode(self.infNFe.ide.nNF.valor).zfill(9)
         num_formatado = '.'.join((num[0:3], num[3:6], num[6:9]))
         return 'Nº ' + num_formatado
 
+    @property
     def serie_formatada(self):
         return 'SÉRIE ' + unicode(self.infNFe.ide.serie.valor).zfill(3)
 
@@ -4111,12 +4114,14 @@ class NFe(XMLNFe):
         formatado = cnpj[0:2] + '.' + cnpj[2:5] + '.' + cnpj[5:8] + '/' + cnpj[8:12] + '-' + cnpj[12:14]
         return formatado
 
+    @property
     def cnpj_emitente_formatado(self):
         if len(self.infNFe.emit.CPF.valor):
             return self._formata_cpf(unicode(self.infNFe.emit.CPF.valor))
         else:
             return self._formata_cnpj(unicode(self.infNFe.emit.CNPJ.valor))
 
+    @property
     def endereco_emitente_formatado(self):
         formatado = self.infNFe.emit.enderEmit.xLgr.valor
         formatado += ', ' + self.infNFe.emit.enderEmit.nro.valor
@@ -4132,27 +4137,32 @@ class NFe(XMLNFe):
 
         return cep[0:5] + '-' + cep[5:8]
 
+    @property
     def cep_emitente_formatado(self):
         return self._formata_cep(self.infNFe.emit.enderEmit.CEP.valor)
 
+    @property
     def endereco_emitente_formatado_linha_1(self):
-        formatado = self.endereco_emitente_formatado()
+        formatado = self.endereco_emitente_formatado
         formatado += ' - ' + self.infNFe.emit.enderEmit.xBairro.valor
         return formatado
 
+    @property
     def endereco_emitente_formatado_linha_2(self):
         formatado = self.infNFe.emit.enderEmit.xMun.valor
         formatado += ' - ' + self.infNFe.emit.enderEmit.UF.valor
-        formatado += ' - ' + self.cep_emitente_formatado()
+        formatado += ' - ' + self.cep_emitente_formatado
         return formatado
 
+    @property
     def endereco_emitente_formatado_linha_3(self):
-        if self.fone_emitente_formatado().strip() != '':
-            formatado = 'Fone: ' + self.fone_emitente_formatado()
+        if self.fone_emitente_formatado.strip() != '':
+            formatado = 'Fone: ' + self.fone_emitente_formatado
         else:
             formatado = ''
         return formatado
 
+    @property
     def endereco_emitente_formatado_linha_4(self):
         return self.site
 
@@ -4170,13 +4180,10 @@ class NFe(XMLNFe):
             fone = fone[2:]
             formatado = '(' + ddd + ') ' + fone[:-4] + '-' + fone[-4:]
 
-        #
-        # Celulares de SP agora têm 9 dígitos...
-        #
         elif len(fone) <= 11:
             ddd = fone[0:3]
             fone = fone[3:]
-            formatado = '(' + ddd + ') ' + fone[:-4] + '-' + fone[-4:]
+            formatado = '(' + ddd + ') ' + fone[-9:-6] + '-' + fone[-6:-4] + '-' + fone[-4:]
 
         #
         # Assume 8 dígitos para o número, 2 para o DD, e o restante é o DDI
@@ -4189,17 +4196,22 @@ class NFe(XMLNFe):
 
         return formatado
 
+    @property
     def fone_emitente_formatado(self):
         return self._formata_fone(unicode(self.infNFe.emit.enderEmit.fone.valor))
 
+    @property
     def cnpj_destinatario_formatado(self):
         if self.infNFe.dest.CPF.valor and len(self.infNFe.dest.CPF.valor):
             return self._formata_cpf(unicode(self.infNFe.dest.CPF.valor))
         elif self.infNFe.dest.CNPJ.valor and len(self.infNFe.dest.CNPJ.valor):
             return self._formata_cnpj(unicode(self.infNFe.dest.CNPJ.valor))
+        elif self.infNFe.dest.idEstrangeiro.valor and len(self.infNFe.dest.idEstrangeiro.valor):
+            return self.infNFe.dest.idEstrangeiro.valor
         else:
             return ''
 
+    @property
     def endereco_destinatario_formatado(self):
         formatado = self.infNFe.dest.enderDest.xLgr.valor
         formatado += ', ' + self.infNFe.dest.enderDest.nro.valor
@@ -4209,15 +4221,19 @@ class NFe(XMLNFe):
 
         return formatado
 
+    @property
     def cep_destinatario_formatado(self):
         return self._formata_cep(self.infNFe.dest.enderDest.CEP.valor)
 
+    @property
     def fone_destinatario_formatado(self):
         return self._formata_fone(unicode(self.infNFe.dest.enderDest.fone.valor))
 
+    @property
     def cnpj_retirada_formatado(self):
         return self._formata_cnpj(self.infNFe.retirada.CNPJ.valor)
 
+    @property
     def endereco_retirada_formatado(self):
         formatado = self.infNFe.retirada.xLgr.valor
         formatado += ', ' + self.infNFe.retirada.nro.valor
@@ -4230,9 +4246,11 @@ class NFe(XMLNFe):
         formatado += '-' + self.infNFe.retirada.UF.valor
         return formatado
 
+    @property
     def cnpj_entrega_formatado(self):
         return self._formata_cnpj(self.infNFe.entrega.CNPJ.valor)
 
+    @property
     def endereco_entrega_formatado(self):
         formatado = self.infNFe.entrega.xLgr.valor
         formatado += ', ' + self.infNFe.entrega.nro.valor
@@ -4245,12 +4263,14 @@ class NFe(XMLNFe):
         formatado += '-' + self.infNFe.entrega.UF.valor
         return formatado
 
+    @property
     def cnpj_transportadora_formatado(self):
         if self.infNFe.transp.transporta.CPF.valor:
             return self._formata_cpf(self.infNFe.transp.transporta.CPF.valor)
         else:
             return self._formata_cnpj(self.infNFe.transp.transporta.CNPJ.valor)
 
+    @property
     def placa_veiculo_formatada(self):
         if not self.infNFe.transp.veicTransp.placa.valor:
             return ''
@@ -4259,6 +4279,7 @@ class NFe(XMLNFe):
         placa = placa[:-4] + '-' + placa[-4:]
         return placa
 
+    @property
     def dados_adicionais(self):
         da = ''
 
@@ -4273,12 +4294,14 @@ class NFe(XMLNFe):
 
         return da
 
+    @property
     def canhoto_formatado(self):
         formatado = 'RECEBEMOS DE <b>'
         formatado += self.infNFe.emit.xNome.valor.upper()
         formatado += '</b> OS PRODUTOS E/OU SERVIÇOS CONSTANTES DA <b>NOTA FISCAL ELETRÔNICA</b> INDICADA AO LADO'
         return formatado
 
+    @property
     def frete_formatado(self):
         if self.infNFe.transp.modFrete.valor == 0:
             formatado = '0-EMITENTE'
@@ -4300,8 +4323,10 @@ class NFe(XMLNFe):
 
         return formatado
 
+    @property
     def cst_descricao(self):
         return 'CST'
 
+    @property
     def crt_descricao(self):
         return ''

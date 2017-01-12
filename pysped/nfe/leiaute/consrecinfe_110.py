@@ -158,13 +158,14 @@ class ProtNFe(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
+    @property
     def protocolo_formatado(self):
         if not self.infProt.nProt.valor:
             return ''
 
         formatado = self.infProt.nProt.valor
         formatado += ' - '
-        formatado += self.infProt.dhRecbto.formato_danfe()
+        formatado += self.infProt.dhRecbto.formato_danfe
         return formatado
 
 

@@ -222,6 +222,7 @@ class TagCaracter(NohXML):
         self.namespace_obrigatorio = True
         self.alertas = []
         self.raiz = None
+        self.cdata = False
 
         # Codigo para dinamizar a criacao de instancias de entidade,
         # aplicando os valores dos atributos na instanciacao
@@ -249,14 +250,19 @@ class TagCaracter(NohXML):
     def _valida(self, valor):
         self.alertas = []
 
-        if self._testa_obrigatorio(valor):
-            self.alertas.append(self._testa_obrigatorio(valor))
+        v = valor
+        if self.cdata:
+            v = valor.replace('<![CDATA[', '')
+            v = v.replace(']]>', '')
 
-        if self._testa_tamanho_minimo(valor):
-            self.alertas.append(self._testa_tamanho_minimo(valor))
+        if self._testa_obrigatorio(v):
+            self.alertas.append(self._testa_obrigatorio(v))
 
-        if self._testa_tamanho_maximo(valor):
-            self.alertas.append(self._testa_tamanho_maximo(valor))
+        if self._testa_tamanho_minimo(v):
+            self.alertas.append(self._testa_tamanho_minimo(v))
+
+        if self._testa_tamanho_maximo(v):
+            self.alertas.append(self._testa_tamanho_maximo(v))
 
         return self.alertas == []
 
@@ -275,7 +281,10 @@ class TagCaracter(NohXML):
             novo_valor = novo_valor.strip()
 
         if self._valida(novo_valor):
-            self._valor_string = unicode(tirar_acentos(novo_valor))
+            if self.cdata:
+                self._valor_string = unicode(novo_valor)
+            else:
+                self._valor_string = unicode(tirar_acentos(novo_valor))
         else:
             self._valor_string = ''
 
@@ -296,7 +305,10 @@ class TagCaracter(NohXML):
             if self.propriedade:
                 texto += ' %s="%s">' % (self.propriedade, self._valor_string)
             elif self.valor or (len(self.tamanho) == 3 and self.tamanho[2]):
-                texto += '>%s</%s>' % (self._valor_string, self.nome)
+                if self.cdata:
+                    texto += '><![CDATA[%s]]></%s>' % (self._valor_string, self.nome)
+                else:
+                    texto += '>%s</%s>' % (self._valor_string, self.nome)
             else:
                 texto += ' />'
 
@@ -449,6 +461,7 @@ class TagData(TagCaracter):
 
     valor = property(get_valor, set_valor)
 
+    @property
     def formato_danfe(self):
         if self._valor_data is None:
             return ''
@@ -479,6 +492,7 @@ class TagHora(TagData):
 
     valor = property(get_valor, set_valor)
 
+    @property
     def formato_danfe(self):
         if self._valor_data is None:
             return ''
@@ -519,6 +533,7 @@ class TagDataHora(TagData):
 
     valor = property(get_valor, set_valor)
 
+    @property
     def formato_danfe(self):
         if self._valor_data is None:
             return ''
@@ -622,6 +637,7 @@ class TagDataHoraUTC(TagData):
 
     fuso_horario = property(get_fuso_horario, set_fuso_horaro)
 
+    @property
     def formato_danfe(self):
         if self._valor_data is None:
             return ''
@@ -684,6 +700,7 @@ class TagInteiro(TagCaracter):
 
     valor = property(get_valor, set_valor)
 
+    @property
     def formato_danfe(self):
         if not (self.obrigatorio or self._valor_inteiro):
             return ''
@@ -803,6 +820,7 @@ class TagDecimal(TagCaracter):
 
     valor = property(get_valor, set_valor)
 
+    @property
     def formato_danfe(self):
         if not (self.obrigatorio or self._valor_decimal):
             return ''
@@ -815,6 +833,22 @@ class TagDecimal(TagCaracter):
                 formato = '%.' + unicode(len(self._parte_decimal())) + 'f'
         else:
             formato = '%.2f'
+
+        return locale.format(formato, self._valor_decimal, grouping=True)
+
+    @property
+    def formato_danfce(self):
+        if not (self.obrigatorio or self._valor_decimal):
+            return ''
+
+        # Tamanho mínimo das casas decimais
+        #if (len(self.decimais) >= 3) and self.decimais[2]:
+            #if len(self._parte_decimal()) <= self.decimais[2]:
+                #formato = '%.' + unicode(self.decimais[2]) + 'f'
+            #else:
+                #formato = '%.' + unicode(len(self._parte_decimal())) + 'f'
+        #else:
+        formato = '%.2f'
 
         return locale.format(formato, self._valor_decimal, grouping=True)
 
