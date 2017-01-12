@@ -47,7 +47,10 @@ setup(
     long_description = open('README.rst').read(),
     requires=[
         'Geraldo(>=0.4.16)',
-        'PyXMLSec(>=0.3.0)'
+        'PyXMLSec(>=0.3.0)',
+        'qrcode(>=5.3)',
+        'py3o.template(>=0.9.11)',
+        'sh(>=1.12.9)'
     ],
     tests_require=[
         'pyflakes(>=0.6.1)',
