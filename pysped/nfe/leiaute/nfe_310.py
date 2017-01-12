@@ -1326,6 +1326,26 @@ class Pag(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
+    @property
+    def pagamento_formatado(self):
+        TIPOS = {
+            '01': 'Dinheiro',
+            '02': 'Cheque',
+            '03': 'Cartão de crédito',
+            '04': 'Cartão de débito',
+            '05': 'Crédito loja',
+            '10': 'Vale alimentação',
+            '11': 'Vale refeição',
+            '12': 'Vale presente',
+            '13': 'Vale combustível',
+            '99': 'Outros',
+        }
+
+        if self.tPag.valor not in TIPOS:
+            return ''
+
+        return TIPOS[self.tPag.valor]
+
 
 class Dup(nfe_200.Dup):
     def __init__(self):
@@ -1641,10 +1661,17 @@ class Dest(nfe_200.Dest):
             xml += self.xNome.xml
 
         xml += self.enderDest.xml
-        xml += self.indIEDest.xml
 
-        if (not self.idEstrangeiro.valor) or (self.indIEDest.valor != '2' and self.IE.valor):
-            xml += self.IE.xml
+        if self.modelo == '55':
+            if self.indIEDest.valor:
+                xml += self.indIEDest.xml
+
+            if (not self.idEstrangeiro.valor) or (self.indIEDest.valor != '2' and self.IE.valor):
+                xml += self.IE.xml
+
+        else:
+            self.indIEDest.valor = '9'
+            xml += self.indIEDest.xml
 
         xml += self.ISUF.xml
         xml += self.IM.xml
@@ -1746,7 +1773,8 @@ class Ide(nfe_200.Ide):
 
         self.dEmi.valor = self.dhEmi.valor
 
-        xml += self.dhSaiEnt.xml
+        if self.mod.valor == '55':
+            xml += self.dhSaiEnt.xml
 
         self.dSaiEnt.valor = self.dhSaiEnt.valor
         self.hSaiEnt.valor = self.hSaiEnt.valor
@@ -1861,7 +1889,9 @@ class InfNFe(nfe_200.InfNFe):
 
         xml += self.total.xml
         xml += self.transp.xml
-        xml += self.cobr.xml
+
+        if self.ide.mod.valor == '55':
+            xml += self.cobr.xml
 
         if self.ide.mod.valor == '65':
             for p in self.pag:

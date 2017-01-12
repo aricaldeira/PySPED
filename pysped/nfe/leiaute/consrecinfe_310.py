@@ -46,6 +46,7 @@ from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import consrecinfe_200
 import os
 from nfe_310 import NFe
+from nfce_310 import NFCe
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -160,3 +161,24 @@ class ProcNFe(consrecinfe_200.ProcNFe):
         self.protNFe = ProtNFe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'procNFe_v3.10.xsd'
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += ABERTURA
+        xml += self.versao.xml
+        xml += self.NFe.xml.replace(ABERTURA, '')
+        xml += self.protNFe.xml.replace(ABERTURA, '')
+        xml += '</nfeProc>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.NFe.xml     = arquivo
+
+            if self.NFe.infNFe.ide.mod.valor == 65:
+                self.NFe = NFCe()
+                self.NFe.xml = arquivo
+
+            self.protNFe.xml = arquivo
+
+    xml = property(get_xml, set_xml)
