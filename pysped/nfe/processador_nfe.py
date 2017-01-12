@@ -254,15 +254,16 @@ class ProcessadorNFe(object):
 
             if self.modelo == '55':
                 if somente_ambiente_nacional:
-                    ws_a_usar = webservices_3.AN
-                if ambiente == 1 and servico == WS_DFE_DISTRIBUICAO:
-                    self._servidor = 'www1.nfe.fazenda.gov.br'
+                    self._servidor = webservices_3.AN[ambiente]['servidor']
+                    self._url      = webservices_3.AN[ambiente][servico]
 
                 elif servico == WS_NFE_DOWNLOAD:
-                    ws_a_usar = webservices_3.SVAN
+                    self._servidor = webservices_3.SVAN[ambiente]['servidor']
+                    self._url      = webservices_3.SVAN[ambiente][servico]
 
                 elif self.contingencia_SCAN or self.contingencia:
-                    ws_a_usar = webservices_3.ESTADO_WS_CONTINGENCIA
+                    self._servidor = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
+                    self._url      = webservices_3.ESTADO_WS_CONTINGENCIA[ambiente][servico]
 
                 else:
                     #
@@ -274,18 +275,16 @@ class ProcessadorNFe(object):
                     else:
                         ws_a_usar = webservices_3.ESTADO_WS[self.estado]
 
-                if 'servidor%s' % servico in ws_a_usar[ambiente]:
-                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
-                else:
-                    self._servidor = ws_a_usar[ambiente]['servidor']
-                self._url      = ws_a_usar[ambiente][servico]
-
-                if self.estado == 'RS' and servico == WS_NFE_CONSULTA_CADASTRO:
-                    self._servidor = 'sef.sefaz.rs.gov.br'
+                    if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                        self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                    else:
+                        self._servidor = ws_a_usar[ambiente]['servidor']
+                    self._url      = ws_a_usar[ambiente][servico]
 
             elif self.modelo == '65':
                 if self.contingencia_SCAN or self.contingencia:
-                    ws_a_usar = webservices_nfce_3.ESTADO_WS_CONTINGENCIA
+                    self._servidor = webservices_nfce_3.ESTADO_WS_CONTINGENCIA[ambiente]['servidor']
+                    self._url      = webservices_nfce_3.ESTADO_WS_CONTINGENCIA[ambiente][servico]
 
                 else:
                     #
@@ -297,11 +296,11 @@ class ProcessadorNFe(object):
                     else:
                         ws_a_usar = webservices_nfce_3.ESTADO_WS[self.estado]
 
-                if 'servidor%s' % servico in ws_a_usar[ambiente]:
-                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
-                else:
-                    self._servidor = ws_a_usar[ambiente]['servidor']
-                self._url      = ws_a_usar[ambiente][servico]
+                    if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                        self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+                    else:
+                        self._servidor = ws_a_usar[ambiente]['servidor']
+                    self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
@@ -959,9 +958,8 @@ class ProcessadorNFe(object):
                 self.danfe.salvar_arquivo = False
                 self.danfe.gerar_danfe()
                 processo.danfe_pdf = self.danfe.conteudo_pdf
-            elif nfe.infNFe.ide.mod.valor == '65':
-                print('vai gerar o danfce', nfe, protnfe_recibo)
 
+            elif nfe.infNFe.ide.mod.valor == '65':
                 self.danfce.NFe     = nfe
                 self.danfce.protNFe = protnfe_recibo
                 self.danfce.salvar_arquivo = False
