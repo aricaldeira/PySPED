@@ -261,13 +261,14 @@ class RetEvento(XMLNFe):
 
     xml = property(get_xml, set_xml)
 
+    @property
     def protocolo_formatado(self):
         if not self.infEvento.nProt.valor:
             return ''
 
         formatado = self.infEvento.nProt.valor
         formatado += ' - '
-        formatado += self.infEvento.dhRegEvento.formato_danfe()
+        formatado += self.infEvento.dhRegEvento.formato_danfe
         return formatado
 
 
