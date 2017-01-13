@@ -951,13 +951,13 @@ class ProcessadorNFe(object):
             processo.NFe     = nfe
             processo.protNFe = protnfe_recibo
 
-            if nfe.infNFe.ide.mod.valor == 55:
+            if nfe.infNFe.ide.mod.valor == '55':
                 self.danfe.NFe     = nfe
                 self.danfe.protNFe = protnfe_recibo
                 self.danfe.salvar_arquivo = False
                 self.danfe.gerar_danfe()
                 processo.danfe_pdf = self.danfe.conteudo_pdf
-            elif nfe.infNFe.ide.mod.valor == 65:
+            elif nfe.infNFe.ide.mod.valor == '65':
                 print('vai gerar o danfce', nfe, protnfe_recibo)
 
                 self.danfce.NFe     = nfe
@@ -986,9 +986,9 @@ class ProcessadorNFe(object):
                 nome_arq = self.caminho + unicode(nfe.chave).strip().rjust(44, '0') + '.pdf'
                 arq = open(nome_arq, 'w')
 
-                if nfe.infNFe.ide.mod.valor == 55:
+                if nfe.infNFe.ide.mod.valor == '55':
                     arq.write(processo.danfe_pdf)
-                elif nfe.infNFe.ide.mod.valor == 65:
+                elif nfe.infNFe.ide.mod.valor == '65':
                     arq.write(processo.danfce_pdf)
 
                 arq.close()

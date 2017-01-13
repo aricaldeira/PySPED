@@ -3697,7 +3697,7 @@ class Ide(XMLNFe):
         self.cNF     = TagCaracter(nome='cNF'    , codigo='B03', tamanho=[ 9,  9, 9], raiz='//NFe/infNFe/ide')
         self.natOp   = TagCaracter(nome='natOp'  , codigo='B04', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/ide')
         self.indPag  = TagInteiro(nome='indPag'  , codigo='B05', tamanho=[ 1,  1, 1], raiz='//NFe/infNFe/ide')
-        self.mod     = TagInteiro(nome='mod'     , codigo='B06', tamanho=[ 2,  2, 2], raiz='//NFe/infNFe/ide', valor=55)
+        self.mod     = TagCaracter(nome='mod'     , codigo='B06', tamanho=[ 2,  2, 2], raiz='//NFe/infNFe/ide', valor=55)
         self.serie   = TagInteiro(nome='serie'   , codigo='B07', tamanho=[ 1,  3, 1], raiz='//NFe/infNFe/ide')
         self.nNF     = TagInteiro(nome='nNF'     , codigo='B08', tamanho=[ 1,  9, 1], raiz='//NFe/infNFe/ide')
         self.dEmi    = TagData(nome='dEmi'       , codigo='B09',                      raiz='//NFe/infNFe/ide')

@@ -268,6 +268,7 @@ class TagCaracter(NohXML):
 
     def set_valor(self, novo_valor):
         if novo_valor is not None:
+            novo_valor = unicode(novo_valor)
             #
             # Remover caratceres inválidos
             #
