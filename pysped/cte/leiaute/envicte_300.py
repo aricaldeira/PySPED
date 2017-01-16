@@ -4,7 +4,7 @@ from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
 import os
 
-from .CTe_300 import CTe
+from .cte_300 import CTe
 
 DIRNAME = os.path.dirname(__file__)
 
