@@ -36,8 +36,8 @@ class EnviCTe(XMLNFe):
             self.CTe = self.le_grupo('//enviLote/CTe', CTe)
 
     xml = property(get_xml, set_xml)
-    
-    
+
+
 class InfRec(XMLNFe):
     def __init__(self):
         super(InfRec, self).__init__()
@@ -48,7 +48,7 @@ class InfRec(XMLNFe):
     def get_xml(self):
         if not self.nRec.valor:
             return ''
-            
+
         xml = XMLNFe.get_xml(self)
         xml += '<infRec>'
         xml += self.nRec.xml
@@ -77,7 +77,7 @@ class RetEnviCTe(XMLNFe):
         self.xMotivo  = TagCaracter(nome='xMotivo'  , codigo='AR06' , tamanho=[1, 255]   , raiz='//retEnviCte')
         self.infRec   = InfRec()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnviCte_v3.00.xsd'
+        self.arquivo_esquema = 'retEnviCTe_v3.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
