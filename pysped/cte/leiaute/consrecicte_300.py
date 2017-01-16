@@ -4,7 +4,7 @@ from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
 import os
 
-from .cte_300 import CTe
+from .CTe_300 import CTe
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -35,8 +35,8 @@ class ConsReciCTe(XMLNFe):
         return self.xml
 
     xml = property(get_xml, set_xml)
-
-
+    
+    
 
 class InfProt(XMLNFe):
     def __init__(self):
@@ -125,8 +125,8 @@ class ProtCTe(XMLNFe):
         formatado += ' - '
         formatado += self.infProt.dhRecbto.formato_danfe()
         return formatado
-
-
+    
+    
 class RetConsReciCTe(XMLNFe):
     def __init__(self):
         super(RetConsReciCTe, self).__init__()
@@ -185,9 +185,9 @@ class RetConsReciCTe(XMLNFe):
             for pn in self.protCTe:
                 self.dic_protCTe[pn.infProt.chCTe.valor] = pn
 
-    xml = property(get_xml, set_xml)
-
-
+    xml = property(get_xml, set_xml)    
+    
+    
 class ProcCTe(XMLNFe):
     def __init__(self):
         super(ProcCTe, self).__init__()

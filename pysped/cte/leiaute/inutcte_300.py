@@ -4,7 +4,7 @@ from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
 import os
 
-from .cte_300 import CTe
+from .CTe_300 import CTe
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -63,7 +63,7 @@ class InutCTe(XMLNFe):
         self.infInut = InfInutEnviado()
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'inutCTe_v3.00.xsd'
+        self.arquivo_esquema = 'inutCte_v3.00.xsd'
 
         self.chave = ''
 
@@ -179,7 +179,7 @@ class RetInutCTe(XMLNFe):
         self.infInut = InfInutRecebido()
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retInutCTe_v3.00.xsd'
+        self.arquivo_esquema = 'retInutCte_v3.00.xsd'
 
         self.chave = ''
 

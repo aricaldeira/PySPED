@@ -4,7 +4,7 @@ from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
 import os
 
-from.eventoscte_300 import EvGTV, EvPrestDesacordo, EvCCeCTe, EvRegMultimodal, EvEPECCTe, EvCancCTe
+from.eventosCTe_300 import EvGTV, EvPrestDesacordo, EvCCeCTe, EvRegMultimodal, EvEPECCTe, EvCancCTe
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -130,7 +130,7 @@ class EventoCTe(XMLNFe):
             self.Signature.xml = self._le_noh('//eventoCTe/sig:Signature', ns=NAMESPACE_CTE)
 
     xml = property(get_xml, set_xml)
-
+    
 
 class InfEventoRet(XMLNFe):
     def __init__(self):
@@ -184,11 +184,11 @@ class InfEventoRet(XMLNFe):
             self.nSeqEvento.xml  = arquivo
             self.dhRegEvento.xml = arquivo
             self.nProt.xml       = arquivo
-
+            
     xml = property(get_xml, set_xml)
 
 
-
+    
 class RetEventoCTe(XMLNFe):
     def __init__(self):
         super(RetEventoCTe, self).__init__()
