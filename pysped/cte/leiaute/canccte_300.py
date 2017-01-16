@@ -61,7 +61,7 @@ class RetCancCTe(XMLNFe):
         self.infCanc = InfCancRecebido()
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', 'PL_CTe_104c/')
-        self.arquivo_esquema = 'retCancCte_v1.04.xsd'
+        self.arquivo_esquema = 'retCancCTe_v1.04.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
