@@ -152,8 +152,8 @@ from eventoscte_300 import EvPrestDesacordo as EvPrestDesacordo_300
 from eventoscte_300 import EvGTV as EvGTV_300
 
 # Consulta status servico
-from consstatservcte_300 import ConsStatServCTe    as ConsStatServCTe_300
-from consstatservcte_300 import RetConsStatServCTe as RetConsStatServCTe_300
+from consstatserv_300 import ConsStatServCTe    as ConsStatServCTe_300
+from consstatserv_300 import RetConsStatServCTe as RetConsStatServCTe_300
 
 # Consulta a situação de CT-e
 from conssitcte_300 import ConsSitCTe as ConsSitCTe_300
