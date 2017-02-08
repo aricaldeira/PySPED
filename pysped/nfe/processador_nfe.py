@@ -514,7 +514,7 @@ class ProcessadorNFe(object):
                     nome_arq += 'aut.xml'
 
                 # NF-e denegada
-                elif pn.infProt.cStat.valor in ('110', '301', '302'):
+                elif pn.infProt.cStat.valor in ('110', '301', '302', '303'):
                     nome_arq += 'den.xml'
 
                 # NF-e rejeitada
@@ -937,8 +937,9 @@ class ProcessadorNFe(object):
         # 110 - denegada
         # 301 - denegada por irregularidade do emitente
         # 302 - denegada por irregularidade do destinatário
+        # 303 - Uso Denegado: Destinatário não habilitado a operar na UF
         #
-        if protnfe_recibo.infProt.cStat.valor in ('100', '150', '110', '301', '302'):
+        if protnfe_recibo.infProt.cStat.valor in ('100', '150', '110', '301', '302', '303'):
             if self.versao == '1.10':
                 processo = ProcNFe_110()
 
@@ -1120,7 +1121,7 @@ class ProcessadorNFe(object):
         if self.salvar_arquivos:
             nome_arq = caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-rec-' + tipo_evento
 
-            if resposta.cStat.valor != '129':
+            if resposta.cStat.valor not in ('129', '128'):
                 nome_arq += '-rej.xml'
             else:
                 nome_arq += '.xml'
