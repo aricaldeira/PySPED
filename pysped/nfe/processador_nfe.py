@@ -1120,7 +1120,7 @@ class ProcessadorNFe(object):
         if self.salvar_arquivos:
             nome_arq = caminho + unicode(envio.idLote.valor).strip().rjust(15, '0') + '-rec-' + tipo_evento
 
-            if resposta.cStat.valor != '129':
+            if resposta.cStat.valor != '128':
                 nome_arq += '-rej.xml'
             else:
                 nome_arq += '.xml'
