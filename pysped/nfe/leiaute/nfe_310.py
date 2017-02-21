@@ -438,6 +438,9 @@ class IPI(nfe_200.IPI):
         self.pIPI = TagDecimal(nome='pIPI', codigo='O13', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
 
     def get_xml(self):
+        if self.CST.valor not in ('01', '02', '03', '04', '50', '51', '52', '53', '54', '55'):
+            return ''
+
         #
         # Define as tags baseado no código da situação tributária
         #
