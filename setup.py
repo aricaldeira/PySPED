@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "PySPED",
-    version = "0.1.2",
+    version = "0.1.3",
     author = "Aristides Caldeira",
     author_email = 'aristides.caldeira@tauga.com.br',
     test_suite='tests',
@@ -47,7 +47,7 @@ setup(
     long_description = open('README.rst').read(),
     requires=[
         'Geraldo(>=0.4.16)',
-        'PyXMLSec(>=0.3.0)',
+        'xmlsec(>=1.0.5)',
         'qrcode(>=5.3)',
         'py3o.template(>=0.9.11)',
         'sh(>=1.12.9)'
