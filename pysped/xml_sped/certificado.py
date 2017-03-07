@@ -379,7 +379,7 @@ class Certificado(object):
     def assina_xml(self, xml):
         self._inicia_funcoes_externas()
         xml = self._prepara_doc_xml(xml)
-
+        xml = xml.replace('<Reference URI="#">', '<Reference URI="">').strip()
         #
         # Colocamos o texto no avaliador XML
         #
