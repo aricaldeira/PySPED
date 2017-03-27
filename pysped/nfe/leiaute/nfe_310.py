@@ -1205,6 +1205,30 @@ class Compra(nfe_200.Compra):
 class Exporta(nfe_200.Exporta):
     def __init__(self):
         super(Exporta, self).__init__()
+        self.UFSaidaPais = TagCaracter(nome='UFSaidaPais'  , codigo='ZA02', tamanho=[2,  2], raiz='//NFe/infNFe/exporta', obrigatorio=False)
+        self.xLocExporta = TagCaracter(nome='xLocExporta', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
+        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
+
+    def get_xml(self):
+        if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
+            return ''
+
+        xml = XMLNFe.get_xml(self)
+        xml += '<exporta>'
+        xml += self.UFSaidaPais.xml
+        xml += self.xLocExporta.xml
+        xml += self.xLocDespacho.xml
+
+        xml += '</exporta>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.UFSaidaPais.xml   = arquivo
+            self.xLocExporta.xml = arquivo
+            self.xLocDespacho.xml = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class ProcRef(nfe_200.ProcRef):
