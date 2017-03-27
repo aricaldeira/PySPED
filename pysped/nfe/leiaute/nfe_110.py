@@ -3653,8 +3653,7 @@ class RefNF(XMLNFe):
 class NFRef(XMLNFe):
     def __init__(self):
         super(NFRef, self).__init__()
-        self.refNFe = TagCaracter(nome='refNFe', codigo='B13', tamanho=[44,
-                                                                        44], raiz='//NFref', obrigatorio=False)
+        self.refNFe = TagCaracter(nome='refNFe', codigo='B13', tamanho=[44, 44], raiz='//NFref', obrigatorio=False)
         self.refNF  = RefNF()
 
     def get_xml(self):
@@ -3761,7 +3760,7 @@ class Ide(XMLNFe):
             # "reenraizadas" (propriedade raiz) para poderem ser
             # lidas corretamente
             #
-            self.NFRef = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
+            self.NFref = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
 
             self.tpImp.xml   = arquivo
             self.tpEmis.xml  = arquivo

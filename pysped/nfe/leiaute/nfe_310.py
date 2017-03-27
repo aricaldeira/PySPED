@@ -1206,7 +1206,7 @@ class Exporta(nfe_200.Exporta):
         super(Exporta, self).__init__()
         self.UFSaidaPais = TagCaracter(nome='UFSaidaPais'  , codigo='ZA02', tamanho=[2,  2], raiz='//NFe/infNFe/exporta', obrigatorio=False)
         self.xLocExporta = TagCaracter(nome='xLocExporta', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
-        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
+        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA04', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
 
     def get_xml(self):
         if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
@@ -1228,6 +1228,19 @@ class Exporta(nfe_200.Exporta):
             self.xLocDespacho.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
+            return ''
+
+        txt = 'ZA|'
+        txt += self.UFSaidaPais.txt + '|'
+        txt += self.xLocExporta.txt + '|'
+        txt += self.xLocDespacho.txt + '|'
+        txt += '\n'
+        return txt
+
+    txt = property(get_txt)
 
 
 class ProcRef(nfe_200.ProcRef):
@@ -1506,9 +1519,9 @@ class ICMSTot(nfe_200.ICMSTot):
     def __init__(self):
         super(ICMSTot, self).__init__()
         self.vICMSDeson = TagDecimal(nome='vICMSDeson', codigo='W04a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
-        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
-        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='W04b', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='W04c', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='W04d', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -1540,8 +1553,8 @@ class ICMSTot(nfe_200.ICMSTot):
             self.vBC.xml     = arquivo
             self.vICMS.xml   = arquivo
             self.vICMSDeson.xml = arquivo
-            self.vFCPUFDest.xml   = arquivo
-            self.vICMSUFDest.xml  = arquivo
+            self.vFCPUFDest.xml = arquivo
+            self.vICMSUFDest.xml = arquivo
             self.vICMSUFRemet.xml = arquivo
             self.vBCST.xml   = arquivo
             self.vST.xml     = arquivo
