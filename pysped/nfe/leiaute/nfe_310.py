@@ -180,15 +180,14 @@ class ISSQN(nfe_200.ISSQN):
 class ICMSUFDest(XMLNFe):
     def __init__(self):
         super(ICMSUFDest, self).__init__()
-        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='NA03', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='NA05', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='NA07', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSInter = TagDecimal(nome='pICMSInter', codigo='NA09', tamanho=[1,  5, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='NA11', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ICMSUFDest', valor=40)
-
-        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='AI02', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='AI03', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInter = TagDecimal(nome='pICMSInter', codigo='AI04', tamanho=[1,  3, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='AI05', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest', valor=40)
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='AI06', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='AI07', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='AI08', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
 
 
     def get_xml(self):
@@ -1207,7 +1206,7 @@ class Exporta(nfe_200.Exporta):
         super(Exporta, self).__init__()
         self.UFSaidaPais = TagCaracter(nome='UFSaidaPais'  , codigo='ZA02', tamanho=[2,  2], raiz='//NFe/infNFe/exporta', obrigatorio=False)
         self.xLocExporta = TagCaracter(nome='xLocExporta', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
-        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
+        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA04', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
 
     def get_xml(self):
         if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
@@ -1229,6 +1228,19 @@ class Exporta(nfe_200.Exporta):
             self.xLocDespacho.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
+            return ''
+
+        txt = 'ZA|'
+        txt += self.UFSaidaPais.txt + '|'
+        txt += self.xLocExporta.txt + '|'
+        txt += self.xLocDespacho.txt + '|'
+        txt += '\n'
+        return txt
+
+    txt = property(get_txt)
 
 
 class ProcRef(nfe_200.ProcRef):
@@ -1507,9 +1519,9 @@ class ICMSTot(nfe_200.ICMSTot):
     def __init__(self):
         super(ICMSTot, self).__init__()
         self.vICMSDeson = TagDecimal(nome='vICMSDeson', codigo='W04a', tamanho=[1, 15, 1], decimais=[1,  2,  2], raiz='//NFe/infNFe/total/ICMSTot')
-        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='NA13', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
-        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='N15', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='W04b', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='W04c', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='W04d', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=False)
 
 
     def get_xml(self):
@@ -1542,6 +1554,9 @@ class ICMSTot(nfe_200.ICMSTot):
             self.vBC.xml     = arquivo
             self.vICMS.xml   = arquivo
             self.vICMSDeson.xml = arquivo
+            self.vFCPUFDest.xml = arquivo
+            self.vICMSUFDest.xml = arquivo
+            self.vICMSUFRemet.xml = arquivo
             self.vBCST.xml   = arquivo
             self.vST.xml     = arquivo
             self.vProd.xml   = arquivo
@@ -1670,6 +1685,7 @@ class Dest(nfe_200.Dest):
             self.idEstrangeiro.xml = arquivo
             self.xNome.xml     = arquivo
             self.enderDest.xml = arquivo
+            self.indIEDest.xml = arquivo
             self.IE.xml        = arquivo
             self.ISUF.xml      = arquivo
             self.IM.xml     = arquivo
@@ -1814,7 +1830,7 @@ class Ide(nfe_200.Ide):
             # "reenraizadas" (propriedade raiz) para poderem ser
             # lidas corretamente
             #
-            self.NFRef = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
+            self.NFref = self.le_grupo('//NFe/infNFe/ide/NFref', NFRef)
 
             self.tpImp.xml   = arquivo
             self.tpEmis.xml  = arquivo
