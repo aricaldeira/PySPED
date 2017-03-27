@@ -8,7 +8,7 @@ setup(
     test_suite='tests',
     keywords = ['nfe', 'nfse', 'cte', 'sped', 'edf', 'ecd'],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Plugins',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
@@ -35,7 +35,7 @@ setup(
         'pysped.exemplos',
     ],
     package_data = {
-        'pysped.nfe.danfe': ['fonts/*'],
+        'pysped.nfe.danfe': ['fonts/*', '*.odt'],
         'pysped.relato_sped': ['fonts/*'],
         'pysped.nfe.leiaute': ['schema/*/*'],
         'pysped.cte.leiaute': ['schema/*/*'],
@@ -43,10 +43,10 @@ setup(
     },
     url = 'https://github.com/aricaldeira/PySPED',
     license = 'LGPL-v2.1+',
-    description = 'PySPED is a library to implement all requirements of the public system of bookkeeping digital',
+    description = 'PySPED is a library to implement all requirements of the Brazilian Public System of Digital Bookkeeping',
     long_description = open('README.rst').read(),
     requires=[
-        'lxml(>=3.7.3))',
+        'lxml(>=3.7.3)',
         'xmlsec(>=1.0.7)',
         'Geraldo(>=0.4.16)',
         'qrcode(>=5.3)',
