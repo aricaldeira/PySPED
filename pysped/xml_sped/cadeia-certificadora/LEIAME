@@ -3,47 +3,14 @@
 #
 
 
-1. Os arquivos foram baixados daqui:
+1. A cadeia certificadora foi baixada daqui:
 
-    http://acraiz.icpbrasil.gov.br/repositorio/v1_ff.der
-    http://acraiz.icpbrasil.gov.br/repositorio/v2_ff.der
-    http://acraiz.icpbrasil.gov.br/repositorio/v3_ff.der
-    https://acraiz.icpbrasil.gov.br/repositorio/v1_ff_sha512.txt
-    https://acraiz.icpbrasil.gov.br/repositorio/v2_ff_sha512.txt
-    https://acraiz.icpbrasil.gov.br/repositorio/v3_ff_sha512.txt
+    http://www.iti.gov.br/icp-brasil/repositorio/144-icp-brasil/repositorio/3886-repositorio-de-certificados-arquivo-unico-compactado
 
-    Dia 13/03/2013
+2. Extraia os arquivos, e use o cat para concatenar os arquivos:
 
-    O certificado raiz dos Correios/SERPRO foram baixados daqui:
-    
-    https://ccd.serpro.gov.br/acserprorfb/docs/acrfb.cer
-    https://ccd.serpro.gov.br/acserprorfb/docs/ACSERPRORFB.crt
-    https://ccd.serpro.gov.br/acserprorfb/docs/acrfbv3.cer
-    https://ccd.serpro.gov.br/acserprorfb/docs/acserprorfbv3.cer
-
-    e foi salvo diretamente no diretório certificados.
-
-
-2. Verificar os certificados baixados:
-
-    >>> sha512sum -c v1_ff_sha512.txt
-    v1_ff.der: SUCESSO
-
-    >>> sha512sum -c v2_ff_sha512.txt
-    v2_ff.der: SUCESSO
-
-    >>> sha512sum -c v3_ff_sha512.txt
-    v3_ff.der: SUCESSO
-
-
-3. Converter os certificados para o formato PEM, pois a biblioteca PyOpenSSL
-    não tem como manipular os certificados no formato baixado (pelo menos eu
-    não achei como...):
-
-    sh converte-certificado.sh
-
-
-4. Separar os certificados em arquivos individuais para leitura e uso pela
-    biblioteca PyXMLSec:
-
-    python separa-certificados.py
+    cd certificados
+    unzip ../ACcompactado.zip
+    cd certificados
+    cat * > cadeia.pem
+    cp cadeia.pem ../../
