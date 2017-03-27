@@ -405,8 +405,11 @@ class ProcessadorNFe(object):
                     if (not nfe.infNFe.dest.CNPJ.valor) and (not nfe.infNFe.dest.CPF.valor) and (not nfe.infNFe.dest.idEstrangeiro.valor):
                         continue
 
-                nfe.infNFe.dest.CNPJ.valor = '99999999000191'
+                #nfe.infNFe.dest.CNPJ.valor = '99999999000191'
                 nfe.infNFe.dest.xNome.valor = 'NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL'
+                #nfe.infNFe.dest.IE.valor = ''
+                #if self.versao == '3.10':
+                    #nfe.infNFe.dest.indIEDest.valor = '2'
 
         processo = ProcessoNFe(webservice=WS_NFE_ENVIO_LOTE, envio=envio, resposta=resposta)
 
