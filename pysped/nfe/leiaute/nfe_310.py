@@ -1300,7 +1300,7 @@ class Exporta(nfe_200.Exporta):
         super(Exporta, self).__init__()
         self.UFSaidaPais = TagCaracter(nome='UFSaidaPais'  , codigo='ZA02', tamanho=[2,  2], raiz='//NFe/infNFe/exporta', obrigatorio=False)
         self.xLocExporta = TagCaracter(nome='xLocExporta', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
-        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA03', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
+        self.xLocDespacho = TagCaracter(nome='xLocDespacho', codigo='ZA04', tamanho=[1, 60], raiz='//NFe/infNFe/exporta', obrigatorio=False)
 
     def get_xml(self):
         if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
@@ -1322,6 +1322,19 @@ class Exporta(nfe_200.Exporta):
             self.xLocDespacho.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+    def get_txt(self):
+        if not (self.UFSaidaPais.valor or self.xLocExporta.valor):
+            return ''
+
+        txt = 'ZA|'
+        txt += self.UFSaidaPais.txt + '|'
+        txt += self.xLocExporta.txt + '|'
+        txt += self.xLocDespacho.txt + '|'
+        txt += '\n'
+        return txt
+
+    txt = property(get_txt)
 
 
 class ProcRef(nfe_200.ProcRef):
