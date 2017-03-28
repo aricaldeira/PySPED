@@ -46,7 +46,6 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, TagCaracter,
                              XMLNFe)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
 import os
-from pysped.xml_sped.base import TagDataHoraUTC
 
 
 DIRNAME = os.path.dirname(__file__)

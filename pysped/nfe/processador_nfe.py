@@ -166,7 +166,7 @@ class ConexaoHTTPS(HTTPSConnection):
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
-        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1, do_handshake_on_connect=False)
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLS, do_handshake_on_connect=False)
 
 
 class ProcessadorNFe(object):
@@ -1407,7 +1407,9 @@ class ProcessadorNFe(object):
 
         envio.validar()
 
-        #Monta caminhos
+        #
+        # Monta caminhos para os arquivos DF-e
+        #
         if (ambiente or self.ambiente) == 1:
             self.caminho = os.path.join(self.caminho, 'producao/dfe/')
         else:

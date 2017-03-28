@@ -180,14 +180,14 @@ class ISSQN(nfe_200.ISSQN):
 class ICMSUFDest(XMLNFe):
     def __init__(self):
         super(ICMSUFDest, self).__init__()
-        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1,  13, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1, 13, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='AI02', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='AI03', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pICMSInter= TagDecimal(nome='pICMSInter', codigo='AI04', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='AI05', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='AI06', tamanho=[1,  13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='AI07', tamanho=[1,  13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
-        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='AI08', tamanho=[1,  13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='AI06', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='AI07', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='AI08', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
 
     def get_xml(self):
         if not (self.vBCUFDest.valor):
@@ -866,11 +866,11 @@ class Imposto(nfe_200.Imposto):
             self.ICMS.xml     = arquivo
             self.IPI.xml      = arquivo
             self.II.xml       = arquivo
+            self.ISSQN.xml    = arquivo
             self.PIS.xml      = arquivo
             self.PISST.xml    = arquivo
             self.COFINS.xml   = arquivo
             self.COFINSST.xml = arquivo
-            self.ISSQN.xml    = arquivo
             self.ICMSUFDest.xml    = arquivo
 
     xml = property(get_xml, set_xml)
@@ -1631,7 +1631,7 @@ class Dest(nfe_200.Dest):
         self.modelo = '55'
         self.enderDest = EnderDest()
         self.idEstrangeiro = TagCaracter(nome='idEstrangeiro' , codigo='E03a', tamanho=[0 , 20]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
-        self.indIEDest = TagCaracter(nome='indIEDest', codigo='E16a', tamanho=[1 , 1], raiz='//NFe/infNFe/dest', obrigatorio=True)
+        self.indIEDest = TagCaracter(nome='indIEDest', codigo='E16a', tamanho=[1 , 1], raiz='//NFe/infNFe/dest', obrigatorio=False, valor='9')
         self.IE        = TagCaracter(nome='IE'   , codigo='E17', tamanho=[ 2, 14]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
         self.IM        = TagCaracter(nome='IM', codigo='E18a', tamanho=[ 1, 15]   , raiz='//NFe/infNFe/dest', obrigatorio=False)
 
