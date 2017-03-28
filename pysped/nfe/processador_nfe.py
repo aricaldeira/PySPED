@@ -1406,7 +1406,9 @@ class ProcessadorNFe(object):
 
         envio.validar()
 
-        #Monta caminhos
+        #
+        # Monta caminhos para os arquivos DF-e
+        #
         if (ambiente or self.ambiente) == 1:
             self.caminho = os.path.join(self.caminho, 'producao/dfe/')
         else:

@@ -3650,6 +3650,7 @@ class RefNF(XMLNFe):
 
     txt = property(get_txt)
 
+
 class NFRef(XMLNFe):
     def __init__(self):
         super(NFRef, self).__init__()
