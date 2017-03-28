@@ -104,11 +104,11 @@ SVRS = {
     # o servidor da consulta de cadastro é diferente dos demais...
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'             : 'nfe.svrs.rs.gov.br',
-        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'svp-ws.sefazvirtual.rs.gov.br',
+        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'cad.svrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx',
+        WS_NFE_CONSULTA_CADASTRO: 'ws/cadconsultacadastro/cadconsultacadastro2.asmx',
         WS_NFE_INUTILIZACAO    : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
         WS_NFE_CONSULTA        : 'ws/NfeConsulta/NfeConsulta2.asmx',
         WS_NFE_SITUACAO        : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
@@ -223,6 +223,7 @@ DPEC = {
 AN = {
     NFE_AMBIENTE_PRODUCAO: {
         'servidor': 'www.nfe.fazenda.gov.br',
+        'servidor%s' % WS_DFE_DISTRIBUICAO: 'www1.nfe.fazenda.gov.br',
         WS_NFE_RECEPCAO_EVENTO   : 'RecepcaoEvento/RecepcaoEvento.asmx',
         WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
         WS_NFE_DOWNLOAD: 'NfeDownloadNF/NfeDownloadNF.asmx',
@@ -463,6 +464,7 @@ UFPE = {
 UFRS = {
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'              : 'nfe.sefazrs.rs.gov.br',
+        'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'cad.sefazrs.rs.gov.br',
         WS_NFE_RECEPCAO_EVENTO  : 'ws/recepcaoevento/recepcaoevento.asmx',
         WS_NFE_AUTORIZACAO       : 'ws/NfeAutorizacao/NFeAutorizacao.asmx',
         WS_NFE_CONSULTA_AUTORIZACAO  : 'ws/NfeRetAutorizacao/NFeRetAutorizacao.asmx',
