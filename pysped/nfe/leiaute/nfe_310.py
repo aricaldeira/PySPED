@@ -180,11 +180,11 @@ class ISSQN(nfe_200.ISSQN):
 class ICMSUFDest(XMLNFe):
     def __init__(self):
         super(ICMSUFDest, self).__init__()
-        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1, 13, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vBCUFDest = TagDecimal(nome='vBCUFDest', codigo='AI01', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
         self.pFCPUFDest = TagDecimal(nome='pFCPUFDest', codigo='AI02', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
         self.pICMSUFDest = TagDecimal(nome='pICMSUFDest', codigo='AI03', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSInter= TagDecimal(nome='pICMSInter', codigo='AI04', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
-        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='AI05', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInter = TagDecimal(nome='pICMSInter', codigo='AI04', tamanho=[1,  3, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.pICMSInterPart = TagDecimal(nome='pICMSInterPart', codigo='AI05', tamanho=[1,  3, 1], decimais=[2, 4, 2], raiz='//det/imposto/ICMSUFDest', valor=40)
         self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='AI06', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
         self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='AI07', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
         self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='AI08', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
@@ -1120,8 +1120,8 @@ class Prod(nfe_200.Prod):
             self.cEAN.xml     = arquivo
             self.xProd.xml    = arquivo
             self.NCM.xml      = arquivo
+            self.CEST.xml     = arquivo
             self.NVE.xml      = arquivo
-            self.CEST.xml      = arquivo
             self.EXTIPI.xml   = arquivo
             #self.genero.xml   = arquivo
             self.CFOP.xml     = arquivo
