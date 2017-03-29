@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "PySPED",
-    version = "1.0.2",
+    version = "1.1.0",
     author = "Aristides Caldeira",
     author_email = 'aristides.caldeira@tauga.com.br',
     test_suite='tests',

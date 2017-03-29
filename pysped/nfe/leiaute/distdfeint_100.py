@@ -144,9 +144,9 @@ class DistDFeInt(XMLNFe):
 class DocZip(XMLNFe):
     def __init__(self):
         super(DocZip, self).__init__()
-        self.NSU    = TagCaracter(nome='docZip', propriedade='NSU'   , namespace=NAMESPACE_NFE, raiz='//docZip')
-        self.schema = TagCaracter(nome='docZip', propriedade='schema', namespace=NAMESPACE_NFE, raiz='//docZip')
-        self.base64Binary = TagCaracter(nome='', namespace=NAMESPACE_NFE, raiz='//docZip')
+        self.NSU    = TagCaracter(nome='docZip', propriedade='NSU'   , namespace=NAMESPACE_NFE, raiz='')
+        self.schema = TagCaracter(nome='docZip', propriedade='schema', namespace=NAMESPACE_NFE, raiz='')
+        self.base64Binary = TagCaracter(nome='docZip', namespace=NAMESPACE_NFE, raiz='')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
