@@ -50,7 +50,6 @@ from datetime import datetime
 from pytz import UTC
 from pysped.xml_sped import XMLNFe, NAMESPACE_SIG, ABERTURA, tira_abertura
 from pysped.xml_sped.assinatura import Signature
-from uuid import uuid4
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -77,10 +76,10 @@ class Certificado(object):
             return
 
         # Lendo o arquivo pfx no formato pkcs12 como binário
-        if self.stream_certificado is not None:
-            pkcs12 = crypto.load_pkcs12(self.stream_certificado, self.senha)
-        else:
-            pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
+        if self.stream_certificado is None:
+            self.stream_certificado = open(self.arquivo, 'rb').read()
+
+        pkcs12 = crypto.load_pkcs12(self.stream_certificado, self.senha)
 
         # Retorna a string decodificada da chave privada
         self.chave = crypto.dump_privatekey(crypto.FILETYPE_PEM, pkcs12.get_privatekey())
@@ -96,6 +95,7 @@ class Certificado(object):
 
         if self.stream_certificado is None:
             self.stream_certificado = open(self.arquivo, 'rb').read()
+
         self.prepara_certificado_txt(self.stream_certificado)
 
         self._certificado_preparado = True

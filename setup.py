@@ -27,7 +27,7 @@ setup(
         'pysped.cte.leiaute',
         'pysped.cte.dacte',
         'pysped.efd',
-#        'pysped.nfse',
+        # 'pysped.nfse',
         'pysped.xml_sped',
         'pysped.ecd',
         'pysped.nf_paulista',
@@ -54,6 +54,6 @@ setup(
         'sh(>=1.12.9)'
     ],
     tests_require=[
-        'pyflakes>=0.6.1',
+        'pyflakes(>=0.6.1)',
     ],
 )
