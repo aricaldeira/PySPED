@@ -1,5 +1,7 @@
 from setuptools import setup
 
+test_requirements = ['pyflakes>=0.6.1']
+
 setup(
     name = "PySPED",
     version = "1.1.0",
@@ -53,7 +55,5 @@ setup(
         'py3o.template(>=0.9.11)',
         'sh(>=1.12.9)'
     ],
-    tests_require=[
-        'pyflakes(>=0.6.1)',
-    ],
+    tests_require=test_requirements,
 )
