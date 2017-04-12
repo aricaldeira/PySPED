@@ -42,6 +42,7 @@
 from __future__ import division, print_function, unicode_literals
 
 import os
+import sys
 from httplib import HTTPSConnection
 import socket
 import ssl
