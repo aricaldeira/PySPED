@@ -157,7 +157,6 @@ class ConexaoHTTPS(HTTPSConnection):
         # source_address é atributo incluído na versão 2.7 do Python
         # Verificando a existência para funcionar em versões anteriores à 2.7
         #
-        print(self.host, self.port, self.source_address)
         if hasattr(self, 'source_address'):
             sock = socket.create_connection((self.host, self.port), self.timeout, self.source_address)
         else:
@@ -166,7 +165,11 @@ class ConexaoHTTPS(HTTPSConnection):
         if self._tunnel_host:
             self.sock = sock
             self._tunnel()
-        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLS, do_handshake_on_connect=False)
+
+        if sys.version_info >= (2,7,13):
+            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLS, do_handshake_on_connect=False)
+        else:
+            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_SSLv23, do_handshake_on_connect=False)
 
 
 class ProcessadorNFe(object):
