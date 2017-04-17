@@ -64,7 +64,7 @@ class Cana(nfe_310.Cana):
         super(Cana, self).__init__()
 
 
-class IPIDevol(nfe_310.IPÎDevol):
+class IPIDevol(nfe_310.IPIDevol):
     def __init__(self):
         super(IPIDevol, self).__init__()
 
