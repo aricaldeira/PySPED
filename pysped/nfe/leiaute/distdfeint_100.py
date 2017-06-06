@@ -46,6 +46,8 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, Signature, TagCaracter,
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute.soap_200 import NFeDadosMsg
 import os
+import gzip
+from StringIO import StringIO
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -144,17 +146,19 @@ class DistDFeInt(XMLNFe):
 class DocZip(XMLNFe):
     def __init__(self):
         super(DocZip, self).__init__()
-        self.NSU    = TagCaracter(nome='docZip', propriedade='NSU'   , namespace=NAMESPACE_NFE, raiz='')
-        self.schema = TagCaracter(nome='docZip', propriedade='schema', namespace=NAMESPACE_NFE, raiz='')
-        self.base64Binary = TagCaracter(nome='docZip', namespace=NAMESPACE_NFE, raiz='')
+        self.NSU    = TagCaracter(nome='docZip', propriedade='NSU'   , namespace=NAMESPACE_NFE, raiz='/')
+        self.schema = TagCaracter(nome='docZip', propriedade='schema', namespace=NAMESPACE_NFE, raiz='/')
+        self.docZip = TagCaracter(nome='docZip', namespace=NAMESPACE_NFE, raiz='/')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
 
-        xml += self.NSU.xml
-        xml += self.schema.xml
-        xml += self.base64Binary.xml
-
+        xml += '<docZip NSU="'
+        xml += self.NSU.valor
+        xml += '" schema="'
+        xml += self.schema.valor
+        xml += '">'
+        xml += self.docZip.valor
         xml += '</docZip>'
         return xml
 
@@ -162,7 +166,17 @@ class DocZip(XMLNFe):
         if self._le_xml(arquivo):
             self.NSU.xml    = arquivo
             self.schema.xml = arquivo
-            self.base64Binary.xml = arquivo
+            self.docZip.xml = arquivo
+
+            if self.docZip.valor:
+                arq = StringIO()
+                arq.write(self.docZip.valor.decode('base64'))
+                arq.seek(0)
+                zip = gzip.GzipFile(fileobj=arq)
+                texto = zip.read()
+                arq.close()
+                zip.close()
+                self.texto = texto.decode('utf-8')
 
     xml = property(get_xml, set_xml)
 
