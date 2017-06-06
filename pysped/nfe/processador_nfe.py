@@ -1389,7 +1389,7 @@ class ProcessadorNFe(object):
 
         return processo
 
-    def consultar_distribuicao(self, estado=None, cnpj_cpf=None, ultimo_nsu=None, nsu=None, ambiente=None):
+    def consultar_distribuicao(self, estado=None, cnpj_cpf=None, ultimo_nsu=None, nsu=None, chave_nfe=None, ambiente=None):
         envio = DistDFeInt_100()
         resposta = RetDistDFeInt_100()
 
@@ -1403,8 +1403,10 @@ class ProcessadorNFe(object):
 
         if ultimo_nsu is not None:
             envio.distNSU.ultNSU.valor = unicode(ultimo_nsu)
-        else:
+        elif nsu is not None:
             envio.consNSU.NSU.valor = unicode(nsu)
+        else:
+            envio.consChNFe.chNFe.valor = unicode(chave_nfe)
 
         processo = ProcessoNFe(webservice=WS_DFE_DISTRIBUICAO, envio=envio, resposta=resposta)
 
