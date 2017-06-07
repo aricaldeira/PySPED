@@ -265,7 +265,7 @@ class DocZip(XMLNFe):
                     self.resposta.xml = texto
                 elif self.schema.valor == 'procNFe_v3.10.xsd':
                     self.resposta = ProcNFe_310()
-                    self.resposta.xml = texto
+                    self.resposta.xml = self.texto
 
     xml = property(get_xml, set_xml)
 
