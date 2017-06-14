@@ -248,26 +248,37 @@ class DocZip(XMLNFe):
             self.schema.xml = arquivo
             self.docZip.xml = arquivo
 
-            if self.docZip.valor:
-                arq = StringIO()
-                arq.write(self.docZip.valor.decode('base64'))
-                arq.seek(0)
-                zip = gzip.GzipFile(fileobj=arq)
-                texto = zip.read()
-                arq.close()
-                zip.close()
-                self.texto = texto.decode('utf-8')
-                self.resposta = None
-
-                if self.schema.valor == 'resNFe_v1.00.xsd':
-                    self.resposta = ResNFe()
-                    texto = unicodedata.normalize(b'NFKD', self.texto).encode('ascii', 'ignore')
-                    self.resposta.xml = texto
-                elif self.schema.valor == 'procNFe_v3.10.xsd':
-                    self.resposta = ProcNFe_310()
-                    self.resposta.xml = self.texto
-
     xml = property(get_xml, set_xml)
+
+    @property
+    def texto(self):
+        if not self.docZip.valor:
+            return ''
+
+        arq = StringIO()
+        arq.write(self.docZip.valor.decode('base64'))
+        arq.seek(0)
+        zip = gzip.GzipFile(fileobj=arq)
+        texto = zip.read()
+        arq.close()
+        zip.close()
+        return texto.decode('utf-8')
+
+    @property
+    def resposta(self):
+        if not self.texto:
+            return None
+
+        resposta = None
+        if self.schema.valor == 'resNFe_v1.00.xsd':
+            resposta = ResNFe()
+            texto = unicodedata.normalize(b'NFKD', self.texto).encode('ascii', 'ignore')
+            resposta.xml = texto
+        elif self.schema.valor == 'procNFe_v3.10.xsd':
+            resposta = ProcNFe_310()
+            resposta.xml = self.texto
+
+        return resposta
 
 
 class LoteDistDFeInt(XMLNFe):
