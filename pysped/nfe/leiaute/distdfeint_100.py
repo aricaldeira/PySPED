@@ -46,7 +46,7 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, Signature, TagCaracter,
                              TagDataHoraUTC)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute.soap_200 import NFeDadosMsg
-from pysped.nfe.leiaute import ProcNFe_310
+from pysped.nfe.leiaute import ProcNFe_310, ProcEvento_100
 import unicodedata
 import os
 import gzip
@@ -223,6 +223,51 @@ class ResNFe(XMLNFe):
     xml = property(get_xml, set_xml)
 
 
+class ResEvento(XMLNFe):
+    def __init__(self):
+        super(ResEvento, self).__init__()
+        self.cOrgao     = TagInteiro(nome='cOrgao'      , tamanho=[ 2,  2], raiz='//resEvento')
+        self.CNPJ       = TagCaracter(nome='CNPJ'       , tamanho=[14, 14], raiz='//resEvento', obrigatorio=False)
+        self.CPF        = TagCaracter(nome='CPF'        , tamanho=[11, 11], raiz='//resEvento', obrigatorio=False)
+        self.chNFe      = TagCaracter(nome='chNFe'      , tamanho=[44, 44], raiz='//resEvento')
+        self.dhEvento   = TagDataHoraUTC(nome='dhEvento',                   raiz='//resEvento')
+        self.tpEvento   = TagCaracter(nome='tpEvento'   , tamanho=[ 6,  6], raiz='//resEvento')
+        self.nSeqEvento = TagInteiro(nome='nSeqEvento'  , tamanho=[ 1,  2], raiz='//resEvento')
+        self.xEvento    = TagCaracter(nome='xEvento'    , tamanho=[ 1, 60], raiz='//resEvento')
+        self.dhRecbto   = TagDataHoraUTC(nome='dhRecbto',                   raiz='//resEvento')
+        self.nProt      = TagCaracter(nome='nProt'      , tamanho=[15, 15], raiz='//resEvento')
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += self.cOrgao.xml
+        xml += self.CNPJ.xml
+        xml += self.CPF.xml
+        xml += self.chNFe.xml
+        xml += self.dhEvento.xml
+        xml += self.tpEvento.xml
+        xml += self.nSeqEvento.xml
+        xml += self.xEvento.xml
+        xml += self.dhRecbto.xml
+        xml += self.nProt.xml
+        xml += '</resEvento>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.cOrgao.xml   = arquivo
+            self.CNPJ.xml   = arquivo
+            self.CPF.xml   = arquivo
+            self.chNFe.xml   = arquivo
+            self.dhEvento.xml   = arquivo
+            self.tpEvento.xml   = arquivo
+            self.nSeqEvento.xml   = arquivo
+            self.xEvento.xml   = arquivo
+            self.dhRecbto.xml   = arquivo
+            self.nProt.xml   = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
 class DocZip(XMLNFe):
     def __init__(self):
         super(DocZip, self).__init__()
@@ -274,8 +319,15 @@ class DocZip(XMLNFe):
             resposta = ResNFe()
             texto = unicodedata.normalize(b'NFKD', self.texto).encode('ascii', 'ignore')
             resposta.xml = texto
+        elif self.schema.valor in ('resEvento_v1.00.xsd', 'resEvento_v1.01.xsd'):
+            resposta = ResEvento()
+            texto = unicodedata.normalize(b'NFKD', self.texto).encode('ascii', 'ignore')
+            resposta.xml = texto
         elif self.schema.valor == 'procNFe_v3.10.xsd':
             resposta = ProcNFe_310()
+            resposta.xml = self.texto
+        elif self.schema.valor == 'procEventoNFe_v1.00.xsd':
+            resposta = ProcEvento_100()
             resposta.xml = self.texto
 
         return resposta
