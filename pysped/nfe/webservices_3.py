@@ -270,7 +270,7 @@ UFBA = {
         WS_NFE_SITUACAO         : 'webservices/NfeStatusServico/NfeStatusServico.asmx',
         WS_NFE_INUTILIZACAO     : 'webservices/nfenw/nfeinutilizacao2.asmx',
         WS_NFE_CONSULTA_CADASTRO: 'webservices/nfenw/CadConsultaCadastro2.asmx',
-        WS_NFE_RECEPCAO_EVENTO  : 'webservices/sre/recepcaoevento',
+        WS_NFE_RECEPCAO_EVENTO  : 'webservices/sre/recepcaoevento.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'            : 'hnfe.sefaz.ba.gov.br',
@@ -280,7 +280,7 @@ UFBA = {
         WS_NFE_SITUACAO         : 'webservices/NfeStatusServico/NfeStatusServico.asmx',
         WS_NFE_INUTILIZACAO     : 'webservices/nfenw/nfeinutilizacao2.asmx',
         WS_NFE_CONSULTA_CADASTRO: 'webservices/nfenw/CadConsultaCadastro2.asmx',
-        WS_NFE_RECEPCAO_EVENTO  : 'webservices/sre/recepcaoevento',
+        WS_NFE_RECEPCAO_EVENTO  : 'webservices/sre/recepcaoevento.asmx',
     }
 }
 
