@@ -1,0 +1,7 @@
+lxml>=3.7.3
+signxml>=2.2.4
+Geraldo>=0.4.16
+qrcode>=5.3
+py3o.template>=0.9.11
+sh>=1.12.9
+pytz==2016.7

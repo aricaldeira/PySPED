@@ -47,13 +47,14 @@ setup(
     license = 'LGPL-v2.1+',
     description = 'PySPED is a library to implement all requirements of the Brazilian Public System of Digital Bookkeeping',
     long_description = open('README.rst').read(),
-    requires=[
-        'lxml(>=3.7.3)',
-        'xmlsec(>=1.0.7)',
-        'Geraldo(>=0.4.16)',
-        'qrcode(>=5.3)',
-        'py3o.template(>=0.9.11)',
-        'sh(>=1.12.9)'
+    install_requires=[
+        'lxml',
+        'signxml',
+        'Geraldo',
+        'qrcode',
+        'py3o.template',
+        'sh',
+        'pytz',
     ],
     tests_require=test_requirements,
 )
