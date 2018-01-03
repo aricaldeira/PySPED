@@ -264,7 +264,7 @@ class ProcessadorNFe(object):
                     ws_a_usar = webservices_3.SVAN
 
                 elif self.contingencia_SCAN or self.contingencia:
-                    ws_a_usar = webservices_3.ESTADO_WS_CONTINGENCIA
+                    ws_a_usar = webservices_3.ESTADO_WS_CONTINGENCIA[self.estado]
 
                 else:
                     #
