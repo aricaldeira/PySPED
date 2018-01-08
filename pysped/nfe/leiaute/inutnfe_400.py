@@ -42,28 +42,50 @@
 from __future__ import division, print_function, unicode_literals
 
 from pysped.xml_sped import *
-from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
-from pysped.nfe.leiaute import nfe_400
+from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_4 as ESQUEMA_ATUAL
+from pysped.nfe.leiaute import inutnfe_310
 import os
+
 
 DIRNAME = os.path.dirname(__file__)
 
 
-class InfNFe(nfe_400.InfNFe):
+class InfInutEnviado(inutnfe_310.InfInutEnviado):
     def __init__(self):
-        super(InfNFe, self).__init__()
-        self.ide.mod.valor = '65'  #  NFC-e
-        self.ide.tpImp.valor = '4'  #  DANFE NFC-e em papel
-        self.ide.indPres.valor = '1'  #  Operação presencial
-        self.ide.indFinal.valor = '1'  #  Consumidor final
-        self.transp.modFrete.valor = 9  #  Sem frete
-        self.dest.modelo = '65'
+        super(InfInutEnviado, self).__init__()
 
 
-class NFCe(nfe_400.NFe):
+class InutNFe(inutnfe_310.InutNFe):
     def __init__(self):
-        super(NFCe, self).__init__()
-        self.infNFe = InfNFe()
-        self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'nfe_v3.10.xsd'
+        super(InutNFe, self).__init__()
+        self.versao  = TagDecimal(nome='inutNFe', codigo='DP01', propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'inutNFe_v4.00.xsd'
+
+
+class InfInutRecebido(inutnfe_310.InfInutRecebido):
+    def __init__(self):
+        super(InfInutRecebido, self).__init__()
+
+
+class RetInutNFe(inutnfe_310.RetInutNFe):
+    def __init__(self):
+        super(RetInutNFe, self).__init__()
+        self.versao = TagDecimal(nome='retInutNFe', codigo='DR01', propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'retInutNFe_v4.00.xsd'
+
+
+class ProcInutNFe(inutnfe_310.ProcInutNFe):
+    def __init__(self):
+        super(ProcInutNFe, self).__init__()
+        #
+        # Atenção --- a tag ProcInutNFe tem que começar com letra maiúscula, para
+        # poder validar no XSD. Os outros arquivos proc, procCancNFe, e procNFe
+        # começam com minúscula mesmo
+        #
+        self.versao = TagDecimal(nome='ProcInutNFe', propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
+        self.inutNFe = InutNFe()
+        self.retInutNFe = RetInutNFe()
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'procInutNFe_v4.00.xsd'

@@ -46,7 +46,7 @@ from pysped.xml_sped import (NAMESPACE_NFE, TagDecimal,
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import envinfe_110
 import os
-
+from .nfe_200 import NFe
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -57,6 +57,28 @@ class EnviNFe(envinfe_110.EnviNFe):
         self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='2.00', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'enviNFe_v2.00.xsd'
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += ABERTURA
+        xml += self.versao.xml
+        xml += self.idLote.xml
+
+        for n in self.NFe:
+            xml += tira_abertura(n.xml)
+
+        xml += '</enviNFe>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.versao.xml    = arquivo
+            self.idLote.xml    = arquivo
+            self.NFe = self.le_grupo('//NFe', NFe)
+
+        return self.xml
+
+    xml = property(get_xml, set_xml)
 
 
 class InfRec(envinfe_110.InfRec):

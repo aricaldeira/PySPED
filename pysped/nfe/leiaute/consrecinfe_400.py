@@ -42,58 +42,47 @@
 from __future__ import division, print_function, unicode_literals
 
 from pysped.xml_sped import *
-from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
-from pysped.nfe.leiaute import envinfe_200
+from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_4 as ESQUEMA_ATUAL
+from pysped.nfe.leiaute import consrecinfe_310
 import os
-from .nfe_310 import NFe
+from .nfe_400 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
 
 
-class EnviNFe(envinfe_200.EnviNFe):
+class ConsReciNFe(consrecinfe_310.ConsReciNFe):
     def __init__(self):
-        super(EnviNFe, self).__init__()
-        self.indSinc = TagCaracter(nome='indSinc', tamanho=[1, 1, 1], raiz='//enviNFe', valor='0')
-        self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
+        super(ConsReciNFe, self).__init__()
+        self.versao  = TagDecimal(nome='consReciNFe', codigo='BP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'enviNFe_v3.10.xsd'
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += ABERTURA
-        xml += self.versao.xml
-        xml += self.idLote.xml
-        xml += self.indSinc.xml
-
-        for n in self.NFe:
-            xml += tira_abertura(n.xml)
-
-        xml += '</enviNFe>'
-        return xml
-
-    def set_xml(self, arquivo):
-        if self._le_xml(arquivo):
-            self.versao.xml    = arquivo
-            self.idLote.xml    = arquivo
-            self.indSinc.xml    = arquivo
-            self.NFe = self.le_grupo('//NFe', NFe)
-
-        return self.xml
-
-    xml = property(get_xml, set_xml)
+        self.arquivo_esquema = 'consReciNFe_v4.00.xsd'
 
 
-class InfRec(envinfe_200.InfRec):
+class InfProt(consrecinfe_310.InfProt):
     def __init__(self):
-        super(InfRec, self).__init__()
+        super(InfProt, self).__init__()
 
 
-class RetEnviNFe(envinfe_200.RetEnviNFe):
+class ProtNFe(consrecinfe_310.ProtNFe):
     def __init__(self):
-        super(RetEnviNFe, self).__init__()
-        self.versao   = TagDecimal(nome='retEnviNFe', codigo='AR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
-        self.dhRecbto = TagDataHoraUTC(nome='dhRecbto' , codigo='AR09', raiz='//retEnviNFe')
-        self.infRec   = InfRec()
+        super(ProtNFe, self).__init__()
+        self.versao  = TagDecimal(nome='protNFe', codigo='PR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
+
+
+class RetConsReciNFe(consrecinfe_310.RetConsReciNFe):
+    def __init__(self):
+        super(RetConsReciNFe, self).__init__()
+        self.versao   = TagDecimal(nome='retConsReciNFe', codigo='BR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnviNFe_v3.10.xsd'
+        self.arquivo_esquema = 'retConsReciNFe_v4.00.xsd'
+
+
+class ProcNFe(consrecinfe_310.ProcNFe):
+    def __init__(self):
+        super(ProcNFe, self).__init__()
+        self.versao  = TagDecimal(nome='nfeProc', propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
+        self.NFe     = NFe()
+        self.protNFe = ProtNFe()
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'procNFe_v4.00.xsd'

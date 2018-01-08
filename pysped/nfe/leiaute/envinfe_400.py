@@ -42,22 +42,21 @@
 from __future__ import division, print_function, unicode_literals
 
 from pysped.xml_sped import *
-from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
-from pysped.nfe.leiaute import envinfe_200
+from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_4 as ESQUEMA_ATUAL
+from pysped.nfe.leiaute import envinfe_310
 import os
-from .nfe_310 import NFe
+from .nfe_400 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
 
 
-class EnviNFe(envinfe_200.EnviNFe):
+class EnviNFe(envinfe_310.EnviNFe):
     def __init__(self):
         super(EnviNFe, self).__init__()
-        self.indSinc = TagCaracter(nome='indSinc', tamanho=[1, 1, 1], raiz='//enviNFe', valor='0')
-        self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
+        self.versao  = TagDecimal(nome='enviNFe', codigo='AP02', propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'enviNFe_v3.10.xsd'
+        self.arquivo_esquema = 'enviNFe_v4.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -84,16 +83,14 @@ class EnviNFe(envinfe_200.EnviNFe):
     xml = property(get_xml, set_xml)
 
 
-class InfRec(envinfe_200.InfRec):
+class InfRec(envinfe_310.InfRec):
     def __init__(self):
         super(InfRec, self).__init__()
 
 
-class RetEnviNFe(envinfe_200.RetEnviNFe):
+class RetEnviNFe(envinfe_310.RetEnviNFe):
     def __init__(self):
         super(RetEnviNFe, self).__init__()
-        self.versao   = TagDecimal(nome='retEnviNFe', codigo='AR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='3.10', raiz='/')
-        self.dhRecbto = TagDataHoraUTC(nome='dhRecbto' , codigo='AR09', raiz='//retEnviNFe')
-        self.infRec   = InfRec()
+        self.versao   = TagDecimal(nome='retEnviNFe', codigo='AR02' , propriedade='versao', namespace=NAMESPACE_NFE, valor='4.00', raiz='/')
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'retEnviNFe_v3.10.xsd'
+        self.arquivo_esquema = 'retEnviNFe_v4.00.xsd'

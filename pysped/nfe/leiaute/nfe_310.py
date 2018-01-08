@@ -39,12 +39,22 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from __future__ import division, print_function, unicode_literals
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
+from io import BytesIO
 
 from pysped.xml_sped import *
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import nfe_200
+from pysped.nfe.webservices_nfce_3 import ESTADO_QRCODE, ESTADO_CONSULTA_NFCE
+from pysped.nfe.webservices_flags import CODIGO_UF
 import os
+import binascii
+import hashlib
+import qrcode
+
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -113,7 +123,7 @@ class ImpostoDevol(XMLNFe):
 class ISSQN(nfe_200.ISSQN):
     def __init__(self):
         super(ISSQN, self).__init__()
-        self.vAliq     = TagDecimal(nome='vAliq'    , codigo='U03', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='//det/imposto/ISSQN')
+        self.vAliq     = TagDecimal(nome='vAliq'    , codigo='U03', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='//det/imposto/ISSQN')
         self.cListServ = TagCaracter(nome='cListServ', codigo='U06', tamanho=[5,  5],                     raiz='//det/imposto/ISSQN')
         #
         # Campos novos da versão 3.10
@@ -234,7 +244,7 @@ class TagCSTCOFINS(nfe_200.TagCSTCOFINS):
 class COFINS(nfe_200.COFINS):
     def __init__(self):
         super(COFINS, self).__init__()
-        self.pCOFINS   = TagDecimal(nome='pCOFINS'  , codigo='S08', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pCOFINS   = TagDecimal(nome='pCOFINS'  , codigo='S08', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
 
     def get_xml(self):
         #
@@ -311,7 +321,7 @@ class TagCSTPIS(nfe_200.TagCSTPIS):
 class PIS(nfe_200.PIS):
     def __init__(self):
         super(PIS, self).__init__()
-        self.pPIS      = TagDecimal(nome='pPIS'     , codigo='Q08', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pPIS      = TagDecimal(nome='pPIS'     , codigo='Q08', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
 
     def get_xml(self):
         #
@@ -388,7 +398,7 @@ class TagCSTIPI(nfe_200.TagCSTIPI):
 class IPI(nfe_200.IPI):
     def __init__(self):
         super(IPI, self).__init__()
-        self.pIPI = TagDecimal(nome='pIPI', codigo='O13', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
+        self.pIPI = TagDecimal(nome='pIPI', codigo='O13', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
 
     def get_xml(self):
         if not self.CST.valor.strip():
@@ -506,12 +516,12 @@ class TagCSTICMS(nfe_200.TagCSTICMS):
 class ICMS(nfe_200.ICMS):
     def __init__(self):
         super(ICMS, self).__init__()
-        self.pRedBC   = TagDecimal(nome='pRedBC'  , codigo='N14', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
-        self.pICMS    = TagDecimal(nome='pICMS'   , codigo='N16', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
-        self.pMVAST   = TagDecimal(nome='pMVAST'  , codigo='N19', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
-        self.pRedBCST = TagDecimal(nome='pRedBCST', codigo='N20', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
-        self.pICMSST  = TagDecimal(nome='pICMSST' , codigo='N22', tamanho=[1,  5, 1], decimais=[0, 4, 4], raiz='')
-        self.pCredSN  = TagDecimal(nome='pCredSN' , codigo='N29', tamanho=[1, 15, 1], decimais=[0, 4, 4], raiz='')
+        self.pRedBC   = TagDecimal(nome='pRedBC'  , codigo='N14', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
+        self.pICMS    = TagDecimal(nome='pICMS'   , codigo='N16', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
+        self.pMVAST   = TagDecimal(nome='pMVAST'  , codigo='N19', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
+        self.pRedBCST = TagDecimal(nome='pRedBCST', codigo='N20', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
+        self.pICMSST  = TagDecimal(nome='pICMSST' , codigo='N22', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='')
+        self.pCredSN  = TagDecimal(nome='pCredSN' , codigo='N29', tamanho=[1, 15, 1], decimais=[0, 4, 2], raiz='')
         #
         # Novos campos para o ICMS desonerado
         #
@@ -533,7 +543,6 @@ class ICMS(nfe_200.ICMS):
         self.CST = TagCSTICMS()
         self.CST.grupo_icms = self
         self.CST.valor = '41'
-
 
     def get_xml(self):
         #
@@ -564,7 +573,7 @@ class ICMS(nfe_200.ICMS):
                     xml += self.vICMS.xml
                     xml += self.modBCST.xml
 
-                    # Somente quando for marge de valor agregado
+                    # Somente quando for margem de valor agregado
                     if self.modBCST.valor == 4:
                         xml += self.pMVAST.xml
 
@@ -580,7 +589,7 @@ class ICMS(nfe_200.ICMS):
                     xml += self.vICMS.xml
                     xml += self.modBCST.xml
 
-                    # Somente quando for marge de valor agregado
+                    # Somente quando for margem de valor agregado
                     if self.modBCST.valor == 4:
                         xml += self.pMVAST.xml
 
@@ -603,7 +612,7 @@ class ICMS(nfe_200.ICMS):
             elif self.CST.valor == '30':
                 xml += self.modBCST.xml
 
-                # Somente quando for marge de valor agregado
+                # Somente quando for margem de valor agregado
                 if self.modBCST.valor == 4:
                     xml += self.pMVAST.xml
 
@@ -640,7 +649,7 @@ class ICMS(nfe_200.ICMS):
                 xml += self.vICMS.xml
                 xml += self.modBCST.xml
 
-                # Somente quando for marge de valor agregado
+                # Somente quando for margem de valor agregado
                 if self.modBCST.valor == 4:
                     xml += self.pMVAST.xml
 
@@ -659,7 +668,7 @@ class ICMS(nfe_200.ICMS):
                 xml += self.vICMS.xml
                 xml += self.modBCST.xml
 
-                # Somente quando for marge de valor agregado
+                # Somente quando for margem de valor agregado
                 if self.modBCST.valor == 4:
                     xml += self.pMVAST.xml
 
@@ -688,7 +697,7 @@ class ICMS(nfe_200.ICMS):
             elif self.CSOSN.valor == '201':
                 xml += self.modBCST.xml
 
-                # Somente quando for marge de valor agregado
+                # Somente quando for margem de valor agregado
                 if self.modBCST.valor == 4:
                     xml += self.pMVAST.xml
 
@@ -702,7 +711,7 @@ class ICMS(nfe_200.ICMS):
             elif self.CSOSN.valor in ('202', '203'):
                 xml += self.modBCST.xml
 
-                # Somente quando for marge de valor agregado
+                # Somente quando for margem de valor agregado
                 if self.modBCST.valor == 4:
                     xml += self.pMVAST.xml
 
@@ -723,7 +732,7 @@ class ICMS(nfe_200.ICMS):
                 xml += self.vICMS.xml
                 xml += self.modBCST.xml
 
-                # Somente quando for marge de valor agregado
+                # Somente quando for margem de valor agregado
                 if self.modBCST.valor == 4:
                     xml += self.pMVAST.xml
 
@@ -898,7 +907,7 @@ class CIDE(nfe_200.CIDE):
 class Comb(nfe_200.Comb):
     def __init__(self):
         super(Comb, self).__init__()
-        self.pMixGN = TagDecimal(nome='pMixGN', codigo='LA03', tamanho=[1, 2, 1], decimais=[0, 4, 4], raiz='//det/prod/comb', obrigatorio=False)
+        self.pMixGN = TagDecimal(nome='pMixGN', codigo='LA03', tamanho=[1, 2, 1], decimais=[0, 4, 2], raiz='//det/prod/comb', obrigatorio=False)
 
     def get_xml(self):
         if not self.cProdANP.valor:
@@ -1080,7 +1089,6 @@ class Prod(nfe_200.Prod):
         self.veicProd = VeicProd()
         self.comb     = Comb()
         self.nRECOPI  = TagCaracter(nome='nRECOPI', codigo='LB01', tamanho=[20, 20, 20], raiz='//det/prod', obrigatorio=False)
-
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -1288,9 +1296,6 @@ class Card(XMLNFe):
         if not (self.CNPJ.valor or self.tBand.valor or self.cAut.valor):
             return ''
 
-        #
-        # Define as tags baseado no código da situação tributária
-        #
         xml = XMLNFe.get_xml(self)
         xml += '<card>'
         xml += self.CNPJ.xml
@@ -1319,9 +1324,6 @@ class Pag(XMLNFe):
         if not (self.tPag.valor or self.vPag.valor or self.card.xml):
             return ''
 
-        #
-        # Define as tags baseado no código da situação tributária
-        #
         xml = XMLNFe.get_xml(self)
         xml += '<pag>'
         xml += self.tPag.xml
@@ -1334,7 +1336,7 @@ class Pag(XMLNFe):
         if self._le_xml(arquivo):
             self.tPag.xml = arquivo
             self.vPag.xml = arquivo
-            self.cad.xml  = arquivo
+            self.card.xml  = arquivo
 
     xml = property(get_xml, set_xml)
 
@@ -1397,7 +1399,7 @@ class VeicTransp(nfe_200.VeicTransp):
 class RetTransp(nfe_200.RetTransp):
     def __init__(self):
         super(RetTransp, self).__init__()
-        self.pICMSRet = TagDecimal(nome='vICMSRet', codigo='X14', tamanho=[1, 15, 1], decimais=[0, 4, 4], raiz='//NFe/infNFe/transp/retTransp')
+        self.pICMSRet = TagDecimal(nome='vICMSRet', codigo='X14', tamanho=[1, 15, 1], decimais=[0, 4, 2], raiz='//NFe/infNFe/transp/retTransp')
 
     def get_xml(self):
         if not (self.vServ.valor or self.vBCRet.valor or self.pICMSRet.valor or self.vICMSRet.valor or self.CFOP.valor or self.cMunFG.valor):
@@ -1860,12 +1862,19 @@ class Ide(nfe_200.Ide):
     xml = property(get_xml, set_xml)
 
 
+class CSC(object):
+    def __init__(self):
+        self.id = '1'
+        self.codigo = ''
+
+
 class InfNFe(nfe_200.InfNFe):
     def __init__(self):
         super(InfNFe, self).__init__()
         self.versao   = TagDecimal(nome='infNFe' , codigo='A01', propriedade='versao', raiz='//NFe', namespace=NAMESPACE_NFE, valor='3.10')
         self.ide      = Ide()
         self.emit     = Emit()
+        self.emit.csc = CSC()
         self.avulsa   = Avulsa()
         self.dest     = Dest()
         self.dest.modelo = self.ide.mod.valor
@@ -1876,7 +1885,7 @@ class InfNFe(nfe_200.InfNFe):
         self.total    = Total()
         self.transp   = Transp()
         self.cobr     = Cobr()
-        self.pag = []
+        self.pag      = []
         self.infAdic  = InfAdic()
         self.exporta  = Exporta()
         self.compra   = Compra()
@@ -1884,7 +1893,7 @@ class InfNFe(nfe_200.InfNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<infNFe versao="' + unicode(self.versao.valor) + '" Id="' + self.Id.valor + '">'
+        xml += '<infNFe versao="' + str(self.versao.valor) + '" Id="' + self.Id.valor + '">'
         xml += self.ide.xml
         xml += self.emit.xml
         xml += self.avulsa.xml
@@ -1897,6 +1906,7 @@ class InfNFe(nfe_200.InfNFe):
 
         for d in self.det:
             d.imposto.ICMS.regime_tributario = self.emit.CRT.valor
+            d.imposto.ISSQN.regime_tributario = self.emit.CRT.valor
             xml += d.xml
 
         xml += self.total.xml
@@ -1938,6 +1948,11 @@ class InfNFe(nfe_200.InfNFe):
             #
             self.autXML = self.le_grupo('//NFe/infNFe/autXML', AutXML)
             self.det = self.le_grupo('//NFe/infNFe/det', Det)
+            for i in range(len(self.det)):
+                d = self.det[i]
+                d.imposto.ICMS.regime_tributario = self.emit.CRT.valor
+                d.imposto.ISSQN.regime_tributario = self.emit.CRT.valor
+                self.det[i] = d
 
             self.total.xml    = arquivo
             self.transp.xml   = arquivo
@@ -1981,36 +1996,78 @@ class InfNFe(nfe_200.InfNFe):
     txt = property(get_txt)
 
 
+class InfNFeSupl(XMLNFe):
+    def __init__(self):
+        super(InfNFeSupl, self).__init__()
+        self.qrCode = TagCaracter(nome='qrCode', codigo='', tamanho=[1,  600], raiz='//NFe/infNFeSupl', cdata=True)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<infNFeSupl>'
+        xml += self.qrCode.xml
+        xml += '</infNFeSupl>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.qrCode.xml = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
 class NFe(nfe_200.NFe):
     def __init__(self):
         super(NFe, self).__init__()
         self.infNFe = InfNFe()
+        self.qrcode = ''
+        self.infNFeSupl = InfNFeSupl()
         self.Signature = Signature()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'nfe_v3.10.xsd'
 
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += ABERTURA
+        xml += '<NFe xmlns="http://www.portalfiscal.inf.br/nfe">'
+        xml += self.infNFe.xml
+
+        if str(self.infNFe.ide.mod.valor) == '65':
+            xml += self.infNFeSupl.xml
+
+        #
+        # Define a URI a ser assinada
+        #
+        self.Signature.URI = '#' + self.infNFe.Id.valor
+
+        xml += self.Signature.xml
+        xml += '</NFe>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.infNFe.xml     = arquivo
+            self.infNFeSupl.xml = arquivo
+            self.Signature.xml  = self._le_noh('//NFe/sig:Signature')
+
+    xml = property(get_xml, set_xml)
+
     def monta_chave(self):
-        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, '0')
-        chave += unicode(self.infNFe.ide.dhEmi.valor.strftime('%y%m')).strip().rjust(4, '0')
-        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, '0')
-        chave += '55'
-        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, '0')
-        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, '0')
-
-        #
-        # Inclui agora o tipo da emissão
-        #
-        chave += unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, '0')
-
-        chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, '0')
-        chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
+        chave = str(self.infNFe.ide.cUF.valor).strip().rjust(2, '0')
+        chave += str(self.infNFe.ide.dhEmi.valor.strftime('%y%m')).strip().rjust(4, '0')
+        chave += str(self.infNFe.emit.CNPJ.valor).strip().rjust(14, '0')
+        chave += str(self.infNFe.ide.mod.valor).zfill(2)
+        chave += str(self.infNFe.ide.serie.valor).strip().rjust(3, '0')
+        chave += str(self.infNFe.ide.nNF.valor).strip().rjust(9, '0')
+        chave += str(self.infNFe.ide.tpEmis.valor).strip().rjust(1, '0')
+        chave += str(self.infNFe.ide.cNF.valor).strip().rjust(8, '0')
+        chave += str(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
         self.chave = chave
 
     def monta_dados_contingencia_fsda(self):
-        dados = unicode(self.infNFe.ide.cUF.valor).zfill(2)
-        dados += unicode(self.infNFe.ide.tpEmis.valor).zfill(1)
-        dados += unicode(self.infNFe.emit.CNPJ.valor).zfill(14)
-        dados += unicode(int(self.infNFe.total.ICMSTot.vNF.valor * 100)).zfill(14)
+        dados = str(self.infNFe.ide.cUF.valor).zfill(2)
+        dados += str(self.infNFe.ide.tpEmis.valor).zfill(1)
+        dados += str(self.infNFe.emit.CNPJ.valor).zfill(14)
+        dados += str(int(self.infNFe.total.ICMSTot.vNF.valor * 100)).zfill(14)
 
         #
         # Há ICMS próprio?
@@ -2031,7 +2088,7 @@ class NFe(nfe_200.NFe):
         dados += self.infNFe.ide.dhEmi.valor.strftime('%d').zfill(2)
 
         digito = self._calcula_dv(dados)
-        dados += unicode(digito)
+        dados += str(digito)
         self.dados_contingencia_fsda = dados
 
     def crt_desconto(self):
@@ -2039,3 +2096,120 @@ class NFe(nfe_200.NFe):
             self.infNFe.total.ICMSTot.vDesc.valor +
             self.infNFe.total.ICMSTot.vICMSDeson.valor
         )
+
+    def monta_qrcode(self):
+        self.monta_chave()
+
+        qrcode = 'chNFe=' + self.chave
+        qrcode += '&nVersao=100'
+        qrcode += '&tpAmb=' + self.infNFe.ide.tpAmb._valor_string
+
+        if self.infNFe.dest.CNPJ.valor:
+            qrcode += '&cDest=' + self.infNFe.dest.CNPJ._valor_string
+
+        elif self.infNFe.dest.CPF.valor:
+            qrcode += '&cDest=' + self.infNFe.dest.CPF._valor_string
+
+        elif self.infNFe.dest.idEstrangeiro.valor:
+            qrcode += '&cDest=' + self.infNFe.dest.idEstrangeiro._valor_string
+
+        #
+        # SP, PR e MS
+        #
+        if self.infNFe.ide.cUF.valor not in (35, 41, 50):
+            qrcode += '&dhEmi=' + binascii.hexlify(self.infNFe.ide.dhEmi._valor_string)
+        else:
+            qrcode += '&dhEmi=' + binascii.hexlify(self.infNFe.ide.dhEmi._valor_string).upper()
+
+        qrcode += '&vNF=' + self.infNFe.total.ICMSTot.vNF._valor_string
+        qrcode += '&vICMS=' + self.infNFe.total.ICMSTot.vICMS._valor_string
+
+        if self.infNFe.ide.cUF.valor not in (35, 41, 50):
+            qrcode += '&digVal=' + binascii.hexlify(self.Signature.DigestValue)
+        else:
+            qrcode += '&digVal=' + binascii.hexlify(self.Signature.DigestValue).upper()
+
+        qrcode += '&cIdToken=' + str(self.infNFe.emit.csc.id).zfill(6)
+
+        pre_qrcode = qrcode + self.infNFe.emit.csc.codigo.ljust(36).upper()
+
+        qrcode += '&cHashQRCode=' + hashlib.sha1(pre_qrcode).hexdigest().upper()
+
+        self.qrcode = qrcode
+
+        qrcode = ESTADO_QRCODE[CODIGO_UF[self.infNFe.ide.cUF.valor]][self.infNFe.ide.tpAmb.valor] + '?' + qrcode
+
+        self.infNFeSupl.qrCode.valor = qrcode
+
+    @property
+    def qrcode_imagem(self):
+        #
+        # box_size=2 dá um tamanho de 4 x 4 cm
+        #
+        codigo = qrcode.QRCode(box_size=2)
+        codigo.add_data(self.infNFeSupl.qrCode.valor)
+
+        arq = BytesIO()
+        codigo.make_image().save(arq)
+        arq.pos = 0
+        imagem = arq.read().encode('base64')
+        arq.close()
+
+        return imagem
+
+    @property
+    def url_consulta(self):
+        return ESTADO_CONSULTA_NFCE[CODIGO_UF[self.infNFe.ide.cUF.valor]][self.infNFe.ide.tpAmb.valor]
+
+    @property
+    def quantidade_itens(self):
+        return str(int(len(self.infNFe.det)))
+
+    @property
+    def numero_formatado(self):
+        num = str(self.infNFe.ide.nNF.valor).zfill(9)
+        num_formatado = '.'.join((num[0:3], num[3:6], num[6:9]))
+
+        if str(self.infNFe.ide.mod.valor) == '65':
+            return 'nº ' + num_formatado
+        else:
+            return 'Nº ' + num_formatado
+
+    @property
+    def serie_formatada(self):
+        if str(self.infNFe.ide.mod.valor) == '65':
+            return 'Série ' + str(self.infNFe.ide.serie.valor).zfill(3)
+        else:
+            return 'SÉRIE ' + str(self.infNFe.ide.serie.valor).zfill(3)
+
+    @property
+    def cnpj_destinatario_formatado(self):
+        if str(self.infNFe.ide.mod.valor) == '65':
+            if self.infNFe.dest.CPF.valor and len(self.infNFe.dest.CPF.valor):
+                return 'CPF ' + self._formata_cpf(str(self.infNFe.dest.CPF.valor))
+            elif self.infNFe.dest.CNPJ.valor and len(self.infNFe.dest.CNPJ.valor):
+                return 'CNPJ ' + self._formata_cnpj(str(self.infNFe.dest.CNPJ.valor))
+            elif self.infNFe.dest.idEstrangeiro.valor and len(self.infNFe.dest.idEstrangeiro.valor):
+                return 'Id. estrangeiro ' + self.infNFe.dest.idEstrangeiro.valor
+            else:
+                return ''
+        else:
+            if self.infNFe.dest.CPF.valor and len(self.infNFe.dest.CPF.valor):
+                return self._formata_cpf(str(self.infNFe.dest.CPF.valor))
+            elif self.infNFe.dest.CNPJ.valor and len(self.infNFe.dest.CNPJ.valor):
+                return self._formata_cnpj(str(self.infNFe.dest.CNPJ.valor))
+            elif self.infNFe.dest.idEstrangeiro.valor and len(self.infNFe.dest.idEstrangeiro.valor):
+                return self.infNFe.dest.idEstrangeiro.valor
+            else:
+                return ''
+
+
+class NFCe(NFe):
+    def __init__(self):
+        super(NFCe, self).__init__()
+        self.infNFe.ide.mod.valor = '65'  #  NFC-e
+        self.infNFe.ide.tpImp.valor = '4'  #  DANFE NFC-e em papel
+        self.infNFe.ide.indPres.valor = '1'  #  Operação presencial
+        self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
+        self.infNFe.transp.modFrete.valor = 9  #  Sem frete
+        self.infNFe.dest.modelo = '65'

@@ -39,7 +39,10 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from __future__ import division, print_function, unicode_literals
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
 
 from pysped.xml_sped import (NAMESPACE_NFE, Signature, TagCaracter,
                              TagDataHora, TagDecimal, TagHora, TagInteiro, XMLNFe)
@@ -358,8 +361,8 @@ class TagCSOSN(TagCaracter):
             self.grupo_icms.nome_tag = 'ICMSSN500'
             self.grupo_icms.nome_tag_txt = 'N10g'
             self.grupo_icms.raiz_tag = '//det/imposto/ICMS/ICMSSN500'
-            self.grupo_icms.vBCSTRet.obrigatorio    = True
-            self.grupo_icms.vICMSSTRet.obrigatorio  = True
+            #self.grupo_icms.vBCSTRet.obrigatorio    = False
+            #self.grupo_icms.vICMSSTRet.obrigatorio  = False
             self.grupo_icms.CST._valor_string       = '60'
 
         elif self.valor == '900':
@@ -1433,10 +1436,10 @@ class Prod(nfe_110.Prod):
     def __init__(self):
         super(Prod, self).__init__()
         self.NCM      = TagCaracter(nome='NCM'     , codigo='I05' , tamanho=[2,  8]                        , raiz='//det/prod')
-        self.qCom     = TagDecimal(nome='qCom'     , codigo='I10' , tamanho=[1, 15, 1], decimais=[0,  4, 4], raiz='//det/prod')
-        self.vUnCom   = TagDecimal(nome='vUnCom'   , codigo='I10a', tamanho=[1, 21, 1], decimais=[0, 10, 4], raiz='//det/prod')
-        self.qTrib    = TagDecimal(nome='qTrib'    , codigo='I14' , tamanho=[1, 15, 1], decimais=[0,  4, 4], raiz='//det/prod')
-        self.vUnTrib  = TagDecimal(nome='vUnTrib'  , codigo='I14a', tamanho=[1, 21, 1], decimais=[0, 10, 4], raiz='//det/prod')
+        self.qCom     = TagDecimal(nome='qCom'     , codigo='I10' , tamanho=[1, 15, 1], decimais=[0,  4, 2], raiz='//det/prod')
+        self.vUnCom   = TagDecimal(nome='vUnCom'   , codigo='I10a', tamanho=[1, 21, 1], decimais=[0, 10, 2], raiz='//det/prod')
+        self.qTrib    = TagDecimal(nome='qTrib'    , codigo='I14' , tamanho=[1, 15, 1], decimais=[0,  4, 2], raiz='//det/prod')
+        self.vUnTrib  = TagDecimal(nome='vUnTrib'  , codigo='I14a', tamanho=[1, 21, 1], decimais=[0, 10, 2], raiz='//det/prod')
         self.vOutro   = TagDecimal(nome='vOutro'   , codigo='I17a', tamanho=[1, 15, 1], decimais=[0,  2, 2], raiz='//det/prod', obrigatorio=False)
         self.indTot   = TagInteiro(nome='indTot'   , codigo='I17b', tamanho=[1,  1, 1],                      raiz='//det/prod', valor=1)
         self.xPed     = TagCaracter(nome='xPed'    , codigo='I30' , tamanho=[1, 15],                         raiz='//det/prod', obrigatorio=False)
@@ -1586,13 +1589,23 @@ class Det(nfe_110.Det):
         self.prod      = Prod()
         self.imposto   = Imposto()
 
+    @property
     def cst_formatado(self):
-        formatado = unicode(self.imposto.ICMS.orig.valor).zfill(1)
+        formatado = str(self.imposto.ICMS.orig.valor).zfill(1)
 
-        if self.imposto.ICMS.regime_tributario == 1:
-            formatado += unicode(self.imposto.ICMS.CSOSN.valor).zfill(3)
+        #
+        # O item é de serviço
+        #
+        if self.imposto.ISSQN.xml:
+            if self.imposto.ISSQN.regime_tributario == 1:
+                formatado += '400'
+            else:
+                formatado += '41'
+
+        elif self.imposto.ICMS.regime_tributario == 1:
+            formatado += str(self.imposto.ICMS.CSOSN.valor).zfill(3)
         else:
-            formatado += unicode(self.imposto.ICMS.CST.valor).zfill(2)
+            formatado += str(self.imposto.ICMS.CST.valor).zfill(2)
 
         return formatado
 
@@ -2384,7 +2397,7 @@ class InfNFe(nfe_110.InfNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<infNFe versao="' + unicode(self.versao.valor) + '" Id="' + self.Id.valor + '">'
+        xml += '<infNFe versao="' + str(self.versao.valor) + '" Id="' + self.Id.valor + '">'
         xml += self.ide.xml
         xml += self.emit.xml
         xml += self.avulsa.xml
@@ -2395,6 +2408,7 @@ class InfNFe(nfe_110.InfNFe):
         for d in self.det:
             #d.imposto.regime_tributario = self.emit.CRT.valor
             d.imposto.ICMS.regime_tributario = self.emit.CRT.valor
+            d.imposto.ISSQN.regime_tributario = self.emit.CRT.valor
             xml += d.xml
 
         xml += self.total.xml
@@ -2425,6 +2439,11 @@ class InfNFe(nfe_110.InfNFe):
             # lidas corretamente
             #
             self.det = self.le_grupo('//NFe/infNFe/det', Det)
+            for i in range(len(self.det)):
+                d = self.det[i]
+                d.imposto.ICMS.regime_tributario = self.emit.CRT.valor
+                d.imposto.ISSQN.regime_tributario = self.emit.CRT.valor
+                self.det[i] = d
 
             self.total.xml    = arquivo
             self.transp.xml   = arquivo
@@ -2483,20 +2502,20 @@ class NFe(nfe_110.NFe):
         self.infNFe.ide.cNF.valor = self.chave[35:43]
 
     def monta_chave(self):
-        chave = unicode(self.infNFe.ide.cUF.valor).strip().rjust(2, '0')
-        chave += unicode(self.infNFe.ide.dEmi.valor.strftime('%y%m')).strip().rjust(4, '0')
-        chave += unicode(self.infNFe.emit.CNPJ.valor).strip().rjust(14, '0')
+        chave = str(self.infNFe.ide.cUF.valor).strip().rjust(2, '0')
+        chave += str(self.infNFe.ide.dEmi.valor.strftime('%y%m')).strip().rjust(4, '0')
+        chave += str(self.infNFe.emit.CNPJ.valor).strip().rjust(14, '0')
         chave += '55'
-        chave += unicode(self.infNFe.ide.serie.valor).strip().rjust(3, '0')
-        chave += unicode(self.infNFe.ide.nNF.valor).strip().rjust(9, '0')
+        chave += str(self.infNFe.ide.serie.valor).strip().rjust(3, '0')
+        chave += str(self.infNFe.ide.nNF.valor).strip().rjust(9, '0')
 
         #
         # Inclui agora o tipo da emissão
         #
-        chave += unicode(self.infNFe.ide.tpEmis.valor).strip().rjust(1, '0')
+        chave += str(self.infNFe.ide.tpEmis.valor).strip().rjust(1, '0')
 
-        chave += unicode(self.infNFe.ide.cNF.valor).strip().rjust(8, '0')
-        chave += unicode(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
+        chave += str(self.infNFe.ide.cNF.valor).strip().rjust(8, '0')
+        chave += str(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
         self.chave = chave
 
     def cst_descricao(self):
@@ -2505,6 +2524,7 @@ class NFe(nfe_110.NFe):
         else:
             return 'CST'
 
+    @property
     def crt_descricao(self):
         texto = 'Regime tributário: '
 
@@ -2516,3 +2536,17 @@ class NFe(nfe_110.NFe):
             texto += 'regime normal'
 
         return texto
+
+    @property
+    def cnpj_retirada_formatado(self):
+        if self.infNFe.retirada.CNPJ.valor:
+            return self._formata_cnpj(self.infNFe.retirada.CNPJ.valor)
+        else:
+            return self._formata_cpf(self.infNFe.retirada.CPF.valor)
+
+    @property
+    def cnpj_entrega_formatado(self):
+        if self.infNFe.entrega.CNPJ.valor:
+            return self._formata_cnpj(self.infNFe.entrega.CNPJ.valor)
+        else:
+            return self._formata_cpf(self.infNFe.entrega.CPF.valor)
