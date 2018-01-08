@@ -4,7 +4,7 @@ from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
 import os
 
-from.eventoscte_300 import EvGTV, EvPrestDesacordo, EvCCeCTe, EvRegMultimodal, EvEPECCTe, EvCancCTe
+from .eventoscte_300 import EvGTV, EvPrestDesacordo, EvCCeCTe, EvRegMultimodal, EvEPECCTe, EvCancCTe
 
 DIRNAME = os.path.dirname(__file__)
 
