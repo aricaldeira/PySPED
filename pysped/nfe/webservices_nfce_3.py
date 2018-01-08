@@ -56,7 +56,7 @@ from .webservices_flags import (NFE_AMBIENTE_PRODUCAO,
                                 WS_NFE_RECEPCAO_EVENTO,
                                 WS_DFE_DISTRIBUICAO)
 
-import webservices_3
+from . import webservices_3
 
 
 SVRS = {
