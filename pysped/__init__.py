@@ -39,6 +39,16 @@
 # <http://www.gnu.org/licenses/>
 #
 
+import sys
+import locale
+
+if sys.version_info.major == 2:
+    locale.setlocale(locale.LC_ALL, b'pt_BR.UTF-8')
+    locale.setlocale(locale.LC_COLLATE, b'pt_BR.UTF-8')
+else:
+    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+    locale.setlocale(locale.LC_COLLATE, 'pt_BR.UTF-8')
+
 from pysped.cte.leiaute.canccte_104 import CancCTe as CancCTe_104
 from pysped.cte.leiaute.canccte_104 import ProcCancCTe as ProcCancCTe_104
 from pysped.cte.leiaute.canccte_104 import RetCancCTe as RetCancCTe_104
@@ -101,74 +111,5 @@ from pysped.nfe.leiaute.nfe_110 import Reboque as Reboque_110
 from pysped.nfe.leiaute.nfe_110 import Vol as Vol_110
 from pysped.nfe.leiaute.soap_100 import SOAPEnvio as SOAPEnvio_110
 from pysped.nfe.leiaute.soap_100 import SOAPRetorno as SOAPRetorno_110
-from pysped.nfe.processador_nfe import ProcessadorNFe, DANFE, Certificado
-
-
-# Pyflakes
-
-Adi_110
-Arma_110
-CTe_104
-CancCTe_104
-CancNFe_107
-Certificado
-ConsCad_101
-ConsReciCTe_104
-ConsReciNFe_110
-ConsSitCTe_104
-ConsSitNFe_107
-ConsStatServCTe_104
-ConsStatServ_107
-DANFE
-DI_110
-Det_110
-Dup_104
-Dup_110
-ESQUEMA_ATUAL
-EnviCTe_104
-EnviNFe_110
-InfNF_104
-InfNFe_104
-InfOutros_104
-InfQ_104
-InutCTe_104
-InutNFe_107
-Lacres_110
-Med_110
-NFRef_110
-NFe_110
-ObsCont_104
-ObsCont_110
-ObsFisco_104
-ObsFisco_110
-Pass_104
-ProcCTe_104
-ProcCancCTe_104
-ProcCancNFe_107
-ProcInutCTe_104
-ProcInutNFe_107
-ProcNFe_110
-ProcRef_110
-ProcessadorNFe
-ProtCTe_104
-ProtNFe_110
-Reboque_110
-RetCancCTe_104
-RetCancNFe_107
-RetConsCad_101
-RetConsReciCTe_104
-RetConsReciNFe_110
-RetConsSitCTe_104
-RetConsSitNFe_107
-RetConsStatServCTe_104
-RetConsStatServ_107
-RetEnviCTe_104
-RetEnviNFe_110
-RetInutCTe_104
-RetInutNFe_107
-SOAPEnvio_104
-SOAPEnvio_110
-SOAPRetorno_104
-SOAPRetorno_110
-Vol_110
-
+#from pysped.nfe.processador_nfe import ProcessadorNFe, DANFE, Certificado
+from pysped.nfe.processador_nfe import ProcessadorNFe, Certificado
