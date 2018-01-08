@@ -39,8 +39,11 @@
 # <http://www.gnu.org/licenses/>
 #
 
+
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
 import os
-from StringIO import StringIO
 from uuid import uuid4
 from pysped.nfe.leiaute import ProtNFe_310
 from pysped.nfe.leiaute import ProcEventoCancNFe_100
@@ -90,16 +93,16 @@ class DANFCE(object):
         self.mensagem_protocolo = ''
         self.mensagem_sem_valor = ''
         if (not self.protNFe.infProt.nProt.valor) or self.NFe.infNFe.ide.tpAmb.valor == 2:
-            self.mensagem_sem_valor = u'Sem valor fiscal'
+            self.mensagem_sem_valor = 'Sem valor fiscal'
 
         # NF-e denegada
         if self.protNFe.infProt.cStat.valor in ('110', '301', '302'):
-            self.mensagem_protocolo = u'Protocolo de Denegação '
+            self.mensagem_protocolo = 'Protocolo de Denegação '
             self.mensagem_protocolo += self.protNFe.protocolo_formatado
 
         # Emissão normal
         elif self.protNFe.infProt.nProt.valor:
-            self.mensagem_protocolo = u'Protocolo de Autorização '
+            self.mensagem_protocolo = 'Protocolo de Autorização '
             self.mensagem_protocolo += self.protNFe.protocolo_formatado
 
         # A NF-e foi cancelada por um evento de cancelamento, , no DANFCE imprimir o "carimbo" de cancelamento
@@ -141,7 +144,7 @@ class DANFCE(object):
         t = Template(nome_arq_template, nome_arq_odt)
         t.render({'danfce': self})
 
-        print(sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf', '--outdir', '/tmp', nome_arq_odt))
+        sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf', '--outdir', '/tmp', nome_arq_odt)
 
         self.conteudo_pdf = open(nome_arq_pdf, 'r').read()
 
