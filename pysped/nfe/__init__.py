@@ -40,10 +40,5 @@
 #
 
 
-from .processador_nfe import ProcessadorNFe, DANFE, Certificado, DAEDE
-
-
-# Pyflakes
-ProcessadorNFe
-DANFE
-Certificado
+#from .processador_nfe import ProcessadorNFe, DANFE, Certificado, DAEDE
+from .processador_nfe import ProcessadorNFe, Certificado
