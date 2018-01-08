@@ -39,11 +39,19 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from StringIO import StringIO
-from geraldo.generators import PDFGenerator
-from pysped.nfe.danfe.danferetrato import DANFERetrato
-from pysped.nfe.leiaute import ProtNFe_310, RetCancNFe_200, ProcCancNFe_200
-from pysped.nfe.leiaute import ProcEventoCancNFe_100
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+import os
+from io import BytesIO
+from uuid import uuid4
+from pysped.nfe.leiaute import ProtNFe_400, RetCancNFe_200, ProcCancNFe_200
+from pysped.nfe.leiaute import ProcEventoCancNFe_100, ProcEventoCCe_100
+from py3o.template import Template
+import sh
+
+
+DIRNAME = os.path.dirname(__file__)
 
 
 class DANFE(object):
@@ -55,195 +63,194 @@ class DANFE(object):
         self.imprime_duplicatas     = True
         self.imprime_issqn          = True
 
-        self.caminho           = ''
-        self.salvar_arquivo    = True
+        self.caminho            = ''
+        self.caminho_temporario = ''
+        self.salvar_arquivo     = True
 
         self.NFe         = None
         self.protNFe     = None
-        self.procCancNFe = None
-        self.retCancNFe  = None
         self.procEventoCancNFe = None
-        self.danfe       = None
-        self.conteudo_pdf = None
+        self.procEventoCCe = None
+        self.reset()
 
-        self.obs_impressao    = 'DANFE gerado em %(now:%d/%m/%Y, %H:%M:%S)s'
         self.nome_sistema     = ''
         self.site             = ''
         self.logo             = ''
-        self.leiaute_logo_vertical = False
-        self.dados_emitente   = []
+        self.cabecalho        = ''
+        self.template         = ''
+
+    def reset(self):
+        self.protNFe     = ProtNFe_400()
+        self.procEventoCancNFe = ProcEventoCancNFe_100()
+        self.procEventoCCe = ProcEventoCCe_100()
+        self.danfe        = None
+        self.conteudo_pdf = None
+
+    def _gera_pdf(self, template):
+        self.caminho_temporario = self.caminho_temporario or '/tmp/'
+
+        nome_arq_template = self.caminho_temporario + uuid4().hex
+        open(nome_arq_template, 'wb').write(template.read())
+        template.close()
+
+        nome_arq_temp = uuid4().hex
+        nome_arq_odt = self.caminho_temporario + nome_arq_temp + '.odt'
+        nome_arq_pdf = self.caminho_temporario + nome_arq_temp + '.pdf'
+
+        t = Template(nome_arq_template, nome_arq_odt)
+        t.render({'danfe': self})
+
+        sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf', '--outdir', '/tmp', nome_arq_odt)
+
+        self.conteudo_pdf = open(nome_arq_pdf, 'rb').read()
+
+        #os.remove(nome_arq_template)
+        #os.remove(nome_arq_odt)
+        #os.remove(nome_arq_pdf)
 
     def gerar_danfe(self):
         if self.NFe is None:
             raise ValueError('Não é possível gerar um DANFE sem a informação de uma NF-e')
 
         if self.protNFe is None:
-            self.protNFe = ProtNFe_310()
-
-        if self.retCancNFe is None:
-            self.retCancNFe = RetCancNFe_200()
-
-        if self.procCancNFe is None:
-            self.procCancNFe = ProcCancNFe_200()
-
-        if self.procEventoCancNFe is None:
-            self.procEventoCancNFe = ProcEventoCancNFe_100()
+            self.reset()
 
         #
         # Prepara o queryset para impressão
         #
         self.NFe.monta_chave()
-        self.NFe.monta_dados_contingencia_fsda()
         self.NFe.site = self.site
 
-        for detalhe in self.NFe.infNFe.det:
-            detalhe.NFe = self.NFe
-            detalhe.protNFe = self.protNFe
-            detalhe.retCancNFe = self.retCancNFe
-            detalhe.procCancNFe = self.procCancNFe
-            detalhe.procEventoCancNFe = self.procEventoCancNFe
-
-        #
-        # Prepara as bandas de impressão para cada formato
-        #
-        if self.NFe.infNFe.ide.tpImp.valor == 2:
-            raise ValueError('DANFE em formato paisagem ainda não implementado')
-        else:
-            self.danfe = DANFERetrato()
-            self.danfe.queryset = self.NFe.infNFe.det
-
-        if self.imprime_canhoto:
-            self.danfe.band_page_header = self.danfe.canhoto
-            self.danfe.band_page_header.child_bands = []
-            self.danfe.band_page_header.child_bands.append(self.danfe.remetente)
-        else:
-            self.danfe.band_page_header = self.danfe.remetente
-            self.danfe.band_page_header.child_bands = []
-
-        # Emissão para simples conferência / sem protocolo de autorização
-        if not self.protNFe.infProt.nProt.valor:
-            self.danfe.remetente.campo_variavel_conferencia()
-
-        # NF-e denegada
-        elif self.protNFe.infProt.cStat.valor in ('110', '301', '302'):
-            #self.danfe.remetente.campo_variavel_denegacao()
-            self.danfe.remetente.campo_variavel_normal()
-            self.danfe.remetente.obs_denegacao()
-
-            #
-            # Adiciona a observação de quem é a irregularidade fiscal
-            #
-            #if self.protNFe.infProt.cStat.valor == '301':
-                #self.danfe.remetente.find_by_name('txt_remetente_var1').text = b'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais do emitente.'
-            #elif self.protNFe.infProt.cStat.valor == '302':
-                #self.danfe.remetente.find_by_name('txt_remetente_var1').text = b'A circulação da mercadoria foi <font color="red"><b>PROIBIDA</b></font> pela SEFAZ<br />autorizadora, devido a irregularidades fiscais do destinatário.'
-
-        # Emissão em contingência com FS ou FSDA
-        elif self.NFe.infNFe.ide.tpEmis.valor in (2, 5,):
-            self.danfe.remetente.campo_variavel_contingencia_fsda()
-            self.danfe.remetente.obs_contingencia_normal_scan()
-
-        # Emissão em contingência com DPEC
-        elif self.NFe.infNFe.ide.tpEmis.valor == 4:
-            self.danfe.remetente.campo_variavel_contingencia_dpec()
-            self.danfe.remetente.obs_contingencia_dpec()
-
-        # Emissão normal ou contingência SCAN
-        else:
-            self.danfe.remetente.campo_variavel_normal()
-            # Contingência SCAN
-            if self.NFe.infNFe.ide.tpEmis.valor == 3:
-                self.danfe.remetente.obs_contingencia_normal_scan()
-
-        # A NF-e foi cancelada, no DANFE imprimir o "carimbo" de cancelamento
-        if self.retCancNFe.infCanc.nProt.valor or self.procCancNFe.retCancNFe.infCanc.nProt.valor:
-            if self.procCancNFe.cancNFe.infCanc.xJust.valor:
-                self.danfe.remetente.obs_cancelamento_com_motivo()
+        if self.template:
+            if isinstance(self.template, (file, BytesIO)):
+                template = self.template
             else:
-                self.danfe.remetente.obs_cancelamento()
+                template = open(self.template, 'rb')
 
-        # A NF-e foi cancelada por um evento de cancelamento, , no DANFE imprimir o "carimbo" de cancelamento
-        if self.procEventoCancNFe.retEvento.infEvento.nProt.valor:
-            if self.procEventoCancNFe.evento.infEvento.detEvento.xJust.valor:
-              self.danfe.remetente.obs_cancelamento_com_motivo_evento()
-            else:
-              self.danfe.remetente.obs_cancelamento_evento()
-
-        # Observação de ausência de valor fiscal
-        # se não houver protocolo ou se o ambiente for de homologação
-        if (not self.protNFe.infProt.nProt.valor) or self.NFe.infNFe.ide.tpAmb.valor == 2:
-            self.danfe.remetente.obs_sem_valor_fiscal()
-
-        self.danfe.band_page_header.child_bands.append(self.danfe.destinatario)
-
-        if self.imprime_local_retirada and len(self.NFe.infNFe.retirada.xml):
-            self.danfe.band_page_header.child_bands.append(self.danfe.local_retirada)
-
-        if self.imprime_local_entrega and len(self.NFe.infNFe.entrega.xml):
-            self.danfe.band_page_header.child_bands.append(self.danfe.local_entrega)
-
-        if self.imprime_fatura:
-            # Pagamento a prazo
-            if (self.NFe.infNFe.ide.indPag.valor == 1) or \
-                (len(self.NFe.infNFe.cobr.dup) > 1) or \
-                ((len(self.NFe.infNFe.cobr.dup) == 1) and \
-                (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())):
-
-                if self.imprime_duplicatas:
-                    self.danfe.fatura_a_prazo.elements.append(self.danfe.duplicatas)
-
-                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_prazo)
-
-            # Pagamento a vista
-            elif (self.NFe.infNFe.ide.indPag.valor != 2):
-                self.danfe.band_page_header.child_bands.append(self.danfe.fatura_a_vista)
-
-                if self.imprime_duplicatas:
-                    self.danfe.fatura_a_vista.elements.append(self.danfe.duplicatas)
-
-        self.danfe.band_page_header.child_bands.append(self.danfe.calculo_imposto)
-        self.danfe.band_page_header.child_bands.append(self.danfe.transporte)
-        self.danfe.band_page_header.child_bands.append(self.danfe.cab_produto)
-
-        if self.imprime_issqn and len(self.NFe.infNFe.total.ISSQNTot.xml):
-            self.danfe.band_page_footer = self.danfe.iss
         else:
-            self.danfe.band_page_footer = self.danfe.dados_adicionais
+            template = open(os.path.join(DIRNAME, 'danfe_a4_retrato.odt'), 'rb')
 
-        self.danfe.band_detail = self.danfe.det_produto
-
-        #
-        # Observação de impressão
-        #
-        if self.nome_sistema:
-            self.danfe.ObsImpressao.expression = self.nome_sistema + ' - ' + self.obs_impressao
-        else:
-            self.danfe.ObsImpressao.expression = self.obs_impressao
-
-        #
-        # Quadro do emitente
-        #
-        # Personalizado?
-        if self.dados_emitente:
-            self.danfe.remetente.monta_quadro_emitente(self.dados_emitente)
-        else:
-            # Sem logotipo
-            if not self.logo:
-                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_sem_logo())
-
-            # Logotipo na vertical
-            elif self.leiaute_logo_vertical:
-                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_vertical(self.logo))
-
-            # Logotipo na horizontal
-            else:
-                self.danfe.remetente.monta_quadro_emitente(self.danfe.remetente.dados_emitente_logo_horizontal(self.logo))
-
-        danfe_pdf = StringIO()
-        self.danfe.generate_by(PDFGenerator, filename=danfe_pdf)
-        self.conteudo_pdf = danfe_pdf.getvalue()
-        danfe_pdf.close()
+        self._gera_pdf(template)
 
         if self.salvar_arquivo:
             nome_arq = self.caminho + self.NFe.chave + '.pdf'
-            self.danfe.generate_by(PDFGenerator, filename=nome_arq)
+            open(nome_arq, 'wb').write(self.conteudo_pdf)
+
+    def gerar_dacce(self):
+        if self.NFe is None:
+            raise ValueError('Não é possível gerar um DACCE sem a informação de uma NF-e')
+
+        if self.protNFe is None:
+            self.reset()
+
+        if not self.procEventoCCe.retEvento.infEvento.cStat.valor:
+            raise ValueError('Não é possível gerar um DACCE sem a informação de uma CC-e')
+
+        #
+        # Prepara o queryset para impressão
+        #
+        self.NFe.monta_chave()
+        self.NFe.site = self.site
+
+        if self.template:
+            if isinstance(self.template, (file, BytesIO)):
+                template = self.template
+            else:
+                template = open(self.template, 'rb')
+
+        else:
+            template = open(os.path.join(DIRNAME, 'dacce_a4_retrato.odt'), 'rb')
+
+        self._gera_pdf(template)
+
+        if self.salvar_arquivo:
+            nome_arq = self.caminho + 'cce-'
+            nome_arq += str(self.procEventoCCe.evento.infEvento.nSeqEvento.valor).zfill(2)
+            nome_arq += '-' + self.NFe.chave + '.pdf'
+            open(nome_arq, 'wb').write(self.conteudo_pdf)
+
+    def gerar_duplicata(self):
+        if self.NFe is None:
+            raise ValueError('Não é possível gerar uma duplicata sem a informação de uma NF-e')
+
+        if self.protNFe is None:
+            self.reset()
+
+        #
+        # Prepara o queryset para impressão
+        #
+        self.NFe.monta_chave()
+        self.NFe.site = self.site
+
+        if self.template:
+            if isinstance(self.template, (file, BytesIO)):
+                template = self.template
+            else:
+                template = open(self.template, 'rb')
+
+        else:
+            template = open(os.path.join(DIRNAME, 'duplicata_a4_retrato.odt'), 'rb')
+
+        self._gera_pdf(template)
+
+        if self.salvar_arquivo:
+            nome_arq = self.caminho + 'duplicatas-' + self.NFe.chave + '.pdf'
+            open(nome_arq, 'wb').write(self.conteudo_pdf)
+
+    @property
+    def fatura_a_prazo(self):
+        if not (self.NFe.infNFe.cobr.fat.nFat.valor or
+                self.NFe.infNFe.cobr.fat.vOrig.valor or
+                self.NFe.infNFe.cobr.fat.vDesc.valor or
+                self.NFe.infNFe.cobr.fat.vLiq.valor):
+            return False
+
+        if (self.NFe.infNFe.ide.indPag.valor == 1) or \
+            (len(self.NFe.infNFe.cobr.dup) > 1) or \
+            ((len(self.NFe.infNFe.cobr.dup) == 1) and \
+            (self.NFe.infNFe.cobr.dup[0].dVenc.valor.toordinal() > self.NFe.infNFe.ide.dEmi.valor.toordinal())):
+            return True
+
+        return False
+
+    @property
+    def fatura_a_vista(self):
+        if not (self.NFe.infNFe.cobr.fat.nFat.valor or
+                self.NFe.infNFe.cobr.fat.vOrig.valor or
+                self.NFe.infNFe.cobr.fat.vDesc.valor or
+                self.NFe.infNFe.cobr.fat.vLiq.valor):
+            return False
+
+        return not self.fatura_a_prazo
+
+
+if __name__ == '__main__':
+    from pysped.nfe.leiaute import ProcNFe_400
+    procNFe = ProcNFe_400()
+    procNFe.xml = '/home/ari/Downloads/35171156505712000117550010000116611630328654-proc-nfe.xml'
+
+    procNFe.NFe.monta_chave()
+
+    danfe = DANFE()
+    #danfe.imprime_canhoto = False
+    danfe.caminho = '/home/ari/'
+    danfe.NFe = procNFe.NFe
+    danfe.protNFe = procNFe.protNFe
+    danfe.procEventoCCe = ProcEventoCCe_100()
+    danfe.procEventoCCe.xml = '/home/ari/Downloads/35171018552169000110550010000011261919335587-01-proc-cce.xml'
+
+    #danfe.NFe.infNFe.emit.IEST.valor = danfe.NFe.infNFe.emit.IE.valor
+    #danfe.NFe.infNFe.transp.transporta.xNome.valor = 'Tauga Tecnologia'
+    #danfe.NFe.infNFe.dest.enderDest.fone.valor = '15997552864'
+    #print(danfe.NFe.infNFe.transp.transporta.xNome.valor, danfe.NFe.infNFe.transp.transporta.xNome.xml)
+
+    #danfe.NFe.infNFe.transp.transporta.CNPJ.valor = '02544208000105'
+    #danfe.NFe.infNFe.transp.transporta.IE.valor = '714004082111'
+    #danfe.NFe.infNFe.transp.transporta.UF.valor = 'SP'
+    #danfe.NFe.infNFe.transp.transporta.xEnder.valor = 'R. João Martins Claro, 278'
+    #danfe.NFe.infNFe.transp.transporta.xMun.valor = 'Sorocaba'
+    #danfe.NFe.infNFe.transp.veicTransp.placa.valor = 'MJX3626'
+    #danfe.NFe.infNFe.transp.veicTransp.UF.valor = 'MM'
+
+    #danfe.gerar_danfe()
+    danfe.gerar_dacce()
