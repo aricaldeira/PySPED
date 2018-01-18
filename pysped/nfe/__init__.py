@@ -39,6 +39,9 @@
 # <http://www.gnu.org/licenses/>
 #
 
+import sys
 
-#from .processador_nfe import ProcessadorNFe, DANFE, Certificado, DAEDE
-from .processador_nfe import ProcessadorNFe, Certificado
+from .processador_nfe import ProcessadorNFe, Certificado, DANFE, DANFCE
+
+if sys.version_info.major == 2:
+    from .processador_nfe import DAEDE

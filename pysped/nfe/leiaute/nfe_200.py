@@ -1957,6 +1957,7 @@ class EnderDest(nfe_110.EnderDest):
     def __init__(self):
         super(EnderDest, self).__init__()
         self.fone    = TagInteiro(nome='fone'    , codigo='E16', tamanho=[ 6, 14]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
+        self.celular = TagInteiro(nome='celular' ,               tamanho=[ 6, 14]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
 
 
 class Dest(nfe_110.Dest):
@@ -1964,7 +1965,7 @@ class Dest(nfe_110.Dest):
         super(Dest, self).__init__()
         self.enderDest = EnderDest()
         self.ISUF      = TagCaracter(nome='ISUF' , codigo='E18', tamanho=[ 8,  9], raiz='//NFe/infNFe/dest', obrigatorio=False)
-        self.email     = TagCaracter(nome='email', codigo='E19', tamanho=[1, 60], raiz='//NFe/infNFe/dest', obrigatorio=False)
+        self.email     = TagCaracter(nome='email', codigo='E19', tamanho=[1,  60], raiz='//NFe/infNFe/dest', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -2029,14 +2030,15 @@ class EnderEmit(nfe_110.EnderEmit):
     def __init__(self):
         super(EnderEmit, self).__init__()
         self.fone    = TagInteiro(nome='fone'    , codigo='C16', tamanho=[ 6, 14]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
+        self.celular = TagInteiro(nome='celular' ,               tamanho=[ 6, 14]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
 
 
 class Emit(nfe_110.Emit):
     def __init__(self):
         super(Emit, self).__init__()
         self.enderEmit = EnderEmit()
-        self.CRT       = TagInteiro(nome='CRT'  , codigo='C21' , tamanho=[ 1,  1], raiz='//NFe/infNFe/emit', valor=1)
-
+        self.CRT       = TagInteiro(nome='CRT'   , codigo='C21' , tamanho=[ 1,  1], raiz='//NFe/infNFe/emit', valor=1)
+        self.email     = TagCaracter(nome='email',                tamanho=[1,  60], raiz='//NFe/infNFe/emit', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -2536,6 +2538,13 @@ class NFe(nfe_110.NFe):
             texto += 'regime normal'
 
         return texto
+
+    @property
+    def simples_sim_nao(self):
+        if self.infNFe.emit.CRT.valor == 1:
+            return 'sim'
+        else:
+            return 'não'
 
     @property
     def cnpj_retirada_formatado(self):

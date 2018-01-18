@@ -49,7 +49,6 @@ from io import open
 
 from lxml import etree
 from datetime import datetime, date, time
-import locale
 import unicodedata
 import re
 import pytz
@@ -59,9 +58,13 @@ from time import strftime
 PYBRASIL = False
 try:
     from pybrasil.valor.decimal import Decimal
+    from pybrasil.valor import formata_valor
+    from pybrasil.data import formata_data
+
     PYBRASIL = True
 except:
     from decimal import Decimal
+    import locale
 
 
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
@@ -233,6 +236,7 @@ class TagCaracter(NohXML):
         self.alertas = []
         self.raiz = None
         self.cdata = False
+        self.ignora_validacao = False
 
         # Codigo para dinamizar a criacao de instancias de entidade,
         # aplicando os valores dos atributos na instanciacao
@@ -258,6 +262,9 @@ class TagCaracter(NohXML):
             #raise TamanhoInvalido(self.codigo, self.nome, valor, tam_max=self.tamanho[1])
 
     def _valida(self, valor):
+        if self.ignora_validacao:
+            return True
+
         self.alertas = []
 
         v = valor
@@ -283,9 +290,10 @@ class TagCaracter(NohXML):
             #
             # Remover caratceres inválidos
             #
-            for c in novo_valor:
-                if c > 'ÿ':
-                    raise ErroCaracterInvalido(self.codigo, self.nome, self.propriedade, novo_valor, c)
+            if not self.ignora_validacao:
+                for c in novo_valor:
+                    if c > 'ÿ':
+                        raise ErroCaracterInvalido(self.codigo, self.nome, self.propriedade, novo_valor, c)
 
             #
             # É obrigatório remover os espaços no início e no final do valor
@@ -485,6 +493,24 @@ class TagData(TagCaracter):
         else:
             return self._valor_data.strftime('%d/%m/%Y')
 
+    @property
+    def mes_ano(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            if PYBRASIL:
+                return formata_data(self._valor_data, '%B/%Y')
+            else:
+                return self._valor_data.strftime('%B/%Y')
+
+    @property
+    def formato_iso(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            return self._valor_data.strftime('%Y-%m-%d')
+
+
 class TagHora(TagData):
     def set_valor(self, novo_valor):
         if isinstance(novo_valor, basestring):
@@ -515,6 +541,10 @@ class TagHora(TagData):
             return ''
         else:
             return self._valor_data.strftime('%H:%M:%S')
+
+    @property
+    def formato_iso(self):
+        return self.formato_danfe
 
 
 class TagDataHora(TagData):
@@ -556,6 +586,23 @@ class TagDataHora(TagData):
             return ''
         else:
             return self._valor_data.strftime('%d/%m/%Y %H:%M:%S')
+
+    @property
+    def mes_ano(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            if PYBRASIL:
+                return formata_data(self._valor_data, '%B/%Y')
+            else:
+                return self._valor_data.strftime('%B/%Y')
+
+    @property
+    def formato_iso(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            return self._valor_data.strftime('%Y-%m-%d %H:%M:%S')
 
 
 def fuso_horario_sistema():
@@ -679,6 +726,23 @@ class TagDataHoraUTC(TagData):
             valor = valor.replace('FNT', 'HOFN')
             return valor
 
+    @property
+    def mes_ano(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            if PYBRASIL:
+                return formata_data(self._valor_data, '%B/%Y')
+            else:
+                return self._valor_data.strftime('%B/%Y')
+
+    @property
+    def formato_iso(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            return self._valor_data.isoformat()
+
 
 class TagInteiro(TagCaracter):
     def __init__(self, **kwargs):
@@ -722,7 +786,11 @@ class TagInteiro(TagCaracter):
         if not (self.obrigatorio or self._valor_inteiro):
             return ''
 
-        return locale.format('%d', self._valor_inteiro, grouping=True)
+        if PYBRASIL:
+            return formata_valor(self._valor_inteiro, casas_decimais=0)
+
+        else:
+            return locale.format('%d', self._valor_inteiro, grouping=True)
 
 
 class TagDecimal(TagCaracter):
@@ -869,23 +937,29 @@ class TagDecimal(TagCaracter):
         else:
             formato = '%.2f'
 
-        return locale.format(formato, self._valor_decimal, grouping=True)
+        if PYBRASIL:
+            if formato == '%d':
+                return formata_valor(self._valor_decimal, casas_decimais=0)
+
+            print(self.nome)
+            print(formato)
+            cd = int(formato.replace('%.', '').replace('f', ''))
+            return formata_valor(self._valor_decimal, casas_decimais=cd)
+
+        else:
+            return locale.format(formato, self._valor_decimal, grouping=True)
 
     @property
     def formato_danfce(self):
         if not (self.obrigatorio or self._valor_decimal):
             return ''
 
-        # Tamanho mínimo das casas decimais
-        #if (len(self.decimais) >= 3) and self.decimais[2]:
-            #if len(self._parte_decimal()) <= self.decimais[2]:
-                #formato = '%.' + str(self.decimais[2]) + 'f'
-            #else:
-                #formato = '%.' + str(len(self._parte_decimal())) + 'f'
-        #else:
-        formato = '%.2f'
+        if PYBRASIL:
+            return formata_valor(self._valor_decimal)
 
-        return locale.format(formato, self._valor_decimal, grouping=True)
+        else:
+            formato = '%.2f'
+            return locale.format(formato, self._valor_decimal, grouping=True)
 
 
 class XMLNFe(NohXML):

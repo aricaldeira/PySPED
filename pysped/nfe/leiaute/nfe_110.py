@@ -2957,13 +2957,19 @@ class Transp(XMLNFe):
 class RetTrib(XMLNFe):
     def __init__(self):
         super(RetTrib, self).__init__()
+        self.pRetPIS    = TagDecimal(nome='pRetPIS'   ,               tamanho=[1,  5, 1], decimais=[0, 5, 2], raiz='')
         self.vRetPIS    = TagDecimal(nome='vRetPIS'   , codigo='W24', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
+        self.pRetCOFINS = TagDecimal(nome='pRetCOFINS',               tamanho=[1,  5, 1], decimais=[0, 5, 2], raiz='')
         self.vRetCOFINS = TagDecimal(nome='vRetCOFINS', codigo='W25', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
+        self.pRetCSLL   = TagDecimal(nome='pRetCSLL'  ,               tamanho=[1,  5, 1], decimais=[0, 5, 2], raiz='')
         self.vRetCSLL   = TagDecimal(nome='vRetCSLL'  , codigo='W26', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
         self.vBCIRRF    = TagDecimal(nome='vBCIRRF'   , codigo='W27', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
+        self.pIRRF      = TagDecimal(nome='pRetIRRF'  ,               tamanho=[1,  5, 1], decimais=[0, 5, 2], raiz='')
         self.vIRRF      = TagDecimal(nome='vIRRF'     , codigo='W28', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
         self.vBCRetPrev = TagDecimal(nome='vBCRetPrev', codigo='W29', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
+        self.pRetPrev   = TagDecimal(nome='pRetPrev'  ,               tamanho=[1,  5, 1], decimais=[0, 5, 2], raiz='')
         self.vRetPrev   = TagDecimal(nome='vRetPrev'  , codigo='W30', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/retTrib', obrigatorio=False)
+        self.vTotal     = TagDecimal(nome='vTotal'    ,               tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='')
 
     def get_xml(self):
         if not (self.vRetPIS.valor or self.vRetCOFINS.valor or self.vRetCSLL.valor or self.vBCIRRF.valor or self.vIRRF.valor or self.vBCRetPrev.valor or self.vRetPrev.valor):
@@ -3016,6 +3022,7 @@ class ISSQNTot(XMLNFe):
         super(ISSQNTot, self).__init__()
         self.vServ   = TagDecimal(nome='vServ'  , codigo='W18', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ISSQNtot', obrigatorio=False)
         self.vBC     = TagDecimal(nome='vBC'    , codigo='W19', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ISSQNtot', obrigatorio=False)
+        self.pISS    = TagDecimal(nome='pISS'   ,               tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ISSQNtot')
         self.vISS    = TagDecimal(nome='vISS'   , codigo='W20', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ISSQNtot', obrigatorio=False)
         self.vPIS    = TagDecimal(nome='vPIS'   , codigo='W21', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ISSQNtot', obrigatorio=False)
         self.vCOFINS = TagDecimal(nome='vCOFINS', codigo='W22', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ISSQNtot', obrigatorio=False)
@@ -3311,6 +3318,7 @@ class EnderDest(XMLNFe):
         self.cPais   = TagCaracter(nome='cPais'  , codigo='E14', tamanho=[ 4,  4, 4], raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.xPais   = TagCaracter(nome='xPais'  , codigo='E15', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.fone    = TagInteiro(nome='fone'    , codigo='E16', tamanho=[ 1, 10]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
+        self.celular = TagInteiro(nome='celular' ,               tamanho=[ 1, 10]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -3512,6 +3520,7 @@ class EnderEmit(XMLNFe):
         self.cPais   = TagCaracter(nome='cPais'  , codigo='C14', tamanho=[ 4,  4, 4], raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.xPais   = TagCaracter(nome='xPais'  , codigo='C15', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.fone    = TagInteiro(nome='fone'    , codigo='C16', tamanho=[ 1, 10]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
+        self.celular = TagInteiro(nome='celular' ,               tamanho=[ 1, 10]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -3578,6 +3587,7 @@ class Emit(XMLNFe):
         self.IEST      = TagCaracter(nome='IEST' , codigo='C18' , tamanho=[ 2, 14], raiz='//NFe/infNFe/emit', obrigatorio=False)
         self.IM        = TagCaracter(nome='IM'   , codigo='C19' , tamanho=[ 1, 15], raiz='//NFe/infNFe/emit', obrigatorio=False)
         self.CNAE      = TagCaracter(nome='CNAE' , codigo='C20' , tamanho=[ 7,  7], raiz='//NFe/infNFe/emit', obrigatorio=False)
+        self.xCNAE     = TagCaracter(nome='xCNAE',                tamanho=[ 1, 255], raiz='//NFe/infNFe/emit', obrigatorio=False)
 
 
     def get_xml(self):
@@ -3733,6 +3743,9 @@ class Ide(XMLNFe):
         self.mod     = TagCaracter(nome='mod'     , codigo='B06', tamanho=[ 2,  2, 2], raiz='//NFe/infNFe/ide', valor=55)
         self.serie   = TagInteiro(nome='serie'   , codigo='B07', tamanho=[ 1,  3, 1], raiz='//NFe/infNFe/ide')
         self.nNF     = TagInteiro(nome='nNF'     , codigo='B08', tamanho=[ 1,  9, 1], raiz='//NFe/infNFe/ide')
+        self.serie_rps = TagCaracter(nome='serie_rps',           tamanho=[ 1,  3, 1], raiz='//NFe/infNFe/ide')
+        self.nRPS    = TagInteiro(nome='nRPS'    ,               tamanho=[ 1,  9, 1], raiz='//NFe/infNFe/ide')
+
         self.dEmi    = TagData(nome='dEmi'       , codigo='B09',                      raiz='//NFe/infNFe/ide')
         self.dSaiEnt = TagData(nome='dSaiEnt'    , codigo='B10',                      raiz='//NFe/infNFe/ide', obrigatorio=False)
         self.tpNF    = TagInteiro(nome='tpNF'    , codigo='B11', tamanho=[ 1,  1, 1], raiz='//NFe/infNFe/ide', valor=1)
@@ -3848,6 +3861,7 @@ class InfNFe(XMLNFe):
         self.dest     = Dest()
         self.retirada = Retirada()
         self.entrega  = Entrega()
+        self.descServico = TagCaracter(nome='descServico',             tamanho=[1, 5000], raiz='//NFe/infNFe/infAdic', ignora_validacao=True)
         self.det      = []
         self.total    = Total()
         self.transp   = Transp()
@@ -4267,6 +4281,10 @@ class NFe(XMLNFe):
         return self._formata_fone(str(self.infNFe.emit.enderEmit.fone.valor))
 
     @property
+    def celular_emitente_formatado(self):
+        return self._formata_fone(str(self.infNFe.emit.enderEmit.celular.valor))
+
+    @property
     def cnpj_destinatario_formatado(self):
         if self.infNFe.dest.CPF.valor and len(self.infNFe.dest.CPF.valor):
             return self._formata_cpf(str(self.infNFe.dest.CPF.valor))
@@ -4301,6 +4319,10 @@ class NFe(XMLNFe):
     @property
     def fone_destinatario_formatado(self):
         return self._formata_fone(str(self.infNFe.dest.enderDest.fone.valor))
+
+    @property
+    def celular_destinatario_formatado(self):
+        return self._formata_fone(str(self.infNFe.dest.enderDest.celular.valor))
 
     @property
     def cnpj_retirada_formatado(self):
@@ -4425,3 +4447,49 @@ class NFe(XMLNFe):
     @property
     def crt_descricao(self):
         return ''
+
+    @property
+    def cnae_formatado(self):
+        if not self.infNFe.emit.CNAE.valor:
+            return ''
+
+        cnae = self.infNFe.emit.CNAE.valor
+        formatado = cnae[:4] + '-' + cnae[4] + '/' + cnae[5:]
+
+        if self.infNFe.emit.xCNAE.valor:
+            formatado += ' - ' + self.infNFe.emit.xCNAE.valor
+
+        return formatado
+
+    @property
+    def descricao_servico_libreoffice(self):
+        da = ''
+
+        if self.infNFe.descServico.valor:
+            da = self.infNFe.descServico.valor.replace('| ', '<text:line-break/>')
+
+        if self.infNFe.infAdic.infCpl.valor:
+            if len(da) > 0:
+                da += '<text:line-break/>'
+
+            da += self.infNFe.infAdic.infCpl.valor.replace('| ', '<text:line-break/>')
+
+        return Markup(da)
+
+    @property
+    def obs_fisco_libreoffice(self):
+        da = ''
+
+        if self.infNFe.infAdic.infAdFisco.valor:
+            da = self.infNFe.infAdic.infAdFisco.valor.replace('| ', '<text:line-break/>')
+
+        return Markup(da)
+
+    @property
+    def obs_complementar_libreoffice(self):
+        da = ''
+
+        if self.infNFe.infAdic.infCpl.valor:
+            da = self.infNFe.infAdic.infCpl.valor.replace('| ', '<text:line-break/>')
+
+        return Markup(da)

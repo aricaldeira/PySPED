@@ -1398,3 +1398,13 @@ class NFCe(NFe):
         self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
         self.infNFe.transp.modFrete.valor = 9  #  Sem frete
         self.infNFe.dest.modelo = '65'
+
+
+class NFSe(NFe):
+    def __init__(self):
+        super(NFSe, self).__init__()
+        self.infNFe.ide.mod.valor = '99'  #  NFS-e
+        self.infNFe.ide.tpImp.valor = '4'  #  DANFE NFS-e em papel
+        self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
+        self.infNFe.transp.modFrete.valor = 9  #  Sem frete
+        self.infNFe.dest.modelo = '99'

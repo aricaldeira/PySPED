@@ -1,0 +1,40 @@
+    <RPS xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <Assinatura>${ 'assinatura de SP' }</Assinatura>
+        <ChaveRPS>
+            <InscricaoPrestador>${ NFe.infNFe.emit.IM.valor }</InscricaoPrestador>
+            <SerieRPS>${ NFe.infNFe.ide.serie_rps.valor or '1' }</SerieRPS>
+            <NumeroRPS>${ NFe.infNFe.ide.nRPS.valor }</NumeroRPS>
+        </ChaveRPS>
+        <TipoRPS>RPS</TipoRPS>
+        <DataEmissao>${ NFe.infNFe.ide.dEmi.formato_iso }</DataEmissao>
+        <StatusRPS>N</StatusRPS>
+        <TributacaoRPS>T</TributacaoRPS>
+        <ValorServicos>${ NFe.infNFe.total.ISSQNTot.vServ.valor }</ValorServicos>
+        <ValorDeducoes>${ NFe.infNFe.total.ISSQNTot.vDeducao.valor }</ValorDeducoes>
+        <ValorPIS py:if="NFe.infNFe.total.retTrib.vRetPIS.valor != 0">${ NFe.infNFe.total.retTrib.vRetPIS.valor }</ValorPIS>
+        <ValorCOFINS py:if="NFe.infNFe.total.retTrib.vRetCOFINS.valor != 0">${ NFe.infNFe.total.retTrib.vRetCOFINS.valor }</ValorCOFINS>
+        <ValorINSS py:if="NFe.infNFe.total.retTrib.vRetPrev.valor != 0">${ NFe.infNFe.total.retTrib.vRetPrev.valor }</ValorINSS>
+        <ValorIR py:if="NFe.infNFe.total.retTrib.vIRRF.valor != 0">${ NFe.infNFe.total.retTrib.vIRRF.valor }</ValorIR>
+        <ValorCSLL py:if="NFe.infNFe.total.retTrib.vRetCSLL.valor != 0">${ NFe.infNFe.total.retTrib.vRetCSLL.valor }</ValorCSLL>
+        <CodigoServico>${ NFe.infNFe.det[0].imposto.ISSQN.cServico.valor }</CodigoServico>
+        <AliquotaServicos>${ NFe.infNFe.total.ISSQNTot.pISS.valor / 100 }</AliquotaServicos>
+        <ISSRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor == 0">false</ISSRetido>
+        <ISSRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor != 0">true</ISSRetido>
+        <CPFCNPJTomador>
+            <CNPJ py:if="NFe.infNFe.dest.CNPJ.valor">${ NFe.infNFe.dest.CNPJ.valor }</CNPJ>
+            <CPF py:if="NFe.infNFe.dest.CPF.valor">${ NFe.infNFe.dest.CPF.valor }</CPF>
+        </CPFCNPJTomador>
+        <RazaoSocialTomador>${ NFe.infNFe.dest.xNome.valor }</RazaoSocialTomador>
+        <EnderecoTomador>
+            <TipoLogradouro>R</TipoLogradouro>
+            <Logradouro>${ NFe.infNFe.dest.enderDest.xLgr.valor }</Logradouro>
+            <NumeroEndereco>${ NFe.infNFe.dest.enderDest.nro.valor }</NumeroEndereco>
+            <ComplementoEndereco>${ NFe.infNFe.dest.enderDest.xCpl.valor }</ComplementoEndereco>
+            <Bairro>${ NFe.infNFe.dest.enderDest.xBairro.valor }</Bairro>
+            <Cidade>${ NFe.infNFe.dest.enderDest.cMun.valor }</Cidade>
+            <UF>${ NFe.infNFe.dest.enderDest.UF.valor }</UF>
+            <CEP>${ NFe.infNFe.dest.enderDest.CEP.valor }</CEP>
+        </EnderecoTomador>
+        <Discriminacao py:if="not NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }</Discriminacao>
+        <Discriminacao py:if="NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }| ${ NFe.infNFe.infAdic.infCpl.valor }</Discriminacao>
+    </RPS>

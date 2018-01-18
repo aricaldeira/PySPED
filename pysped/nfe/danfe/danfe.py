@@ -67,10 +67,10 @@ class DANFE(object):
         self.caminho_temporario = ''
         self.salvar_arquivo     = True
 
-        self.NFe         = None
-        self.protNFe     = None
+        self.NFe               = None
+        self.protNFe           = None
         self.procEventoCancNFe = None
-        self.procEventoCCe = None
+        self.procEventoCCe     = None
         self.reset()
 
         self.nome_sistema     = ''
@@ -83,7 +83,6 @@ class DANFE(object):
         self.protNFe     = ProtNFe_400()
         self.procEventoCancNFe = ProcEventoCancNFe_100()
         self.procEventoCCe = ProcEventoCCe_100()
-        self.danfe        = None
         self.conteudo_pdf = None
 
     def _gera_pdf(self, template):
@@ -104,9 +103,9 @@ class DANFE(object):
 
         self.conteudo_pdf = open(nome_arq_pdf, 'rb').read()
 
-        #os.remove(nome_arq_template)
-        #os.remove(nome_arq_odt)
-        #os.remove(nome_arq_pdf)
+        os.remove(nome_arq_template)
+        os.remove(nome_arq_odt)
+        os.remove(nome_arq_pdf)
 
     def gerar_danfe(self):
         if self.NFe is None:
@@ -122,10 +121,10 @@ class DANFE(object):
         self.NFe.site = self.site
 
         if self.template:
-            if isinstance(self.template, (file, BytesIO)):
-                template = self.template
-            else:
+            if isinstance(self.template, str):
                 template = open(self.template, 'rb')
+            else:
+                template = self.template
 
         else:
             template = open(os.path.join(DIRNAME, 'danfe_a4_retrato.odt'), 'rb')
@@ -222,35 +221,3 @@ class DANFE(object):
             return False
 
         return not self.fatura_a_prazo
-
-
-if __name__ == '__main__':
-    from pysped.nfe.leiaute import ProcNFe_400
-    procNFe = ProcNFe_400()
-    procNFe.xml = '/home/ari/Downloads/35171156505712000117550010000116611630328654-proc-nfe.xml'
-
-    procNFe.NFe.monta_chave()
-
-    danfe = DANFE()
-    #danfe.imprime_canhoto = False
-    danfe.caminho = '/home/ari/'
-    danfe.NFe = procNFe.NFe
-    danfe.protNFe = procNFe.protNFe
-    danfe.procEventoCCe = ProcEventoCCe_100()
-    danfe.procEventoCCe.xml = '/home/ari/Downloads/35171018552169000110550010000011261919335587-01-proc-cce.xml'
-
-    #danfe.NFe.infNFe.emit.IEST.valor = danfe.NFe.infNFe.emit.IE.valor
-    #danfe.NFe.infNFe.transp.transporta.xNome.valor = 'Tauga Tecnologia'
-    #danfe.NFe.infNFe.dest.enderDest.fone.valor = '15997552864'
-    #print(danfe.NFe.infNFe.transp.transporta.xNome.valor, danfe.NFe.infNFe.transp.transporta.xNome.xml)
-
-    #danfe.NFe.infNFe.transp.transporta.CNPJ.valor = '02544208000105'
-    #danfe.NFe.infNFe.transp.transporta.IE.valor = '714004082111'
-    #danfe.NFe.infNFe.transp.transporta.UF.valor = 'SP'
-    #danfe.NFe.infNFe.transp.transporta.xEnder.valor = 'R. João Martins Claro, 278'
-    #danfe.NFe.infNFe.transp.transporta.xMun.valor = 'Sorocaba'
-    #danfe.NFe.infNFe.transp.veicTransp.placa.valor = 'MJX3626'
-    #danfe.NFe.infNFe.transp.veicTransp.UF.valor = 'MM'
-
-    #danfe.gerar_danfe()
-    danfe.gerar_dacce()

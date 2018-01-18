@@ -54,6 +54,8 @@ import os
 import binascii
 import hashlib
 import qrcode
+import sys
+import unicodedata
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -125,6 +127,7 @@ class ISSQN(nfe_200.ISSQN):
         super(ISSQN, self).__init__()
         self.vAliq     = TagDecimal(nome='vAliq'    , codigo='U03', tamanho=[1,  5, 1], decimais=[0, 4, 2], raiz='//det/imposto/ISSQN')
         self.cListServ = TagCaracter(nome='cListServ', codigo='U06', tamanho=[5,  5],                     raiz='//det/imposto/ISSQN')
+        self.xListServ = TagCaracter(nome='xListServ',              tamanho=[1, 255],                     raiz='//det/imposto/ISSQN')
         #
         # Campos novos da versão 3.10
         #
@@ -1530,6 +1533,13 @@ class ISSQNTot(nfe_200.ISSQNTot):
 
     xml = property(get_xml, set_xml)
 
+    @property
+    def iss_retido_sim_nao(self):
+        if self.vISSRet.valor:
+            return 'sim'
+        else:
+            return 'não'
+
 
 class ICMSTot(nfe_200.ICMSTot):
     def __init__(self):
@@ -2172,15 +2182,19 @@ class NFe(nfe_200.NFe):
 
         if str(self.infNFe.ide.mod.valor) == '65':
             return 'nº ' + num_formatado
-        else:
+        elif str(self.infNFe.ide.mod.valor) == '55':
             return 'Nº ' + num_formatado
+        else:
+            return num_formatado
 
     @property
     def serie_formatada(self):
         if str(self.infNFe.ide.mod.valor) == '65':
             return 'Série ' + str(self.infNFe.ide.serie.valor).zfill(3)
-        else:
+        elif str(self.infNFe.ide.mod.valor) == '65':
             return 'SÉRIE ' + str(self.infNFe.ide.serie.valor).zfill(3)
+        else:
+            return str(self.infNFe.ide.serie.valor).zfill(3)
 
     @property
     def cnpj_destinatario_formatado(self):
@@ -2203,6 +2217,32 @@ class NFe(nfe_200.NFe):
             else:
                 return ''
 
+    @property
+    def incentivador_cultural_sim_nao(self):
+        incentivador_cultural = False
+
+        for det in self.infNFe.det:
+            if det.imposto.ISSQN.indIncentivo.valor == 1:
+                incentivador_cultural = True
+                break
+
+        if incentivador_cultural:
+            return 'sim'
+        else:
+            return 'não'
+
+    @property
+    def servico_formatado(self):
+        if len(self.infNFe.det) == 0 or not self.infNFe.det[0].imposto.ISSQN.cListServ.valor:
+            return ''
+
+        formatado = self.infNFe.det[0].imposto.ISSQN.cListServ.valor
+
+        if self.infNFe.det[0].imposto.ISSQN.xListServ.valor:
+            formatado += ' - ' + self.infNFe.det[0].imposto.ISSQN.xListServ.valor
+
+        return formatado
+
 
 class NFCe(NFe):
     def __init__(self):
@@ -2213,3 +2253,65 @@ class NFCe(NFe):
         self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
         self.infNFe.transp.modFrete.valor = 9  #  Sem frete
         self.infNFe.dest.modelo = '65'
+
+
+class NFSe(NFe):
+    def __init__(self):
+        super(NFSe, self).__init__()
+        self.infNFe.ide.mod.valor = '99'  #  NFS-e
+        self.infNFe.ide.tpImp.valor = '4'  #  DANFE NFS-e em papel
+        self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
+        self.infNFe.transp.modFrete.valor = 9  #  Sem frete
+        self.infNFe.dest.modelo = '99'
+
+        #
+        # Marca as tags de ISS e retenções como obrigatórias
+        #
+        self.infNFe.total.ISSQNTot.vServ.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vBC.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vISS.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vPIS.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vCOFINS.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vDeducao.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vOutro.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vDescIncond.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vDescCond.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vISSRet.obrigatorio = True
+        self.infNFe.total.ISSQNTot.cRegTrib.obrigatorio = True
+
+        self.infNFe.total.retTrib.vRetPIS.obrigatorio = True
+        self.infNFe.total.retTrib.vRetCOFINS.obrigatorio = True
+        self.infNFe.total.retTrib.vRetCSLL.obrigatorio = True
+        self.infNFe.total.retTrib.vBCIRRF.obrigatorio = True
+        self.infNFe.total.retTrib.vIRRF.obrigatorio = True
+        self.infNFe.total.retTrib.vBCRetPrev.obrigatorio = True
+        self.infNFe.total.retTrib.vRetPrev.obrigatorio = True
+
+    @property
+    def nome_cidade(self):
+        nome_cidade = self.infNFe.emit.enderEmit.UF.valor
+        nome_cidade += '-'
+        nome_cidade += self.infNFe.emit.enderEmit.xMun.valor
+        nome_cidade = nome_cidade.replace(' ', '_').lower()
+
+        nome_cidade = nome_cidade.replace('°','o')
+
+        if sys.version_info.major == 2:
+            nome_cidade = unicodedata.normalize(b'NFKD', nome_cidade).encode('ascii', 'ignore').encode('utf-8')
+        else:
+            nome_cidade = unicodedata.normalize('NFKD', nome_cidade).encode('ascii', 'ignore').decode('utf-8')
+
+        return nome_cidade
+
+    @property
+    def xml(self):
+        caminho_templates = os.path.join(DIRNAME, '../../nfse/', self.nome_cidade)
+
+        from genshi.template.loader import TemplateLoader
+        from genshi.template import MarkupTemplate
+
+        loader = TemplateLoader(search_path=caminho_templates, auto_reload=True, allow_exec=True, default_class=MarkupTemplate)
+
+        tmpl = loader.load('envio_rps.xml')
+        stream = tmpl.generate(NFe=self)
+        return stream.render()

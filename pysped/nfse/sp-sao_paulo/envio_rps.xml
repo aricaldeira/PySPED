@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PedidoEnvioRPS xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.prefeitura.sp.gov.br/nfe">
+    <Cabecalho Versao="1">
+        <CPFCNPJRemetente>
+            <CNPJ>${ NFe.infNFe.emit.CNPJ.valor }</CNPJ>
+        </CPFCNPJRemetente>
+    </Cabecalho>
+    <xi:include href="rps.xml" />
+</PedidoEnvioRPS>

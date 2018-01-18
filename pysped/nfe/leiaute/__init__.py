@@ -270,6 +270,11 @@ ESQUEMA_ATUAL_VERSAO_3 = 'pl_008i2'
 from .nfe_310 import NFCe as NFCe_310
 
 #
+# Emissão de NFS-e
+#
+from .nfe_310 import NFSe as NFSe_310
+
+#
 # Emissão de NF-e
 #
 from .nfe_310 import NFe as NFe_310
@@ -331,6 +336,11 @@ ESQUEMA_ATUAL_VERSAO_4 = 'pl_009_v4'
 # Emissão de NFC-e
 #
 from .nfe_400 import NFCe as NFCe_400
+
+#
+# Emissão de NFS-e
+#
+from .nfe_400 import NFSe as NFSe_400
 
 #
 # Emissão de NF-e
