@@ -61,11 +61,13 @@ if sys.version_info.major == 2:
     from .danfe.danfe_geraldo import DANFE
     from .danfe.daede import DAEDE
     from .danfe.danfce import DANFCE
+    from .danfe.danfse import DANFSE
 
 else:
     from http.client import HTTPSConnection
-    from .danfe.danfce import DANFCE
     from .danfe.danfe import DANFE
+    from .danfe.danfce import DANFCE
+    from .danfe.danfse import DANFSE
 
 from .webservices_flags import (UF_CODIGO,
                                #WS_NFE_CANCELAMENTO,
@@ -207,6 +209,7 @@ class ProcessadorNFe(object):
         self.contingencia = False
         self.danfe = DANFE()
         self.danfce = DANFCE()
+        self.danfse = DANFSE()
 
         if sys.version_info.major == 2:
             self.daede = DAEDE()
