@@ -385,8 +385,6 @@ class DadosAdicionaisPaisagem(BandaDANFE):
 
 
 if __name__ == '__main__':
-    print('aqui')
-
     registra_fontes()
 
     registros = [{'id': 1}, {'id': 1}, {'id': 1}, {'id': 1}, {'id': 1}, {'id': 1}, {'id': 1}, {'id': 1}, {'id': 1}, {'id': 1},]

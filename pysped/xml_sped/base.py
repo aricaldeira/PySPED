@@ -941,8 +941,6 @@ class TagDecimal(TagCaracter):
             if formato == '%d':
                 return formata_valor(self._valor_decimal, casas_decimais=0)
 
-            print(self.nome)
-            print(formato)
             cd = int(formato.replace('%.', '').replace('f', ''))
             return formata_valor(self._valor_decimal, casas_decimais=cd)
 

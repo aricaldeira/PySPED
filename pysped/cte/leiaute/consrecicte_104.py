@@ -153,7 +153,6 @@ class ProtCTe(XMLNFe):
             # por isso, a raiz dele não pode ser assumida como sendo sempre o grupo
             # protCTe
             #
-            print('aqui:', self._le_noh('//protCTe/infProt', ns=NAMESPACE_CTE))
             self.infProt.xml = self._le_noh('//protCTe/infProt', ns=NAMESPACE_CTE)
             self.Signature.xml = self._le_noh('//protCTe/sig:Signature')
 
