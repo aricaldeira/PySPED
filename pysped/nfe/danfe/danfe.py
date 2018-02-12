@@ -99,7 +99,8 @@ class DANFE(object):
         t = Template(nome_arq_template, nome_arq_odt)
         t.render({'danfe': self})
 
-        sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf', '--outdir', '/tmp', nome_arq_odt)
+        lo = sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf', '--outdir', '/tmp', nome_arq_odt, _bg=True)
+        lo.wait()
 
         self.conteudo_pdf = open(nome_arq_pdf, 'rb').read()
 
