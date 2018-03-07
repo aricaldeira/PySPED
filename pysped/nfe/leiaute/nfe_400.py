@@ -1297,7 +1297,8 @@ class InfNFe(nfe_310.InfNFe):
         if self.ide.mod.valor == '55':
             xml += self.cobr.xml
 
-        xml += self.pag.xml
+        for p in self.pag:
+            xml += p.xml
 
         xml += self.infAdic.xml
         xml += self.exporta.xml
