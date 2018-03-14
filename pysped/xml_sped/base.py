@@ -53,6 +53,7 @@ import unicodedata
 import re
 import pytz
 from time import strftime
+from hashlib import md5
 
 
 PYBRASIL = False
@@ -77,16 +78,21 @@ ABERTURA = '<?xml version="1.0" encoding="utf-8"?>'
 class NohXML(object):
     def __init__(self, *args, **kwargs):
         self._xml = None
+        self._hash = None
         self.alertas = []
 
     def _le_xml(self, arquivo):
         if arquivo is None:
             return False
 
+        #import ipdb; ipdb.set_trace();
+
         if not isinstance(arquivo, basestring):
             arquivo = etree.tounicode(arquivo)
-            #self._xml = arquivo
-            #return True
+
+        hash = md5(arquivo.encode('utf-8')).hexdigest()
+        if hash == self._hash:
+            return True
 
         #elif arquivo is not None:
         if arquivo is not None:
@@ -105,6 +111,16 @@ class NohXML(object):
                     self._xml = etree.fromstring(txt.encode('utf-8'))
             else:
                 self._xml = etree.parse(arquivo)
+
+            #
+            # Agora que temos o arquivo já parseado, setamos para as tags filhas desta
+            #
+            for chave in self.__dict__:
+                if isinstance(self.__dict__[chave], NohXML):
+                    self.__dict__[chave]._xml = self._xml
+                    self.__dict__[chave]._hash = hash
+                    self.__dict__[chave]._le_xml(arquivo)
+
             return True
 
         return False
