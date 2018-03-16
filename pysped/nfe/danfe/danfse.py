@@ -119,3 +119,31 @@ class DANFSE(DANFE):
         CACHE_LOGO[self.NFe.nome_cidade] = base64.encodebytes(logo)
 
         return CACHE_LOGO[self.NFe.nome_cidade]
+
+    def gerar_darl(self):
+        if self.NFe is None:
+            raise ValueError('Não é possível gerar um DARL sem a informação de um Recibo de Locação')
+
+        if self.protNFe is None:
+            self.reset()
+
+        #
+        # Prepara o queryset para impressão
+        #
+        self.NFe.site = self.site
+
+        if self.template:
+            if isinstance(self.template, (file, BytesIO)):
+                template = self.template
+            else:
+                template = open(self.template, 'rb')
+
+        else:
+            template = open(os.path.join(DIRNAME, 'darl_a4.odt'), 'rb')
+
+        self._gera_pdf(template)
+
+        if self.salvar_arquivo:
+            #nome_arq = self.caminho + self.NFe.chave + '.pdf'
+            nome_arq = self.caminho + 'recibo_locacao.pdf'
+            open(nome_arq, 'wb').write(self.conteudo_pdf)

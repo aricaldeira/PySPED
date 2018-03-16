@@ -3145,6 +3145,13 @@ class ICMSTot(XMLNFe):
 
     txt = property(get_txt)
 
+    @property
+    def valor_extenso(self):
+        if not PYBRASIL:
+            return ''
+
+        return numero_por_extenso_unidade(self.vNF.valor)
+
 
 class Total(XMLNFe):
     def __init__(self):
