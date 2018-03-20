@@ -138,6 +138,7 @@ class ISSQN(nfe_200.ISSQN):
         self.vISSRet = TagDecimal(nome='vISSRet', codigo='U11', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.indISS  = TagCaracter(nome='indISS', codigo='U12', tamanho=[1,  1], raiz='//det/imposto/ISSQN')
         self.cServico = TagCaracter(nome='cServico', codigo='U13', tamanho=[1, 20], raiz='//det/imposto/ISSQN', obrigatorio=False)
+        self.xServico = TagCaracter(nome='xServico',              tamanho=[1, 255],                     raiz='//det/imposto/ISSQN')
         self.cMun     = TagInteiro(nome='cMun'   , codigo='U14', tamanho=[7, 7, 7], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.cPais    = TagInteiro(nome='cPais'  , codigo='U15', tamanho=[4, 4, 4], raiz='//det/imposto/ISSQN', obrigatorio=False)
         self.nProcesso = TagCaracter(nome='nProcesso', codigo='U16', tamanho=[1, 30], raiz='//det/imposto/ISSQN', obrigatorio=False)
@@ -2233,6 +2234,18 @@ class NFe(nfe_200.NFe):
 
     @property
     def servico_formatado(self):
+        if not (self.infNFe.det and self.infNFe.det[0].imposto.ISSQN.cServico.valor):
+            return ''
+
+        formatado = self.infNFe.det[0].imposto.ISSQN.cServico.valor
+
+        if self.infNFe.det[0].imposto.ISSQN.xServico.valor:
+            formatado += ' - ' + self.infNFe.det[0].imposto.ISSQN.xServico.valor
+
+        return formatado
+
+    @property
+    def servico_federal_formatado(self):
         if len(self.infNFe.det) == 0 or not self.infNFe.det[0].imposto.ISSQN.cListServ.valor:
             return ''
 
@@ -2263,6 +2276,7 @@ class NFSe(NFe):
         self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
         self.infNFe.transp.modFrete.valor = 9  #  Sem frete
         self.infNFe.dest.modelo = '99'
+        self.assinatura_servico = ''
 
         #
         # Marca as tags de ISS e retenções como obrigatórias
@@ -2315,3 +2329,40 @@ class NFSe(NFe):
         tmpl = loader.load('envio_rps.xml')
         stream = tmpl.generate(NFe=self)
         return stream.render()
+
+    @property
+    def assinatura_nfse_sp(self):
+        assinatura = self.infNFe.emit.IM.valor.zfill(8)[:8]
+        assinatura += self.infNFe.ide.serie_rps.valor.strip().ljust(5)[:5]
+        assinatura += str(self.infNFe.ide.nRPS.valor).zfill(12)[:12]
+        assinatura += self.infNFe.ide.dhEmi.formato_iso[:10].replace('-', '')
+
+        if self.infNFe.ide.natureza_nfse == '1':
+            assinatura += 'F'
+        elif self.infNFe.ide.natureza_nfse == '2':
+            assinatura += 'I'
+        elif self.infNFe.ide.natureza_nfse == '4':
+            assinatura += 'J'
+        else:
+            assinatura += 'T'
+
+        #assinatura += 'C' if nota.cancelada else 'N'
+        assinatura += 'N'
+        assinatura += 'S' if self.infNFe.total.ISSQNtot.vISSRet.valor > 0 else 'N'
+        assinatura += str(int(D(self.infNFe.total.ISSQNtot.vServ.valor * 100))).zfill(15)
+        assinatura += str(int(D(self.infNFe.total.ISSQNtot.vDeducao.valor * 100))).zfill(15)
+        assinatura += self.infNFe.det[0].imposto.ISSQN.cServico.valor.strip().zfill(5)[:5]
+
+        if self.infNFe.dest.CPF.valor:
+            assinatura += '1'
+            assinatura += self.infNFe.dest.CPF.valor.zfill(14)[:14]
+
+        elif self.infNFe.dest.CNPJ.valor:
+            assinatura += '2'
+            assinatura += self.infNFe.dest.CNPJ.valor.zfill(14)[:14]
+
+        else:
+            assinatura += '3'
+            assinatura += ''.zfill(14)
+
+        return assinatura

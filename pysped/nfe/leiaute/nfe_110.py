@@ -3746,6 +3746,7 @@ class Ide(XMLNFe):
         self.cUF     = TagInteiro(nome='cUF'     , codigo='B02', tamanho=[ 2,  2, 2], raiz='//NFe/infNFe/ide')
         self.cNF     = TagCaracter(nome='cNF'    , codigo='B03', tamanho=[ 9,  9, 9], raiz='//NFe/infNFe/ide')
         self.natOp   = TagCaracter(nome='natOp'  , codigo='B04', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/ide')
+        self.natureza_nfse = TagCaracter(nome='natureza_nfse'  , codigo='B04', tamanho=[ 1, 2]   , raiz='//NFe/infNFe/ide')
         self.indPag  = TagInteiro(nome='indPag'  , codigo='B05', tamanho=[ 1,  1, 1], raiz='//NFe/infNFe/ide')
         self.mod     = TagCaracter(nome='mod'     , codigo='B06', tamanho=[ 2,  2, 2], raiz='//NFe/infNFe/ide', valor=55)
         self.serie   = TagInteiro(nome='serie'   , codigo='B07', tamanho=[ 1,  3, 1], raiz='//NFe/infNFe/ide')
@@ -4169,6 +4170,11 @@ class NFe(XMLNFe):
     def serie_formatada(self):
         return 'SÉRIE ' + str(self.infNFe.ide.serie.valor).zfill(3)
 
+    @property
+    def numero_rps_formatado(self):
+        num = str(self.infNFe.ide.nRPS.valor).zfill(9)
+        num_formatado = '.'.join((num[0:3], num[3:6], num[6:9]))
+        return num_formatado
 
     def _formata_cpf(self, cpf):
         if not len(cpf.strip()):
