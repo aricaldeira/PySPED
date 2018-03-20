@@ -210,6 +210,7 @@ class ProcessadorNFe(object):
         self.danfe = DANFE()
         self.danfce = DANFCE()
         self.danfse = DANFSE()
+        self.darl = DANFSE()
 
         if sys.version_info.major == 2:
             self.daede = DAEDE()
