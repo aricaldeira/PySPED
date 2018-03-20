@@ -12,7 +12,7 @@
         <ValorTotalDeducoes>${ NFe.infNFe.total.ISSQNTot.vDeducao.valor }</ValorTotalDeducoes>
     </Cabecalho>
     <RPS xmlns="">
-        <Assinatura>${ 'assinatura de SP' }</Assinatura>
+        <Assinatura>${ NFe.assinatura_servico }</Assinatura>
         <ChaveRPS>
             <InscricaoPrestador>${ NFe.infNFe.emit.IM.valor }</InscricaoPrestador>
             <SerieRPS>${ NFe.infNFe.ide.serie_rps.valor or '1' }</SerieRPS>
