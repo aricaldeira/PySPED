@@ -61,6 +61,7 @@ try:
     from pybrasil.valor.decimal import Decimal
     from pybrasil.valor import formata_valor
     from pybrasil.data import formata_data
+    from pybrasil.base import tira_acentos_ascii
 
     PYBRASIL = True
 except:
@@ -307,9 +308,21 @@ class TagCaracter(NohXML):
             # Remover caratceres inválidos
             #
             if not self.ignora_validacao:
-                for c in novo_valor:
-                    if c > 'ÿ':
-                        raise ErroCaracterInvalido(self.codigo, self.nome, self.propriedade, novo_valor, c)
+                if PYBRASIL:
+                    valor_corrigido = ''
+
+                    for c in novo_valor:
+                        if c <= 'ÿ':
+                            valor_corrigido += c
+                        else:
+                            valor_corrigido += tira_acentos_ascii(c)
+
+                    novo_valor = valor_corrigido
+
+                else:
+                    for c in novo_valor:
+                        if c > 'ÿ':
+                            raise ErroCaracterInvalido(self.codigo, self.nome, self.propriedade, novo_valor, c)
 
             #
             # É obrigatório remover os espaços no início e no final do valor
