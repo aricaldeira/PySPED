@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap12:Body>
+        <EnvioRPSRequest xmlns="http://www.prefeitura.sp.gov.br/nfe">
+            <VersaoSchema>1</VersaoSchema>
+            <MensagemXML>
+                ${ body }
+            </MensagemXML>
+        </EnvioRPSRequest>
+    </soap12:Body>
+</soap12:Envelope>

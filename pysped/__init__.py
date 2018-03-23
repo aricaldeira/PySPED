@@ -113,3 +113,4 @@ from pysped.nfe.leiaute.soap_100 import SOAPEnvio as SOAPEnvio_110
 from pysped.nfe.leiaute.soap_100 import SOAPRetorno as SOAPRetorno_110
 #from pysped.nfe.processador_nfe import ProcessadorNFe, DANFE, Certificado
 from pysped.nfe.processador_nfe import ProcessadorNFe, Certificado
+from pysped.nfse.processador_nfse import ProcessadorNFSe

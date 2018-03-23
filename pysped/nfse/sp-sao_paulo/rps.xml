@@ -1,5 +1,5 @@
     <RPS xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-        <Assinatura>${ 'assinatura de SP' }</Assinatura>
+        <Assinatura>${ NFe.assinatura_servico }</Assinatura>
         <ChaveRPS>
             <InscricaoPrestador>${ NFe.infNFe.emit.IM.valor }</InscricaoPrestador>
             <SerieRPS>${ NFe.infNFe.ide.serie_rps.valor or '1' }</SerieRPS>
@@ -20,12 +20,14 @@
         <AliquotaServicos>${ NFe.infNFe.total.ISSQNTot.pISS.valor / 100 }</AliquotaServicos>
         <ISSRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor == 0">false</ISSRetido>
         <ISSRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor != 0">true</ISSRetido>
-        <CPFCNPJTomador>
+        <CPFCNPJTomador py:if="NFe.infNFe.dest.CNPJ.valor or NFe.infNFe.dest.CPF.valor">
             <CNPJ py:if="NFe.infNFe.dest.CNPJ.valor">${ NFe.infNFe.dest.CNPJ.valor }</CNPJ>
             <CPF py:if="NFe.infNFe.dest.CPF.valor">${ NFe.infNFe.dest.CPF.valor }</CPF>
         </CPFCNPJTomador>
-        <RazaoSocialTomador>${ NFe.infNFe.dest.xNome.valor }</RazaoSocialTomador>
-        <EnderecoTomador>
+        <InscricaoMunicipalTomador py:if="NFe.infNFe.dest.IM.valor">${ NFe.infNFe.dest.IM.valor }</InscricaoMunicipalTomador>
+        <InscricaoEstadualTomador py:if="NFe.infNFe.dest.IE.valor">${ NFe.infNFe.dest.IE.valor }</InscricaoEstadualTomador>
+        <RazaoSocialTomador py:if="NFe.infNFe.dest.CNPJ.valor or NFe.infNFe.dest.CPF.valor">${ NFe.infNFe.dest.xNome.valor }</RazaoSocialTomador>
+        <EnderecoTomador py:if="NFe.infNFe.dest.CNPJ.valor or NFe.infNFe.dest.CPF.valor">
             <TipoLogradouro>R</TipoLogradouro>
             <Logradouro>${ NFe.infNFe.dest.enderDest.xLgr.valor }</Logradouro>
             <NumeroEndereco>${ NFe.infNFe.dest.enderDest.nro.valor }</NumeroEndereco>
@@ -35,6 +37,7 @@
             <UF>${ NFe.infNFe.dest.enderDest.UF.valor }</UF>
             <CEP>${ NFe.infNFe.dest.enderDest.CEP.valor }</CEP>
         </EnderecoTomador>
+        <EmailTomador py:if="NFe.infNFe.dest.email.valor">${ NFe.infNFe.dest.email.valor }</EmailTomador>
         <Discriminacao py:if="not NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }</Discriminacao>
         <Discriminacao py:if="NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }| ${ NFe.infNFe.infAdic.infCpl.valor }</Discriminacao>
     </RPS>

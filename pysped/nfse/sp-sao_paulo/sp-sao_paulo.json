@@ -1,0 +1,44 @@
+{
+    "envio_rps": {
+        "conexao": {
+            "servidor": "nfe.prefeitura.sp.gov.br",
+            "porta": 443,
+            "url": "ws/lotenfe.asmx",
+            "metodo": "EnvioRPS",
+            "header": {
+                "Content-Type": "text/xml; charset=utf-8",
+                "soap_action": "http://www.prefeitura.sp.gov.br/nfe/ws/envioRPS"
+            },
+            "forca_tls": false,
+            "forca_http": false,
+            "forca_cadeia_conexao": false,
+            "sem_certificado": false
+        },
+        "assina": true,
+        "assinatura": {
+            "URI": "",
+            "atributo": "Id",
+            "tag": "RPS",
+            "namespaces": {
+                "nfse": "http://www.prefeitura.sp.gov.br/nfe",
+                "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "xsd": "http://www.w3.org/2001/XMLSchema",
+                "soap": "http://schemas.xmlsoap.org/soap/envelope/",
+                "sig": "http://www.w3.org/2000/09/xmldsig#"
+            }
+         },
+        "escapa_envio": false,
+        "escapa_resposta": true,
+        "tag_resposta": "RetornoEnvioRPS",
+        "tag_erro": "Erro",
+        "tag_erro_codigo": "Codigo",
+        "tag_erro_descricao": "Descricao",
+        "tag_alerta": "Alerta",
+        "tag_alerta_codigo": "Codigo",
+        "tag_alerta_descricao": "Descricao",
+        "tag_sucesso": "ChaveNFe",
+        "tag_sucesso_codigo_verificacao": "CodigoVerificacao",
+        "tag_sucesso_numero_nfse": "NumeroNFe",
+        "tag_sucesso_data_nfse": ""
+    }
+}

@@ -3753,6 +3753,7 @@ class Ide(XMLNFe):
         self.nNF     = TagInteiro(nome='nNF'     , codigo='B08', tamanho=[ 1,  9, 1], raiz='//NFe/infNFe/ide')
         self.serie_rps = TagCaracter(nome='serie_rps',           tamanho=[ 1,  3, 1], raiz='//NFe/infNFe/ide')
         self.nRPS    = TagInteiro(nome='nRPS'    ,               tamanho=[ 1,  9, 1], raiz='//NFe/infNFe/ide')
+        self.nLote   = TagInteiro(nome='nLote'   ,               tamanho=[ 1,  9, 1], raiz='//NFe/infNFe/ide')
 
         self.dEmi    = TagData(nome='dEmi'       , codigo='B09',                      raiz='//NFe/infNFe/ide')
         self.dSaiEnt = TagData(nome='dSaiEnt'    , codigo='B10',                      raiz='//NFe/infNFe/ide', obrigatorio=False)

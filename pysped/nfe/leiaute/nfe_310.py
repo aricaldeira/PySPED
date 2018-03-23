@@ -2277,6 +2277,7 @@ class NFSe(NFe):
         self.infNFe.transp.modFrete.valor = 9  #  Sem frete
         self.infNFe.dest.modelo = '99'
         self.assinatura_servico = ''
+        self.codigo_verificacao = ''
 
         #
         # Marca as tags de ISS e retenções como obrigatórias
@@ -2318,51 +2319,30 @@ class NFSe(NFe):
         return nome_cidade
 
     @property
-    def xml(self):
-        caminho_templates = os.path.join(DIRNAME, '../../nfse/', self.nome_cidade)
+    def caminho_templates(self):
+        return os.path.join(DIRNAME, '../../nfse/', self.nome_cidade)
 
+    @property
+    def configuracao_json(self):
+        return os.path.join(DIRNAME, '../../nfse/', self.nome_cidade, self.nome_cidade + '.json')
+
+    def render_template(self, template, variaveis={}):
         from genshi.template.loader import TemplateLoader
         from genshi.template import MarkupTemplate
 
-        loader = TemplateLoader(search_path=caminho_templates, auto_reload=True, allow_exec=True, default_class=MarkupTemplate)
+        loader = TemplateLoader(search_path=self.caminho_templates, auto_reload=True, allow_exec=True,
+                                default_class=MarkupTemplate)
 
-        tmpl = loader.load('envio_rps.xml')
-        stream = tmpl.generate(NFe=self)
+        tmpl = loader.load(template)
+        variaveis['NFe'] = self
+
+        stream = tmpl.generate(**variaveis)
         return stream.render()
 
     @property
-    def assinatura_nfse_sp(self):
-        assinatura = self.infNFe.emit.IM.valor.zfill(8)[:8]
-        assinatura += self.infNFe.ide.serie_rps.valor.strip().ljust(5)[:5]
-        assinatura += str(self.infNFe.ide.nRPS.valor).zfill(12)[:12]
-        assinatura += self.infNFe.ide.dhEmi.formato_iso[:10].replace('-', '')
+    def xml_rps(self):
+        return self.render_template('envio_rps.xml')
 
-        if self.infNFe.ide.natureza_nfse == '1':
-            assinatura += 'F'
-        elif self.infNFe.ide.natureza_nfse == '2':
-            assinatura += 'I'
-        elif self.infNFe.ide.natureza_nfse == '4':
-            assinatura += 'J'
-        else:
-            assinatura += 'T'
-
-        #assinatura += 'C' if nota.cancelada else 'N'
-        assinatura += 'N'
-        assinatura += 'S' if self.infNFe.total.ISSQNtot.vISSRet.valor > 0 else 'N'
-        assinatura += str(int(D(self.infNFe.total.ISSQNtot.vServ.valor * 100))).zfill(15)
-        assinatura += str(int(D(self.infNFe.total.ISSQNtot.vDeducao.valor * 100))).zfill(15)
-        assinatura += self.infNFe.det[0].imposto.ISSQN.cServico.valor.strip().zfill(5)[:5]
-
-        if self.infNFe.dest.CPF.valor:
-            assinatura += '1'
-            assinatura += self.infNFe.dest.CPF.valor.zfill(14)[:14]
-
-        elif self.infNFe.dest.CNPJ.valor:
-            assinatura += '2'
-            assinatura += self.infNFe.dest.CNPJ.valor.zfill(14)[:14]
-
-        else:
-            assinatura += '3'
-            assinatura += ''.zfill(14)
-
-        return assinatura
+    @property
+    def xml_nfse(self):
+        return self.render_template('nfse.xml')

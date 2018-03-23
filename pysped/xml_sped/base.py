@@ -756,6 +756,14 @@ class TagDataHoraUTC(TagData):
             return valor
 
     @property
+    def formato_danfse(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S')
+            return valor
+
+    @property
     def mes_ano(self):
         if self._valor_data is None:
             return ''
@@ -824,12 +832,12 @@ class TagInteiro(TagCaracter):
 
 class TagDecimal(TagCaracter):
     def __init__(self, *args, **kwargs):
-        self._valor_decimal = Decimal('0.0')
-        self._valor_string = '0.0'
+        self._valor_decimal = Decimal('0.00')
+        self._valor_string = '0.00'
         self.decimais = [None, None, None]
         super(TagDecimal, self).__init__(*args, **kwargs)
 
-        self._valor_decimal = Decimal('0.0')
+        self._valor_decimal = Decimal('0.00')
         self._valor_string = self._formata(self._valor_decimal)
         self.decimais = [None, None, None]
         self.decimais_danfe = None
@@ -930,13 +938,13 @@ class TagDecimal(TagCaracter):
             if novo_valor:
                 novo_valor = Decimal(novo_valor)
             else:
-                novo_valor = Decimal('0.0')
+                novo_valor = Decimal('0.00')
 
         if isinstance(novo_valor, (int, Decimal)) and self._valida(novo_valor):
             self._valor_decimal = Decimal(novo_valor)
             self._valor_string = self._formata(self._valor_decimal)
         else:
-            self._valor_decimal = Decimal('0.0')
+            self._valor_decimal = Decimal('0.00')
             self._valor_string = self._formata(self._valor_decimal)
 
     def get_valor(self):

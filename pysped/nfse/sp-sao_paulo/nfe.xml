@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NFe xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
-    <Assinatura>${ 'assinatura de SP' }</Assinatura>
+    <Assinatura>${ NFe.assinatura_servico }</Assinatura>
     <ChaveNFe>
     </ChaveNFe>
     <DataEmissaoNFe>${ NFe.infNFe.ide.dEmi.formato_iso }</DataEmissaoNFe>
@@ -27,11 +27,11 @@
         <UF>${ NFe.infNFe.emit.enderEmi.UF.valor }</UF>
         <CEP>${ NFe.infNFe.emit.enderEmi.CEP.valor }</CEP>
     </EnderecoPrestador>
-
-
-
     <StatusRPS>N</StatusRPS>
-    <TributacaoRPS>T</TributacaoRPS>
+    <TributacaoRPS py:if="NFe.infNFe.ide.natureza_nfse == '1'">F</TributacaoRPS>
+    <TributacaoRPS py:if="NFe.infNFe.ide.natureza_nfse == '2'">A</TributacaoRPS>
+    <TributacaoRPS py:if="NFe.infNFe.ide.natureza_nfse == '4'">J</TributacaoRPS>
+    <TributacaoRPS py:if="NFe.infNFe.ide.natureza_nfse not in ['1', '2', '4']">T</TributacaoRPS>
     <ValorServicos>${ NFe.infNFe.total.ISSQNTot.vServ.valor }</ValorServicos>
     <ValorDeducoes>${ NFe.infNFe.total.ISSQNTot.vDeducao.valor }</ValorDeducoes>
     <ValorPIS py:if="NFe.infNFe.total.retTrib.vRetPIS.valor != 0">${ NFe.infNFe.total.retTrib.vRetPIS.valor }</ValorPIS>
