@@ -2278,6 +2278,7 @@ class NFSe(NFe):
         self.infNFe.dest.modelo = '99'
         self.assinatura_servico = ''
         self.codigo_verificacao = ''
+        self.cancelada = False
 
         #
         # Marca as tags de ISS e retenções como obrigatórias
@@ -2344,5 +2345,5 @@ class NFSe(NFe):
         return self.render_template('envio_rps.xml')
 
     @property
-    def xml_nfse(self):
-        return self.render_template('nfse.xml')
+    def xml_cancelamento(self):
+        return self.render_template('envio_cancelamento.xml')
