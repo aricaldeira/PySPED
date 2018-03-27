@@ -190,6 +190,7 @@ class ICMS(nfe_310.ICMS):
         self.vBCFCPSTRet = TagDecimal(nome='vBCFCPSTRet', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
         self.pFCPSTRet = TagDecimal(nome='pFCPSTRet'    , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='')
         self.vFCPSTRet = TagDecimal(nome='vFCPSTRet'    , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
+        self.orig = TagCaracter(nome='orig', codigo='', raiz='')
 
         #
         # Situação tributária do Simples Nacional
@@ -226,8 +227,9 @@ class ICMS(nfe_310.ICMS):
                 xml += self.vICMS.xml
 
                 #xml += self.vBCFCP.xml
-                xml += self.pFCP.xml
-                xml += self.vFCP.xml
+                if self.vFCP.valor:
+                    xml += self.pFCP.xml
+                    xml += self.vFCP.xml
 
             elif self.CST.valor == '10':
                 if not self.partilha:
@@ -277,9 +279,10 @@ class ICMS(nfe_310.ICMS):
                 xml += self.pICMS.xml
                 xml += self.vICMS.xml
 
-                xml += self.vBCFCP.xml
-                xml += self.pFCP.xml
-                xml += self.vFCP.xml
+                if self.vFCP.valor:
+                    xml += self.vBCFCP.xml
+                    xml += self.pFCP.xml
+                    xml += self.vFCP.xml
 
                 xml += self.vICMSDeson.xml
                 xml += self.motDesICMS.xml
@@ -316,10 +319,10 @@ class ICMS(nfe_310.ICMS):
                 xml += self.pDif.xml
                 xml += self.vICMSDif.xml
                 xml += self.vICMS.xml
-
-                xml += self.vBCFCP.xml
-                xml += self.pFCP.xml
-                xml += self.vFCP.xml
+                if self.vFCP.valor:
+                    xml += self.vBCFCP.xml
+                    xml += self.pFCP.xml
+                    xml += self.vFCP.xml
 
             elif self.CST.valor == '60':
                 if (self.vBCSTRet.valor or self.pST.valor or self.vICMSSTRet.valor):
@@ -363,9 +366,10 @@ class ICMS(nfe_310.ICMS):
                 xml += self.pICMS.xml
                 xml += self.vICMS.xml
 
-                xml += self.vBCFCP.xml
-                xml += self.pFCP.xml
-                xml += self.vFCP.xml
+                if self.vFCP.valor:
+                    xml += self.vBCFCP.xml
+                    xml += self.pFCP.xml
+                    xml += self.vFCP.xml
 
                 xml += self.modBCST.xml
 
@@ -850,7 +854,7 @@ class Card(nfe_310.Card):
         self.tpIntegra = TagCaracter(nome='tpIntegra', codigo='', tamanho=[ 1,  1], raiz='//detPag/card')
         self.CNPJ      = TagCaracter(nome='CNPJ' , codigo='XA05', tamanho=[14, 14], raiz='//detPag/card', obrigatorio=False)
         self.tBand     = TagCaracter(nome='tBand', codigo='YA01', tamanho=[ 2,  2], raiz='//detPag/card', obrigatorio=False)
-        self.cAut      = TagCaracter(nome='cAut' , codigo='YA01', tamanho=[20, 20], raiz='//detPag/card', obrigatorio=False)
+        self.cAut      = TagCaracter(nome='cAut' , codigo='YA07', tamanho=[20, 20], raiz='//detPag/card', obrigatorio=False)
 
     def get_xml(self):
         if not (self.tpIntegra.valor or self.CNPJ.valor or self.tBand.valor or self.cAut.valor):
@@ -1028,6 +1032,9 @@ class ICMSTot(nfe_310.ICMSTot):
         self.vFCPST = TagDecimal(nome='vFCPST', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=True)
         self.vFCPSTRet = TagDecimal(nome='vFCPSTRet', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=True)
         self.vIPIDevol = TagDecimal(nome='vIPIDevol', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=True)
+        self.vICMSUFDest = TagDecimal(nome='vICMSUFDest', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=True)
+        self.vFCPUFDest = TagDecimal(nome='vFCPUFDest', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=True)
+        self.vICMSUFRemet = TagDecimal(nome='vICMSUFRemet', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/total/ICMSTot', obrigatorio=True)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -1035,14 +1042,17 @@ class ICMSTot(nfe_310.ICMSTot):
         xml += self.vBC.xml
         xml += self.vICMS.xml
         xml += self.vICMSDeson.xml
-        xml += self.vFCPUFDest.xml
-        xml += self.vICMSUFDest.xml
-        xml += self.vICMSUFRemet.xml
         xml += self.vFCP.xml
         xml += self.vBCST.xml
         xml += self.vST.xml
         xml += self.vFCPST.xml
         xml += self.vFCPSTRet.xml
+        if self.vICMSUFDest.valor:
+            xml += self.vICMSUFDest.xml
+        if self.vICMSUFRemet.valor:
+            xml += self.vICMSUFRemet.xml
+        if self.vFCPUFDest.valor:
+            xml += self.vFCPUFDest.xml
         xml += self.vProd.xml
         xml += self.vFrete.xml
         xml += self.vSeg.xml
@@ -1297,8 +1307,7 @@ class InfNFe(nfe_310.InfNFe):
         if self.ide.mod.valor == '55':
             xml += self.cobr.xml
 
-        for p in self.pag:
-            xml += p.xml
+        xml += self.pag.xml
 
         xml += self.infAdic.xml
         xml += self.exporta.xml

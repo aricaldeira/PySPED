@@ -200,7 +200,7 @@ class ProcessadorNFe(object):
     def __init__(self):
         self.ambiente = 2
         self.estado = 'SP'
-        self.versao = '3.10'
+        self.versao = '4.00'
         self.modelo = '55'
         self.certificado = Certificado()
         self.caminho = ''
@@ -302,7 +302,7 @@ class ProcessadorNFe(object):
                     ws_a_usar = webservices.SVAN
 
                 elif self.contingencia_SCAN or self.contingencia:
-                    ws_a_usar = webservices.ESTADO_WS_CONTINGENCIA
+                    ws_a_usar = webservices.ESTADO_WS_CONTINGENCIA[self.estado]
 
                 else:
                     #
