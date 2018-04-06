@@ -176,6 +176,56 @@ class TagCSTICMS(nfe_310.TagCSTICMS):
     def __init__(self, *args, **kwargs):
         super(TagCSTICMS, self).__init__(*args, **kwargs)
 
+    def set_valor(self, novo_valor):
+        super(TagCSTICMS, self).set_valor(novo_valor)
+
+        if not self.grupo_icms:
+            return None
+
+        #
+        # Definimos todas as tags como não obrigatórias
+        #
+        self.grupo_icms.pST.obrigatorio         = False
+        self.grupo_icms.vBCFCP.obrigatorio      = False
+        self.grupo_icms.pFCP.obrigatorio        = False
+        self.grupo_icms.vFCP.obrigatorio        = False
+        self.grupo_icms.vBCFCPST.obrigatorio    = False
+        self.grupo_icms.pFCPST.obrigatorio      = False
+        self.grupo_icms.vFCPST.obrigatorio      = False
+        self.grupo_icms.vBCFCPSTRet.obrigatorio = False
+        self.grupo_icms.pFCPSTRet.obrigatorio   = False
+        self.grupo_icms.vFCPSTRet.obrigatorio   = False
+
+        #
+        # Por segurança, zeramos os valores das tags do
+        # grupo ICMS ao redefinirmos o código da situação
+        # tributária
+        #
+        self.grupo_icms.pST.valor         = '0.00'
+        self.grupo_icms.vBCFCP.valor      = '0.00'
+        self.grupo_icms.pFCP.valor        = '0.00'
+        self.grupo_icms.vFCP.valor        = '0.00'
+        self.grupo_icms.vBCFCPST.valor    = '0.00'
+        self.grupo_icms.pFCPST.valor      = '0.00'
+        self.grupo_icms.vFCPST.valor      = '0.00'
+        self.grupo_icms.vBCFCPSTRet.valor = '0.00'
+        self.grupo_icms.pFCPSTRet.valor   = '0.00'
+        self.grupo_icms.vFCPSTRet.valor   = '0.00'
+
+        #
+        # Redefine a raiz para todas as tags do grupo ICMS
+        #
+        self.grupo_icms.pST.raiz         = self.grupo_icms.raiz_tag
+        self.grupo_icms.vBCFCP.raiz      = self.grupo_icms.raiz_tag
+        self.grupo_icms.pFCP.raiz        = self.grupo_icms.raiz_tag
+        self.grupo_icms.vFCP.raiz        = self.grupo_icms.raiz_tag
+        self.grupo_icms.vBCFCPST.raiz    = self.grupo_icms.raiz_tag
+        self.grupo_icms.pFCPST.raiz      = self.grupo_icms.raiz_tag
+        self.grupo_icms.vFCPST.raiz      = self.grupo_icms.raiz_tag
+        self.grupo_icms.vBCFCPSTRet.raiz = self.grupo_icms.raiz_tag
+        self.grupo_icms.pFCPSTRet.raiz   = self.grupo_icms.raiz_tag
+        self.grupo_icms.vFCPSTRet.raiz   = self.grupo_icms.raiz_tag
+
 
 class ICMS(nfe_310.ICMS):
     def __init__(self):
@@ -878,7 +928,7 @@ class Card(nfe_310.Card):
 class DetPag(nfe_310.Pag):
     def __init__(self):
         super(DetPag, self).__init__()
-        self.tPag = TagCaracter(nome='tPag', codigo='YA01', tamanho=[2, 2, 2], raiz='//detPag')
+        self.tPag = TagCaracter(nome='tPag', codigo='YA01', tamanho=[2, 2, 2], raiz='//detPag', valor='90')
         self.vPag = TagDecimal(nome='vPag' , codigo='YA02', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//detPag')
         self.card = Card()
 
@@ -930,7 +980,7 @@ class Pag(XMLNFe):
     def __init__(self):
         super(Pag, self).__init__()
         self.detPag = []
-        self.vTroco = TagDecimal(nome='vTroco' , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//pag')
+        self.vTroco = TagDecimal(nome='vTroco' , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//pag', obrigatorio=False)
 
     def get_xml(self):
         #
@@ -1297,9 +1347,7 @@ class InfNFe(nfe_310.InfNFe):
         if self.ide.mod.valor == '55':
             xml += self.cobr.xml
 
-        for p in self.pag:
-            xml += p.xml
-
+        xml += self.pag.xml
         xml += self.infAdic.xml
         xml += self.exporta.xml
         xml += self.compra.xml
@@ -1338,9 +1386,7 @@ class InfNFe(nfe_310.InfNFe):
             self.total.xml    = arquivo
             self.transp.xml   = arquivo
             self.cobr.xml     = arquivo
-
-            self.pag = self.le_grupo('//NFe/infNFe/pag', Pag)
-
+            self.pag.xml      = arquivo
             self.infAdic.xml  = arquivo
             self.exporta.xml  = arquivo
             self.compra.xml   = arquivo
