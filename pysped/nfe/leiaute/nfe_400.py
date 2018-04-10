@@ -85,7 +85,7 @@ class ISSQN(nfe_310.ISSQN):
 class ICMSUFDest(nfe_310.ICMSUFDest):
     def __init__(self):
         super(ICMSUFDest, self).__init__()
-        self.vBCFCPUFDest = TagDecimal(nome='vBCFCPUFDest', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest')
+        self.vBCFCPUFDest = TagDecimal(nome='vBCFCPUFDest', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='//det/imposto/ICMSUFDest', obrigatorio=False)
 
     def get_xml(self):
         if not (self.vBCUFDest.valor):
@@ -280,16 +280,16 @@ class TagCSTICMS(nfe_310.TagCSTICMS):
 class ICMS(nfe_310.ICMS):
     def __init__(self):
         super(ICMS, self).__init__()
-        self.pST  = TagDecimal(nome='pST'               , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='')
-        self.vBCFCP = TagDecimal(nome='vBCFCP'          , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
-        self.pFCP = TagDecimal(nome='pFCP'              , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='')
-        self.vFCP = TagDecimal(nome='vFCP'              , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
-        self.vBCFCPST = TagDecimal(nome='vBCFCPST'      , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
-        self.pFCPST = TagDecimal(nome='pFCPST'          , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='')
-        self.vFCPST = TagDecimal(nome='vFCPST'          , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
-        self.vBCFCPSTRet = TagDecimal(nome='vBCFCPSTRet', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
-        self.pFCPSTRet = TagDecimal(nome='pFCPSTRet'    , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='')
-        self.vFCPSTRet = TagDecimal(nome='vFCPSTRet'    , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='')
+        self.pST  = TagDecimal(nome='pST'               , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='', obrigatorio=False)
+        self.vBCFCP = TagDecimal(nome='vBCFCP'          , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
+        self.pFCP = TagDecimal(nome='pFCP'              , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='', obrigatorio=False)
+        self.vFCP = TagDecimal(nome='vFCP'              , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
+        self.vBCFCPST = TagDecimal(nome='vBCFCPST'      , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
+        self.pFCPST = TagDecimal(nome='pFCPST'          , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='', obrigatorio=False)
+        self.vFCPST = TagDecimal(nome='vFCPST'          , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
+        self.vBCFCPSTRet = TagDecimal(nome='vBCFCPSTRet', codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
+        self.pFCPSTRet = TagDecimal(nome='pFCPSTRet'    , codigo='', tamanho=[1,  3, 1], decimais=[0, 2, 4], raiz='', obrigatorio=False)
+        self.vFCPSTRet = TagDecimal(nome='vFCPSTRet'    , codigo='', tamanho=[1, 13, 1], decimais=[0, 2, 2], raiz='', obrigatorio=False)
 
         #
         # Situação tributária do Simples Nacional
