@@ -71,6 +71,7 @@ except:
 
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
 NAMESPACE_CTE = 'http://www.portalfiscal.inf.br/cte'
+NAMESPACE_MDFE = 'http://www.portalfiscal.inf.br/mdfe'
 NAMESPACE_SIG = 'http://www.w3.org/2000/09/xmldsig#'
 NAMESPACE_NFSE = 'http://localhost:8080/WsNFe2/lote'
 ABERTURA = '<?xml version="1.0" encoding="utf-8"?>'
@@ -149,7 +150,13 @@ class NohXML(object):
         #
         # Não deu certo, tem que botar mesmo os namespaces
         #
-        namespaces = {'nfe': NAMESPACE_NFE, 'sig': NAMESPACE_SIG, 'nfse': NAMESPACE_NFSE, 'cte': NAMESPACE_CTE}
+        namespaces = {
+            'nfe': NAMESPACE_NFE,
+            'sig': NAMESPACE_SIG,
+            'nfse': NAMESPACE_NFSE,
+            'cte': NAMESPACE_CTE,
+            'mdfe': NAMESPACE_MDFE,
+        }
 
         if ns is not None:
             namespaces['res'] = ns
@@ -158,6 +165,8 @@ class NohXML(object):
             sigla_ns = 'nfe'
         elif '//CTe' in tag or ns == NAMESPACE_CTE:
             sigla_ns = 'cte'
+        elif '//MDFe' in tag or ns == NAMESPACE_MDFE:
+            sigla_ns = 'mdfe'
 
         if not tag.startswith('//*/res'):
             tag = self._preenche_namespace(tag, sigla_ns)

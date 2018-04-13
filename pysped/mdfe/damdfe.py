@@ -39,18 +39,65 @@
 # <http://www.gnu.org/licenses/>
 #
 
-import sys
-import locale
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
 
-if sys.version_info.major == 2:
-    locale.setlocale(locale.LC_ALL, b'pt_BR.UTF-8')
-    locale.setlocale(locale.LC_COLLATE, b'pt_BR.UTF-8')
-else:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-    locale.setlocale(locale.LC_COLLATE, 'pt_BR.UTF-8')
+import os
+import base64
+from io import BytesIO
+from py3o.template import Template
+import sh
 
-from pysped.nfe.leiaute import *
-from pysped.cte.leiaute import *
-from pysped.mdfe.leiaute import *
-from pysped.nfe.processador_nfe import ProcessadorNFe, Certificado
-from pysped.nfse.processador_nfse import ProcessadorNFSe
+from ..nfe.danfe import DANFE
+from .leiaute import ProtMDFe_300
+from .leiaute import ProcEventoCancMDFe_300, ProcEventoEncMDFe_300
+
+
+DIRNAME = os.path.dirname(__file__)
+
+CACHE_LOGO = {}
+
+
+class DAMDFE(DANFE):
+    def __init__(self):
+        super(DAMDFE, self).__init__()
+        self.MDFe              = None
+        self.protMDFe          = None
+        self.procEventoEncMDFe = None
+        self.procEventoCancMDFe = None
+
+    def reset(self):
+        super(DAMDFE, self).reset()
+        self.protMDFe = ProtMDFe_300()
+        self.procEventoEncMDFe = ProcEventoEncMDFe_300()
+        self.procEventoCancMDFe = ProcEventoCancMDFe_300()
+
+    def gerar_damdfe(self):
+        if self.MDFe is None:
+            raise ValueError('Não é possível gerar um DAMDFE sem a informação de um MDF-e')
+
+        if self.protMDFe is None:
+            self.reset()
+
+        #
+        # Prepara o queryset para impressão
+        #
+        self.MDFe.site = self.site
+
+        if self.template:
+            if isinstance(self.template, (file, BytesIO)):
+                template = self.template
+            else:
+                template = open(self.template, 'rb')
+
+        else:
+            template = open(os.path.join(DIRNAME, 'damdfe_a4_retrato.odt'), 'rb')
+
+        self._gera_pdf(template)
+
+        if self.salvar_arquivo:
+            nome_arq = self.caminho + self.MDFe.chave + '.pdf'
+            open(nome_arq, 'wb').write(self.conteudo_pdf)
+
+    def gerar_danfe(self):
+        self.gerar_damdfe()

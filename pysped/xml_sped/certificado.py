@@ -366,6 +366,12 @@ class Certificado(object):
             #doctype = '<!DOCTYPE evento [<!ATTLIST infEvento Id ID #IMPLIED>]>'
 
         #
+        # XML do MDF-e
+        #
+        elif '</MDFe>' in xml:
+            doctype = '<!DOCTYPE MDFe [<!ATTLIST infNFe Id ID #IMPLIED>]>'
+
+        #
         # XML da NFS-e
         #
         elif 'ReqEnvioLoteRPS' in xml:

@@ -80,7 +80,7 @@ class DANFE(object):
         self.template         = ''
 
     def reset(self):
-        self.protNFe     = ProtNFe_400()
+        self.protNFe = ProtNFe_400()
         self.procEventoCancNFe = ProcEventoCancNFe_100()
         self.procEventoCCe = ProcEventoCCe_100()
         self.conteudo_pdf = None
@@ -97,7 +97,7 @@ class DANFE(object):
         nome_arq_pdf = self.caminho_temporario + nome_arq_temp + '.pdf'
 
         t = Template(nome_arq_template, nome_arq_odt)
-        t.render({'danfe': self})
+        t.render({'danfe': self, 'danfse': self, 'dance': self, 'darl': self, 'damdfe': self})
 
         lo = sh.libreoffice('--headless', '--invisible', '--convert-to', 'pdf', '--outdir', '/tmp', nome_arq_odt, _bg=True)
         lo.wait()

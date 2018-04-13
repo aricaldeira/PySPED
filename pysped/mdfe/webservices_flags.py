@@ -39,18 +39,16 @@
 # <http://www.gnu.org/licenses/>
 #
 
-import sys
-import locale
+from __future__ import division, print_function, unicode_literals
+from ..nfe.webservices_flags import UF_CODIGO, CODIGO_UF
 
-if sys.version_info.major == 2:
-    locale.setlocale(locale.LC_ALL, b'pt_BR.UTF-8')
-    locale.setlocale(locale.LC_COLLATE, b'pt_BR.UTF-8')
-else:
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-    locale.setlocale(locale.LC_COLLATE, 'pt_BR.UTF-8')
 
-from pysped.nfe.leiaute import *
-from pysped.cte.leiaute import *
-from pysped.mdfe.leiaute import *
-from pysped.nfe.processador_nfe import ProcessadorNFe, Certificado
-from pysped.nfse.processador_nfse import ProcessadorNFSe
+WS_MDFE_AUTORIZACAO = 0
+WS_MDFE_CONSULTA_AUTORIZACAO = 1
+WS_MDFE_RECEPCAO_EVENTO = 2
+WS_MDFE_CONSULTA = 3
+WS_MDFE_SITUACAO = 4
+WS_MDFE_CONSULTA_NAO_ENCERRADO = 5
+
+MDFE_AMBIENTE_PRODUCAO = 1
+MDFE_AMBIENTE_HOMOLOGACAO = 2

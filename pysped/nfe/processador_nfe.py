@@ -227,7 +227,7 @@ class ProcessadorNFe(object):
         self._soap_envio   = None
         self._soap_retorno = None
 
-    def _conectar_servico(self, servico, envio, resposta, ambiente=None, somente_ambiente_nacional=False):
+    def _configura_servico(self, servico, envio, resposta, ambiente=None, somente_ambiente_nacional=False):
         if ambiente is None:
             ambiente = self.ambiente
 
@@ -359,6 +359,10 @@ class ProcessadorNFe(object):
         self._soap_retorno.webservice = self._soap_envio.webservice
         self._soap_retorno.metodo     = self._soap_envio.metodo
         self._soap_retorno.resposta   = resposta
+
+    def _conectar_servico(self, servico, envio, resposta, ambiente=None, somente_ambiente_nacional=False):
+        self._configura_servico(servico, envio, resposta, ambiente=ambiente,
+                                somente_ambiente_nacional=somente_ambiente_nacional)
 
         #try:
         self.certificado.prepara_certificado_arquivo_pfx()

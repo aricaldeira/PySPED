@@ -393,7 +393,7 @@ UFMG = {
 
 UFPR = {
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'              : 'nfe.fazenda.pr.gov.br',
+        'servidor'              : 'nfe.sefa.pr.gov.br',
         WS_NFE_INUTILIZACAO     : 'nfe/NFeInutilizacao4',
         WS_NFE_CONSULTA         : 'nfe/NFeConsultaProtocolo4',
         WS_NFE_SITUACAO         : 'nfe/NFeStatusServico4',
@@ -403,7 +403,7 @@ UFPR = {
         WS_NFE_CONSULTA_AUTORIZACAO  : 'nfe/NFeRetAutorizacao4',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'              : 'homologacao.nfe.fazenda.pr.gov.br',
+        'servidor'              : 'homologacao.nfe.sefa.pr.gov.br',
         WS_NFE_INUTILIZACAO     : 'nfe/NFeInutilizacao4',
         WS_NFE_CONSULTA         : 'nfe/NFeConsultaProtocolo4',
         WS_NFE_SITUACAO         : 'nfe/NFeStatusServico4',
