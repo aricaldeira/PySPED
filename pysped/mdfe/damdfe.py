@@ -49,7 +49,7 @@ from py3o.template import Template
 import sh
 
 from ..nfe.danfe import DANFE
-from .leiaute import ProtMDFe_300
+from .leiaute import MDFe_300, ProtMDFe_300
 from .leiaute import ProcEventoCancMDFe_300, ProcEventoEncMDFe_300
 
 
@@ -61,10 +61,10 @@ CACHE_LOGO = {}
 class DAMDFE(DANFE):
     def __init__(self):
         super(DAMDFE, self).__init__()
-        self.MDFe              = None
-        self.protMDFe          = None
-        self.procEventoEncMDFe = None
-        self.procEventoCancMDFe = None
+        self.MDFe = MDFe_300()
+        self.protMDFe = ProtMDFe_300()
+        self.procEventoEncMDFe = ProcEventoEncMDFe_300()
+        self.procEventoCancMDFe = ProcEventoCancMDFe_300()
 
     def reset(self):
         super(DAMDFE, self).reset()

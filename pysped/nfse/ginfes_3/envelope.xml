@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prod="http://producao.ginfes.com.br">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <prod:RecepcionarLoteRpsV3>
+            <arg0>
+                <ns2:cabecalho versao="3" xmlns:ns2="http://www.ginfes.com.br/cabecalho_v03.xsd">
+                    <versaoDados>3</versaoDados>
+                </ns2:cabecalho>
+            </arg0>
+            <arg1>
+                ${ body }
+            </arg1>
+        </prod:RecepcionarLoteRpsV3>
+    </soapenv:Body>
+</soapenv:Envelope>

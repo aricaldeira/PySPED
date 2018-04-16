@@ -125,7 +125,7 @@ class RetEventoCancMDFe(RetEvento):
 class ProcEventoCancMDFe(ProcEvento):
     def __init__(self):
         super(ProcEventoCancMDFe, self).__init__()
-        self.evento = EventoCancMDFe()
-        self.retEvento = RetEventoCancMDFe()
+        self.eventoMDFe = EventoCancMDFe()
+        self.retEventoMDFe = RetEventoCancMDFe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'procEventoCancMDFe_v3.00.xsd'

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ns2:EnviarLoteRpsEnvio xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:ns2="http://www.ginfes.com.br/servico_enviar_lote_rps_envio_v03.xsd" xmlns="http://www.ginfes.com.br/tipos_v03.xsd">
+    <ns2:LoteRps Id="">
+        <NumeroLote></NumeroLote>
+        <Cnpj>${ NFe.infNFe.emit.CNPJ.valor }</Cnpj>
+        <InscricaoMunicipal>${ NFe.infNFe.emit.IM.valor }</InscricaoMunicipal>
+        <QuantidadeRps>1</QuantidadeRps>
+        <ListaRps>
+            <xi:include href="rps.xml" />
+        </ListaRps>
+    </ns2:LoteRps>
+    <xi:include href="signature.xml" />
+</ns2:EnviarLoteRpsEnvio>

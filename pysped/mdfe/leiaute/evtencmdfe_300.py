@@ -126,7 +126,7 @@ class RetEventoEncMDFe(RetEvento):
 class ProcEventoEncMDFe(ProcEvento):
     def __init__(self):
         super(ProcEventoEncMDFe, self).__init__()
-        self.evento = EventoEncMDFe()
-        self.retEvento = RetEventoEncMDFe()
+        self.eventoMDFe = EventoEncMDFe()
+        self.retEventoMDFe = RetEventoEncMDFe()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'procEventoEncMDFe_v3.00.xsd'
