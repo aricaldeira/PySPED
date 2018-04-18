@@ -1,4 +1,48 @@
 # -*- coding: utf-8 -*-
+#
+# PySPED - Python libraries to deal with Brazil's SPED Project
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# PySPED - Bibliotecas Python para o
+#          SPED - Sistema Público de Escrituração Digital
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
+#
+# Este programa é um software livre: você pode redistribuir e/ou modificar
+# este programa sob os termos da licença GNU Affero General Public License,
+# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# com sua opção, qualquer versão posterior.
+#
+# Este programa é distribuido na esperança de que venha a ser útil,
+# porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
+# COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
+# GNU Affero General Public License para mais detalhes.
+#
+# Você deve ter recebido uma cópia da GNU Affero General Public License
+# juntamente com este programa. Caso esse não seja o caso, acesse:
+# <http://www.gnu.org/licenses/>
+#
+
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
 
 from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
@@ -12,7 +56,7 @@ DIRNAME = os.path.dirname(__file__)
 class DetEvento(XMLNFe):
     def __init__(self):
         super(DetEvento, self).__init__()
-        self.versaoEvento = TagDecimal(nome=u'detEvento', propriedade=u'versaoEvento', namespace=NAMESPACE_CTE, valor=u'3.00', raiz=u'/')
+        self.versaoEvento = TagDecimal(nome='detEvento', propriedade='versaoEvento', namespace=NAMESPACE_CTE, valor='3.00', raiz='/')
         self.evento = None
 
     def get_xml(self):
@@ -21,7 +65,7 @@ class DetEvento(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += self.versaoEvento.xml
         xml += self.evento.xml
-        xml += u'</detEvento>'
+        xml += '</detEvento>'
 
         return xml
 
@@ -53,21 +97,21 @@ class DetEvento(XMLNFe):
 class InfEvento(XMLNFe):
     def __init__(self):
         super(InfEvento, self).__init__()
-        self.Id    = TagCaracter(nome=u'infEvento', codigo=u'EP04', tamanho=[54, 54]    , raiz=u'//eventoCTe', propriedade=u'Id')
-        self.cOrgao  = TagInteiro(nome=u'cOrgao'      , codigo=u'EP05', tamanho=[2, 2,2]   , raiz=u'//eventoCTe/infEvento', valor=91)
-        self.tpAmb = TagInteiro(nome=u'tpAmb'   , codigo=u'EP06', tamanho=[ 1,  1, 1] , raiz=u'//eventoCTe/infEvento', valor=2)
-        self.CNPJ    = TagCaracter(nome=u'CNPJ'   , codigo=u'EP07' , tamanho=[ 0, 14]   , raiz=u'//eventoCTe/infEvento')
-        self.chCTe = TagCaracter(nome=u'chCTe'   , codigo=u'EP08', tamanho=[44, 44, 44], raiz=u'//eventoCTe/infEvento')
-        self.dhEvento = TagCaracter(nome=u'dhEvento', codigo=u'EP09' , tamanho=[ 0, 30], raiz=u'//eventoCTe/infEvento')
-        self.tpEvento = TagCaracter(nome=u'tpEvento'   , codigo=u'EP10', tamanho=[6, 6, 6], raiz=u'//eventoCTe/infEvento',valor=u'110111')
-        self.nSeqEvento = TagInteiro(nome=u'nSeqEvento'   , codigo=u'EP11', tamanho=[1,2], raiz=u'//eventoCTe/infEvento', valor=1)
+        self.Id    = TagCaracter(nome='infEvento', codigo='EP04', tamanho=[54, 54]    , raiz='//eventoCTe', propriedade='Id')
+        self.cOrgao  = TagInteiro(nome='cOrgao'      , codigo='EP05', tamanho=[2, 2,2]   , raiz='//eventoCTe/infEvento', valor=91)
+        self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='EP06', tamanho=[ 1,  1, 1] , raiz='//eventoCTe/infEvento', valor=2)
+        self.CNPJ    = TagCaracter(nome='CNPJ'   , codigo='EP07' , tamanho=[ 0, 14]   , raiz='//eventoCTe/infEvento')
+        self.chCTe = TagCaracter(nome='chCTe'   , codigo='EP08', tamanho=[44, 44, 44], raiz='//eventoCTe/infEvento')
+        self.dhEvento = TagCaracter(nome='dhEvento', codigo='EP09' , tamanho=[ 0, 30], raiz='//eventoCTe/infEvento')
+        self.tpEvento = TagCaracter(nome='tpEvento'   , codigo='EP10', tamanho=[6, 6, 6], raiz='//eventoCTe/infEvento',valor='110111')
+        self.nSeqEvento = TagInteiro(nome='nSeqEvento'   , codigo='EP11', tamanho=[1,2], raiz='//eventoCTe/infEvento', valor=1)
         self.detEvento = DetEvento()
 
     def get_xml(self):
 
         xml = XMLNFe.get_xml(self)
 
-        self.Id.valor = u'ID' + self.tpEvento.valor + self.chCTe.valor +  ("%02d" % self.nSeqEvento.valor)
+        self.Id.valor = 'ID' + self.tpEvento.valor + self.chCTe.valor +  ("%02d" % self.nSeqEvento.valor)
 
         xml += self.Id.xml
         xml += self.cOrgao.xml
@@ -78,7 +122,7 @@ class InfEvento(XMLNFe):
         xml += self.tpEvento.xml
         xml += self.nSeqEvento.xml
         xml += self.detEvento.xml
-        xml += u'</infEvento>'
+        xml += '</infEvento>'
         return xml
 
     def set_xml(self, arquivo):
@@ -103,11 +147,11 @@ class InfEvento(XMLNFe):
 class EventoCTe(XMLNFe):
     def __init__(self):
         super(EventoCTe, self).__init__()
-        self.versao = TagDecimal(nome=u'eventoCTe', propriedade=u'versao', namespace=NAMESPACE_CTE, valor=u'3.00', raiz=u'/')
+        self.versao = TagDecimal(nome='eventoCTe', propriedade='versao', namespace=NAMESPACE_CTE, valor='3.00', raiz='/')
         self.infEvento = InfEvento()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'eventoCTe_v3.00.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'eventoCTe_v3.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -117,9 +161,9 @@ class EventoCTe(XMLNFe):
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = u'#' + self.infEvento.Id.valor
+        self.Signature.URI = '#' + self.infEvento.Id.valor
         xml += self.Signature.xml
-        xml += u'</eventoCTe>'
+        xml += '</eventoCTe>'
 
         return xml
 
@@ -135,16 +179,16 @@ class EventoCTe(XMLNFe):
 class InfEventoRet(XMLNFe):
     def __init__(self):
         super(InfEventoRet, self).__init__()
-        self.Id          = TagCaracter(nome=u'infEvento', codigo=u'ER04', tamanho=[54, 54]    , raiz=u'//infEvento', propriedade=u'Id')
-        self.tpAmb       = TagInteiro(nome=u'tpAmb'   , codigo=u'ER05', tamanho=[ 1,  1, 1] , raiz=u'//retEventoCTe/infEvento', valor=2)
-        self.verAplic    = TagCaracter(nome=u'verAplic'      , codigo=u'ER06', tamanho=[1, 20]   , raiz=u'//retEventoCTe/infEvento')
-        self.cOrgao      = TagInteiro(nome=u'cOrgao'      , codigo=u'ER07', tamanho=[2, 2,2]   , raiz=u'//retEventoCTe/infEvento')
+        self.Id          = TagCaracter(nome='infEvento', codigo='ER04', tamanho=[54, 54]    , raiz='//infEvento', propriedade='Id')
+        self.tpAmb       = TagInteiro(nome='tpAmb'   , codigo='ER05', tamanho=[ 1,  1, 1] , raiz='//retEventoCTe/infEvento', valor=2)
+        self.verAplic    = TagCaracter(nome='verAplic'      , codigo='ER06', tamanho=[1, 20]   , raiz='//retEventoCTe/infEvento')
+        self.cOrgao      = TagInteiro(nome='cOrgao'      , codigo='ER07', tamanho=[2, 2,2]   , raiz='//retEventoCTe/infEvento')
         self.cStat       = TagCaracter(nome='cStat'   , codigo='ER08', tamanho=[3, 3, 3]   , raiz='//retEventoCTe/infEvento')
         self.xMotivo     = TagCaracter(nome='xMotivo' , codigo='ER09', tamanho=[1, 255]    , raiz='//retEventoCTe/infEvento')
-        self.chCTe       = TagCaracter(nome=u'chCTe'   , codigo=u'ER10', tamanho=[44, 44, 44], raiz=u'//retEventoCTe/infEvento', obrigatorio=False)
-        self.tpEvento    = TagCaracter(nome=u'tpEvento'   , codigo=u'ER11', tamanho=[6, 6, 6], raiz=u'//retEventoCTe/infEvento', obrigatorio=False)
+        self.chCTe       = TagCaracter(nome='chCTe'   , codigo='ER10', tamanho=[44, 44, 44], raiz='//retEventoCTe/infEvento', obrigatorio=False)
+        self.tpEvento    = TagCaracter(nome='tpEvento'   , codigo='ER11', tamanho=[6, 6, 6], raiz='//retEventoCTe/infEvento', obrigatorio=False)
         self.xEvento     = TagCaracter(nome='xEvento'    , codigo='ER12', tamanho=[ 4,  60], raiz='//retEventoCTe/infEvento', obrigatorio=False)
-        self.nSeqEvento  = TagInteiro(nome=u'nSeqEvento'   , codigo=u'ER13', tamanho=[1,2], raiz=u'//retEventoCTe/infEvento', obrigatorio=False)
+        self.nSeqEvento  = TagInteiro(nome='nSeqEvento'   , codigo='ER13', tamanho=[1,2], raiz='//retEventoCTe/infEvento', obrigatorio=False)
         self.dhRegEvento = TagDataHoraUTC(nome='dhRegEvento', codigo='ER14', raiz='//retEventoCTe/infEvento', obrigatorio=False)
         self.nProt       = TagCaracter(nome='nProt', codigo='ER15', tamanho=[15, 15, 15], raiz='//retEventoCTe/infEvento', obrigatorio=False)
 
@@ -167,7 +211,7 @@ class InfEventoRet(XMLNFe):
         xml += self.nSeqEvento.xml
         xml += self.dhRegEvento.xml
         xml += self.nProt.xml
-        xml += u'</infEvento>'
+        xml += '</infEvento>'
         return xml
 
     def set_xml(self, arquivo):
@@ -192,11 +236,11 @@ class InfEventoRet(XMLNFe):
 class RetEventoCTe(XMLNFe):
     def __init__(self):
         super(RetEventoCTe, self).__init__()
-        self.versao = TagDecimal(nome=u'retEventoCTe', propriedade=u'versao', namespace=NAMESPACE_CTE, valor=u'3.00', raiz=u'/')
+        self.versao = TagDecimal(nome='retEventoCTe', propriedade='versao', namespace=NAMESPACE_CTE, valor='3.00', raiz='/')
         self.infEvento = InfEventoRet()
         self.Signature = Signature()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'retEventoCTe_v3.00.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'retEventoCTe_v3.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -206,9 +250,9 @@ class RetEventoCTe(XMLNFe):
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = u'#' + self.infEvento.Id.valor
+        self.Signature.URI = '#' + self.infEvento.Id.valor
         xml += self.Signature.xml
-        xml += u'</retEventoCTe>'
+        xml += '</retEventoCTe>'
 
         return xml
 
@@ -225,12 +269,12 @@ class RetEventoCTe(XMLNFe):
 class ProcEventoCTe(XMLNFe):
     def __init__(self):
         super(ProcEventoCTe, self).__init__()
-        self.versao = TagDecimal(nome=u'procEventoCTe', propriedade=u'versao', namespace=NAMESPACE_CTE, valor=u'3.00', raiz=u'/')
+        self.versao = TagDecimal(nome='procEventoCTe', propriedade='versao', namespace=NAMESPACE_CTE, valor='3.00', raiz='/')
         self.ipTransmissor = TagCaracter(nome='ipTransmissor', codigo='ZR03', tamanho=[0, 15]   , raiz='/', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
         self.eventoCTe = EventoCTe()
         self.retEventoCTe = RetEventoCTe()
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'procEventoCTe_v3.00.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'procEventoCTe_v3.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -241,7 +285,7 @@ class ProcEventoCTe(XMLNFe):
             xml += '<procEventoCTe versao="'+ self.versao.valor +'" ipTransmissor="'+ self.ipTransmissor.valor +'">'
         xml += self.eventoCTe.xml
         xml += self.retEventoCTe.xml
-        xml += u'</procEventoCTe>'
+        xml += '</procEventoCTe>'
 
         return xml
 

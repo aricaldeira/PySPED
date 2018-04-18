@@ -1,4 +1,48 @@
 # -*- coding: utf-8 -*-
+#
+# PySPED - Python libraries to deal with Brazil's SPED Project
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# PySPED - Bibliotecas Python para o
+#          SPED - Sistema Público de Escrituração Digital
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
+#
+# Este programa é um software livre: você pode redistribuir e/ou modificar
+# este programa sob os termos da licença GNU Affero General Public License,
+# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# com sua opção, qualquer versão posterior.
+#
+# Este programa é distribuido na esperança de que venha a ser útil,
+# porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
+# COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
+# GNU Affero General Public License para mais detalhes.
+#
+# Você deve ter recebido uma cópia da GNU Affero General Public License
+# juntamente com este programa. Caso esse não seja o caso, acesse:
+# <http://www.gnu.org/licenses/>
+#
+
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
 
 from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
@@ -35,8 +79,8 @@ class AutXML(XMLNFe):
 class InfCTeAnu(XMLNFe):
     def __init__(self):
         super(InfCTeAnu, self).__init__()
-        self.chCte = TagCaracter(nome='chCte', tamanho=[ 44, 44], raiz='//infCTeAnu', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
-        self.dEmi  = TagData(nome='dEmi', raiz='//infCTeAnu', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.chCte = TagCaracter(nome='chCte', tamanho=[ 44, 44], raiz='//infCTeAn', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.dEmi  = TagData(nome='dEmi', raiz='//infCTeAn', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
 
     def get_xml(self):
         if not (self.chCte.valor or self.dEmi.valor):
@@ -215,7 +259,7 @@ class InfCTeSub(XMLNFe):
     def __init__(self):
         super(InfCTeSub, self).__init__()
         self.chCte  = TagCaracter(nome='chCte', tamanho=[44, 44], raiz='//infCteSub', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
-        self.refCteAnu = TagCaracter(nome='refCteAnu', tamanho=[44, 44], raiz='//infCteSub', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
+        self.refCteAnu = TagCaracter(nome='refCteAn', tamanho=[44, 44], raiz='//infCteSub', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
         self.tomaICMS  = TomaICMS()
         #self.indAlteraToma = TagInteiro(nome='indAlteraToma', tamanho=[0, 1], raiz='//infCteSub', namespace=NAMESPACE_CTE, namespace_obrigatorio=False, obrigatorio=False)
 
@@ -373,7 +417,7 @@ class InfModal(XMLNFe):
             return ''
 
         xml = XMLNFe.get_xml(self)
-        xml += u'<infModal versaoModal="' + unicode(self.versaoModal.valor) + '">'
+        xml += '<infModal versaoModal="' + str(self.versaoModal.valor) + '">'
         xml += self.modal.xml
         xml += '</infModal>'
         return xml
@@ -569,7 +613,7 @@ class InfOutros(XMLNFe):
         xml += self.nDoc.xml
         xml += self.dEmi.xml
         xml += self.vDocFisc.xml
-        xml += self.dPred.xml
+        xml += self.dPrev.xml
 
         for c in self.infUnidCarga:
             xml += c.xml
@@ -586,7 +630,7 @@ class InfOutros(XMLNFe):
             self.nDoc.xml     = arquivo
             self.dEmi.xml     = arquivo
             self.vDocFisc.xml     = arquivo
-            self.dPred.xml   = arquivo
+            self.dPrev.xml   = arquivo
             self.infUnidCarga  = self.le_grupo('//CTe/infCte/infCTeNorm/infDoc/infOutros/infUnidCarga', InfUnidCarga, sigla_ns='cte')
             self.infUnidTransp = self.le_grupo('//CTe/infCte/infCTeNorm/infDoc/infOutros/infUnidTransp', InfUnidTransp, sigla_ns='cte')
 
@@ -610,7 +654,7 @@ class InfNFe(XMLNFe):
         xml += '<infNFe>'
         xml += self.chave.xml
         xml += self.PIN.xml
-        xml += self.dPred.xml
+        xml += self.dPrev.xml
         for c in self.infUnidCarga:
             xml += c.xml
         for t in self.infUnidTransp:
@@ -623,7 +667,7 @@ class InfNFe(XMLNFe):
         if self._le_xml(arquivo):
             self.chave.xml   = arquivo
             self.PIN.xml     = arquivo
-            self.dPred.xml   = arquivo
+            self.dPrev.xml   = arquivo
             self.infUnidCarga  = self.le_grupo('//CTe/infCte/infCTeNorm/infDoc/infNFe/infUnidCarga', InfUnidCarga, sigla_ns='cte')
             self.infUnidTransp = self.le_grupo('//CTe/infCte/infCTeNorm/infDoc/infNFe/infUnidTransp', InfUnidTransp, sigla_ns='cte')
 
@@ -2362,7 +2406,7 @@ class InfCTe(XMLNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += u'<infCte versao="' + unicode(self.versao.valor) + '" Id="' + self.Id.valor + '">'
+        xml += '<infCte versao="' + str(self.versao.valor) + '" Id="' + self.Id.valor + '">'
         xml += self.ide.xml
         xml += self.compl.xml
         xml += self.emit.xml
@@ -2446,21 +2490,21 @@ class CTe(XMLNFe):
         self.infCte = InfCTe()
         self.Signature = Signature()
 
-        self.caminho_esquema = os.path.join(DIRNAME, u'schema/', ESQUEMA_ATUAL + u'/')
-        self.arquivo_esquema = u'cte_v3.00.xsd'
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'cte_v3.00.xsd'
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
-        xml += u'<CTe xmlns="' + NAMESPACE_CTE + u'">'
+        xml += '<CTe xmlns="' + NAMESPACE_CTE + '">'
         xml += self.infCte.xml
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = u'#' + self.infCte.Id.valor
+        self.Signature.URI = '#' + self.infCte.Id.valor
 
         xml += self.Signature.xml
-        xml += u'</CTe>'
+        xml += '</CTe>'
         return xml
 
     def set_xml(self, arquivo):
@@ -2488,18 +2532,18 @@ class CTe(XMLNFe):
         return digito
 
     def gera_nova_chave(self):
-        chave = unicode(self.infCte.ide.cUF.valor).zfill(2)
-        chave += unicode(self.infCte.ide.dhEmi.valor.strftime('%y%m')).zfill(4)
-        chave += unicode(self.infCte.emit.CNPJ.valor).zfill(14)
-        chave += unicode(self.infCte.ide.mod.valor).zfill(2)
-        chave += unicode(self.infCte.ide.serie.valor).zfill(3)
-        chave += unicode(self.infCte.ide.nCT.valor).zfill(9)
-        chave += unicode(self.infCte.ide.tpEmis.valor).zfill(1)
+        chave = str(self.infCte.ide.cUF.valor).zfill(2)
+        chave += str(self.infCte.ide.dhEmi.valor.strftime('%y%m')).zfill(4)
+        chave += str(self.infCte.emit.CNPJ.valor).zfill(14)
+        chave += str(self.infCte.ide.mod.valor).zfill(2)
+        chave += str(self.infCte.ide.serie.valor).zfill(3)
+        chave += str(self.infCte.ide.nCT.valor).zfill(9)
+        chave += str(self.infCte.ide.tpEmis.valor).zfill(1)
 
         #
         # O código numério é um número aleatório
         #
-        #chave += unicode(random.randint(0, 99999999)).strip().rjust(8, '0')
+        #chave += str(random.randint(0, 99999999)).strip().rjust(8, '0')
 
         #
         # Mas, por segurança, é preferível que esse número não seja aleatório de todo
@@ -2508,7 +2552,7 @@ class CTe(XMLNFe):
         for c in chave:
             soma += int(c) ** 3 ** 2
 
-        codigo = unicode(soma)
+        codigo = str(soma)
         if len(codigo) > 8:
             codigo = codigo[-8:]
         else:
@@ -2519,7 +2563,7 @@ class CTe(XMLNFe):
         #
         # Define na estrutura do XML o campo cCT
         #
-        #self.infCte.ide.cCT.valor = unicode(self.infCte.ide.tpEmis.valor).zfill(1) + codigo
+        #self.infCte.ide.cCT.valor = str(self.infCte.ide.tpEmis.valor).zfill(1) + codigo
         self.infCte.ide.cCT.valor = chave[-8:]
 
         #
@@ -2532,7 +2576,7 @@ class CTe(XMLNFe):
         #
         self.infCte.ide.cDV.valor = digito
 
-        chave += unicode(digito)
+        chave += str(digito)
         self.chave = chave
 
         #
@@ -2542,15 +2586,15 @@ class CTe(XMLNFe):
 
     def monta_chave(self):
         self.gera_nova_chave()
-        chave = unicode(self.infCte.ide.cUF.valor).zfill(2)
-        chave += unicode(self.infCte.ide.dhEmi.valor.strftime('%y%m')).zfill(4)
-        chave += unicode(self.infCte.emit.CNPJ.valor).zfill(14)
-        chave += unicode(self.infCte.ide.mod.valor).zfill(2)
-        chave += unicode(self.infCte.ide.serie.valor).zfill(3)
-        chave += unicode(self.infCte.ide.nCT.valor).zfill(9)
-        chave += unicode(self.infCte.ide.tpEmis.valor).zfill(1)
-        chave += unicode(self.infCte.ide.cCT.valor).zfill(8)
-        chave += unicode(self.infCte.ide.cDV.valor).zfill(1)
+        chave = str(self.infCte.ide.cUF.valor).zfill(2)
+        chave += str(self.infCte.ide.dhEmi.valor.strftime('%y%m')).zfill(4)
+        chave += str(self.infCte.emit.CNPJ.valor).zfill(14)
+        chave += str(self.infCte.ide.mod.valor).zfill(2)
+        chave += str(self.infCte.ide.serie.valor).zfill(3)
+        chave += str(self.infCte.ide.nCT.valor).zfill(9)
+        chave += str(self.infCte.ide.tpEmis.valor).zfill(1)
+        chave += str(self.infCte.ide.cCT.valor).zfill(8)
+        chave += str(self.infCte.ide.cDV.valor).zfill(1)
         self.chave = chave
 
 
