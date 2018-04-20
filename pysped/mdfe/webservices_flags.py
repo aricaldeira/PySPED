@@ -40,6 +40,7 @@
 #
 
 from __future__ import division, print_function, unicode_literals
+
 from ..nfe.webservices_flags import UF_CODIGO, CODIGO_UF
 
 

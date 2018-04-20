@@ -40,3 +40,4 @@
 #
 
 from .processador_nfse import ProcessadorNFSe
+from .danfse import DANFSE

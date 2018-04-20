@@ -47,6 +47,11 @@ from builtins import str
 from pysped.xml_sped import *
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_4 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import nfe_310
+from pysped.nfe.webservices_nfce_4 import ESTADO_QRCODE, ESTADO_CONSULTA_NFCE
+from pysped.nfe.webservices_flags import CODIGO_UF
+import binascii
+import hashlib
+
 import os
 
 DIRNAME = os.path.dirname(__file__)
@@ -1486,6 +1491,54 @@ class NFe(nfe_310.NFe):
             self.Signature.xml  = self._le_noh('//NFe/sig:Signature')
 
     xml = property(get_xml, set_xml)
+
+    def monta_qrcode(self):
+        self.monta_chave()
+
+        qrcode = 'chNFe=' + self.chave
+        qrcode += '&nVersao=100'
+        qrcode += '&tpAmb=' + self.infNFe.ide.tpAmb._valor_string
+
+        if self.infNFe.dest.CNPJ.valor:
+            qrcode += '&cDest=' + self.infNFe.dest.CNPJ._valor_string
+
+        elif self.infNFe.dest.CPF.valor:
+            qrcode += '&cDest=' + self.infNFe.dest.CPF._valor_string
+
+        elif self.infNFe.dest.idEstrangeiro.valor:
+            qrcode += '&cDest=' + self.infNFe.dest.idEstrangeiro._valor_string
+
+        #
+        # SP, PR e MS
+        #
+        if self.infNFe.ide.cUF.valor not in (35, 41, 50):
+            qrcode += '&dhEmi=' + binascii.hexlify(self.infNFe.ide.dhEmi._valor_string)
+        else:
+            qrcode += '&dhEmi=' + binascii.hexlify(self.infNFe.ide.dhEmi._valor_string).upper()
+
+        qrcode += '&vNF=' + self.infNFe.total.ICMSTot.vNF._valor_string
+        qrcode += '&vICMS=' + self.infNFe.total.ICMSTot.vICMS._valor_string
+
+        if self.infNFe.ide.cUF.valor not in (35, 41, 50):
+            qrcode += '&digVal=' + binascii.hexlify(self.Signature.DigestValue)
+        else:
+            qrcode += '&digVal=' + binascii.hexlify(self.Signature.DigestValue).upper()
+
+        qrcode += '&cIdToken=' + str(self.infNFe.emit.csc.id).zfill(6)
+
+        pre_qrcode = qrcode + self.infNFe.emit.csc.codigo.ljust(36).upper()
+
+        qrcode += '&cHashQRCode=' + hashlib.sha1(pre_qrcode).hexdigest().upper()
+
+        self.qrcode = qrcode
+
+        qrcode = ESTADO_QRCODE[CODIGO_UF[self.infNFe.ide.cUF.valor]][self.infNFe.ide.tpAmb.valor] + '?' + qrcode
+
+        self.infNFeSupl.qrCode.valor = qrcode
+
+    @property
+    def url_consulta(self):
+        return ESTADO_CONSULTA_NFCE[CODIGO_UF[self.infNFe.ide.cUF.valor]][self.infNFe.ide.tpAmb.valor]
 
 
 class NFCe(NFe):

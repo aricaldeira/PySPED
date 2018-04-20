@@ -59,7 +59,7 @@ if sys.version_info.major == 2:
 else:
     from http.client import HTTPSConnection, HTTPConnection
 
-from ..nfe.danfe.danfse import DANFSE
+from .danfse import DANFSE
 
 import pybrasil
 

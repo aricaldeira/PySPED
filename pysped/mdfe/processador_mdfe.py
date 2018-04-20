@@ -53,8 +53,7 @@ from io import open
 from ..nfe.processador_nfe import ProcessadorNFe, ProcessoNFe as ProcessoMDFe
 from .damdfe import DAMDFE
 
-from .webservices_flags import UF_CODIGO, WS_MDFE_AUTORIZACAO, WS_MDFE_CONSULTA_AUTORIZACAO, WS_MDFE_RECEPCAO_EVENTO, \
-    WS_MDFE_CONSULTA, WS_MDFE_SITUACAO, WS_MDFE_CONSULTA_NAO_ENCERRADO
+from .webservices_flags import *
 from . import webservices_3
 
 from .leiaute import SOAPEnvio_200, SOAPRetorno_200

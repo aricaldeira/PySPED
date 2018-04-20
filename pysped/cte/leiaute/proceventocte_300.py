@@ -56,7 +56,7 @@ DIRNAME = os.path.dirname(__file__)
 class DetEvento(XMLNFe):
     def __init__(self):
         super(DetEvento, self).__init__()
-        self.versaoEvento = TagDecimal(nome='detEvento', propriedade='versaoEvento', namespace=NAMESPACE_CTE, valor='3.00', raiz='/')
+        self.versaoEvento = TagDecimal(nome='detEvento', propriedade='versaoEvento', namespace=NAMESPACE_CTE, valor='3.00', raiz='/', namespace_obrigatorio=False)
         self.evento = None
 
     def get_xml(self):
@@ -97,14 +97,14 @@ class DetEvento(XMLNFe):
 class InfEvento(XMLNFe):
     def __init__(self):
         super(InfEvento, self).__init__()
-        self.Id    = TagCaracter(nome='infEvento', codigo='EP04', tamanho=[54, 54]    , raiz='//eventoCTe', propriedade='Id')
-        self.cOrgao  = TagInteiro(nome='cOrgao'      , codigo='EP05', tamanho=[2, 2,2]   , raiz='//eventoCTe/infEvento', valor=91)
-        self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='EP06', tamanho=[ 1,  1, 1] , raiz='//eventoCTe/infEvento', valor=2)
-        self.CNPJ    = TagCaracter(nome='CNPJ'   , codigo='EP07' , tamanho=[ 0, 14]   , raiz='//eventoCTe/infEvento')
-        self.chCTe = TagCaracter(nome='chCTe'   , codigo='EP08', tamanho=[44, 44, 44], raiz='//eventoCTe/infEvento')
-        self.dhEvento = TagCaracter(nome='dhEvento', codigo='EP09' , tamanho=[ 0, 30], raiz='//eventoCTe/infEvento')
-        self.tpEvento = TagCaracter(nome='tpEvento'   , codigo='EP10', tamanho=[6, 6, 6], raiz='//eventoCTe/infEvento',valor='110111')
-        self.nSeqEvento = TagInteiro(nome='nSeqEvento'   , codigo='EP11', tamanho=[1,2], raiz='//eventoCTe/infEvento', valor=1)
+        self.Id    = TagCaracter(nome='infEvento', codigo='EP04', tamanho=[54, 54]    , raiz='//eventoCTe', propriedade='Id', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.cOrgao  = TagInteiro(nome='cOrgao'      , codigo='EP05', tamanho=[2, 2,2]   , raiz='//eventoCTe/infEvento', valor=91, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.tpAmb = TagInteiro(nome='tpAmb'   , codigo='EP06', tamanho=[ 1,  1, 1] , raiz='//eventoCTe/infEvento', valor=2, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.CNPJ    = TagCaracter(nome='CNPJ'   , codigo='EP07' , tamanho=[ 0, 14]   , raiz='//eventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.chCTe = TagCaracter(nome='chCTe'   , codigo='EP08', tamanho=[44, 44, 44], raiz='//eventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.dhEvento = TagDataHoraUTC(nome='dhEvento', codigo='EP09' , tamanho=[ 0, 30], raiz='//eventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.tpEvento = TagCaracter(nome='tpEvento'   , codigo='EP10', tamanho=[6, 6, 6], raiz='//eventoCTe/infEvento',valor='110111', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.nSeqEvento = TagInteiro(nome='nSeqEvento'   , codigo='EP11', tamanho=[1,2,2], raiz='//eventoCTe/infEvento', valor=1, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.detEvento = DetEvento()
 
     def get_xml(self):
@@ -135,11 +135,7 @@ class InfEvento(XMLNFe):
             self.dhEvento.xml = arquivo
             self.tpEvento.xml = arquivo
             self.nSeqEvento.xml = arquivo
-            self.verEvento.xml = arquivo
-            self.versao.xml = arquivo
-            self.descEvento.xml = arquivo
-            self.nProt.xml = arquivo
-            self.xJust.xml = arquivo
+            self.detEvento.xml = arquivo
 
     xml = property(get_xml, set_xml)
 
@@ -155,7 +151,6 @@ class EventoCTe(XMLNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += ABERTURA
         xml += self.versao.xml
         xml += self.infEvento.xml
         #
@@ -179,18 +174,18 @@ class EventoCTe(XMLNFe):
 class InfEventoRet(XMLNFe):
     def __init__(self):
         super(InfEventoRet, self).__init__()
-        self.Id          = TagCaracter(nome='infEvento', codigo='ER04', tamanho=[54, 54]    , raiz='//infEvento', propriedade='Id')
-        self.tpAmb       = TagInteiro(nome='tpAmb'   , codigo='ER05', tamanho=[ 1,  1, 1] , raiz='//retEventoCTe/infEvento', valor=2)
-        self.verAplic    = TagCaracter(nome='verAplic'      , codigo='ER06', tamanho=[1, 20]   , raiz='//retEventoCTe/infEvento')
-        self.cOrgao      = TagInteiro(nome='cOrgao'      , codigo='ER07', tamanho=[2, 2,2]   , raiz='//retEventoCTe/infEvento')
-        self.cStat       = TagCaracter(nome='cStat'   , codigo='ER08', tamanho=[3, 3, 3]   , raiz='//retEventoCTe/infEvento')
-        self.xMotivo     = TagCaracter(nome='xMotivo' , codigo='ER09', tamanho=[1, 255]    , raiz='//retEventoCTe/infEvento')
-        self.chCTe       = TagCaracter(nome='chCTe'   , codigo='ER10', tamanho=[44, 44, 44], raiz='//retEventoCTe/infEvento', obrigatorio=False)
-        self.tpEvento    = TagCaracter(nome='tpEvento'   , codigo='ER11', tamanho=[6, 6, 6], raiz='//retEventoCTe/infEvento', obrigatorio=False)
-        self.xEvento     = TagCaracter(nome='xEvento'    , codigo='ER12', tamanho=[ 4,  60], raiz='//retEventoCTe/infEvento', obrigatorio=False)
-        self.nSeqEvento  = TagInteiro(nome='nSeqEvento'   , codigo='ER13', tamanho=[1,2], raiz='//retEventoCTe/infEvento', obrigatorio=False)
-        self.dhRegEvento = TagDataHoraUTC(nome='dhRegEvento', codigo='ER14', raiz='//retEventoCTe/infEvento', obrigatorio=False)
-        self.nProt       = TagCaracter(nome='nProt', codigo='ER15', tamanho=[15, 15, 15], raiz='//retEventoCTe/infEvento', obrigatorio=False)
+        self.Id          = TagCaracter(nome='infEvento', codigo='ER04', tamanho=[54, 54]    , raiz='//infEvento', propriedade='Id', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.tpAmb       = TagInteiro(nome='tpAmb'   , codigo='ER05', tamanho=[ 1,  1, 1] , raiz='//retEventoCTe/infEvento', valor=2, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.verAplic    = TagCaracter(nome='verAplic'      , codigo='ER06', tamanho=[1, 20]   , raiz='//retEventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.cOrgao      = TagInteiro(nome='cOrgao'      , codigo='ER07', tamanho=[2, 2,2]   , raiz='//retEventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.cStat       = TagCaracter(nome='cStat'   , codigo='ER08', tamanho=[3, 3, 3]   , raiz='//retEventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.xMotivo     = TagCaracter(nome='xMotivo' , codigo='ER09', tamanho=[1, 255]    , raiz='//retEventoCTe/infEvento', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.chCTe       = TagCaracter(nome='chCTe'   , codigo='ER10', tamanho=[44, 44, 44], raiz='//retEventoCTe/infEvento', obrigatorio=False, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.tpEvento    = TagCaracter(nome='tpEvento'   , codigo='ER11', tamanho=[6, 6, 6], raiz='//retEventoCTe/infEvento', obrigatorio=False, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.xEvento     = TagCaracter(nome='xEvento'    , codigo='ER12', tamanho=[ 4,  60], raiz='//retEventoCTe/infEvento', obrigatorio=False, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.nSeqEvento  = TagInteiro(nome='nSeqEvento'   , codigo='ER13', tamanho=[1,2,2], raiz='//retEventoCTe/infEvento', obrigatorio=False, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.dhRegEvento = TagDataHoraUTC(nome='dhRegEvento', codigo='ER14', raiz='//retEventoCTe/infEvento', obrigatorio=False, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.nProt       = TagCaracter(nome='nProt', codigo='ER15', tamanho=[15, 15, 15], raiz='//retEventoCTe/infEvento', obrigatorio=False, namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
 
     def get_xml(self):
 
@@ -280,9 +275,9 @@ class ProcEventoCTe(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         if not (self.ipTransmissor.valor):
-            xml += '<procEventoCTe versao="'+ self.versao.valor +'">'
+            xml += '<procEventoCTe versao="'+ str(self.versao.valor) +'">'
         else:
-            xml += '<procEventoCTe versao="'+ self.versao.valor +'" ipTransmissor="'+ self.ipTransmissor.valor +'">'
+            xml += '<procEventoCTe versao="'+ str(self.versao.valor) +'" ipTransmissor="'+ self.ipTransmissor.valor +'">'
         xml += self.eventoCTe.xml
         xml += self.retEventoCTe.xml
         xml += '</procEventoCTe>'

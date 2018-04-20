@@ -41,14 +41,7 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from .webservices_flags import (MDFE_AMBIENTE_PRODUCAO,
-                                MDFE_AMBIENTE_HOMOLOGACAO,
-                                WS_MDFE_AUTORIZACAO,
-                                WS_MDFE_CONSULTA_AUTORIZACAO,
-                                WS_MDFE_RECEPCAO_EVENTO,
-                                WS_MDFE_CONSULTA,
-                                WS_MDFE_SITUACAO,
-                                WS_MDFE_CONSULTA_NAO_ENCERRADO)
+from .webservices_flags import *
 
 
 METODO_WS = {

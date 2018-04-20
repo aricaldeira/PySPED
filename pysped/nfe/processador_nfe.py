@@ -61,34 +61,19 @@ if sys.version_info.major == 2:
     from .danfe.danfe_geraldo import DANFE
     from .danfe.daede import DAEDE
     from .danfe.danfce import DANFCE
-    from .danfe.danfse import DANFSE
 
 else:
     from http.client import HTTPSConnection
     from .danfe.danfe import DANFE
     from .danfe.danfce import DANFCE
-    from .danfe.danfse import DANFSE
 
-from .webservices_flags import (UF_CODIGO,
-                               #WS_NFE_CANCELAMENTO,
-                               WS_NFE_CONSULTA,
-                               WS_NFE_CONSULTA_CADASTRO,
-                               WS_NFE_CONSULTA_RECIBO,
-                               WS_NFE_CONSULTA_DESTINADAS,
-                               WS_NFE_DOWNLOAD,
-                               WS_NFE_RECEPCAO_EVENTO,
-                               WS_NFE_SITUACAO,
-                               WS_NFE_ENVIO_LOTE,
-                               WS_NFE_INUTILIZACAO,
-                               WS_NFE_AUTORIZACAO,
-                               WS_NFE_CONSULTA_AUTORIZACAO,
-                               WS_DFE_DISTRIBUICAO,
-                               )
+from .webservices_flags import *
 from . import webservices_1
 from . import webservices_2
 from . import webservices_3
 from . import webservices_4
 from . import webservices_nfce_3
+from . import webservices_nfce_4
 
 from pysped.xml_sped.certificado import Certificado
 
@@ -209,8 +194,6 @@ class ProcessadorNFe(object):
         self.contingencia = False
         self.danfe = DANFE()
         self.danfce = DANFCE()
-        self.danfse = DANFSE()
-        self.darl = DANFSE()
 
         if sys.version_info.major == 2:
             self.daede = DAEDE()
@@ -276,9 +259,15 @@ class ProcessadorNFe(object):
 
         elif self.versao == '3.10' or self.versao == '4.00':
             if self.versao == '3.10':
-                webservices = webservices_3
+                if self.modelo == '55':
+                    webservices = webservices_3
+                else:
+                    webservices = webservices_nfce_3
             else:
-                webservices = webservices_4
+                if self.modelo == '55':
+                    webservices = webservices_3
+                else:
+                    webservices = webservices_nfce_4
 
             metodo_ws = webservices.METODO_WS
 
@@ -294,51 +283,30 @@ class ProcessadorNFe(object):
 
             self._soap_envio.cUF = UF_CODIGO[self.estado]
 
-            if self.modelo == '55':
-                if somente_ambiente_nacional:
-                    ws_a_usar = webservices.AN
+            if somente_ambiente_nacional:
+                ws_a_usar = webservices.AN
 
-                elif servico == WS_NFE_DOWNLOAD:
-                    ws_a_usar = webservices.SVAN
+            elif servico == WS_NFE_DOWNLOAD:
+                ws_a_usar = webservices.SVAN
 
-                elif self.contingencia_SCAN or self.contingencia:
-                    ws_a_usar = webservices.ESTADO_WS_CONTINGENCIA
+            elif self.contingencia_SCAN or self.contingencia:
+                ws_a_usar = webservices.ESTADO_WS_CONTINGENCIA
 
+            else:
+                #
+                # Testa a opção de um estado, para determinado serviço, usar o WS
+                # de outro estado
+                #
+                if type(webservices.ESTADO_WS[self.estado][ambiente][servico]) == dict:
+                    ws_a_usar = webservices.ESTADO_WS[self.estado][ambiente][servico]
                 else:
-                    #
-                    # Testa a opção de um estado, para determinado serviço, usar o WS
-                    # de outro estado
-                    #
-                    if type(webservices.ESTADO_WS[self.estado][ambiente][servico]) == dict:
-                        ws_a_usar = webservices.ESTADO_WS[self.estado][ambiente][servico]
-                    else:
-                        ws_a_usar = webservices.ESTADO_WS[self.estado]
+                    ws_a_usar = webservices.ESTADO_WS[self.estado]
 
-                if 'servidor%s' % servico in ws_a_usar[ambiente]:
-                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
-                else:
-                    self._servidor = ws_a_usar[ambiente]['servidor']
-                self._url      = ws_a_usar[ambiente][servico]
-
-            elif self.modelo == '65':
-                if self.contingencia_SCAN or self.contingencia:
-                    ws_a_usar = webservices_nfce_3.ESTADO_WS_CONTINGENCIA
-
-                else:
-                    #
-                    # Testa a opção de um estado, para determinado serviço, usar o WS
-                    # de outro estado
-                    #
-                    if type(webservices_nfce_3.ESTADO_WS[self.estado][ambiente][servico]) == dict:
-                        ws_a_usar = webservices_nfce_3.ESTADO_WS[self.estado][ambiente][servico]
-                    else:
-                        ws_a_usar = webservices_nfce_3.ESTADO_WS[self.estado]
-
-                if 'servidor%s' % servico in ws_a_usar[ambiente]:
-                    self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
-                else:
-                    self._servidor = ws_a_usar[ambiente]['servidor']
-                self._url      = ws_a_usar[ambiente][servico]
+            if 'servidor%s' % servico in ws_a_usar[ambiente]:
+                self._servidor = ws_a_usar[ambiente]['servidor%s' % servico]
+            else:
+                self._servidor = ws_a_usar[ambiente]['servidor']
+            self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
         self._soap_envio.metodo     = metodo_ws[servico]['metodo']
