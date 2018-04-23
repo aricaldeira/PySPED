@@ -199,7 +199,7 @@ class ProcessadorNFSe(object):
         conexao.header = configuracao.header or {}
         conexao.forca_tls = configuracao.forca_tls or False
         conexao.forca_http = configuracao.forca_http or False
-        conexao.forca_cadei = configuracao.forca_cadei or False
+        conexao.forca_cadeia_conexao = configuracao.forca_cadeia_conexao or False
         conexao.sem_certificado = configuracao.sem_certificado or False
 
         return conexao
