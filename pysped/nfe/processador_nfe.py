@@ -185,7 +185,7 @@ class ProcessadorNFe(object):
     def __init__(self):
         self.ambiente = 2
         self.estado = 'SP'
-        self.versao = '3.10'
+        self.versao = '4.00'
         self.modelo = '55'
         self.certificado = Certificado()
         self.caminho = ''
@@ -265,7 +265,7 @@ class ProcessadorNFe(object):
                     webservices = webservices_nfce_3
             else:
                 if self.modelo == '55':
-                    webservices = webservices_3
+                    webservices = webservices_4
                 else:
                     webservices = webservices_nfce_4
 

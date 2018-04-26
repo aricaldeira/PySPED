@@ -101,7 +101,7 @@ class SOAPEnvio(XMLNFe):
         super(SOAPEnvio, self).__init__()
         self.webservice = ''
         self.metodo = ''
-        self.versao = '3.10'
+        self.versao = '4.00'
         self.cUF    = None
         self.envio  = None
         self.nfeCabecMsg = NFeCabecMsg()
