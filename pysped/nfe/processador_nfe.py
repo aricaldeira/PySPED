@@ -450,7 +450,7 @@ class ProcessadorNFe(object):
             if nfe.infNFe.ide.mod._valor_string == '65':
                 nfe.monta_qrcode()
 
-            nfe.validar()
+            #nfe.validar()
 
         envio.NFe = lista_nfes
 
