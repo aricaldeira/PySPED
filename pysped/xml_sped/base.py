@@ -468,7 +468,7 @@ class TagBoolean(TagCaracter):
         else:
             texto = '<%s' % self.nome
 
-            if self.namespace:
+            if self.namespace and self.namespace_obrigatorio:
                 texto += ' xmlns="%s"' % self.namespace
 
             if self.propriedade:
