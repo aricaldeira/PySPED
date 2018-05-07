@@ -81,7 +81,7 @@ from pysped.relato_sped.base import (BandaDANFE,
                                      MARGEM_SUPERIOR,
                                      RETRATO,
                                      Texto)
-from pysped.nfe.manual_401 import Vol_200
+from pysped.nfe.leiaute import Vol_200
 
 
 class DANFERetrato(Report):
