@@ -82,6 +82,8 @@ class NohXML(object):
         self._xml = None
         self._hash = None
         self.alertas = []
+        self.namespace = None
+        self.namespace_obrigatorio = True
 
     def _le_xml(self, arquivo):
         if arquivo is None:
@@ -157,6 +159,13 @@ class NohXML(object):
             'cte': NAMESPACE_CTE,
             'mdfe': NAMESPACE_MDFE,
         }
+
+        if self.namespace is not None:
+            namespaces['info'] = self.namespace
+            sigla_ns = 'info'
+
+        if ns is not None and sigla_ns:
+            namespaces[sigla_ns] = ns
 
         if ns is not None:
             namespaces['res'] = ns
@@ -257,8 +266,6 @@ class TagCaracter(NohXML):
         self.obrigatorio = True
         self.tamanho = [None, None, None]
         self.propriedade = None
-        self.namespace = None
-        self.namespace_obrigatorio = True
         self.alertas = []
         self.raiz = None
         self.cdata = False
@@ -1031,10 +1038,10 @@ class XMLNFe(NohXML):
         namespace = '{http://www.portalfiscal.inf.br/nfe}'
         return "\n".join([x.message.replace(namespace, '') for x in esquema.error_log])
 
-    def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe'):
+    def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe', namespace=None):
         tags = []
 
-        grupos = self._le_nohs(raiz_grupo, sigla_ns=sigla_ns)
+        grupos = self._le_nohs(raiz_grupo, sigla_ns=sigla_ns, ns=namespace)
 
         if grupos is not None:
             tags = [classe_grupo() for g in grupos]
