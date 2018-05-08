@@ -381,6 +381,12 @@ class Certificado(object):
         elif 'CancelarNfseEnvio' in xml:
             doctype = '<!DOCTYPE CancelarNfseEnvio>'
 
+        #
+        # Esocial
+        #
+        elif '</evtInfoEmpregador>' in xml:
+            doctype = '<!DOCTYPE eSocial [<!ATTLIST evtInfoEmpregador Id ID #IMPLIED>]>'
+
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
 
