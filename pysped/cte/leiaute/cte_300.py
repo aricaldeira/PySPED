@@ -2512,7 +2512,6 @@ class CTe(XMLNFe):
             self.infCte.xml    = arquivo
             self.Signature.xml = self._le_noh('//CTe/sig:Signature')
 
-
     xml = property(get_xml, set_xml)
 
     def _calcula_dv(self, valor):
