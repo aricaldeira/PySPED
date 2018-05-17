@@ -42,8 +42,10 @@
 from __future__ import division, print_function, unicode_literals
 
 from .webservices_flags import *
-
 from . import webservices_3
+
+
+METODO_WS = webservices_3.METODO_WS
 
 
 SVRS = {
@@ -332,4 +334,3 @@ ESTADO_CONSULTA_NFCE = {
         NFE_AMBIENTE_HOMOLOGACAO: '',
     },
 }
-

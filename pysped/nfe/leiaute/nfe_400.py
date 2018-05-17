@@ -1455,6 +1455,22 @@ class InfNFe(nfe_310.InfNFe):
 class InfNFeSupl(nfe_310.InfNFeSupl):
     def __init__(self):
         super(InfNFeSupl, self).__init__()
+        self.urlChave = TagCaracter(nome='urlChave', tamanho=[21,  85], raiz='//NFe/infNFeSupl')
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<infNFeSupl>'
+        xml += self.qrCode.xml
+        xml += self.urlChave.xml
+        xml += '</infNFeSupl>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.qrCode.xml = arquivo
+            self.urlChave.xml = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class NFe(nfe_310.NFe):
@@ -1535,6 +1551,7 @@ class NFe(nfe_310.NFe):
         qrcode = ESTADO_QRCODE[CODIGO_UF[self.infNFe.ide.cUF.valor]][self.infNFe.ide.tpAmb.valor] + '?' + qrcode
 
         self.infNFeSupl.qrCode.valor = qrcode
+        self.infNFeSupl.urlChave.valor = self.url_consulta
 
     @property
     def url_consulta(self):
