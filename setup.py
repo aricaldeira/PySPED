@@ -51,8 +51,8 @@ setup(
         'pysped.esocial.leiaute': ['schema/*/*'],
 
         'pysped.nfe.danfe': ['fonts/*', '*.odt'],
-        'pysped.xml_sped': ['cadeia-certificadora/*/*']
-        'pysped.relato_sped': ['fonts/*'],
+        'pysped.xml_sped': ['cadeia-certificadora/*/*'],
+        'pysped.relato_sped': ['fonts/*']
     },
     url = 'https://github.com/aricaldeira/PySPED',
     license = 'LGPL-v2.1+',
