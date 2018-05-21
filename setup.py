@@ -40,17 +40,7 @@ setup(
         'pysped.relato_sped',
     ],
     package_data = {
-        'pysped.nfe': ['*.odt'],
-        'pysped.nfe.leiaute': ['schema/*/*'],
-        'pysped.cte': ['*.odt'],
-        'pysped.cte.leiaute': ['schema/*/*'],
-        'pysped.mdfe': ['*.odt'],
-        'pysped.mdfe.leiaute': ['schema/*/*'],
-        'pysped.nfse': ['*.odt', 'logo_prefeitura/*'],
-        'pysped.esocial': ['*.odt'],
-        'pysped.esocial.leiaute': ['schema/*/*'],
-
-        'pysped.nfe.danfe': ['fonts/*', '*.odt'],
+        '': ['*.txt', '*.odt', '*.xsd', '*.ttf', '*.png', '*.jpg'],
         'pysped.xml_sped': ['cadeia-certificadora/*/*'],
         'pysped.relato_sped': ['fonts/*']
     },
