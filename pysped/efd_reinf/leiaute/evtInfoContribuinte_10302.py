@@ -48,7 +48,7 @@ import base64
 from reportlab.graphics.barcode import createBarcodeDrawing
 from genshi.core import Markup
 from pysped.xml_sped import *
-from pysped.esocial.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
+from pysped.efd_reinf.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
 
 PYBRASIL = False
 #try:
@@ -257,7 +257,7 @@ class Contato(XMLNFe):
     xml = property(get_xml, set_xml)       
 
 
-class SoftHouse(XMLNfe):
+class SoftHouse(XMLNFe):
     def __init(self):
         super(SoftHouse, self).__init()
         self.cnpjSoftHouse = TagCaracter(nome='cnpjSoftHouse', tamanho=[1, 14], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
@@ -271,7 +271,7 @@ class SoftHouse(XMLNfe):
         xml += '<softHouse>'
         xml += self.cnpjSoftHouse.xml
         xml += self.nmRazao.xml
-        xml += self.nmCont.xml
+        xml += self.nmConXMLNfet.xml
         xml += self.telefone.xml
         xml += self.email.xml
         xml += '</softHouse>'
@@ -288,7 +288,7 @@ class SoftHouse(XMLNfe):
     xml = property(get_xml, set_xml)
 
 
-class InfoEFR(XMLNfe):
+class InfoEFR(XMLNFe):
     def __init(self):
         super(InfoEFR, self).__init()
         self.ideEFR = TagCaracter(nome='ideEFR', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)

@@ -151,7 +151,7 @@ class LoteEventoEFDReinf(XMLNFe):
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         #xml += ABERTURA
-        xml += '<Reinf xmlns="' + NAMESPACE_LOTE_EFDREINF + '">'a
+        xml += '<Reinf xmlns="' + NAMESPACE_LOTE_EFDREINF + '">'
         xml += self.envioLoteEventos.xml
         xml += '</Reinf>'
         return xml
