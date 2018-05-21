@@ -37,7 +37,7 @@
                       <xs:simpleType>
                         <xs:annotation>
                           <xs:documentation>Preencher com o número do recibo do arquivo a ser retificado.</xs:documentation>
-                        </xs:annotation>
+                        </xs:annotation>2
                         <xs:restriction base="xs:string">
                           <xs:minLength value="16"/>
                           <xs:maxLength value="52" />
