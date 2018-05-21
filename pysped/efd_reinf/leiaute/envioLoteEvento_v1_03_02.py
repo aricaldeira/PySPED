@@ -145,15 +145,15 @@ class LoteEventoEFDReinf(XMLNFe):
         super(LoteEventoEFDReinf, self).__init__()
         self.envioLoteEventos = EnvioLoteEventos()        
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'EnvioLoteEventos-v1_03_02.xsd'
+        self.arquivo_esquema = 'EnvioLoteEventos.xsd'
         self.id_evento = ''
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         #xml += ABERTURA
-        xml += '<eSocial xmlns="' + NAMESPACE_LOTE_EFDREINF + '">'a
+        xml += '<Reinf xmlns="' + NAMESPACE_LOTE_EFDREINF + '">'a
         xml += self.envioLoteEventos.xml
-        xml += '</eSocial>'
+        xml += '</Reinf>'
         return xml
 
     def set_xml(self, arquivo):
