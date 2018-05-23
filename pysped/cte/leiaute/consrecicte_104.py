@@ -45,7 +45,7 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_CTE, Signature, TagCaracter,
                              TagDataHora, TagDecimal, TagInteiro, XMLNFe)
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_104 as ESQUEMA_ATUAL
 import os
-from cte_104 import CTe
+from .cte_104 import CTe
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -153,7 +153,6 @@ class ProtCTe(XMLNFe):
             # por isso, a raiz dele não pode ser assumida como sendo sempre o grupo
             # protCTe
             #
-            print('aqui:', self._le_noh('//protCTe/infProt', ns=NAMESPACE_CTE))
             self.infProt.xml = self._le_noh('//protCTe/infProt', ns=NAMESPACE_CTE)
             self.Signature.xml = self._le_noh('//protCTe/sig:Signature')
 

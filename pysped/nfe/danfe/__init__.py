@@ -40,5 +40,4 @@
 #
 
 from pysped.nfe.danfe.danfe import DANFE
-from pysped.nfe.danfe.daede import DAEDE
 from pysped.nfe.danfe.danfce import DANFCE

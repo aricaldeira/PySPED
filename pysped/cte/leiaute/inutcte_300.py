@@ -1,4 +1,48 @@
 # -*- coding: utf-8 -*-
+#
+# PySPED - Python libraries to deal with Brazil's SPED Project
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# PySPED - Bibliotecas Python para o
+#          SPED - Sistema Público de Escrituração Digital
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
+#
+# Este programa é um software livre: você pode redistribuir e/ou modificar
+# este programa sob os termos da licença GNU Affero General Public License,
+# publicada pela Free Software Foundation, em sua versão 3 ou, de acordo
+# com sua opção, qualquer versão posterior.
+#
+# Este programa é distribuido na esperança de que venha a ser útil,
+# porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
+# COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
+# GNU Affero General Public License para mais detalhes.
+#
+# Você deve ter recebido uma cópia da GNU Affero General Public License
+# juntamente com este programa. Caso esse não seja o caso, acesse:
+# <http://www.gnu.org/licenses/>
+#
+
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
 
 from pysped.xml_sped import *
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_300 as ESQUEMA_ATUAL
@@ -90,13 +134,13 @@ class InutCTe(XMLNFe):
     xml = property(get_xml, set_xml)
 
     def monta_chave(self):
-        chave = unicode(self.infInut.cUF.valor).zfill(2)
+        chave = str(self.infInut.cUF.valor).zfill(2)
         #chave += self.infInut.ano.valor.zfill(2)
         chave += self.infInut.CNPJ.valor.zfill(14)
-        chave += unicode(self.infInut.mod.valor).zfill(2)
-        chave += unicode(self.infInut.serie.valor).zfill(3)
-        chave += unicode(self.infInut.nCTIni.valor).zfill(9)
-        chave += unicode(self.infInut.nCTFin.valor).zfill(9)
+        chave += str(self.infInut.mod.valor).zfill(2)
+        chave += str(self.infInut.serie.valor).zfill(3)
+        chave += str(self.infInut.nCTIni.valor).zfill(9)
+        chave += str(self.infInut.nCTFin.valor).zfill(9)
 
         self.chave = chave
         return chave
@@ -204,15 +248,15 @@ class RetInutCTe(XMLNFe):
 
     def monta_chave(self):
         '''
-        chave = unicode(self.infInut.cUF.valor).zfill(2)
+        chave = str(self.infInut.cUF.valor).zfill(2)
         #chave += self.infInut.ano.valor.zfill(2)
         chave += self.infInut.CNPJ.valor.zfill(14)
-        chave += unicode(self.infInut.mod.valor).zfill(2)
-        chave += unicode(self.infInut.serie.valor).zfill(3)
-        chave += unicode(self.infInut.nNFIni.valor).zfill(9)
-        chave += unicode(self.infInut.nNFFin.valor).zfill(9)
+        chave += str(self.infInut.mod.valor).zfill(2)
+        chave += str(self.infInut.serie.valor).zfill(3)
+        chave += str(self.infInut.nNFIni.valor).zfill(9)
+        chave += str(self.infInut.nNFFin.valor).zfill(9)
         '''
-        chave = unicode(self.infInut.nProt.valor)
+        chave = str(self.infInut.nProt.valor)
         self.chave = chave
         return chave
 

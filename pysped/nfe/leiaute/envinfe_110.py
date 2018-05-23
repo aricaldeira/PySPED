@@ -45,7 +45,7 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, TagCaracter, TagDecimal,
                              TagDataHora, TagInteiro, XMLNFe, tira_abertura)
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
 import os
-from nfe_110 import NFe
+from .nfe_110 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -76,7 +76,7 @@ class EnviNFe(XMLNFe):
         if self._le_xml(arquivo):
             self.versao.xml    = arquivo
             self.idLote.xml    = arquivo
-            self.NFe = self.le_grupo('//enviLote/NFe', NFe)
+            self.NFe = self.le_grupo('//NFe', NFe)
 
         return self.xml
 

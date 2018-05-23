@@ -39,7 +39,10 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from __future__ import division, print_function, unicode_literals
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
 
 from pysped.xml_sped import (ABERTURA, NAMESPACE_NFE, Signature, TagCaracter,
                              TagDataHora, TagDecimal, TagInteiro, XMLNFe)
@@ -132,13 +135,13 @@ class InutNFe(XMLNFe):
     xml = property(get_xml, set_xml)
 
     def monta_chave(self):
-        chave = unicode(self.infInut.cUF.valor).zfill(2)
+        chave = str(self.infInut.cUF.valor).zfill(2)
         chave += self.infInut.ano.valor.zfill(2)
         chave += self.infInut.CNPJ.valor.zfill(14)
-        chave += unicode(self.infInut.mod.valor).zfill(2)
-        chave += unicode(self.infInut.serie.valor).zfill(3)
-        chave += unicode(self.infInut.nNFIni.valor).zfill(9)
-        chave += unicode(self.infInut.nNFFin.valor).zfill(9)
+        chave += str(self.infInut.mod.valor).zfill(2)
+        chave += str(self.infInut.serie.valor).zfill(3)
+        chave += str(self.infInut.nNFIni.valor).zfill(9)
+        chave += str(self.infInut.nNFFin.valor).zfill(9)
 
         self.chave = chave
         return chave
@@ -251,13 +254,13 @@ class RetInutNFe(XMLNFe):
     xml = property(get_xml, set_xml)
 
     def monta_chave(self):
-        chave = unicode(self.infInut.cUF.valor).zfill(2)
+        chave = str(self.infInut.cUF.valor).zfill(2)
         chave += self.infInut.ano.valor.zfill(2)
         chave += self.infInut.CNPJ.valor.zfill(14)
-        chave += unicode(self.infInut.mod.valor).zfill(2)
-        chave += unicode(self.infInut.serie.valor).zfill(3)
-        chave += unicode(self.infInut.nNFIni.valor).zfill(9)
-        chave += unicode(self.infInut.nNFFin.valor).zfill(9)
+        chave += str(self.infInut.mod.valor).zfill(2)
+        chave += str(self.infInut.serie.valor).zfill(3)
+        chave += str(self.infInut.nNFIni.valor).zfill(9)
+        chave += str(self.infInut.nNFFin.valor).zfill(9)
 
         self.chave = chave
         return chave

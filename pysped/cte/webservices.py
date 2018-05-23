@@ -1,241 +1,308 @@
 # -*- coding: utf-8 -*-
+#
+# PySPED - Python libraries to deal with Brazil's SPED Project
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Library General Public License as
+# published by the Free Software Foundation, either version 2.1 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Library General Public License for more details.
+#
+# You should have received a copy of the GNU Library General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# PySPED - Bibliotecas Python para o
+#          SPED - Sistema Público de Escrituração Digital
+#
+# Copyright (C) 2010-2012
+# Copyright (C) Aristides Caldeira <aristides.caldeira arroba tauga.com.br>
+#
+# Este programa é um software livre: você pode redistribuir e/ou modificar
+# este programa sob os termos da licença GNU Library General Public License,
+# publicada pela Free Software Foundation, em sua versão 2.1 ou, de acordo
+# com sua opção, qualquer versão posterior.
+#
+# Este programa é distribuido na esperança de que venha a ser útil,
+# porém SEM QUAISQUER GARANTIAS, nem mesmo a garantia implícita de
+# COMERCIABILIDADE ou ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Veja a
+# GNU Library General Public License para mais detalhes.
+#
+# Você deve ter recebido uma cópia da GNU Library General Public License
+# juntamente com este programa. Caso esse não seja o caso, acesse:
+# <http://www.gnu.org/licenses/>
+#
 
-from webservices_flags import *
+from __future__ import division, print_function, unicode_literals
 
-#Ultima atualização: 01/12/2016
+from .webservices_flags import *
+
 
 METODO_WS = {
-    WS_CTE_RECEPCAO: {
-        u'webservice': u'CteRecepcao',
-        u'metodo'    : u'cteRecepcaoLote',
+    WS_CTE_AUTORIZACAO: {
+        'webservice': 'CteRecepcao',
+        'metodo'    : 'cteRecepcaoLote',
     },
-    WS_CTE_RET_RECEPCAO: {
-        u'webservice': u'CteRetRecepcao',
-        u'metodo'    : u'cteRetRecepcao',
+    WS_CTE_CONSULTA_AUTORIZACAO: {
+        'webservice': 'CteRetRecepcao',
+        'metodo'    : 'cteRetRecepcao',
     },
     WS_CTE_INUTILIZACAO: {
-        u'webservice': u'CteInutilizacao',
-        u'metodo'    : u'cteInutilizacaoCT',
+        'webservice': 'CteInutilizacao',
+        'metodo'    : 'cteInutilizacaoCT',
     },
     WS_CTE_CONSULTA: {
-        #u'webservice': u'CteConsultaProtocolo',
-        u'webservice': u'CteConsulta',
-        u'metodo'    : u'cteConsultaCT',
+        #'webservice': 'CteConsultaProtocolo',
+        'webservice': 'CteConsulta',
+        'metodo'    : 'cteConsultaCT',
     },
-    WS_CTE_STATUS_SERVICO: {
-        u'webservice': u'CteStatusServico',
-        u'metodo'    : u'cteStatusServicoCT',
+    WS_CTE_SITUACAO: {
+        'webservice': 'CteStatusServico',
+        'metodo'    : 'cteStatusServicoCT',
     },
-    WS_CTE_EVENTO: {
-        u'webservice': u'CteRecepcaoEvento',
-        u'metodo'    : u'cteRecepcaoEvento',
+    WS_CTE_RECEPCAO_EVENTO: {
+        'webservice': 'CteRecepcaoEvento',
+        'metodo'    : 'cteRecepcaoEvento',
     },
-    WS_CTE_CONSULTA_CADASTRO: {
-        u'webservice': u'CadConsultaCadastro',
-        u'metodo'    : u'consultaCadastro2',
-    }
+    WS_CTE_RECEPCAO_OS: {
+        'webservice': 'CTeRecepcaoOS',
+        'metodo'    : 'cteRecepcaoOS',
+    },
+    WS_CTE_DISTRIBUICAO: {
+        'webservice': 'CTeDistribuicaoDFe',
+        'metodo'    : 'cteDistDFeInteresse',
+    },
 }
 
 SVRS = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'cte.svrs.rs.gov.br',
-        WS_CTE_RECEPCAO        : u'ws/cterecepcao/CteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO : u'ws/cteretrecepcao/cteRetRecepcao.asmx',
-        WS_CTE_INUTILIZACAO    : u'ws/cteinutilizacao/cteinutilizacao.asmx',
-        WS_CTE_CONSULTA    : u'ws/cteconsulta/CteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO        : u'ws/ctestatusservico/CteStatusServico.asmx',
-        WS_CTE_EVENTO        : u'ws/cterecepcaoevento/cterecepcaoevento.asmx'
-        },
+        'servidor'                 : 'cte.svrs.rs.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ws/cterecepcao/CteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ws/cteretrecepcao/cteRetRecepcao.asmx',
+        WS_CTE_INUTILIZACAO        : 'ws/cteinutilizacao/cteinutilizacao.asmx',
+        WS_CTE_CONSULTA            : 'ws/cteconsulta/CteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'ws/ctestatusservico/CteStatusServico.asmx',
+        WS_CTE_RECEPCAO_EVENTO     : 'ws/cterecepcaoevento/cterecepcaoevento.asmx',
+        WS_CTE_RECEPCAO_OS         : 'ws/cterecepcaoos/cterecepcaoos.asmx',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'cte-homologacao.svrs.rs.gov.br',
-        WS_CTE_RECEPCAO        : u'ws/cterecepcao/CteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO : u'ws/cteretrecepcao/cteRetRecepcao.asmx',
-        WS_CTE_INUTILIZACAO    : u'ws/cteinutilizacao/cteinutilizacao.asmx',
-        WS_CTE_CONSULTA    : u'ws/cteconsulta/CteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO        : u'ws/ctestatusservico/CteStatusServico.asmx',
-        WS_CTE_EVENTO        : u'ws/cterecepcaoevento/cterecepcaoevento.asmx'
-        }
+        'servidor'                 : 'cte-homologacao.svrs.rs.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ws/cterecepcao/CteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ws/cteretrecepcao/cteRetRecepcao.asmx',
+        WS_CTE_INUTILIZACAO        : 'ws/cteinutilizacao/cteinutilizacao.asmx',
+        WS_CTE_CONSULTA            : 'ws/cteconsulta/CteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'ws/ctestatusservico/CteStatusServico.asmx',
+        WS_CTE_RECEPCAO_EVENTO     : 'ws/cterecepcaoevento/cterecepcaoevento.asmx',
+        WS_CTE_RECEPCAO_OS         : 'ws/cterecepcaoos/cterecepcaoos.asmx',
+    },
 }
 
 SVSP = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'nfe.fazenda.sp.gov.br',
-        WS_CTE_RECEPCAO        : u'cteWEB/services/CteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO : u'cteWEB/services/CteRetRecepcao.asmx',
-        WS_CTE_CONSULTA    : u'cteWEB/services/CteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO        : u'cteWEB/services/CteStatusServico.asmx',
-        },
+        'servidor'                 : 'nfe.fazenda.sp.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cteWEB/services/CteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cteWEB/services/CteRetRecepcao.asmx',
+        WS_CTE_CONSULTA            : 'cteWEB/services/CteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'cteWEB/services/CteStatusServico.asmx',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'homologacao.nfe.fazenda.sp.gov.br',
-        WS_CTE_RECEPCAO        : u'cteWEB/services/CteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO : u'cteWEB/services/CteRetRecepcao.asmx',
-        WS_CTE_CONSULTA    : u'cteWEB/services/CteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO        : u'cteWEB/services/CteStatusServico.asmx',
-        }
+        'servidor'                 : 'homologacao.nfe.fazenda.sp.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cteWEB/services/CteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cteWEB/services/CteRetRecepcao.asmx',
+        WS_CTE_CONSULTA            : 'cteWEB/services/CteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'cteWEB/services/CteStatusServico.asmx',
+    },
+}
+
+AN = {
+    CTE_AMBIENTE_PRODUCAO: {
+        'servidor': 'www1.cte.fazenda.gov.br',
+        WS_CTE_DISTRIBUICAO: 'CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx',
+    },
+    CTE_AMBIENTE_HOMOLOGACAO: {
+        'servidor': 'hom1.cte.fazenda.gov.br',
+        WS_CTE_DISTRIBUICAO: 'CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx',
+    },
 }
 
 UFMT = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'cte.sefaz.mt.gov.br',
-        WS_CTE_RECEPCAO        : u'ctews/services/CteRecepcao',
-        WS_CTE_RET_RECEPCAO : u'ctews/services/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO    : u'ctews/services/CteInutilizacao',
-        WS_CTE_CONSULTA    : u'ctews/services/CteConsulta',
-        WS_CTE_STATUS_SERVICO        : u'ctews/services/CteStatusServico',
-        WS_CTE_EVENTO        : u'ctews2/services/CteRecepcaoEvento?wsdl'
-        },
+        'servidor'                 : 'cte.sefaz.mt.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ctews/services/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ctews/services/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'ctews/services/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'ctews/services/CteConsulta',
+        WS_CTE_SITUACAO            : 'ctews/services/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'ctews2/services/CteRecepcaoEvento?wsdl',
+        WS_CTE_RECEPCAO_OS         : 'ctews/services/CteRecepcaoOS',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'homologacao.sefaz.mt.gov.br',
-        WS_CTE_RECEPCAO        : u'ctews/services/CteRecepcao',
-        WS_CTE_RET_RECEPCAO : u'ctews/services/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO    : u'ctews/services/CteInutilizacao',
-        WS_CTE_CONSULTA    : u'ctews/services/CteConsulta',
-        WS_CTE_STATUS_SERVICO        : u'ctews/services/CteStatusServico',
-        WS_CTE_EVENTO        : u'ctews2/services/CteRecepcaoEvento?wsdl'
-        }
+        'servidor'                 : 'homologacao.sefaz.mt.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ctews/services/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ctews/services/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'ctews/services/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'ctews/services/CteConsulta',
+        WS_CTE_SITUACAO            : 'ctews/services/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'ctews2/services/CteRecepcaoEvento?wsdl',
+        WS_CTE_RECEPCAO_OS         : 'ctews/services/CteRecepcaoOS',
+    },
 }
 
 UFMS = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'producao.cte.ms.gov.br',
-        WS_CTE_RECEPCAO        : u'ws/CteRecepcao',
-        WS_CTE_RET_RECEPCAO : u'ws/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO    : u'ws/CteInutilizacao',
-        WS_CTE_CONSULTA    : u'ws/CteConsulta',
-        WS_CTE_STATUS_SERVICO        : u'ws/CteStatusServico',
-        WS_CTE_CONSULTA_CADASTRO : u'ws/CadConsultaCadastro',
-        WS_CTE_EVENTO        : u'ws/CteRecepcaoEvento'
-        },
+        'servidor'                 : 'producao.cte.ms.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ws/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ws/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'ws/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'ws/CteConsulta',
+        WS_CTE_SITUACAO            : 'ws/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'ws/CteRecepcaoEvento',
+        WS_CTE_RECEPCAO_OS         : 'ws/CteRecepcaoOS',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'homologacao.cte.ms.gov.br',
-        WS_CTE_RECEPCAO        : u'ws/CteRecepcao',
-        WS_CTE_RET_RECEPCAO : u'ws/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO    : u'ws/CteInutilizacao',
-        WS_CTE_CONSULTA    : u'ws/CteConsulta',
-        WS_CTE_STATUS_SERVICO        : u'ws/CteStatusServico',
-        WS_CTE_CONSULTA_CADASTRO : u'ws/CadConsultaCadastro',
-        WS_CTE_EVENTO        : u'ws/CteRecepcaoEvento'
-        }
+        'servidor'                 : 'homologacao.cte.ms.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ws/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ws/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'ws/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'ws/CteConsulta',
+        WS_CTE_SITUACAO            : 'ws/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'ws/CteRecepcaoEvento',
+        WS_CTE_RECEPCAO_OS         : 'ws/CteRecepcaoOS',
+    },
 }
 
 UFMG = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'cte.fazenda.mg.gov.br',
-        WS_CTE_RECEPCAO        : u'cte/services/CteRecepcao',
-        WS_CTE_RET_RECEPCAO : u'cte/services/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO    : u'cte/services/CteInutilizacao',
-        WS_CTE_CONSULTA    : u'cte/services/CteConsulta',
-        WS_CTE_STATUS_SERVICO        : u'cte/services/CteStatusServico',
-        WS_CTE_EVENTO        : u'cte/services/RecepcaoEvento'
-        },
+        'servidor'                 : 'cte.fazenda.mg.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cte/services/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cte/services/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'cte/services/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'cte/services/CteConsulta',
+        WS_CTE_SITUACAO            : 'cte/services/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'cte/services/RecepcaoEvento',
+        WS_CTE_RECEPCAO_OS         : 'cte/services/CteRecepcaoOS',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'hcte.fazenda.mg.gov.br',
-        WS_CTE_RECEPCAO        : u'cte/services/CteRecepcao',
-        WS_CTE_RET_RECEPCAO : u'cte/services/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO    : u'cte/services/CteInutilizacao',
-        WS_CTE_CONSULTA    : u'cte/services/CteConsulta',
-        WS_CTE_STATUS_SERVICO        : u'cte/services/CteStatusServico',
-        WS_CTE_EVENTO        : u'cte/services/RecepcaoEvento'
-        }
+        'servidor'                 : 'hcte.fazenda.mg.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cte/services/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cte/services/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'cte/services/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'cte/services/CteConsulta',
+        WS_CTE_SITUACAO            : 'cte/services/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'cte/services/RecepcaoEvento',
+        WS_CTE_RECEPCAO_OS         : 'cte/services/CteRecepcaoOS',
+    },
 }
 
 UFPR = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'cte.fazenda.pr.gov.br',
-        WS_CTE_RECEPCAO         : u'cte/CteRecepcao',
-        WS_CTE_RET_RECEPCAO     : u'cte/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO     : u'cte/CteInutilizacao',
-        WS_CTE_CONSULTA         : u'cte/CteConsulta',
-        WS_CTE_STATUS_SERVICO   : u'cte/CteStatusServico',
-        WS_CTE_EVENTO           : u'cte/CteRecepcaoEvento'
-        },
+        'servidor'                 : 'cte.fazenda.pr.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cte/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cte/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'cte/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'cte/CteConsulta',
+        WS_CTE_SITUACAO            : 'cte/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'cte/CteRecepcaoEvento',
+        WS_CTE_RECEPCAO_OS         : 'cte/CteRecepcaoOS',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'homologacao.cte.fazenda.pr.gov.br',
-        WS_CTE_RECEPCAO         : u'cte/CteRecepcao',
-        WS_CTE_RET_RECEPCAO     : u'cte/CteRetRecepcao',
-        WS_CTE_INUTILIZACAO     : u'cte/CteInutilizacao',
-        WS_CTE_CONSULTA         : u'cte/CteConsulta',
-        WS_CTE_STATUS_SERVICO   : u'cte/CteStatusServico',
-        WS_CTE_EVENTO           : u'cte/CteRecepcaoEvento'
-        }
+        'servidor'                 : 'homologacao.cte.fazenda.pr.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cte/CteRecepcao',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cte/CteRetRecepcao',
+        WS_CTE_INUTILIZACAO        : 'cte/CteInutilizacao',
+        WS_CTE_CONSULTA            : 'cte/CteConsulta',
+        WS_CTE_SITUACAO            : 'cte/CteStatusServico',
+        WS_CTE_RECEPCAO_EVENTO     : 'cte/CteRecepcaoEvento',
+        WS_CTE_RECEPCAO_OS         : 'cte/CteRecepcaoOS',
+    },
 }
 
 UFRS = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'cte.svrs.rs.gov.br',
-        WS_CTE_RECEPCAO         : u'ws/cterecepcao/CteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO     : u'ws/cteretrecepcao/cteRetRecepcao.asmx',
-        WS_CTE_INUTILIZACAO     : u'ws/cteinutilizacao/cteinutilizacao.asmx',
-        WS_CTE_CONSULTA         : u'ws/cteconsulta/CteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO   : u'ws/ctestatusservico/CteStatusServico.asmx',
-        WS_CTE_EVENTO           : u'ws/cterecepcaoevento/cterecepcaoevento.asmx',
-        },
+        'servidor'                 : 'cte.svrs.rs.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ws/cterecepcao/CteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ws/cteretrecepcao/cteRetRecepcao.asmx',
+        WS_CTE_INUTILIZACAO        : 'ws/cteinutilizacao/cteinutilizacao.asmx',
+        WS_CTE_CONSULTA            : 'ws/cteconsulta/CteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'ws/ctestatusservico/CteStatusServico.asmx',
+        WS_CTE_RECEPCAO_EVENTO     : 'ws/cterecepcaoevento/cterecepcaoevento.asmx',
+        WS_CTE_RECEPCAO_OS         : 'ws/cterecepcaoos/cterecepcaoos.asmx',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'cte-homologacao.svrs.rs.gov.br',
-        WS_CTE_RECEPCAO         : u'ws/cterecepcao/CteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO     : u'ws/cteretrecepcao/cteRetRecepcao.asmx',
-        WS_CTE_INUTILIZACAO     : u'ws/cteinutilizacao/cteinutilizacao.asmx',
-        WS_CTE_CONSULTA         : u'ws/cteconsulta/CteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO   : u'ws/ctestatusservico/CteStatusServico.asmx',
-        WS_CTE_EVENTO           : u'ws/cterecepcaoevento/cterecepcaoevento.asmx',
-        }
+        'servidor'                 : 'cte-homologacao.svrs.rs.gov.br',
+        WS_CTE_AUTORIZACAO         : 'ws/cterecepcao/CteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'ws/cteretrecepcao/cteRetRecepcao.asmx',
+        WS_CTE_INUTILIZACAO        : 'ws/cteinutilizacao/cteinutilizacao.asmx',
+        WS_CTE_CONSULTA            : 'ws/cteconsulta/CteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'ws/ctestatusservico/CteStatusServico.asmx',
+        WS_CTE_RECEPCAO_EVENTO     : 'ws/cterecepcaoevento/cterecepcaoevento.asmx',
+        WS_CTE_RECEPCAO_OS         : 'ws/cterecepcaoos/cterecepcaoos.asmx',
+    },
 }
 
 UFSP = {
     CTE_AMBIENTE_PRODUCAO: {
-        u'servidor'            : u'nfe.fazenda.sp.gov.br',
-        WS_CTE_RECEPCAO         : u'cteWEB/services/cteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO     : u'cteWEB/services/cteRetRecepcao.asmx',
-        WS_CTE_INUTILIZACAO     : u'cteWEB/services/cteInutilizacao.asmx',
-        WS_CTE_CONSULTA         : u'cteWEB/services/cteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO   : u'cteWEB/services/cteStatusServico.asmx',
-        WS_CTE_EVENTO           : u'cteweb/services/cteRecepcaoEvento.asmx',
-        },
+        'servidor'                 : 'nfe.fazenda.sp.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cteWEB/services/cteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cteWEB/services/cteRetRecepcao.asmx',
+        WS_CTE_INUTILIZACAO        : 'cteWEB/services/cteInutilizacao.asmx',
+        WS_CTE_CONSULTA            : 'cteWEB/services/cteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'cteWEB/services/cteStatusServico.asmx',
+        WS_CTE_RECEPCAO_EVENTO     : 'cteweb/services/cteRecepcaoEvento.asmx',
+        WS_CTE_RECEPCAO_OS         : 'cteWEB/services/cteRecepcaoOS.asmx',
+    },
     CTE_AMBIENTE_HOMOLOGACAO: {
-        u'servidor'            : u'homologacao.nfe.fazenda.sp.gov.br',
-        WS_CTE_RECEPCAO         : u'cteWEB/services/cteRecepcao.asmx',
-        WS_CTE_RET_RECEPCAO     : u'cteWEB/services/cteRetRecepcao.asmx',
-        WS_CTE_INUTILIZACAO     : u'cteWEB/services/cteInutilizacao.asmx',
-        WS_CTE_CONSULTA         : u'cteWEB/services/cteConsulta.asmx',
-        WS_CTE_STATUS_SERVICO   : u'cteWEB/services/cteStatusServico.asmx',
-        WS_CTE_EVENTO           : u'cteweb/services/cteRecepcaoEvento.asmx',
-        }
+        'servidor'                 : 'homologacao.nfe.fazenda.sp.gov.br',
+        WS_CTE_AUTORIZACAO         : 'cteWEB/services/cteRecepcao.asmx',
+        WS_CTE_CONSULTA_AUTORIZACAO: 'cteWEB/services/cteRetRecepcao.asmx',
+        WS_CTE_INUTILIZACAO        : 'cteWEB/services/cteInutilizacao.asmx',
+        WS_CTE_CONSULTA            : 'cteWEB/services/cteConsulta.asmx',
+        WS_CTE_SITUACAO            : 'cteWEB/services/cteStatusServico.asmx',
+        WS_CTE_RECEPCAO_EVENTO     : 'cteweb/services/cteRecepcaoEvento.asmx',
+        WS_CTE_RECEPCAO_OS         : 'cteWEB/services/cteRecepcaoOS.asmx',
+    },
 }
 
 #
-# Informação obtida em 
+# Informação obtida em
 # http://www.cte.fazenda.gov.br/portal/webServices.aspx?tipoConteudo=wpdBtfbTMrw=
-#  Última verificação: 01/12/2016
-#Estados que utilizam a SVSP - Sefaz Virtual de São Paulo: AP, PE, RR 
+#  Última verificação: 20/04/2018
+#Estados que utilizam a SVSP - Sefaz Virtual de São Paulo: AP, PE, RR
 #Estados que utilizam a SVRS - Sefaz Virtual do RS: AC, AL, AM, BA, CE, DF, ES, GO, MA, PA, PB, PI, RJ, RN, RO, SC, SE, TO
 #
 
 ESTADO_WS = {
-    u'AC': SVRS,
-    u'AL': SVRS,
-    u'AM': SVRS,
-    u'AP': SVSP,
-    u'BA': SVRS,
-    u'CE': SVRS,
-    u'DF': SVRS,
-    u'ES': SVRS,
-    u'GO': SVRS,
-    u'MA': SVRS,
-    u'MG': UFMG,
-    u'MS': SVRS,
-    u'MT': UFMT,
-    u'PA': SVRS,
-    u'PB': SVRS,
-    u'PE': SVSP,
-    u'PI': SVRS,
-    u'PR': UFPR,
-    u'RJ': SVRS,
-    u'RN': SVRS,
-    u'RO': SVRS,
-    u'RR': SVSP,
-    u'RS': UFRS,
-    u'SC': SVRS,
-    u'SE': SVRS,
-    u'SP': UFSP,
-    u'TO': SVRS
-}   
+    'AC': SVRS,
+    'AL': SVRS,
+    'AM': SVRS,
+    'AP': SVSP,
+    'BA': SVRS,
+    'CE': SVRS,
+    'DF': SVRS,
+    'ES': SVRS,
+    'GO': SVRS,
+    'MA': SVRS,
+    'MG': UFMG,
+    'MS': SVRS,
+    'MT': UFMT,
+    'PA': SVRS,
+    'PB': SVRS,
+    'PE': SVSP,
+    'PI': SVRS,
+    'PR': UFPR,
+    'RJ': SVRS,
+    'RN': SVRS,
+    'RO': SVRS,
+    'RR': SVSP,
+    'RS': UFRS,
+    'SC': SVRS,
+    'SE': SVRS,
+    'SP': UFSP,
+    'TO': SVRS
+}

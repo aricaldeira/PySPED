@@ -41,46 +41,35 @@
 
 from __future__ import division, print_function, unicode_literals
 
-from .webservices_flags import (NFE_AMBIENTE_PRODUCAO,
-                                NFE_AMBIENTE_HOMOLOGACAO,
-                                WS_DPEC_CONSULTA,
-                                WS_DPEC_RECEPCAO,
-                                WS_NFE_AUTORIZACAO,
-                                WS_NFE_CONSULTA,
-                                WS_NFE_CONSULTA_AUTORIZACAO,
-                                WS_NFE_CONSULTA_CADASTRO,
-                                WS_NFE_CONSULTA_DESTINADAS,
-                                WS_NFE_DOWNLOAD,
-                                WS_NFE_INUTILIZACAO,
-                                WS_NFE_SITUACAO,
-                                WS_NFE_RECEPCAO_EVENTO,
-                                WS_DFE_DISTRIBUICAO)
+from .webservices_flags import *
+from . import webservices_3
 
-import webservices_3
+
+METODO_WS = webservices_3.METODO_WS
 
 
 SVRS = {
     # o servidor da consulta de cadastro é diferente dos demais...
     NFE_AMBIENTE_PRODUCAO: {
-        'servidor'             : 'nfce.svrs.rs.gov.br',
+        'servidor'                 : 'nfce.svrs.rs.gov.br',
         'servidor%s' % WS_NFE_CONSULTA_CADASTRO: 'cad.svrs.rs.gov.br',
-        WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
-        WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
-        WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx',
-        WS_NFE_INUTILIZACAO    : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
-        WS_NFE_CONSULTA        : 'ws/NfeConsulta/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO        : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
+        WS_NFE_RECEPCAO_EVENTO     : 'ws/recepcaoevento/recepcaoevento.asmx',
+        WS_NFE_AUTORIZACAO         : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
+        WS_NFE_CONSULTA_AUTORIZACAO: 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
+        WS_NFE_CONSULTA_CADASTRO   : 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx',
+        WS_NFE_INUTILIZACAO        : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+        WS_NFE_CONSULTA            : 'ws/NfeConsulta/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO            : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
-        'servidor'             : 'nfce-homologacao.svrs.rs.gov.br',
-        WS_NFE_RECEPCAO_EVENTO: 'ws/recepcaoevento/recepcaoevento.asmx',
-        WS_NFE_AUTORIZACAO      : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
-        WS_NFE_CONSULTA_AUTORIZACAO : 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
-        WS_NFE_CONSULTA_CADASTRO: 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx',
-        WS_NFE_INUTILIZACAO    : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
-        WS_NFE_CONSULTA        : 'ws/NfeConsulta/NfeConsulta2.asmx',
-        WS_NFE_SITUACAO        : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
+        'servidor'                 : 'nfce-homologacao.svrs.rs.gov.br',
+        WS_NFE_RECEPCAO_EVENTO     : 'ws/recepcaoevento/recepcaoevento.asmx',
+        WS_NFE_AUTORIZACAO         : 'ws/NfeAutorizacao/NfeAutorizacao.asmx',
+        WS_NFE_CONSULTA_AUTORIZACAO: 'ws/NfeRetAutorizacao/NfeRetAutorizacao.asmx',
+        WS_NFE_CONSULTA_CADASTRO   : 'ws/CadConsultaCadastro/CadConsultaCadastro2.asmx',
+        WS_NFE_INUTILIZACAO        : 'ws/nfeinutilizacao/nfeinutilizacao2.asmx',
+        WS_NFE_CONSULTA            : 'ws/NfeConsulta/NfeConsulta2.asmx',
+        WS_NFE_SITUACAO            : 'ws/NfeStatusServico/NfeStatusServico2.asmx',
     }
 }
 
@@ -93,19 +82,6 @@ UFPR = webservices_3.UFPR
 UFPE = webservices_3.UFPE
 UFRS = webservices_3.UFRS
 UFSP = webservices_3.UFSP
-
-
-#
-# Informação obtida em
-# http://www.nfe.fazenda.gov.br/portal/webServices.aspx
-#  Última verificação: 15/08/2014 16:22
-#
-# UF que utilizam a SVAN - Sefaz Virtual do Ambiente Nacional: MA, PA, PI
-# UF que utilizam a SVRS - Sefaz Virtual do RS:
-# - Para serviço de Consulta Cadastro: AC, RN, PB, SC
-# - Para demais serviços relacionados com o sistema da NF-e: AC, AL, AP, DF, PB, RJ, RN, RO, RR, SC, SE, TO
-# Autorizadores: AM BA CE GO MG MA MS MT PE PR RS SP
-#
 
 ESTADO_WS = {
     'AC': SVRS,
@@ -358,4 +334,3 @@ ESTADO_CONSULTA_NFCE = {
         NFE_AMBIENTE_HOMOLOGACAO: '',
     },
 }
-

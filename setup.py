@@ -23,25 +23,26 @@ setup(
         'pysped.nfe',
         'pysped.nfe.leiaute',
         'pysped.nfe.danfe',
-        'pysped.nfe.manual_300',
-        'pysped.nfe.manual_401',
+
         'pysped.cte',
         'pysped.cte.leiaute',
-        'pysped.cte.dacte',
-        'pysped.efd',
-        # 'pysped.nfse',
+
+        'pysped.mdfe',
+        'pysped.mdfe.leiaute',
+
+        'pysped.nfse',
+        'pysped.nfse/sp-sao_paulo',
+
+        'pysped.esocial',
+        'pysped.esocial.leiaute',
+
         'pysped.xml_sped',
-        'pysped.ecd',
-        'pysped.nf_paulista',
         'pysped.relato_sped',
-        'pysped.exemplos',
     ],
     package_data = {
-        'pysped.nfe.danfe': ['fonts/*', '*.odt'],
-        'pysped.relato_sped': ['fonts/*'],
-        'pysped.nfe.leiaute': ['schema/*/*'],
-        'pysped.cte.leiaute': ['schema/*/*'],
-        'pysped.xml_sped': ['cadeia-certificadora/*/*']
+        '': ['*.txt', '*.odt', '*.xsd', '*.ttf', '*.png', '*.jpg'],
+        'pysped.xml_sped': ['cadeia-certificadora/*/*'],
+        'pysped.relato_sped': ['fonts/*']
     },
     url = 'https://github.com/aricaldeira/PySPED',
     license = 'LGPL-v2.1+',

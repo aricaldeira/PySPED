@@ -42,7 +42,7 @@ class InfRec(XMLNFe):
     def __init__(self):
         super(InfRec, self).__init__()
         self.nRec     = TagCaracter(nome='nRec'     , codigo='AR08', tamanho=[1, 15, 1], raiz='//retEnviCte/infRec', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
-        self.dhRecbto = TagDataHora(nome='dhRecbto', codigo='AR09'                    , raiz='//retEnviCte/infRec', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
+        self.dhRecbto = TagDataHoraUTC(nome='dhRecbto', codigo='AR09'                    , raiz='//retEnviCte/infRec', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
         self.tMed     = TagInteiro(nome='tMed'     , codigo='AR10', tamanho=[1,  4, 1], raiz='//retEnviCte/infRec', namespace=NAMESPACE_CTE, namespace_obrigatorio=False)
 
     def get_xml(self):

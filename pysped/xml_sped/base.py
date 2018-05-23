@@ -39,59 +39,92 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from __future__ import division, print_function, unicode_literals
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+import sys
+from past.builtins import basestring
+from builtins import int, str
+from io import open
 
 from lxml import etree
 from datetime import datetime, date, time
-from decimal import Decimal
-import locale
 import unicodedata
 import re
 import pytz
 from time import strftime
+from hashlib import md5
+
+
+PYBRASIL = False
+try:
+    from pybrasil.valor.decimal import Decimal
+    from pybrasil.valor import formata_valor
+    from pybrasil.data import formata_data
+    from pybrasil.base import tira_acentos_ascii
+
+    PYBRASIL = True
+except:
+    from decimal import Decimal
+    import locale
 
 
 NAMESPACE_NFE = 'http://www.portalfiscal.inf.br/nfe'
 NAMESPACE_CTE = 'http://www.portalfiscal.inf.br/cte'
+NAMESPACE_MDFE = 'http://www.portalfiscal.inf.br/mdfe'
 NAMESPACE_SIG = 'http://www.w3.org/2000/09/xmldsig#'
 NAMESPACE_NFSE = 'http://localhost:8080/WsNFe2/lote'
 ABERTURA = '<?xml version="1.0" encoding="utf-8"?>'
-
-locale.setlocale(locale.LC_ALL, b'pt_BR.UTF-8')
-locale.setlocale(locale.LC_COLLATE, b'pt_BR.UTF-8')
 
 
 class NohXML(object):
     def __init__(self, *args, **kwargs):
         self._xml = None
+        self._hash = None
         self.alertas = []
+        self.namespace = None
+        self.namespace_obrigatorio = True
 
     def _le_xml(self, arquivo):
         if arquivo is None:
             return False
 
+        #import ipdb; ipdb.set_trace();
+
         if not isinstance(arquivo, basestring):
             arquivo = etree.tounicode(arquivo)
-            #self._xml = arquivo
-            #return True
+
+        hash = md5(arquivo.encode('utf-8')).hexdigest()
+        if hash == self._hash:
+            return True
 
         #elif arquivo is not None:
         if arquivo is not None:
             if isinstance(arquivo, basestring):
-                if isinstance(arquivo, str):
-                    arquivo = unicode(arquivo.encode('utf-8'))
+                if sys.version_info.major == 2:
+                    if not isinstance(arquivo, unicode):
+                        arquivo = arquivo.decode('utf-8')
 
                 if '<' in arquivo:
                     self._xml = etree.fromstring(tira_abertura(arquivo).encode('utf-8'))
                 else:
-                    arq = open(arquivo)
-                    txt = b''.join(arq.readlines())
-                    txt = unicode(txt.decode('utf-8'))
+                    arq = open(arquivo, 'r', encoding='utf-8')
+                    txt = ''.join(arq.readlines())
                     txt = tira_abertura(txt)
                     arq.close()
-                    self._xml = etree.fromstring(txt)
+                    self._xml = etree.fromstring(txt.encode('utf-8'))
             else:
                 self._xml = etree.parse(arquivo)
+
+            #
+            # Agora que temos o arquivo já parseado, setamos para as tags filhas desta
+            #
+            for chave in self.__dict__:
+                if isinstance(self.__dict__[chave], NohXML):
+                    self.__dict__[chave]._xml = self._xml
+                    self.__dict__[chave]._hash = hash
+                    self.__dict__[chave]._le_xml(arquivo)
+
             return True
 
         return False
@@ -119,7 +152,20 @@ class NohXML(object):
         #
         # Não deu certo, tem que botar mesmo os namespaces
         #
-        namespaces = {'nfe': NAMESPACE_NFE, 'sig': NAMESPACE_SIG, 'nfse': NAMESPACE_NFSE, 'cte': NAMESPACE_CTE}
+        namespaces = {
+            'nfe': NAMESPACE_NFE,
+            'sig': NAMESPACE_SIG,
+            'nfse': NAMESPACE_NFSE,
+            'cte': NAMESPACE_CTE,
+            'mdfe': NAMESPACE_MDFE,
+        }
+
+        if self.namespace is not None:
+            namespaces['info'] = self.namespace
+            sigla_ns = 'info'
+
+        if ns is not None and sigla_ns:
+            namespaces[sigla_ns] = ns
 
         if ns is not None:
             namespaces['res'] = ns
@@ -128,6 +174,8 @@ class NohXML(object):
             sigla_ns = 'nfe'
         elif '//CTe' in tag or ns == NAMESPACE_CTE:
             sigla_ns = 'cte'
+        elif '//MDFe' in tag or ns == NAMESPACE_MDFE:
+            sigla_ns = 'mdfe'
 
         if not tag.startswith('//*/res'):
             tag = self._preenche_namespace(tag, sigla_ns)
@@ -174,25 +222,25 @@ class ErroObrigatorio(Exception):
         return repr(self.value)
 
     def __unicode__(self):
-        return unicode(self.value)
+        return str(self.value)
 
 
 class TamanhoInvalido(Exception):
     def __init__(self, codigo, nome, valor, tam_min=None, tam_max=None, dec_min=None, dec_max=None):
         if tam_min:
-           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o tamanho mínimo de ' + unicode(tam_min) + ', mas o tamanho enviado foi ' + unicode(len(unicode(valor))) + ': ' + unicode(valor)
+           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o tamanho mínimo de ' + str(tam_min) + ', mas o tamanho enviado foi ' + str(len(str(valor))) + ': ' + str(valor)
         elif tam_max:
-           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o tamanho máximo de ' + unicode(tam_max) + ', mas o tamanho enviado foi ' + unicode(len(unicode(valor))) + ': ' + unicode(valor)
+           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o tamanho máximo de ' + str(tam_max) + ', mas o tamanho enviado foi ' + str(len(str(valor))) + ': ' + str(valor)
         elif dec_min:
-           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o mínimo de ' + unicode(dec_min) + ' casas decimais, mas o enviado foi ' + unicode(len(unicode(valor))) + ': ' + unicode(valor)
+           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o mínimo de ' + str(dec_min) + ' casas decimais, mas o enviado foi ' + str(len(str(valor))) + ': ' + str(valor)
         elif dec_max:
-           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o máximo de ' + unicode(dec_max) + ' casas decimais, mas o enviado foi ' + unicode(len(unicode(valor))) + ': ' + unicode(valor)
+           self.value = 'O campo código ' + codigo + ', "' + nome + '", deve ter o máximo de ' + str(dec_max) + ' casas decimais, mas o enviado foi ' + str(len(str(valor))) + ': ' + str(valor)
 
     def __str__(self):
         return repr(self.value)
 
     def __unicode__(self):
-        return unicode(self.value)
+        return str(self.value)
 
 
 class ErroCaracterInvalido(Exception):
@@ -206,7 +254,7 @@ class ErroCaracterInvalido(Exception):
         return repr(self.value)
 
     def __unicode__(self):
-        return unicode(self.value)
+        return str(self.value)
 
 
 class TagCaracter(NohXML):
@@ -218,18 +266,17 @@ class TagCaracter(NohXML):
         self.obrigatorio = True
         self.tamanho = [None, None, None]
         self.propriedade = None
-        self.namespace = None
-        self.namespace_obrigatorio = True
         self.alertas = []
         self.raiz = None
         self.cdata = False
+        self.ignora_validacao = False
 
         # Codigo para dinamizar a criacao de instancias de entidade,
         # aplicando os valores dos atributos na instanciacao
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-        if kwargs.has_key('valor'):
+        if 'valor' in kwargs:
             self.valor = kwargs['valor']
 
     def _testa_obrigatorio(self, valor):
@@ -238,16 +285,19 @@ class TagCaracter(NohXML):
             #raise ErroObrigatorio(self.codigo, self.nome, self.propriedade)
 
     def _testa_tamanho_minimo(self, valor):
-        if self.tamanho[0] and (len(unicode(valor)) < self.tamanho[0]):
+        if self.tamanho[0] and (len(str(valor)) < self.tamanho[0]):
             return TamanhoInvalido(self.codigo, self.nome, valor, tam_min=self.tamanho[0])
             #raise TamanhoInvalido(self.codigo, self.nome, valor, tam_min=self.tamanho[0])
 
     def _testa_tamanho_maximo(self, valor):
-        if self.tamanho[1] and (len(unicode(valor)) > self.tamanho[1]):
+        if self.tamanho[1] and (len(str(valor)) > self.tamanho[1]):
             return TamanhoInvalido(self.codigo, self.nome, valor, tam_max=self.tamanho[1])
             #raise TamanhoInvalido(self.codigo, self.nome, valor, tam_max=self.tamanho[1])
 
     def _valida(self, valor):
+        if self.ignora_validacao:
+            return True
+
         self.alertas = []
 
         v = valor
@@ -268,13 +318,27 @@ class TagCaracter(NohXML):
 
     def set_valor(self, novo_valor):
         if novo_valor is not None:
-            novo_valor = unicode(novo_valor)
+            novo_valor = str(novo_valor).replace('ŭ', 'u').replace('Ŭ', 'U')
+
             #
             # Remover caratceres inválidos
             #
-            for c in novo_valor:
-                if c > 'ÿ':
-                    raise ErroCaracterInvalido(self.codigo, self.nome, self.propriedade, novo_valor, c)
+            if not self.ignora_validacao:
+                if PYBRASIL:
+                    valor_corrigido = ''
+
+                    for c in novo_valor:
+                        if c <= 'ÿ':
+                            valor_corrigido += c
+                        else:
+                            valor_corrigido += tira_acentos_ascii(c)
+
+                    novo_valor = valor_corrigido
+
+                else:
+                    for c in novo_valor:
+                        if c > 'ÿ':
+                            raise ErroCaracterInvalido(self.codigo, self.nome, self.propriedade, novo_valor, c)
 
             #
             # É obrigatório remover os espaços no início e no final do valor
@@ -283,14 +347,19 @@ class TagCaracter(NohXML):
 
         if self._valida(novo_valor):
             if self.cdata:
-                self._valor_string = unicode(novo_valor)
+                self._valor_string = str(novo_valor)
             else:
-                self._valor_string = unicode(tirar_acentos(novo_valor))
+                self._valor_string = str(tirar_acentos(novo_valor))
         else:
             self._valor_string = ''
 
     def get_valor(self):
-        return unicode(por_acentos(self._valor_string))
+        valor = str(por_acentos(self._valor_string))
+        if valor[:6] == 'Tauga ':
+            return 'Taŭga ' + valor[6:]
+        elif valor[:6] == 'TAUGA ':
+            return 'TAŬGA ' + valor[6:]
+        return valor
 
     valor = property(get_valor, set_valor)
 
@@ -356,7 +425,7 @@ class TagBoolean(TagCaracter):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-        if kwargs.has_key('valor'):
+        if 'valor' in kwargs:
             self.valor = kwargs['valor']
 
 
@@ -406,7 +475,7 @@ class TagBoolean(TagCaracter):
         else:
             texto = '<%s' % self.nome
 
-            if self.namespace:
+            if self.namespace and self.namespace_obrigatorio:
                 texto += ' xmlns="%s"' % self.namespace
 
             if self.propriedade:
@@ -428,7 +497,7 @@ class TagData(TagCaracter):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-        if kwargs.has_key('valor'):
+        if 'valor' in kwargs:
             self.valor = kwargs['valor']
 
     def _valida(self, valor):
@@ -469,6 +538,24 @@ class TagData(TagCaracter):
         else:
             return self._valor_data.strftime('%d/%m/%Y')
 
+    @property
+    def mes_ano(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            if PYBRASIL:
+                return formata_data(self._valor_data, '%B/%Y')
+            else:
+                return self._valor_data.strftime('%B/%Y')
+
+    @property
+    def formato_iso(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            return self._valor_data.strftime('%Y-%m-%d')
+
+
 class TagHora(TagData):
     def set_valor(self, novo_valor):
         if isinstance(novo_valor, basestring):
@@ -499,6 +586,10 @@ class TagHora(TagData):
             return ''
         else:
             return self._valor_data.strftime('%H:%M:%S')
+
+    @property
+    def formato_iso(self):
+        return self.formato_danfe
 
 
 class TagDataHora(TagData):
@@ -540,6 +631,23 @@ class TagDataHora(TagData):
             return ''
         else:
             return self._valor_data.strftime('%d/%m/%Y %H:%M:%S')
+
+    @property
+    def mes_ano(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            if PYBRASIL:
+                return formata_data(self._valor_data, '%B/%Y')
+            else:
+                return self._valor_data.strftime('%B/%Y')
+
+    @property
+    def formato_iso(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            return self._valor_data.strftime('%Y-%m-%d %H:%M:%S')
 
 
 def fuso_horario_sistema():
@@ -643,7 +751,7 @@ class TagDataHoraUTC(TagData):
         if self._valor_data is None:
             return ''
         else:
-            valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S %Z (%z)')
+            valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S (%z)')
             #
             # Troca as siglas:
             # BRT - Brasília Time -> HOB - Horário Oficial de Brasília
@@ -663,6 +771,31 @@ class TagDataHoraUTC(TagData):
             valor = valor.replace('FNT', 'HOFN')
             return valor
 
+    @property
+    def formato_danfse(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            valor = self._brasilia.normalize(self._valor_data).strftime('%d/%m/%Y %H:%M:%S')
+            return valor
+
+    @property
+    def mes_ano(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            if PYBRASIL:
+                return formata_data(self._valor_data, '%B/%Y')
+            else:
+                return self._valor_data.strftime('%B/%Y')
+
+    @property
+    def formato_iso(self):
+        if self._valor_data is None:
+            return ''
+        else:
+            return self._valor_data.isoformat()
+
 
 class TagInteiro(TagCaracter):
     def __init__(self, **kwargs):
@@ -675,7 +808,7 @@ class TagInteiro(TagCaracter):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-        if kwargs.has_key('valor'):
+        if 'valor' in kwargs:
             self.valor = kwargs['valor']
 
     def set_valor(self, novo_valor):
@@ -685,9 +818,9 @@ class TagInteiro(TagCaracter):
             else:
                 novo_valor = 0
 
-        if isinstance(novo_valor, (int, long, Decimal)) and self._valida(novo_valor):
+        if isinstance(novo_valor, (int, Decimal)) and self._valida(novo_valor):
             self._valor_inteiro = novo_valor
-            self._valor_string = unicode(self._valor_inteiro)
+            self._valor_string = str(self._valor_inteiro)
 
             if (len(self.tamanho) >= 3) and self.tamanho[2] and (len(self._valor_string) < self.tamanho[2]):
                 self._valor_string = self._valor_string.rjust(self.tamanho[2], '0')
@@ -706,19 +839,24 @@ class TagInteiro(TagCaracter):
         if not (self.obrigatorio or self._valor_inteiro):
             return ''
 
-        return locale.format('%d', self._valor_inteiro, grouping=True)
+        if PYBRASIL:
+            return formata_valor(self._valor_inteiro, casas_decimais=0)
+
+        else:
+            return locale.format('%d', self._valor_inteiro, grouping=True)
 
 
 class TagDecimal(TagCaracter):
     def __init__(self, *args, **kwargs):
-        self._valor_decimal = Decimal('0.0')
-        self._valor_string = '0.0'
+        self._valor_decimal = Decimal('0.00')
+        self._valor_string = '0.00'
         self.decimais = [None, None, None]
         super(TagDecimal, self).__init__(*args, **kwargs)
 
-        self._valor_decimal = Decimal('0.0')
+        self._valor_decimal = Decimal('0.00')
         self._valor_string = self._formata(self._valor_decimal)
         self.decimais = [None, None, None]
+        self.decimais_danfe = None
 
         # Codigo para dinamizar a criacao de instancias de entidade,
         # aplicando os valores dos atributos na instanciacao
@@ -729,21 +867,28 @@ class TagDecimal(TagCaracter):
         if valor is None:
             valor = self._valor_decimal
 
-        valor = unicode(valor).strip()
+        valor = str(valor).strip()
 
         if '.' in valor:
             valor = valor.split('.')[0]
 
         return valor
 
-    def _parte_decimal(self, valor=None):
+    def _parte_decimal(self, valor=None, tira_zeros=False):
         if valor is None:
             valor = self._valor_decimal
 
-        valor = unicode(valor).strip()
+        valor = str(valor).strip()
 
         if '.' in valor:
             valor = valor.split('.')[1]
+
+            if tira_zeros:
+                valor = valor[::-1]
+                valor = int(valor)
+                valor = str(valor)
+                valor = valor[::-1]
+
         else:
             valor = ''
 
@@ -759,6 +904,8 @@ class TagDecimal(TagCaracter):
         # Tamanho mínimo das casas decimais
         if (len(self.decimais) >= 3) and self.decimais[2] and (len(dec) < self.decimais[2]):
             dec = dec.ljust(self.decimais[2], '0')
+        elif self.nome == 'versao':
+            dec = dec.ljust(2, '0')
 
         texto += '.' + dec
         return texto
@@ -807,13 +954,13 @@ class TagDecimal(TagCaracter):
             if novo_valor:
                 novo_valor = Decimal(novo_valor)
             else:
-                novo_valor = Decimal('0.0')
+                novo_valor = Decimal('0.00')
 
-        if isinstance(novo_valor, (int, long, Decimal)) and self._valida(novo_valor):
+        if isinstance(novo_valor, (int, Decimal)) and self._valida(novo_valor):
             self._valor_decimal = Decimal(novo_valor)
             self._valor_string = self._formata(self._valor_decimal)
         else:
-            self._valor_decimal = Decimal('0.0')
+            self._valor_decimal = Decimal('0.00')
             self._valor_string = self._formata(self._valor_decimal)
 
     def get_valor(self):
@@ -826,32 +973,44 @@ class TagDecimal(TagCaracter):
         if not (self.obrigatorio or self._valor_decimal):
             return ''
 
-        # Tamanho mínimo das casas decimais
-        if (len(self.decimais) >= 3) and self.decimais[2]:
-            if len(self._parte_decimal()) <= self.decimais[2]:
-                formato = '%.' + unicode(self.decimais[2]) + 'f'
+        if self.decimais_danfe is not None:
+            if self.decimais_danfe == 0:
+                formato = '%d'
+            elif len(self._parte_decimal(tira_zeros=True)) <= self.decimais_danfe:
+                formato = '%.' + str(self.decimais_danfe) + 'f'
             else:
-                formato = '%.' + unicode(len(self._parte_decimal())) + 'f'
+                formato = '%.' + str(len(self._parte_decimal(tira_zeros=True))) + 'f'
+
+        # Tamanho mínimo das casas decimais
+        elif (len(self.decimais) >= 3) and self.decimais[2]:
+            if len(self._parte_decimal()) <= self.decimais[2]:
+                formato = '%.' + str(self.decimais[2]) + 'f'
+            else:
+                formato = '%.' + str(len(self._parte_decimal())) + 'f'
         else:
             formato = '%.2f'
 
-        return locale.format(formato, self._valor_decimal, grouping=True)
+        if PYBRASIL:
+            if formato == '%d':
+                return formata_valor(self._valor_decimal, casas_decimais=0)
+
+            cd = int(formato.replace('%.', '').replace('f', ''))
+            return formata_valor(self._valor_decimal, casas_decimais=cd)
+
+        else:
+            return locale.format(formato, self._valor_decimal, grouping=True)
 
     @property
     def formato_danfce(self):
         if not (self.obrigatorio or self._valor_decimal):
             return ''
 
-        # Tamanho mínimo das casas decimais
-        #if (len(self.decimais) >= 3) and self.decimais[2]:
-            #if len(self._parte_decimal()) <= self.decimais[2]:
-                #formato = '%.' + unicode(self.decimais[2]) + 'f'
-            #else:
-                #formato = '%.' + unicode(len(self._parte_decimal())) + 'f'
-        #else:
-        formato = '%.2f'
+        if PYBRASIL:
+            return formata_valor(self._valor_decimal)
 
-        return locale.format(formato, self._valor_decimal, grouping=True)
+        else:
+            formato = '%.2f'
+            return locale.format(formato, self._valor_decimal, grouping=True)
 
 
 class XMLNFe(NohXML):
@@ -879,10 +1038,10 @@ class XMLNFe(NohXML):
         namespace = '{http://www.portalfiscal.inf.br/nfe}'
         return "\n".join([x.message.replace(namespace, '') for x in esquema.error_log])
 
-    def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe'):
+    def le_grupo(self, raiz_grupo, classe_grupo, sigla_ns='nfe', namespace=None):
         tags = []
 
-        grupos = self._le_nohs(raiz_grupo, sigla_ns=sigla_ns)
+        grupos = self._le_nohs(raiz_grupo, sigla_ns=sigla_ns, ns=namespace)
 
         if grupos is not None:
             tags = [classe_grupo() for g in grupos]
@@ -901,6 +1060,8 @@ def tirar_acentos(texto):
     texto = texto.replace('>', '&gt;')
     texto = texto.replace('"', '&quot;')
     texto = texto.replace("'", '&apos;')
+    texto = texto.replace('Ŭ', '&#364;')
+    texto = texto.replace('ŭ', '&#365;')
 
     #
     # Trocar ENTER e TAB
@@ -930,6 +1091,8 @@ def por_acentos(texto):
     texto = texto.replace('&GT;', '>')
     texto = texto.replace('&LT;', '<')
     texto = texto.replace('&AMP;', '&')
+    texto = texto.replace('&#364;', 'Ŭ')
+    texto = texto.replace('&#365;', 'ŭ')
 
     return texto
 
@@ -985,11 +1148,11 @@ def _tipo_para_string(valor, tipo, obrigatorio, dec_min):
     # e a função strftime só aceita data com anos a partir de 1900
     if (tipo in ('d', 'h', 'dh')) and isinstance(valor, (datetime, date, time,)):
         valor = formata_datahora(valor, tipo)
-    elif (tipo == 'n') and isinstance(valor, (int, long, float, Decimal)):
-        if isinstance(valor, (int, long, float)):
-            valor = Decimal(unicode(valor))
+    elif (tipo == 'n') and isinstance(valor, (int, float, Decimal)):
+        if isinstance(valor, (int, float)):
+            valor = Decimal(str(valor))
 
-        valor = unicode(valor).strip()
+        valor = str(valor).strip()
 
         if '.' in valor:
             decimais = valor.split('.')[1]
