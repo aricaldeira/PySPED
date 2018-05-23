@@ -39,4 +39,34 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from .processador_esocial import ProcessadorESocial
+from __future__ import division, print_function, unicode_literals
+
+from .webservices_flags import *
+
+METODO_WS = {
+    WS_ESOCIAL_ENVIO: {
+        'webservice': 'ServicoEnviarLoteEventos',
+        'metodo'    : 'EnviarLoteEventos',
+    },
+    WS_ESOCIAL_CONSULTA: {
+        'webservice': 'ServicoConsultarLoteEventos',
+        'metodo'    : 'ConsultarLoteEventos',
+    },
+    
+}
+
+SVESOCIAL = {
+    # o servidor da consulta de cadastro é diferente dos demais...
+    ESOCIAL_AMBIENTE_PRODUCAO: {
+        'servidor'                 : 'webservices.producaorestrita.esocial.gov.br',
+        WS_ESOCIAL_ENVIO           : 'servicos/empregador/enviarloteeventos/WsEnviarLoteEventos.svc',        
+        WS_ESOCIAL_CONSULTA        : 'servicos/empregador/consultarloteeventos/WsConsultarLoteEventos.svc',
+        
+    },
+    ESOCIAL_AMBIENTE_HOMOLOGACAO: {
+        'servidor'                 : 'webservices.producaorestrita.esocial.gov.br',
+        WS_ESOCIAL_ENVIO           : 'servicos/empregador/enviarloteeventos/WsEnviarLoteEventos.svc',       
+        WS_ESOCIAL_CONSULTA        : 'servicos/empregador/consultarloteeventos/WsConsultarLoteEventos.svc',
+       
+    }
+}

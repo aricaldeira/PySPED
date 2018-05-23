@@ -39,4 +39,13 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from .processador_esocial import ProcessadorESocial
+from __future__ import division, print_function, unicode_literals
+
+from ..nfe.webservices_flags import UF_CODIGO, CODIGO_UF
+
+
+WS_ESOCIAL_ENVIO = 0
+WS_ESOCIAL_CONSULTA = 1
+
+ESOCIAL_AMBIENTE_PRODUCAO = 1
+ESOCIAL_AMBIENTE_HOMOLOGACAO = 2

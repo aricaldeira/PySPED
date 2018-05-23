@@ -39,4 +39,55 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from .processador_esocial import ProcessadorESocial
+from __future__ import (division, print_function, unicode_literals,
+                        absolute_import)
+
+from builtins import str
+import os
+from pysped.xml_sped import *
+from pysped.esocial.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
+
+DIRNAME = os.path.dirname(__file__)
+
+NAMESPACE_ESOCIAL = 'http://www.esocial.gov.br/schema/lote/eventos/envio/v1_1_1'
+
+
+class ConsultaLoteEventos(XMLNFe):
+    def __init__(self):
+        super(ConsultaLoteEventos, self).__init__()
+        self.protocoloEnvio = TagCaracter(nome='protocoloEnvio', raiz='//envioLoteEventos', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<consultaLoteEventos>'
+        xml += self.protocoloEnvio.xml
+        xml += '</consultaLoteEventos>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.protocoloEnvio.xml = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
+class ConsultaLoteEventosEsocial(XMLNFe):
+    def __init__(self):
+        super(ConsultaLoteEventosEsocial, self).__init__()
+        self.consultaLoteEventos = ConsultaLoteEventos()
+        self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
+        self.arquivo_esquema = 'ConsultaLoteEventos-v1_0_0.xsd'
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        #xml += ABERTURA
+        xml += '<eSocial xmlns="' + NAMESPACE_ESOCIAL + '">'
+        xml += self.consultaLoteEventos.xml
+        xml += '</eSocial>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.consultaLoteEventos.xml = arquivo
+
+    xml = property(get_xml, set_xml)

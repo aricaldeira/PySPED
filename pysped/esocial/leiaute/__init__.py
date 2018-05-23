@@ -47,4 +47,13 @@ from __future__ import division, print_function, unicode_literals
 ESQUEMA_ATUAL_VERSAO_2 = 'v2.04.02'
 
 
+from .soap_10100 import SOAPEnvio as SOAPEnvio_10100
+from .soap_10100 import SOAPRetorno as SOAPRetorno_10100
+
+from .envioLoteEventos_10101 import LoteEventosEsocial as LoteEventosEsocial_10101
+from .retornoEnvioLoteEventos_10100 import RetornoLoteEventosEsocial as RetornoLoteEventosEsocial_10100
+from .consultaLoteEventos_10000 import ConsultaLoteEventosEsocial as ConsultaLoteEventosEsocial_10000
+
+
 from .evtInfoEmpregador_20402 import S1000 as S1000_2
+
