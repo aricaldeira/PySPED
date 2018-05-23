@@ -52,5 +52,11 @@ else:
 from pysped.nfe.leiaute import *
 from pysped.cte.leiaute import *
 from pysped.mdfe.leiaute import *
+from pysped.esocial.leiaute import *
+
 from pysped.nfe.processador_nfe import ProcessadorNFe, Certificado
+from pysped.cte.processador_cte import ProcessadorCTe
+from pysped.mdfe.processador_mdfe import ProcessadorMDFe
+from pysped.esocial.processador_esocial import ProcessadorESocial
+
 from pysped.nfse.processador_nfse import ProcessadorNFSe
