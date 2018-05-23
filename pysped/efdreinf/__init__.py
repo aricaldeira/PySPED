@@ -3,7 +3,7 @@
 # PySPED - Python libraries to deal with Brazil's SPED Project
 #
 # Copyright (C) 2010-2012
-# Copyright (C) Wagner Pereira <wagner.pereira at tauga.com.br>
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -39,16 +39,4 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from __future__ import division, print_function, unicode_literals
-
-#
-# Versão 1.03.02
-#
-ESQUEMA_ATUAL_VERSAO_1 = 'v1.03.02'
-
-
-from .soap_200 import SOAPEnvio as SOAPEnvio_200
-from .soap_200 import SOAPRetorno as SOAPRetorno_200
-
-from .evtInfoContribuinte_10302 import R1000 as R1000_1
-from .envioLoteEvento_v1_03_02 import LoteEventoEFDReinf as LoteEventoEFDReinf_v1_03_02
+from .processador_efdreinf import ProcessadorEFDReinf

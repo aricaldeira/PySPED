@@ -3,7 +3,7 @@
 # PySPED - Python libraries to deal with Brazil's SPED Project
 #
 # Copyright (C) 2010-2012
-# Copyright (C) Wagner Pereira <wagner.pereira at tauga.com.br>
+# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -54,28 +54,28 @@ class SOAPEnvio(XMLNFe):
         self.webservice = ''
         self.metodo = ''
         self.cUF    = None
-        self.envio  = None        
-        self._header = {b'Content-Type': b'text/xml; charset=UTF-8'}
-        self._header[b'Accept-Encoding'] = b'gzip,deflate'
-        self._header[b'Connection'] = b'Keep-Alive'
-        self._header[b'User-Agent'] = b'Apache-HttpClient/4.1.1 (java 1.5)'
+        self.envio  = None
+        self._header = {
+            b'Content-Type': b'text/xml; charset=UTF-8',
+            b'Accept-Encoding': b'gzip,deflate',
+            b'Connection': b'Keep-Alive',
+            b'User-Agent': b'Apache-HttpClient/4.1.1 (java 1.5)',
+        }
 
-    def get_xml(self):        
-        self._header[b'SOAPAction'] = b'http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0/' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8')
-
+    def get_xml(self):
+        self._header[b'SOAPAction'] =  b'http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0/' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8')
 
         xml = XMLNFe.get_xml(self)
         #xml += ABERTURA
         xml += '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0">'
-        xml += '<soapenv:Header>'        
-        xml += '</soapenv:Header>'
-        xml += '<soapenv:Body>'
-        xml += '<v1:EnviarLoteEventos>'        
-        xml += '<v1:loteEventos>'
-        xml += self.envio.xml            
-        xml += '</v1:loteEventos>'
-        xml +='</v1:EnviarLoteEventos>'        
-        xml += '</soapenv:Body>'
+        xml +=     '<soapenv:Header/>'
+        xml +=     '<soapenv:Body>'
+        xml +=         '<v1:EnviarLoteEventos>'
+        xml +=             '<v1:loteEventos>'
+        xml +=                 self.envio.xml
+        xml +=             '</v1:loteEventos>'
+        xml +=         '</v1:EnviarLoteEventos>'
+        xml +=     '</soapenv:Body>'
         xml += '</soapenv:Envelope>'
         return xml
 
@@ -96,29 +96,24 @@ class SOAPRetorno(XMLNFe):
         super(SOAPRetorno, self).__init__()
         self.webservice = ''
         self.metodo = ''
-        self.mdfeCabecMsg = MDFeCabecMsg()
         self.resposta = None
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
-        xml += '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'
-        xml +=     '<soap:Header>'
-        xml +=         '<mdfeCabecMsg xmlns="http://www.portalfiscal.inf.br/mdfe/wsdl/' + self.webservice + '">'
-        xml +=             self.mdfeCabecMsg.xml
-        xml +=         '</mdfeCabecMsg>'
-        xml +=     '</soap:Header>'
-        xml +=     '<soap:Body>'
-        xml +=         '<' + self.metodo + 'Result xmlns="http://www.portalfiscal.inf.br/mdfe/wsdl/' + self.webservice + '">'
-        xml +=             self.resposta.xml
-        xml +=         '</' + self.metodo + 'Result>'
-        xml +=     '</soap:Body>'
-        xml += '</soap:Envelope>'
+        xml += '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">'
+        xml +=     '<s:Body>'
+        xml +=         '<EnviarLoteEventosResponse xmlns="http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0">'
+        xml +=             '<EnviarLoteEventosResult>'
+        xml +=                  self.resposta.xml
+        xml +=             '</EnviarLoteEventosResult>'
+        xml +=         '</EnviarLoteEventosResponse>'
+        xml +=     '</s:Body>'
+        xml += '</s:Envelope>'
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.mdfeCabecMsg.xml = arquivo
             self.resposta.xml = arquivo
 
     xml = property(get_xml, set_xml)

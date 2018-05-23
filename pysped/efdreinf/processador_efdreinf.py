@@ -52,7 +52,7 @@ from ..nfe.processador_nfe import ProcessadorNFe, ProcessoNFe as ProcessoEFDRein
 
 from .webservices_flags import *
 from . import webservices_3
-from .leiaute import SOAPEnvio_200, SOAPRetorno_200
+from .leiaute import SOAPEnvio_10100, SOAPRetorno_10100
 from .leiaute import LoteEventoEFDReinf_v1_03_02
 
 

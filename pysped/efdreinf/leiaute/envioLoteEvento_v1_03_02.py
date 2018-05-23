@@ -48,7 +48,7 @@ import base64
 from reportlab.graphics.barcode import createBarcodeDrawing
 from genshi.core import Markup
 from pysped.xml_sped import *
-from pysped.efd_reinf.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
+from pysped.efdreinf.leiaute import ESQUEMA_ATUAL_VERSAO_1 as ESQUEMA_ATUAL
 
 PYBRASIL = False
 #try:
