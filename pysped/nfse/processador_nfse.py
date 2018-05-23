@@ -211,8 +211,8 @@ class ProcessadorNFSe(object):
             return xml
 
         for namespace, url in self.configuracao[operacao].assinatura.namespaces.items():
-            xml = xml.replace(f'xmlns:{namespace}="{url}"', '')
-            xml = xml.replace(f'xmlns="{url}"', '')
+            xml = xml.replace('xmlns:{namespace}="{url}"'.format(namespace=namespace, url=url), '')
+            xml = xml.replace('xmlns="{url}"'.format(url=url), '')
 
         return xml
 
@@ -342,11 +342,11 @@ class ProcessadorNFSe(object):
 
                 if configuracao.tag_erro_codigo:
                     texto_erro = getattr(erro, configuracao.tag_erro_codigo, '')
-                    mensagem_erro += f'Código de retorno: {texto_erro}\n'
+                    mensagem_erro += 'Código de retorno: {texto_erro}\n'.format(texto_erro=texto_erro)
 
                 if configuracao.tag_erro_descricao:
                     texto_erro = getattr(erro, configuracao.tag_erro_descricao, '')
-                    mensagem_erro += f'Mensagem: {texto_erro}\n'
+                    mensagem_erro += 'Mensagem: {texto_erro}\n'.format(texto_erro=texto_erro)
 
             conexao.mensagem_erro = mensagem_erro
 
@@ -358,11 +358,11 @@ class ProcessadorNFSe(object):
 
                 if configuracao.tag_alerta_codigo:
                     texto_alerta = getattr(alerta, configuracao.tag_alerta_codigo, '')
-                    mensagem_alerta += f'Código de retorno: {texto_alerta}\n'
+                    mensagem_alerta += 'Código de retorno: {texto_alerta}\n'.format(texto_erro=texto_erro)
 
                 if configuracao.tag_alerta_descricao:
                     texto_alerta = getattr(alerta, configuracao.tag_alerta_descricao, '')
-                    mensagem_alerta += f'Mensagem: {texto_alerta}\n'
+                    mensagem_alerta += 'Mensagem: {texto_alerta}\n'.format(texto_erro=texto_erro)
 
             conexao.mensagem_erro = mensagem_alerta
 
@@ -464,11 +464,11 @@ class ProcessadorNFSe(object):
                         conexao.erros = []
                         break
 
-                    mensagem_erro += f'Código de retorno: {texto_erro}\n'
+                    mensagem_erro += 'Código de retorno: {texto_erro}\n'.format(texto_erro=texto_erro)
 
                 if configuracao.tag_erro_descricao:
                     texto_erro = getattr(erro, configuracao.tag_erro_descricao, '')
-                    mensagem_erro += f'Mensagem: {texto_erro}\n'
+                    mensagem_erro += 'Mensagem: {texto_erro}\n'.format(texto_erro=texto_erro)
 
                 conexao.erros.append(erro)
 
@@ -490,11 +490,11 @@ class ProcessadorNFSe(object):
                         conexao.erros = []
                         break
 
-                    mensagem_alerta += f'Código de retorno: {texto_alerta}\n'
+                    mensagem_alerta += 'Código de retorno: {texto_alerta}\n'.format(texto_alerta=texto_alerta)
 
                 if configuracao.tag_alerta_descricao:
                     texto_alerta = getattr(alerta, configuracao.tag_alerta_descricao, '')
-                    mensagem_alerta += f'Mensagem: {texto_alerta}\n'
+                    mensagem_alerta += 'Mensagem: {texto_alerta}\n'.format(texto_alerta=texto_alerta)
 
                 conexao.erros.append(alerta)
 
