@@ -387,6 +387,9 @@ class Certificado(object):
         elif '</evtInfoEmpregador>' in xml:
             doctype = '<!DOCTYPE eSocial [<!ATTLIST evtInfoEmpregador Id ID #IMPLIED>]>'
 
+        elif '</evtInfoContri>' in xml:
+            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
+
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
 
@@ -459,6 +462,11 @@ class Certificado(object):
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
         )
         assinador.namespaces = {None: assinador.namespaces['ds']}
+
+        print(doc_xml.xml)
+        print(self.chave)
+        print(assinatura.URI)
+        print(self.certificado)
 
         doc_xml = assinador.sign(doc_xml, key=self.chave, cert=self.certificado, reference_uri=assinatura.URI)
 

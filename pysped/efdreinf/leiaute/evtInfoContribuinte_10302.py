@@ -208,7 +208,7 @@ class InfoContri(XMLNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<infoEmpregador>'
+        xml += '<infoContri>'
         if self.operacao == 'I':
             xml += '<inclusao>'
             xml += self.idePeriodo.xml
@@ -226,7 +226,7 @@ class InfoContri(XMLNFe):
             xml += self.idePeriodo.xml
             xml += '</exclusao>'
 
-        xml += '</infoEmpregador>'
+        xml += '</infoContri>'
         return xml
 
     def set_xml(self):

@@ -87,12 +87,12 @@ class ProcessadorEFDReinf(ProcessadorNFe):
         envio = LoteEventoEFDReinf_v1_03_02()
         resposta = LoteEventoEFDReinf_v1_03_02()
         processo = ProcessoEFDReinf(webservice=WS_EFDREINF_ENVIO, envio=envio, resposta=resposta)
-        envio.envioLoteEventos.ideEmpregador.tpInsc.valor = lista_eventos[0].evtInfoEmpregador.ideEmpregador.tpInsc
-        envio.envioLoteEventos.ideEmpregador.nrInsc.valor = lista_eventos[0].evtInfoEmpregador.ideEmpregador.nrInsc
-        envio.envioLoteEventos.ideTransmissor.tpInsc.valor = lista_eventos[0].evtInfoEmpregador.ideEmpregador.tpInsc
-        envio.envioLoteEventos.ideTransmissor.nrInsc.valor = lista_eventos[0].evtInfoEmpregador.ideEmpregador.nrInsc
+        envio.envioLoteEventos.ideContri.tpInsc.valor = lista_eventos[0].evtInfoContri.ideContri.tpInsc
+        envio.envioLoteEventos.ideContri.nrInsc.valor = lista_eventos[0].evtInfoContri.ideContri.nrInsc
+        envio.envioLoteEventos.ideTransmissor.tpInsc.valor = lista_eventos[0].evtInfoContri.ideContri.tpInsc
+        envio.envioLoteEventos.ideTransmissor.nrInsc.valor = lista_eventos[0].evtInfoContri.ideContri.nrInsc
 
-        self.ambiente = lista_eventos[0].evtInfoEmpregador.ideEvento.tpAmb.valor 
+        self.ambiente = lista_eventos[0].evtInfoContri.ideEvento.tpAmb.valor
                 
         for evento in lista_eventos:            
             self.certificado.assina_xmlnfe(evento)

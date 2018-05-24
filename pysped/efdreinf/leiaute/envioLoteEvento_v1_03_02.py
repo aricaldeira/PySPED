@@ -63,18 +63,18 @@ DIRNAME = os.path.dirname(__file__)
 NAMESPACE_LOTE_EFDREINF = 'http://www.reinf.esocial.gov.br/schema/lote/eventos/envio/v1_03_02'
 
 
-class IdeEmpregador(XMLNFe):
+class IdeContri(XMLNFe):
     def __init__(self):
-        super(IdeEmpregador, self).__init__()
-        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//ideEmpregador', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[ 14, 14], raiz='//ideEmpregador', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
+        super(IdeContri, self).__init__()
+        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[ 14, 14], raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<ideEmpregador>'
+        xml += '<ideContri>'
         xml += self.tpInsc.xml
         xml += self.nrInsc.xml
-        xml += '</ideEmpregador>'
+        xml += '</ideContri>'
         return xml
 
     def set_xml(self):
@@ -111,14 +111,14 @@ class EnvioLoteEventos(XMLNFe):
     def __init__(self):
         super(EnvioLoteEventos, self).__init__()
         self.grupo = TagCaracter(nome='envioLoteEventos', propriedade='grupo', valor='1', raiz='//envioLoteEventos', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.ideEmpregador = IdeEmpregador()        
+        self.ideContri = IdeContri()
         self.ideTransmissor = IdeTransmissor()
         self.eventos = []        
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += self.grupo.xml
-        xml += self.ideEmpregador.xml        
+        xml += self.ideContri.xml
         xml += self.ideTransmissor.xml
         xml += '<eventos>'
                 
@@ -133,7 +133,7 @@ class EnvioLoteEventos(XMLNFe):
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):            
-            self.ideEmpregador.xml = arquivo
+            self.ideContri.xml = arquivo
             self.ideTransmissor.xml = arquivo            
             self.eventos.xml = arquivo            
             
