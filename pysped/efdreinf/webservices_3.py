@@ -59,14 +59,14 @@ SVEFDREINF = {
     # o servidor da consulta de cadastro é diferente dos demais...
     EFDREINF_AMBIENTE_PRODUCAO: {
         'servidor'                  : 'preprodefdreinf.receita.fazenda.gov.br',  # TODO Atualizar para o ambiente de produção quando disponível
-        WS_EFDREINF_ENVIO           : 'WsREINF/RecepcaoLoteReinf.svc',
-        WS_EFDREINF_CONSULTA        : 'WsREINF/ConsultasReinf.svc',
+        WS_EFDREINF_ENVIO           : 'RecepcaoLoteReinf.svc',
+        WS_EFDREINF_CONSULTA        : 'ConsultasReinf.svc',
         
     },
     EFDREINF_AMBIENTE_HOMOLOGACAO: {
         'servidor'                  : 'preprodefdreinf.receita.fazenda.gov.br',
-        WS_EFDREINF_ENVIO           : 'WsREINF/RecepcaoLoteReinf.svc',
-        WS_EFDREINF_CONSULTA        : 'WsREINF/ConsultasReinf.svc',
+        WS_EFDREINF_ENVIO           : 'RecepcaoLoteReinf.svc',
+        WS_EFDREINF_CONSULTA        : 'ConsultasReinf.svc',
        
     }
 }

@@ -67,7 +67,7 @@ class IdeContri(XMLNFe):
     def __init__(self):
         super(IdeContri, self).__init__()
         self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[ 14, 14], raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -89,7 +89,7 @@ class IdeTransmissor(XMLNFe):
     def __init__(self):
         super(IdeTransmissor, self).__init__()
         self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//ideTransmissor', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[ 14, 14], raiz='//ideTransmissor', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//ideTransmissor', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)

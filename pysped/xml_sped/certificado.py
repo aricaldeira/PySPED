@@ -388,7 +388,8 @@ class Certificado(object):
             doctype = '<!DOCTYPE eSocial [<!ATTLIST evtInfoEmpregador Id ID #IMPLIED>]>'
 
         elif '</evtInfoContri>' in xml:
-            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
+            # doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
+            doctype = ''
 
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
@@ -457,16 +458,11 @@ class Certificado(object):
 
         assinador = signxml.XMLSigner(
             method=signxml.methods.enveloped,
-            signature_algorithm='rsa-sha1',
-            digest_algorithm='sha1',
+            signature_algorithm='rsa-sha256',
+            digest_algorithm='sha256',
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
         )
         assinador.namespaces = {None: assinador.namespaces['ds']}
-
-        print(doc_xml.xml)
-        print(self.chave)
-        print(assinatura.URI)
-        print(self.certificado)
 
         doc_xml = assinador.sign(doc_xml, key=self.chave, cert=self.certificado, reference_uri=assinatura.URI)
 
@@ -536,7 +532,7 @@ class Certificado(object):
         #
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
-        assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha1')
+        assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha256')
 
         return base64.encode(assinatura)
 
@@ -547,7 +543,7 @@ class Certificado(object):
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
         try:
-            crypto.verify(pkcs12.get_certificate(), assinatura, texto, 'sha1')
+            crypto.verify(pkcs12.get_certificate(), assinatura, texto, 'sha256')
         except:
             return False
 

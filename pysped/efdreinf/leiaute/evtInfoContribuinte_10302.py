@@ -162,6 +162,7 @@ class InfoCadastro(XMLNFe):
         xml += self.indDesoneracao.xml
         xml += self.indAcordoIsenMulta.xml
         xml += self.indSitPJ.xml
+        xml += self.contato.xml
         xml += '</infoCadastro>'
         return xml
 
@@ -241,7 +242,7 @@ class IdeContri(XMLNFe):
     def __init__(self):
         super(IdeContri, self).__init__()
         self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//Reinf/evtInfoContri/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[14, 14], raiz='//Reinf/evtInfoContri/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//Reinf/evtInfoContri/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -287,15 +288,17 @@ class IdeEvento(XMLNFe):
 class EvtInfoContri(XMLNFe):
     def __init__(self):
         super(EvtInfoContri, self).__init__()
-        self.Id = TagCaracter(nome='evtInfoContri', tamanho=[1, 36], raiz='//Reinf/evtInfoContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=True)
+        self.Id = TagCaracter(nome='evtInfoContri', propriedade='Id', raiz='//Reinf/evtInfoContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.ideEvento = IdeEvento()
         self.ideContri = IdeContri()
         self.infoContri = InfoContri()
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<evtInfoContri>'
         xml += self.Id.xml
+        xml += self.ideEvento.xml
+        xml += self.ideContri.xml
+        xml += self.infoContri.xml
         xml += '</evtInfoContri>'
         return xml
 
