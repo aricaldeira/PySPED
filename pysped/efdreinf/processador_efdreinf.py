@@ -54,6 +54,7 @@ from .webservices_flags import *
 from . import webservices_3
 from .leiaute import SOAPEnvio_10100, SOAPRetorno_10100
 from .leiaute import LoteEventoEFDReinf_v1_03_02
+from .leiaute import RetornoLoteEventosEFDReinf_v1_03_02
 
 
 class ProcessadorEFDReinf(ProcessadorNFe):
@@ -85,12 +86,12 @@ class ProcessadorEFDReinf(ProcessadorNFe):
 
     def enviar_lote(self, lista_eventos=[]):
         envio = LoteEventoEFDReinf_v1_03_02()
-        resposta = LoteEventoEFDReinf_v1_03_02()
+        resposta = RetornoLoteEventosEFDReinf_v1_03_02()
         processo = ProcessoEFDReinf(webservice=WS_EFDREINF_ENVIO, envio=envio, resposta=resposta)
-        envio.envioLoteEventos.ideContri.tpInsc.valor      = lista_eventos[0].evtInfoContri.ideContri.tpInsc.valor
-        envio.envioLoteEventos.ideContri.nrInsc.valor      = lista_eventos[0].evtInfoContri.ideContri.nrInsc.valor
-        envio.envioLoteEventos.ideTransmissor.tpInsc.valor = lista_eventos[0].evtInfoContri.ideContri.tpInsc.valor
-        envio.envioLoteEventos.ideTransmissor.nrInsc.valor = lista_eventos[0].evtInfoContri.ideContri.nrInsc.valor
+        # envio.envioLoteEventos.ideContri.tpInsc.valor      = lista_eventos[0].evtInfoContri.ideContri.tpInsc.valor
+        # envio.envioLoteEventos.ideContri.nrInsc.valor      = lista_eventos[0].evtInfoContri.ideContri.nrInsc.valor
+        # envio.envioLoteEventos.ideTransmissor.tpInsc.valor = lista_eventos[0].evtInfoContri.ideContri.tpInsc.valor
+        # envio.envioLoteEventos.ideTransmissor.nrInsc.valor = lista_eventos[0].evtInfoContri.ideContri.nrInsc.valor
 
         self.ambiente = lista_eventos[0].evtInfoContri.ideEvento.tpAmb.valor
                 
@@ -100,7 +101,6 @@ class ProcessadorEFDReinf(ProcessadorNFe):
             
         envio.envioLoteEventos.eventos = lista_eventos
         envio.validar()
-        print(envio.xml)
 
         if self.salvar_arquivos:
             for n in lista_eventos:                
@@ -114,7 +114,14 @@ class ProcessadorEFDReinf(ProcessadorNFe):
             arq.write(envio.xml)
             arq.close()
 
+        print(envio.xml)
+
         self._conectar_servico(WS_EFDREINF_ENVIO, envio, resposta)
+
+        if resposta.status in [404]:
+            raise Exception("Ambiente não encontrado !")
+
+        print(resposta.original)
         ## resposta.validar()
         # if self.salvar_arquivos:
         #     nome_arq = self.caminho + str(envio.idLote.valor).strip().rjust(15, '0') + '-rec'
@@ -128,17 +135,17 @@ class ProcessadorEFDReinf(ProcessadorNFe):
         #     arq.write(resposta.xml)
         #     arq.close()
 
-        if self.salvar_arquivos:
-            nome_arq = self.caminho + id_evento + '-rec'
-
-            if resposta.retornoEnvioLoteEventos.status.cdResposta.valor != '201':
-                nome_arq += '-rej.xml'
-            else:
-                nome_arq += '.xml'
-
-            arq = open(nome_arq, 'w', encoding='utf-8')
-            arq.write(resposta.xml)
-            arq.close()
+        # if self.salvar_arquivos:
+        #     nome_arq = self.caminho enviar_lote+ id_evento + '-rec'
+        #
+        #     if resposta.retornoEnvioLoteEventos.status.cdResposta.valor != '201':
+        #         nome_arq += '-rej.xml'
+        #     else:
+        #         nome_arq += '.xml'
+        #
+        #     arq = open(nome_arq, 'w', encoding='utf-8')
+        #     arq.write(resposta.xml)
+        #     arq.close()
 
         return processo
 

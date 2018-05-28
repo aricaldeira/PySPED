@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 #
 # PySPED - Python libraries to deal with Brazil's SPED Project
@@ -63,79 +64,28 @@ DIRNAME = os.path.dirname(__file__)
 NAMESPACE_LOTE_EFDREINF = 'http://www.reinf.esocial.gov.br/schema/lote/eventos/envio/v1_03_02'
 
 
-class IdeContri(XMLNFe):
+class Evento(XMLNFe):
     def __init__(self):
-        super(IdeContri, self).__init__()
-        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//ideContri', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
+        super(Evento, self).__init__()
+        self.Id = TagCaracter(nome='evento', propriedade='Id', raiz='//Reinf/loteEventos/evento', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
+        self.eventos = []
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<ideContri>'
-        xml += self.tpInsc.xml
-        xml += self.nrInsc.xml
-        xml += '</ideContri>'
-        return xml
-
-    def set_xml(self):
-        if self._le_xml(arquivo):
-            self.tpInsc.xml = arquivo
-            self.nrInsc.xml = arquivo
-
-    xml = property(get_xml, set_xml)
-
-
-class IdeTransmissor(XMLNFe):
-    def __init__(self):
-        super(IdeTransmissor, self).__init__()
-        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//ideTransmissor', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//ideTransmissor', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += '<ideTransmissor>'
-        xml += self.tpInsc.xml
-        xml += self.nrInsc.xml
-        xml += '</ideTransmissor>'
-        return xml
-
-    def set_xml(self):
-        if self._le_xml(arquivo):
-            self.tpInsc.xml = arquivo
-            self.nrInsc.xml = arquivo
-
-    xml = property(get_xml, set_xml)
-  
-
-class EnvioLoteEventos(XMLNFe):
-    def __init__(self):
-        super(EnvioLoteEventos, self).__init__()
-        self.grupo = TagCaracter(nome='envioLoteEventos', propriedade='grupo', valor='1', raiz='//envioLoteEventos', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
-        self.ideContri = IdeContri()
-        self.ideTransmissor = IdeTransmissor()
-        self.eventos = []        
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += self.grupo.xml
-        xml += self.ideContri.xml
-        xml += self.ideTransmissor.xml
-        xml += '<eventos>'
+        xml += '<loteEventos>'
                 
         for e in self.eventos:
             xml += '<evento Id="' + e.id_evento + '">'
             xml += e.xml                                    
             xml += '</evento>'                     
             
-        xml += '</eventos>'
-        xml += '</envioLoteEventos>'        
+        xml += '</loteEventos>'
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):            
-            self.ideContri.xml = arquivo
-            self.ideTransmissor.xml = arquivo            
-            self.eventos.xml = arquivo            
+            self.Id.xml = arquivo
+            self.eventos.xml = arquivo
             
     xml = property(get_xml, set_xml)
 
@@ -143,7 +93,7 @@ class EnvioLoteEventos(XMLNFe):
 class LoteEventoEFDReinf(XMLNFe):
     def __init__(self):
         super(LoteEventoEFDReinf, self).__init__()
-        self.envioLoteEventos = EnvioLoteEventos()        
+        self.envioLoteEventos = Evento()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'EnvioLoteEventos.xsd'
         self.id_evento = ''
@@ -158,6 +108,6 @@ class LoteEventoEFDReinf(XMLNFe):
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.envioLoteEventos.xml = arquivo                       
+            self.envioLoteEventos.xml = arquivo
     
     xml = property(get_xml, set_xml)

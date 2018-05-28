@@ -50,6 +50,7 @@ ESQUEMA_ATUAL_VERSAO_1 = 'v1.03.02'
 from .soap_10100 import SOAPEnvio as SOAPEnvio_10100
 from .soap_10100 import SOAPRetorno as SOAPRetorno_10100
 
-from .envioLoteEvento_v1_03_02 import LoteEventoEFDReinf as LoteEventoEFDReinf_v1_03_02
+from .envioLoteEvento_10302 import LoteEventoEFDReinf as LoteEventoEFDReinf_v1_03_02
+from .retornoLoteEventos_10302 import RetornoLoteEventos as RetornoLoteEventosEFDReinf_v1_03_02
 
 from .evtInfoContribuinte_10302 import R1000 as R1000_1
