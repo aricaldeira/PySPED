@@ -60,7 +60,7 @@ PYBRASIL = True
 
 DIRNAME = os.path.dirname(__file__)
 
-NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtInfoContri/v1_03_02'
+NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtInfoContribuinte/v1_03_02'
 
 
 class Contato(XMLNFe):
@@ -288,7 +288,7 @@ class IdeEvento(XMLNFe):
 class EvtInfoContri(XMLNFe):
     def __init__(self):
         super(EvtInfoContri, self).__init__()
-        self.Id = TagCaracter(nome='evtInfoContri', propriedade='Id', raiz='//Reinf/evtInfoContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.Id = TagCaracter(nome='evtInfoContri', propriedade='id', raiz='//Reinf/evtInfoContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.ideEvento = IdeEvento()
         self.ideContri = IdeContri()
         self.infoContri = InfoContri()
@@ -355,9 +355,10 @@ class R1000(XMLNFe):
         #OBS.: No caso de pessoas jurídicas, o CNPJ informado deverá conter 8 ou 14 posições de
         #acordo com o enquadramento do contribuinte para preenchimento do campo {ideEmpregador/nrInsc} do evento S-1000, completando-se com zeros à direita, se necessário.        
                 
-        id_evento = 'ID'        
+        id_evento = 'ID'
         id_evento += self.evtInfoContri.ideContri.tpInsc.valor
-        id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor).zfill(14)
+        id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor)[0:8] + '000000'
+        # id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor).zfill(14)
         id_evento += data_hora        
         id_evento += str(1).zfill(5)
    

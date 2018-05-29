@@ -117,11 +117,11 @@ class ProcessadorEFDReinf(ProcessadorNFe):
         print(envio.xml)
 
         self._conectar_servico(WS_EFDREINF_ENVIO, envio, resposta)
+        # print(resposta.original)
 
         if resposta.status in [404]:
             raise Exception("Ambiente não encontrado !")
 
-        print(resposta.original)
         ## resposta.validar()
         # if self.salvar_arquivos:
         #     nome_arq = self.caminho + str(envio.idLote.valor).strip().rjust(15, '0') + '-rec'

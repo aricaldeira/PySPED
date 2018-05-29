@@ -61,7 +61,7 @@ PYBRASIL = True
 
 DIRNAME = os.path.dirname(__file__)
 
-NAMESPACE_LOTE_EFDREINF = 'http://www.reinf.esocial.gov.br/schema/lote/eventos/envio/v1_03_02'
+NAMESPACE_LOTE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/envioLoteEventos/v1_03_02'
 
 
 class Evento(XMLNFe):
@@ -75,8 +75,8 @@ class Evento(XMLNFe):
         xml += '<loteEventos>'
                 
         for e in self.eventos:
-            xml += '<evento Id="' + e.id_evento + '">'
-            xml += e.xml                                    
+            xml += '<evento id="' + e.id_evento + '">'
+            xml += e.xml
             xml += '</evento>'                     
             
         xml += '</loteEventos>'

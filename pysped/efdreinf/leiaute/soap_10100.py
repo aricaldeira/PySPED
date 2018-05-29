@@ -60,21 +60,23 @@ class SOAPEnvio(XMLNFe):
             b'Accept-Encoding': b'gzip,deflate',
             b'Connection': b'Keep-Alive',
             b'User-Agent': b'Apache-HttpClient/4.1.1 (java 1.5)',
+            b'SOAPAction': b'http://sped.fazenda.gov.br/RecepcaoLoteReinf/ReceberLoteEventos'
         }
 
     def get_xml(self):
-        self._header[b'SOAPAction'] =  b'http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0/' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8')
+        # self._header[b'SOAPAction'] = b'http://sped.fazenda.gov.br/RecepcaoLoteReinf/ReceberLoteEventos' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8')
+        # self._header[b'SOAPAction'] = b'http://sped.fazenda.gov.br/RecepcaoLoteReinf/ReceberLoteEventos'
 
         xml = XMLNFe.get_xml(self)
         #xml += ABERTURA
-        xml += '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0">'
+        xml += '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sped="http://sped.fazenda.gov.br/">'
         xml +=     '<soapenv:Header/>'
         xml +=     '<soapenv:Body>'
-        xml +=         '<v1:EnviarLoteEventos>'
-        xml +=             '<v1:loteEventos>'
+        xml +=         '<sped:ReceberLoteEventos>'
+        xml +=             '<sped:loteEventos>'
         xml +=                 self.envio.xml
-        xml +=             '</v1:loteEventos>'
-        xml +=         '</v1:EnviarLoteEventos>'
+        xml +=             '</sped:loteEventos>'
+        xml +=         '</sped:ReceberLoteEventos>'
         xml +=     '</soapenv:Body>'
         xml += '</soapenv:Envelope>'
         return xml
@@ -102,12 +104,12 @@ class SOAPRetorno(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += '<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">'
-        xml +=     '<s:Body>'
-        xml +=         '<EnviarLoteEventosResponse xmlns="http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/v1_1_0">'
-        xml +=             '<EnviarLoteEventosResult>'
+        xml +=     '<s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
+        xml +=         '<ReceberLoteEventosResponse xmlns="http://sped.fazenda.gov.br/">'
+        xml +=             '<ReceberLoteEventosResult>'
         xml +=                  self.resposta.xml
-        xml +=             '</EnviarLoteEventosResult>'
-        xml +=         '</EnviarLoteEventosResponse>'
+        xml +=             '</ReceberLoteEventosResult>'
+        xml +=         '</ReceberLoteEventosResponse>'
         xml +=     '</s:Body>'
         xml += '</s:Envelope>'
         return xml

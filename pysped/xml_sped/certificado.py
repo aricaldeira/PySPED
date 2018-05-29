@@ -387,9 +387,11 @@ class Certificado(object):
         elif '</evtInfoEmpregador>' in xml:
             doctype = '<!DOCTYPE eSocial [<!ATTLIST evtInfoEmpregador Id ID #IMPLIED>]>'
 
+        #
+        # EFD/Reinf
+        #
         elif '</evtInfoContri>' in xml:
-            # doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
-            doctype = ''
+            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
 
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
