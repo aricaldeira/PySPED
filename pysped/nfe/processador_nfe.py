@@ -397,6 +397,8 @@ class ProcessadorNFe(object):
             self._soap_retorno.resposta.original = resp.read().decode('utf-8')
         else:
             self._soap_retorno.resposta.original = resp.read()
+        print("==== Retorno ====")
+        print(self._soap_retorno.resposta.original)
 
         # Tudo certo!
         if self._soap_retorno.resposta.status == 200:

@@ -323,7 +323,7 @@ class Certificado(object):
             raise ValueError('O documento nao e do tipo esperado: XMLNFe')
 
         # Realiza a assinatura
-        xml = self.assina_xml(doc.xml)
+        xml = self.assina_xml(doc.xml, metodo=doc.Signature.metodo)
 
         # Devolve os valores para a instância doc
         doc.Signature.xml = xml
@@ -437,7 +437,7 @@ class Certificado(object):
 
         return xml
 
-    def assina_xml(self, xml):
+    def assina_xml(self, xml, metodo='sha1'):
         xml = self._prepara_doc_xml(xml)
 
         assinatura = Signature()
@@ -458,10 +458,16 @@ class Certificado(object):
         #
         doc_xml = etree.fromstring(xml.encode('utf-8'))
 
+        signature_algorithm = 'rsa-sha1'
+        digest_algorithm = 'sha1'
+        if metodo == 'sha256':
+            signature_algorithm = 'rsa-sha256'
+            digest_algorithm = 'sha256'
+
         assinador = signxml.XMLSigner(
             method=signxml.methods.enveloped,
-            signature_algorithm='rsa-sha256',
-            digest_algorithm='sha256',
+            signature_algorithm=signature_algorithm,
+            digest_algorithm=digest_algorithm,
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
         )
         assinador.namespaces = {None: assinador.namespaces['ds']}

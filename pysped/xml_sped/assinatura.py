@@ -57,6 +57,7 @@ class Signature(XMLNFe):
         self.X509Certificate = u''
         self.caminho_esquema = os.path.join(DIRNAME, u'schema/')
         self.arquivo_esquema = u'xmldsig-core-schema_v1.01.xsd'
+        self.metodo = 'sha1'
 
     def get_xml(self):
         if not len(self.URI):
@@ -68,15 +69,19 @@ class Signature(XMLNFe):
         xml  = u'<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">'
         xml +=     u'<SignedInfo>'
         xml +=         u'<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />'
-        # xml +=         u'<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />'
-        xml +=         u'<SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />'
+        if self.metodo == 'sha1':
+            xml +=         u'<SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />'
+        elif self.metodo == 'sha256':
+            xml +=         u'<SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />'
         xml +=         u'<Reference URI="' + self.URI + u'">'
         xml +=             u'<Transforms>'
         xml +=                 u'<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />'
         xml +=                 u'<Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />'
         xml +=             u'</Transforms>'
-        # xml +=             u'<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />'
-        xml +=             u'<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />'
+        if self.metodo == 'sha1':
+            xml +=             u'<DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />'
+        elif self.metodo == 'sha256':
+            xml +=             u'<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />'
         xml +=             u'<DigestValue>' + self.DigestValue + u'</DigestValue>'
         xml +=         u'</Reference>'
         xml +=     u'</SignedInfo>'
