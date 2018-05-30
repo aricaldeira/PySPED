@@ -85,7 +85,7 @@ class RetornoEventos(XMLNFe):
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.evento.xml = arquivo
+            self.evento.xml = arquivoRetornoEventos
 
     xml = property(get_xml, set_xml)
 
@@ -144,19 +144,17 @@ class DadosRegistroOcorrenciaLote(XMLNFe):
     xml = property(get_xml, set_xml)
 
 
-class Status(XMLNFe):
+class RetornoStatus(XMLNFe):
     def __init__(self):
-        super(Status, self).__init__()
-        self.cdStatus    = TagCaracter(nome='cdStatus', raiz='//Reinf/retornoLoteEventos/status', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.descRetorno = TagCaracter(nome='descRetorno', raiz='//Reinf/retornoLoteEventos/status', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.dadosRegistroOcorrenciaLote = DadosRegistroOcorrenciaLote()
+        super(RetornoStatus, self).__init__()
+        self.cdStatus    = TagInteiro(nome='cdStatus', tamanho=[1, 1, 1], raiz='//Reinf/retornoLoteEventos/status', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.descRetorno = TagCaracter(nome='descRetorno', tamanho=[1, 255], raiz='//Reinf/retornoLoteEventos/status', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<status>'
         xml += self.cdStatus.xml
         xml += self.descRetorno.xml
-        xml += self.dadosRegistroOcorrenciaLote.xml
         xml += '</status>'
         return xml
 
@@ -164,7 +162,6 @@ class Status(XMLNFe):
         if self._le_xml(arquivo):
             self.cdStatus.xml = arquivo
             self.descRetorno.xml = arquivo
-            self.dadosRegistroOcorrenciaLote.xml = arquivo
 
     xml = property(get_xml, set_xml)
 
@@ -175,7 +172,7 @@ class IdeTransmissor(XMLNFe):
         self.idTransmissor = TagCaracter(nome='idTransmissor', raiz='//Reinf/retornoLoteEventos/ideTransmissor', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
-        if not (self.idTransmissor.valor):
+        if not self.idTransmissor.valor:
             return ''
 
         xml = XMLNFe.get_xml(self)
@@ -196,14 +193,14 @@ class RetornoLoteEventos(XMLNFe):
         super(RetornoLoteEventos, self).__init__()
         self.Id = TagCaracter(nome='retornoLoteEventos', propriedade='id', raiz='//Reinf/retornoLoteEventos', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.ideTransmissor = IdeTransmissor()
-        self.status = Status()
+        self.retornostatus = RetornoStatus()
         self.retornoEventos = RetornoEventos()
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<retornoLoteEventos>'
         xml += self.ideTransmissor.xml
-        xml += self.status.xml
+        xml += self.retornostatus.xml
         xml += self.retornoEventos.xml
         xml += '</retornoLoteEventos>'
         return xml
@@ -211,7 +208,7 @@ class RetornoLoteEventos(XMLNFe):
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.ideTransmissor.xml = arquivo
-            self.status.xml = arquivo
+            self.retornostatus.xml = arquivo
             self.retornoEventos.xml = arquivo
 
     xml = property(get_xml, set_xml)

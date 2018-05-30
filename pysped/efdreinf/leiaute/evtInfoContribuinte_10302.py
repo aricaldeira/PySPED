@@ -331,6 +331,9 @@ class R1000(XMLNFe):
         self.Signature.URI = '#' + self.evtInfoContri.Id.valor
         xml += self.Signature.xml               
         xml += '</Reinf>'
+
+        # Define o método de assinatura
+        self.Signature.metodo = 'sha256'
         return xml
 
     def set_xml(self, arquivo):

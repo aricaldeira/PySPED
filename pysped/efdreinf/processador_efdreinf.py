@@ -114,7 +114,7 @@ class ProcessadorEFDReinf(ProcessadorNFe):
             arq.write(envio.xml)
             arq.close()
 
-        print(envio.xml)
+        # print(envio.xml)
 
         self._conectar_servico(WS_EFDREINF_ENVIO, envio, resposta)
         # print(resposta.original)
