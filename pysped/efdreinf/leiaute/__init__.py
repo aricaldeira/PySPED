@@ -52,5 +52,6 @@ from .soap_10100 import SOAPRetorno as SOAPRetorno_10100
 
 from .envioLoteEvento_10302 import LoteEventoEFDReinf as LoteEventoEFDReinf_v1_03_02
 from .retornoLoteEventos_10302 import RetornoLoteEventos as RetornoLoteEventosEFDReinf_v1_03_02
+from .retornoTotalizadorEvento_10302 import RetornoTotalizadorEvento as RetornoTotalizadorEventoEFDReinf_v1_03_02
 
 from .evtInfoContribuinte_10302 import R1000 as R1000_1

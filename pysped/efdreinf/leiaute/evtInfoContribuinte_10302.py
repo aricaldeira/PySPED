@@ -87,6 +87,7 @@ class Contato(XMLNFe):
             self.cpfCtt.xml = arquivo
             self.foneFixo.xml = arquivo
             self.email.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -118,6 +119,7 @@ class SoftHouse(XMLNFe):
             self.nmCont.xml = arquivo
             self.telefone.xml = arquivo
             self.email.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -140,6 +142,7 @@ class InfoEFR(XMLNFe):
         if self._le_xml(arquivo):
             self.ideEFR.xml = arquivo
             self.cnpjEFR.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -173,6 +176,7 @@ class InfoCadastro(XMLNFe):
             self.indDesoneracao.xml = arquivo
             self.indAcordoIsenMulta.xml = arquivo
             self.indSitPJ.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -195,6 +199,7 @@ class IdePeriodo(XMLNFe):
         if self._le_xml(arquivo):
             self.iniValid.xml = arquivo
             self.fimValid.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -256,6 +261,7 @@ class IdeContri(XMLNFe):
         if self._le_xml(arquivo):
             self.tpInsc.xml = arquivo
             self.nrInsc.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -281,6 +287,7 @@ class IdeEvento(XMLNFe):
             self.tpAmb.xml = arquivo
             self.procEmi.xml = arquivo
             self.verProc.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -305,6 +312,7 @@ class EvtInfoContri(XMLNFe):
     def set_xml(self):
         if self._le_xml(arquivo):
             self.Id.xml = arquivo
+        return True
 
     xml = property(get_xml, set_xml)
 
@@ -340,7 +348,8 @@ class R1000(XMLNFe):
         if self._le_xml(arquivo):
             self.evtInfoContri.xml = arquivo
             self.Signature.xml = self._le_noh('//Reinf/evtInfoContri/sig:Signature')
-                        
+        return True
+
     def gera_id_evento(self, data_hora):
         
         #A identificação única do evento (Id) é composta por 36 caracteres, conforme o que segue: IDTNNNNNNNNNNNNNNAAAAMMDDHHMMSSQQQQQ

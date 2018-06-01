@@ -114,10 +114,7 @@ class ProcessadorEFDReinf(ProcessadorNFe):
             arq.write(envio.xml)
             arq.close()
 
-        # print(envio.xml)
-
         self._conectar_servico(WS_EFDREINF_ENVIO, envio, resposta)
-        # print(resposta.original)
 
         if resposta.status in [404]:
             raise Exception("Ambiente não encontrado !")
