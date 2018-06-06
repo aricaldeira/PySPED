@@ -55,3 +55,5 @@ from .retornoLoteEventos_10302 import RetornoLoteEventos as RetornoLoteEventosEF
 from .retornoTotalizadorEvento_10302 import RetornoTotalizadorEvento as RetornoTotalizadorEventoEFDReinf_v1_03_02
 
 from .evtInfoContribuinte_10302 import R1000 as R1000_1
+
+from .evtTomadorServicos_10302 import R2010 as R2010_1
