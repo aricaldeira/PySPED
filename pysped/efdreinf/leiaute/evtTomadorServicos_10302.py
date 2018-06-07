@@ -388,13 +388,16 @@ class EvtServTom(XMLNFe):
         xml += self.Id.xml
         xml += self.ideEvento.xml
         xml += self.ideContri.xml
-        xml += self.infoContri.xml
+        xml += self.infoServTom.xml
         xml += '</evtInfoContri>'
         return xml
 
     def set_xml(self):
         if self._le_xml(arquivo):
             self.Id.xml = arquivo
+            self.ideEvento.xml = arquivo
+            self.ideContri.xml = arquivo
+            self.infoServTom.xml = arquivo
         return True
 
     xml = property(get_xml, set_xml)
