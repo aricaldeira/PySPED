@@ -57,3 +57,5 @@ from .retornoTotalizadorEvento_10302 import RetornoTotalizadorEvento as RetornoT
 from .evtInfoContribuinte_10302 import R1000 as R1000_1
 
 from .evtTomadorServicos_10302 import R2010 as R2010_1
+from .evtTomadorServicos_10302 import NFS as NFS_1
+from .evtTomadorServicos_10302 import InfoTpServ as InfoTpServ_1
