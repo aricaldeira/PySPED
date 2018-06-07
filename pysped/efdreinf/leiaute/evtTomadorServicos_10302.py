@@ -64,8 +64,8 @@ NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtServTom/v1_03_0
 
 
 class InfoProcRetAd(XMLNFe):
-    def __init(self):
-        super(InfoProcRetAd, self).__init()
+    def __init__(self):
+        super(InfoProcRetAd, self).__init__()
         self.tpProcRetAdic = TagInteiro(nome='tpProcRetAdic', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.nrProcRetAdic = TagCaracter(nome='nrProcRetAdic', tamanho=[1, 21], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.codSuspAdic = TagInteiro(nome='codSuspAdic', tamanho=[0, 14], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
@@ -93,8 +93,8 @@ class InfoProcRetAd(XMLNFe):
 
 
 class InfoProcRetPr(XMLNFe):
-    def __init(self):
-        super(InfoProcRetPr, self).__init()
+    def __init__(self):
+        super(InfoProcRetPr, self).__init__()
         self.tpProcRetPrinc = TagInteiro(nome='tpProcRetPrinc', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.nrProcRetPrinc = TagCaracter(nome='nrProcRetPrint', tamanho=[1, 21], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.codSuspPrinc = TagInteiro(nome='codSuspPrinc', tamanho=[0, 14], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
@@ -122,8 +122,8 @@ class InfoProcRetPr(XMLNFe):
 
 
 class InfoTpServ(XMLNFe):
-    def __init(self):
-        super(InfoTpServ, self).__init()
+    def __init__(self):
+        super(InfoTpServ, self).__init__()
         self.tpServico = TagInteiro(nome='tpServico', tamanho=[1, 9], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.vlrBaseRet = TagDecimal(nome='vlrBaseRet', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.vlrRetencao = TagDecimal(nome='vlrRetencao', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
