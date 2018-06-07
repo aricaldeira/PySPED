@@ -93,7 +93,7 @@ class ProcessadorEFDReinf(ProcessadorNFe):
         # envio.envioLoteEventos.ideTransmissor.tpInsc.valor = lista_eventos[0].evtInfoContri.ideContri.tpInsc.valor
         # envio.envioLoteEventos.ideTransmissor.nrInsc.valor = lista_eventos[0].evtInfoContri.ideContri.nrInsc.valor
 
-        self.ambiente = lista_eventos[0].evtInfoContri.ideEvento.tpAmb.valor
+        # self.ambiente = lista_eventos[0].evtInfoContri.ideEvento.tpAmb.valor
                 
         for evento in lista_eventos:            
             self.certificado.assina_xmlnfe(evento)

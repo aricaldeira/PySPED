@@ -60,7 +60,7 @@ PYBRASIL = True
 
 DIRNAME = os.path.dirname(__file__)
 
-NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtServTom/v1_03_02'
+NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtTomadorServicos/v1_03_02'
 
 
 class InfoProcRetAd(XMLNFe):
@@ -69,7 +69,7 @@ class InfoProcRetAd(XMLNFe):
         self.tpProcRetAdic = TagInteiro(nome='tpProcRetAdic', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.nrProcRetAdic = TagCaracter(nome='nrProcRetAdic', tamanho=[1, 21], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.codSuspAdic = TagInteiro(nome='codSuspAdic', tamanho=[0, 14], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.valorAdic = TagDecimal(nome='valorAdic', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.valorAdic = TagDecimalVirgula(nome='valorAdic', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetAd', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -98,7 +98,7 @@ class InfoProcRetPr(XMLNFe):
         self.tpProcRetPrinc = TagInteiro(nome='tpProcRetPrinc', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.nrProcRetPrinc = TagCaracter(nome='nrProcRetPrint', tamanho=[1, 21], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.codSuspPrinc = TagInteiro(nome='codSuspPrinc', tamanho=[0, 14], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.valorPrinc = TagDecimal(nome='valorPrinc', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.valorPrinc = TagDecimalVirgula(nome='valorPrinc', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/infoProcRetPr', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -125,15 +125,15 @@ class InfoTpServ(XMLNFe):
     def __init__(self):
         super(InfoTpServ, self).__init__()
         self.tpServico = TagInteiro(nome='tpServico', tamanho=[1, 9], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrBaseRet = TagDecimal(nome='vlrBaseRet', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrRetencao = TagDecimal(nome='vlrRetencao', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrRetSub = TagDecimal(nome='vlrRetSub', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrNRetPrinc = TagDecimal(nome='vlrNRetPrinc', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrServicos15 = TagDecimal(nome='vlrServicos15', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrServicos20 = TagDecimal(nome='vlrServicos20', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrServicos25 = TagDecimal(nome='vlrServicos25', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrAdicional = TagDecimal(nome='vlrAdicional', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrNRetAdic = TagDecimal(nome='vlrNRetAdic', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrBaseRet = TagDecimalVirgula(nome='vlrBaseRet', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrRetencao = TagDecimalVirgula(nome='vlrRetencao', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrRetSub = TagDecimalVirgula(nome='vlrRetSub', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrNRetPrinc = TagDecimalVirgula(nome='vlrNRetPrinc', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrServicos15 = TagDecimalVirgula(nome='vlrServicos15', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrServicos20 = TagDecimalVirgula(nome='vlrServicos20', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrServicos25 = TagDecimalVirgula(nome='vlrServicos25', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrAdicional = TagDecimalVirgula(nome='vlrAdicional', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrNRetAdic = TagDecimalVirgula(nome='vlrNRetAdic', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs/infoTpServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -141,13 +141,20 @@ class InfoTpServ(XMLNFe):
         xml += self.tpServico.xml
         xml += self.vlrBaseRet.xml
         xml += self.vlrRetencao.xml
-        xml += self.vlrRetSub.xml
-        xml += self.vlrNRetPrinc.xml
-        xml += self.vlrServicos15.xml
-        xml += self.vlrServicos20.xml
-        xml += self.vlrServicos25.xml
-        xml += self.vlrAdicional.xml
-        xml += self.vlrNRetAdic.xml
+        if self.vlrRetSub.valor:
+            xml += self.vlrRetSub.xml
+        if self.vlrNRetPrinc.valor:
+            xml += self.vlrNRetPrinc.xml
+        if self.vlrServicos15.valor:
+            xml += self.vlrServicos15.xml
+        if self.vlrServicos20.valor:
+            xml += self.vlrServicos20.xml
+        if self.vlrServicos25.valor:
+            xml += self.vlrServicos25.xml
+        if self.vlrAdicional.valor:
+            xml += self.vlrAdicional.xml
+        if self.vlrNRetAdic.valor:
+            xml += self.vlrNRetAdic.xml
         xml += '</infoTpServ>'
         return xml
 
@@ -174,7 +181,7 @@ class NFS(XMLNFe):
         self.serie = TagCaracter(nome='serie', tamanho=[1, 5], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.numDocto = TagCaracter(nome='numDocto', tamanho=[1, 15], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.dtEmissaoNF = TagData(nome='dtEmissaoNF', tamanho=[1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrBruto = TagDecimal(nome='vlrBruto', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrBruto = TagDecimalVirgula(nome='vlrBruto', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.obs = TagCaracter(nome='obs', tamanho=[0, 250], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ/nfs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
         self.infoTpServ = []
 
@@ -209,12 +216,12 @@ class IdePrestServ(XMLNFe):
     def __init__(self):
         super(IdePrestServ, self).__init__()
         self.cnpjPrestador = TagCaracter(nome='cnpjPrestador', raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrTotalBruto = TagDecimal(nome='vlrTotalBruto', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrTotalBaseRet = TagDecimal(nome='vlrTotalBaseRet', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrTotalRetPrinc = TagDecimal(nome='vlrTotalRetPrinc', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrTotalRetAdic = TagDecimal(nome='vlrTotalRetAdic', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrTotalNRetPrinc = TagDecimal(nome='vlrTotalNRetPrinc', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrTotalNRetAdic = TagDecimal(nome='vlrTotalNRetAdic', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalBruto = TagDecimalVirgula(nome='vlrTotalBruto', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalBaseRet = TagDecimalVirgula(nome='vlrTotalBaseRet', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalRetPrinc = TagDecimalVirgula(nome='vlrTotalRetPrinc', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalRetAdic = TagDecimalVirgula(nome='vlrTotalRetAdic', tamanho=[1, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalNRetPrinc = TagDecimalVirgula(nome='vlrTotalNRetPrinc', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalNRetAdic = TagDecimalVirgula(nome='vlrTotalNRetAdic', tamanho=[0, 14, 2], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.indCPRB = TagInteiro(nome='indCPRB', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra/idePrestServ', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.nfs = []
         self.infoProcRetPr = []
@@ -227,9 +234,12 @@ class IdePrestServ(XMLNFe):
         xml += self.vlrTotalBruto.xml
         xml += self.vlrTotalBaseRet.xml
         xml += self.vlrTotalRetPrinc.xml
-        xml += self.vlrTotalRetAdic.xml
-        xml += self.vlrTotalNRetPrinc.xml
-        xml += self.vlrTotalNRetAdic.xml
+        if self.vlrTotalRetAdic.valor:
+            xml += self.vlrTotalRetAdic.xml
+        if self.vlrTotalNRetPrinc.valor:
+            xml += self.vlrTotalNRetPrinc.xml
+        if self.vlrTotalNRetAdic.valor:
+            xml += self.vlrTotalNRetAdic.xml
         xml += self.indCPRB.xml
 
         # Adiciona as NFs
@@ -272,7 +282,7 @@ class IdeEstabObra(XMLNFe):
     def __init__(self):
         super(IdeEstabObra, self).__init__()
         self.tpInscEstab = TagInteiro(nome='tpInscEstab', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, valor=1)
-        self.nrInscEstab = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInscEstab = TagCaracter(nome='nrInscEstab', tamanho=[8, 14], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.indObra = TagInteiro(nome='indObra', tamanho=[1, 1, 1], raiz='//Reinf/evtServTom/infoServTom/ideEstabObra', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, valor=0)
         self.idePrestServ = IdePrestServ()
 
@@ -354,7 +364,8 @@ class IdeEvento(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += '<ideEvento>'
         xml += self.indRetif.xml
-        xml += self.nrRecibo.xml
+        if self.nrRecibo.valor:
+            xml += self.nrRecibo.xml
         xml += self.perApur.xml
         xml += self.tpAmb.xml
         xml += self.procEmi.xml
