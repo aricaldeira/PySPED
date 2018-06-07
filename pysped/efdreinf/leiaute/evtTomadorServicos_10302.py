@@ -451,15 +451,15 @@ class R2010(XMLNFe):
         #acordo com o enquadramento do contribuinte para preenchimento do campo {ideEmpregador/nrInsc} do evento S-1000, completando-se com zeros à direita, se necessário.        
                 
         id_evento = 'ID'
-        id_evento += self.evtInfoContri.ideContri.tpInsc.valor
-        id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor)[0:8] + '000000'
+        id_evento += self.evtServTom.ideContri.tpInsc.valor
+        id_evento += str(self.evtServTom.ideContri.nrInsc.valor)[0:8] + '000000'
         # id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor).zfill(14)
         id_evento += data_hora        
         id_evento += str(1).zfill(5)
    
         # Define o Id
         #
-        self.evtInfoContri.Id.valor = id_evento
+        self.evtServTom.Id.valor = id_evento
         self.id_evento = id_evento
 
     xml = property(get_xml, set_xml)
