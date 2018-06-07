@@ -42,7 +42,7 @@
 
 from .base import ABERTURA, NAMESPACE_MDFE, NAMESPACE_NFE, NAMESPACE_SIG, \
     TagCaracter, TagData, TagDataHora, TagDecimal, TagHora, TagInteiro, \
-    TagDataHoraUTC, \
+    TagDataHoraUTC, TagDecimalVirgula, \
     XMLNFe, tira_abertura, tirar_acentos, por_acentos, TagBoolean, somente_ascii, \
     NAMESPACE_CTE
 
@@ -62,6 +62,7 @@ TagData
 TagDataHora
 TagDataHoraUTC
 TagDecimal
+TagDecimalVirgula
 TagHora
 TagInteiro
 XMLNFe
