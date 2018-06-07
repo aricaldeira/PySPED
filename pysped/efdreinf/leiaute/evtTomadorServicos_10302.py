@@ -277,7 +277,7 @@ class IdeEstabObra(XMLNFe):
         self.idePrestServ = IdePrestServ()
 
     def get_xml(self):
-        xml = XMLNFE.get_xml(self)
+        xml = XMLNFe.get_xml(self)
         xml += '<ideEstabObra>'
         xml += self.tpInscEstab.xml
         xml += self.nrInscEstab.xml
@@ -309,7 +309,7 @@ class InfoServTom(XMLNFe):
         xml += '</infoServTom>'
         return xml
 
-    def set_xml(self):
+    def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.ideEstabObra.xml = arquivo
         return True
