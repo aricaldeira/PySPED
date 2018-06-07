@@ -389,7 +389,7 @@ class EvtServTom(XMLNFe):
         xml += self.ideEvento.xml
         xml += self.ideContri.xml
         xml += self.infoServTom.xml
-        xml += '</evtInfoContri>'
+        xml += '</evtServTom>'
         return xml
 
     def set_xml(self):
