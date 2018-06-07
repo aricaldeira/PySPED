@@ -93,8 +93,8 @@ class Contato(XMLNFe):
 
 
 class SoftHouse(XMLNFe):
-    def __init(self):
-        super(SoftHouse, self).__init()
+    def __init__(self):
+        super(SoftHouse, self).__init__()
         self.cnpjSoftHouse = TagCaracter(nome='cnpjSoftHouse', tamanho=[1, 14], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
         self.nmRazao = TagCaracter(nome='nmRazao', tamanho=[1, 115], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
         self.nmCont = TagCaracter(nome='nmRazao', tamanho=[1, 70], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
@@ -125,8 +125,8 @@ class SoftHouse(XMLNFe):
 
 
 class InfoEFR(XMLNFe):
-    def __init(self):
-        super(InfoEFR, self).__init()
+    def __init__(self):
+        super(InfoEFR, self).__init__()
         self.ideEFR = TagCaracter(nome='ideEFR', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/infoEFR', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
         self.cnpjEFR = TagCaracter(nome='cnpjEFR', tamanho=[1, 14], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/infoEFR', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
 
