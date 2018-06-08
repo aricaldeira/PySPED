@@ -2520,6 +2520,7 @@ class NFe(nfe_110.NFe):
         chave += str(self.infNFe.ide.cDV.valor).strip().rjust(1, '0')
         self.chave = chave
 
+    @property
     def cst_descricao(self):
         if self.infNFe.emit.CRT.valor == 1:
             return 'CSOSN'
