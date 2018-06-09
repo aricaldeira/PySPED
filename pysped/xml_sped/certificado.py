@@ -394,6 +394,8 @@ class Certificado(object):
             doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
         elif '</evtServTom>' in xml:
             doctype = '<!DOCTYPE Reinf [<!ATTLIST evtServTom Id ID #IMPLIED>]>'
+        elif '</evtFechaEvPer>' in xml:
+            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtFechaEvPer Id ID #IMPLIED>]>'
 
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
