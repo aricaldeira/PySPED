@@ -60,184 +60,77 @@ PYBRASIL = True
 
 DIRNAME = os.path.dirname(__file__)
 
-NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtInfoContribuinte/v1_03_02'
+NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtFechamento/v1_03_02'
 
 
-class Contato(XMLNFe):
+class InfoFech(XMLNFe):
     def __init__(self):
-        super(Contato, self).__init__()
-        self.nmCtt = TagCaracter(nome='nmCtt', tamanho=[1, 70], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.cpfCtt = TagCaracter(nome='cpfCtt', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.foneFixo = TagCaracter(nome='foneFixo', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.email = TagCaracter(nome='email', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        super(InfoFech, self).__init__()
+        self.evtServTm = TagCaracter(nome='evtServTm', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.evtServPr = TagCaracter(nome='evtServPr', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.evtAssDespRec = TagCaracter(nome='evtAssDespRec', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.evtAssDespRep = TagCaracter(nome='evtAssDespRep', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.evtComProd = TagCaracter(nome='evtComProd', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.evtCPRB = TagCaracter(nome='evtCPRB', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.evtPgtos = TagCaracter(nome='evtPgtos', tamanho=[1, 1], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.compSemMovto = TagCaracter(nome='compSemMovto', tamanho=[0, 7], raiz='//Reinf/evtFechaEvPer/infoFech', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<contato>'
-        xml += self.nmCtt.xml
-        xml += self.cpfCtt.xml
-        xml += self.foneFixo.xml
-        xml += self.email.xml
-        xml += '</contato>'
+        xml += '<infoFech>'
+        xml += self.evtServTm.xml
+        xml += self.evtServPr.xml
+        xml += self.evtAssDespRec.xml
+        xml += self.evtAssDespRep.xml
+        xml += self.evtComProd.xml
+        xml += self.evtCPRB.xml
+        xml += self.evtPgtos.xml
+        if self.compSemMovto.valor:
+            xml += self.compSemMovto.xml
+        xml += '</infoFech>'
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.nmCtt.xml = arquivo
-            self.cpfCtt.xml = arquivo
-            self.foneFixo.xml = arquivo
-            self.email.xml = arquivo
+            self.evtServTm.xml = arquivo
+            self.evtServPr.xml = arquivo
+            self.evtAssDespRec.xml = arquivo
+            self.evtAssDespRep.xml = arquivo
+            self.evtComProd.xml = arquivo
+            self.evtCPRB.xml = arquivo
+            self.evtPgtos.xml = arquivo
+            self.compSemMovto.xml = arquivo
         return True
 
     xml = property(get_xml, set_xml)
 
 
-class SoftHouse(XMLNFe):
+class IdeRespInf(XMLNFe):
     def __init__(self):
-        super(SoftHouse, self).__init__()
-        self.cnpjSoftHouse = TagCaracter(nome='cnpjSoftHouse', tamanho=[1, 14], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.nmRazao = TagCaracter(nome='nmRazao', tamanho=[1, 115], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.nmCont = TagCaracter(nome='nmRazao', tamanho=[1, 70], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.telefone = TagCaracter(nome='telefone', tamanho=[10, 13], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.email = TagCaracter(nome='email', tamanho=[1, 60], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/softHouse', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        super(IdeRespInf, self).__init__()
+        self.nmResp = TagCaracter(nome='nmResp', tamanho=[1, 70], raiz='//Reinf/evtFechaEvPer/ideRespInf', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.cpfResp = TagCaracter(nome='cpfResp', tamanho=[1, 11], raiz='//Reinf/evtFechaEvPer/ideRespInf', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.telefone = TagCaracter(nome='telefone', tamanho=[0, 13], raiz='//Reinf/evtFechaEvPer/ideRespInf', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.email = TagCaracter(nome='email', tamanho=[0, 60], raiz='//Reinf/evtFechaEvPer/ideRespInf', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<softHouse>'
-        xml += self.cnpjSoftHouse.xml
-        xml += self.nmRazao.xml
-        xml += self.nmCont.xml
-        xml += self.telefone.xml
-        xml += self.email.xml
-        xml += '</softHouse>'
+        xml += '<ideRespInf>'
+        xml += self.nmResp.xml
+        xml += self.cpfResp.xml
+        if self.telefone.valor:
+            xml += self.telefone.xml
+        if self.email.valor:
+            xml += self.email.xml
+        xml += '</ideRespInf>'
         return xml
 
-    def set_xml(self):
+    def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.cnpjSoftHouse.xml = arquivo
-            self.nmRazao.xml = arquivo
-            self.nmCont.xml = arquivo
+            self.nmResp.xml = arquivo
+            self.cpfResp.xml = arquivo
             self.telefone.xml = arquivo
             self.email.xml = arquivo
-        return True
-
-    xml = property(get_xml, set_xml)
-
-
-class InfoEFR(XMLNFe):
-    def __init__(self):
-        super(InfoEFR, self).__init__()
-        self.ideEFR = TagCaracter(nome='ideEFR', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/infoEFR', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.cnpjEFR = TagCaracter(nome='cnpjEFR', tamanho=[1, 14], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/infoEFR', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += '<infoEFR>'
-        xml += self.ideEFR.xml
-        xml += self.cnpjEFR.xml
-        xml += '</infoEFR>'
-        return xml
-
-    def set_xml(self):
-        if self._le_xml(arquivo):
-            self.ideEFR.xml = arquivo
-            self.cnpjEFR.xml = arquivo
-        return True
-
-    xml = property(get_xml, set_xml)
-
-
-class InfoCadastro(XMLNFe):
-    def __init__(self):
-        super(InfoCadastro, self).__init__()
-        self.contato = Contato()
-        self.classTrib = TagCaracter(nome='classTrib', tamanho=[1, 2], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.indEscrituracao = TagCaracter(nome='indEscrituracao', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.indDesoneracao = TagCaracter(nome='indDesoneracao', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.indAcordoIsenMulta = TagCaracter(nome='indAcordoIsenMulta', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.indSitPJ = TagCaracter(nome='indSitPJ', tamanho=[1, 1], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += '<infoCadastro>'
-        xml += self.classTrib.xml
-        xml += self.indEscrituracao.xml
-        xml += self.indDesoneracao.xml
-        xml += self.indAcordoIsenMulta.xml
-        xml += self.indSitPJ.xml
-        xml += self.contato.xml
-        xml += '</infoCadastro>'
-        return xml
-
-    def set_xml(self):
-        if self._le_xml(arquivo):
-            self.classTrib.xml = arquivo
-            self.indEscrituracao.xml = arquivo
-            self.indDesoneracao.xml = arquivo
-            self.indAcordoIsenMulta.xml = arquivo
-            self.indSitPJ.xml = arquivo
-        return True
-
-    xml = property(get_xml, set_xml)
-
-
-class IdePeriodo(XMLNFe):
-    def __init__(self):
-        super(IdePeriodo, self).__init__()
-        self.iniValid  = TagCaracter(nome='iniValid', raiz='//Reinf/evtInfoContri/infoContri/idePeriodo', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.fimValid  = TagCaracter(nome='fimValid', raiz='//Reinf/evtInfoContri/infoContri/idePeriodo', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += '<idePeriodo>'
-        xml += self.iniValid.xml
-        xml += self.fimValid.xml
-        xml += '</idePeriodo>'
-        return xml
-
-    def set_xml(self, arquivo):
-        if self._le_xml(arquivo):
-            self.iniValid.xml = arquivo
-            self.fimValid.xml = arquivo
-        return True
-
-    xml = property(get_xml, set_xml)
-
-
-class InfoContri(XMLNFe):
-    def __init__(self):
-        super(InfoContri, self).__init__()
-        self.idePeriodo = IdePeriodo()
-        self.infoCadastro = InfoCadastro()
-        self.novaValidade = IdePeriodo()
-        self.operacao = 'I'
-
-    def get_xml(self):
-        xml = XMLNFe.get_xml(self)
-        xml += '<infoContri>'
-        if self.operacao == 'I':
-            xml += '<inclusao>'
-            xml += self.idePeriodo.xml
-            xml += self.infoCadastro.xml
-            xml += '</inclusao>'
-        elif self.operacao == 'A':
-            xml += '<alteracao>'
-            xml += self.idePeriodo.xml
-            xml += self.infoCadastro.xml
-            xml += self.novaValidade.xml
-            xml += '</alteracao>'
-
-        elif self.operacao == 'E':
-            xml += '<exclusao>'
-            xml += self.idePeriodo.xml
-            xml += '</exclusao>'
-
-        xml += '</infoContri>'
-        return xml
-
-    def set_xml(self):
-        if self._le_xml(arquivo):
-            self.novaValidade.xml = arquivo
         return True
 
     xml = property(get_xml, set_xml)
@@ -246,8 +139,8 @@ class InfoContri(XMLNFe):
 class IdeContri(XMLNFe):
     def __init__(self):
         super(IdeContri, self).__init__()
-        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//Reinf/evtInfoContri/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//Reinf/evtInfoContri/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//Reinf/evtFechaEvPer/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//Reinf/evtFechaEvPer/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -269,13 +162,15 @@ class IdeContri(XMLNFe):
 class IdeEvento(XMLNFe):
     def __init__(self):
         super(IdeEvento, self).__init__()
-        self.tpAmb = TagInteiro(nome='tpAmb', tamanho=[1, 1, 1], raiz='//Reinf/evtInfoContri/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, valor=2)
-        self.procEmi = TagInteiro(nome='procEmi', tamanho=[1, 1, 1], raiz='//Reinf/evtInfoContri/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.verProc = TagCaracter(nome='verProc', tamanho=[1, 20], raiz='//Reinf/evtInfoContri/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.perApur = TagCaracter(nome='perApur', tamanho=[1, 10], raiz='//Reinf/evtFechaEvPer/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.tpAmb = TagInteiro(nome='tpAmb', tamanho=[1, 1, 1], raiz='//Reinf/evtFechaEvPer/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, valor=2)
+        self.procEmi = TagInteiro(nome='procEmi', tamanho=[1, 1, 1], raiz='//Reinf/evtFechaEvPer/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.verProc = TagCaracter(nome='verProc', tamanho=[1, 20], raiz='//Reinf/evtFechaEvPer/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<ideEvento>'
+        xml += self.perApur.xml
         xml += self.tpAmb.xml
         xml += self.procEmi.xml
         xml += self.verProc.xml
@@ -284,6 +179,7 @@ class IdeEvento(XMLNFe):
 
     def set_xml(self):
         if self._le_xml(arquivo):
+            self.perApur.xml = arquivo
             self.tpAmb.xml = arquivo
             self.procEmi.xml = arquivo
             self.verProc.xml = arquivo
@@ -292,51 +188,57 @@ class IdeEvento(XMLNFe):
     xml = property(get_xml, set_xml)
 
 
-class EvtInfoContri(XMLNFe):
+class EvtFechaEvPer(XMLNFe):
     def __init__(self):
-        super(EvtInfoContri, self).__init__()
-        self.Id = TagCaracter(nome='evtInfoContri', propriedade='id', raiz='//Reinf/evtInfoContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        super(EvtFechaEvPer, self).__init__()
+        self.Id = TagCaracter(nome='evtFechaEvPer', propriedade='id', raiz='//Reinf/evtFechaEvPer', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.ideEvento = IdeEvento()
         self.ideContri = IdeContri()
-        self.infoContri = InfoContri()
+        self.ideRespInf = IdeRespInf()
+        self.infoFech = InfoFech()
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += self.Id.xml
         xml += self.ideEvento.xml
         xml += self.ideContri.xml
-        xml += self.infoContri.xml
-        xml += '</evtInfoContri>'
+        xml += self.ideRespInf.xml
+        xml += self.infoFech.xml
+        xml += '</evtFechaEvPer>'
         return xml
 
     def set_xml(self):
         if self._le_xml(arquivo):
             self.Id.xml = arquivo
+            self.ideEvento.xml = arquivo
+            self.ideContri.xml = arquivo
+            self.ideRespInf.xml = arquivo
+            self.infoFech.xml = arquivo
         return True
 
     xml = property(get_xml, set_xml)
 
 
-class R1000(XMLNFe):
+class R2099(XMLNFe):
     def __init__(self):
-        super(R1000, self).__init__()
-        self.evtInfoContri = EvtInfoContri()
+        super(R2099, self).__init__()
+        self.evtFechaEvPer = EvtFechaEvPer()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
-        self.arquivo_esquema = 'evtInfoContribuinte.xsd'
+        self.arquivo_esquema = 'evtFechamento.xsd'
         self.id_evento = ''
         self.Signature = Signature()
-        self.evento = self.evtInfoContri
+        self.evento = self.evtFechaEvPer
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         #xml += ABERTURA
         xml += '<Reinf xmlns="' + NAMESPACE_EFDREINF + '">'
-        xml += self.evtInfoContri.xml
+        xml += self.evtFechaEvPer.xml
         
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = '#' + self.evtInfoContri.Id.valor
+        self.Signature.URI = '#' + self.evtFechaEvPer.Id.valor
         xml += self.Signature.xml               
         xml += '</Reinf>'
 
@@ -346,8 +248,8 @@ class R1000(XMLNFe):
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
-            self.evtInfoContri.xml = arquivo
-            self.Signature.xml = self._le_noh('//Reinf/evtInfoContri/sig:Signature')
+            self.evtFechaEvPer.xml = arquivo
+            self.Signature.xml = self._le_noh('//Reinf/evtFechaEvPer/sig:Signature')
         return True
 
     def gera_id_evento(self, data_hora):
@@ -368,15 +270,15 @@ class R1000(XMLNFe):
         #acordo com o enquadramento do contribuinte para preenchimento do campo {ideEmpregador/nrInsc} do evento S-1000, completando-se com zeros à direita, se necessário.        
                 
         id_evento = 'ID'
-        id_evento += self.evtInfoContri.ideContri.tpInsc.valor
-        id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor)[0:8] + '000000'
+        id_evento += self.evtFechaEvPer.ideContri.tpInsc.valor
+        id_evento += str(self.evtFechaEvPer.ideContri.nrInsc.valor)[0:8] + '000000'
         # id_evento += str(self.evtInfoContri.ideContri.nrInsc.valor).zfill(14)
         id_evento += data_hora        
         id_evento += str(1).zfill(5)
    
         # Define o Id
         #
-        self.evtInfoContri.Id.valor = id_evento
+        self.evtFechaEvPer.Id.valor = id_evento
         self.id_evento = id_evento
 
     xml = property(get_xml, set_xml)

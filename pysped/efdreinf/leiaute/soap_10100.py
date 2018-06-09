@@ -119,3 +119,48 @@ class SOAPRetorno(XMLNFe):
             self.resposta.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+
+class SOAPConsulta(XMLNFe):
+    def __init__(self):
+        super(SOAPConsulta, self).__init__()
+        self.webservice = ''
+        self.metodo = ''
+        self.cUF    = None
+        self.envio  = None
+        self.tipoInscricaoContribuinte = ''
+        self.numeroInscricaoContribuinte = ''
+        self.numeroProtocoloFechamento = ''
+        self._header = {
+            b'Content-Type': b'text/xml; charset=UTF-8',
+            b'Accept-Encoding': b'gzip,deflate',
+            b'Connection': b'Keep-Alive',
+            b'User-Agent': b'Apache-HttpClient/4.1.1 (java 1.5)',
+            b'SOAPAction': b'http://sped.fazenda.gov.br/ConsultasReinf/ConsultaInformacoesConsolidadas'
+        }
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += ABERTURA
+        xml += '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sped="http://sped.fazenda.gov.br/">'
+        xml +=     '<soapenv:Header/>'
+        xml +=     '<soapenv:Body>'
+        xml +=         '<sped:ConsultaInformacoesConsolidadas>'
+        xml +=             '<sped:tipoInscricaoContribuinte>%s</sped:tipoInscricaoContribuinte>' % self.tipoInscricaoContribuinte
+        xml +=             '<sped:numeroInscricaoContribuinte>%s</sped:numeroInscricaoContribuinte>' % self.numeroInscricaoContribuinte
+        xml +=             '<sped:numeroReciboFechamento>%s</sped:numeroReciboFechamento>' % self.numeroProtocoloFechamento
+        xml +=         '</sped:ConsultaInformacoesConsolidadas>'
+        xml +=     '</soapenv:Body>'
+        xml += '</soapenv:Envelope>'
+        return xml
+
+    def set_xml(self):
+        pass
+
+    xml = property(get_xml, set_xml)
+
+    def get_header(self):
+        header = self._header
+        return header
+
+    header = property(get_header)

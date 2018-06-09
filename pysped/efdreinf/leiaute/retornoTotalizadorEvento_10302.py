@@ -63,21 +63,250 @@ DIRNAME = os.path.dirname(__file__)
 NAMESPACE_EFDREINF = 'http://www.reinf.esocial.gov.br/schemas/evtTotal/v1_03_02'
 
 
+class RRecEspetDesp(XMLNFe):
+    def __init__(self):
+        super(RRecEspetDesp, self).__init__()
+        self.CRRecEspetDesp = TagCaracter(nome='CRRecEspetDesp', tamanho=[1, 6], raiz='//Reinf/evtTotal/infoTotal/RRecEspetDesp', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrReceitaTotal = TagDecimal(nome='vlrReceitaTotal', raiz='//Reinf/evtTotal/infoTotal/RRecEspetDesp', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRRecEspetDesp = TagDecimal(nome='vlrCRRecEspetDesp', raiz='//Reinf/evtTotal/infoTotal/RRecEspetDesp', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRRecEspetDespSusp = TagDecimal(nome='vlrCRRecEspetDespSusp', raiz='//Reinf/evtTotal/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<RRecEspetDesp>'
+        xml += self.CRRecEspetDesp.xml
+        xml += self.vlrReceitaTotal.xml
+        xml += self.vlrCRRecEspetDesp.xml
+        xml += self.vlrCRRecEspetDespSusp.xml
+        xml += '</RRecEspetDesp>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.CRRecEspetDesp.xml = arquivo
+            self.vlrReceitaTotal.xml = arquivo
+            self.vlrCRRecEspetDesp.xml = arquivo
+            self.vlrCRRecEspetDespSusp.xml = arquivo
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
+class RCPRB(XMLNFe):
+    def __init__(self):
+        super(RCPRB, self).__init__()
+        self.CRCPRB = TagCaracter(nome='CRCPRB', tamanho=[1, 6], raiz='//Reinf/evtTotal/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRCPRB = TagDecimal(nome='vlrCRCPRB', raiz='//Reinf/evtTotal/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRCPRBSusp = TagDecimal(nome='vlrCRCPRBSusp', raiz='//Reinf/evtTotal/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<RCPRB>'
+        xml += self.CRCPRB.xml
+        xml += self.vlrCRCPRB.xml
+        xml += self.vlrCRCPRBSusp.xml
+        xml += '</RCPRB>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.CRCPRB.xml = arquivo
+            self.vlrCRCPRB.xml = arquivo
+            self.vlrCRCPRBSusp.xml = arquivo
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
+class RComl(XMLNFe):
+    def __init__(self):
+        super(RComl, self).__init__()
+        self.CRComl = TagCaracter(nome='CRComl', tamanho=[1, 6], raiz='//Reinf/evtTotal/infoTotal/RComl', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRComl = TagDecimal(nome='vlrCRComl', raiz='//Reinf/evtTotal/infoTotal/RComl', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRComlSusp = TagDecimal(nome='vlrCRComlSusp', raiz='//Reinf/evtTotal/infoTotal/RComl', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<RComl>'
+        xml += self.CRComl.xml
+        xml += self.vlrCRComl.xml
+        xml += self.vlrCRComlSusp.xml
+        xml += '</RComl>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.CRComl.xml = arquivo
+            self.vlrCRComl.xml = arquivo
+            self.vlrCRComlSusp.xml = arquivo
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
+class RRecRepAD(XMLNFe):
+    def __init__(self):
+        super(RRecRepAD, self).__init__()
+        self.cnpjAssocDesp = TagCaracter(nome='cnpjAssocDesp', tamanho=[1, 14], raiz='//Reinf/evtTotal/infoTotal/RRecRepAD', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalRep = TagDecimal(nome='vlrTotalRep', raiz='//Reinf/evtTotal/infoTotal/RRecRepAD', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.CRRecRepAD = TagCaracter(nome='CRRecRepAD', tamanho=[1, 6], raiz='//Reinf/evtTotal/infoTotal/RRecRepAD', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRRecRepAD = TagDecimal(nome='vlrCRRecRepAD', raiz='//Reinf/evtTotal/infoTotal/RRecRepAD', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRRecRepADSusp = TagDecimal(nome='vlrCRRecRepADSusp', raiz='//Reinf/evtTotal/infoTotal/RRecRepAD', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<RRecRepAD>'
+        xml += self.cnpjAssocDesp.xml
+        xml += self.vlrTotalRep.xml
+        xml += self.CRRecRepAD.xml
+        xml += self.vlrCRRecRepAD.xml
+        xml += self.vlrCRRecRepADSusp.xml
+        xml += '</RRecRepAD>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.cnpjAssocDesp.xml = arquivo
+            self.vlrTotalRep.xml = arquivo
+            self.CRRecRepAD.xml = arquivo
+            self.vlrCRRecRepAD.xml = arquivo
+            self.vlrCRRecRepADSusp.xml = arquivo
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
+class RPrest(XMLNFe):
+    def __init__(self):
+        super(RPrest, self).__init__()
+        self.tpInscTomador = TagInteiro(nome='tpInscTomador', tamanho=[1, 1, 1], raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrInscTomador = TagCaracter(nome='nrInscTomador', tamanho=[1, 14], raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalBaseRet = TagDecimal(nome='vlrTotalBaseRet', raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalRetPrinc = TagDecimal(nome='vlrTotalRetPrinc', raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalRetAdic = TagDecimal(nome='vlrTotalRetAdic', raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.vlrTotalNRetPrinc = TagDecimal(nome='vlrTotalNRetPrinc', raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.vlrTotalNRetAdic = TagDecimal(nome='vlrTotalNRetAdic', raiz='//Reinf/evtTotal/infoTotal/RPrest', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<RPrest>'
+        xml += self.tpInscTomador.xml
+        xml += self.nrInscTomador.xml
+        xml += self.vlrTotalBaseRet.xml
+        xml += self.vlrTotalRetPrinc.xml
+        xml += self.vlrTotalRetAdic.xml
+        xml += self.vlrTotalNRetPrinc.xml
+        xml += self.vlrTotalNRetAdic.xml
+        xml += '</RPrest>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.tpInscTomador.xml = arquivo
+            self.nrInscTomador.xml = arquivo
+            self.vlrTotalBaseRet.xml = arquivo
+            self.vlrTotalRetPrinc.xml = arquivo
+            self.vlrTotalRetAdic.xml = arquivo
+            self.vlrTotalNRetPrinc.xml = arquivo
+            self.vlrTotalNRetAdic.xml = arquivo
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
+class InfoCRTom(XMLNFe):
+    def __init__(self):
+        super(InfoCRTom, self).__init__()
+        self.CRTom = TagCaracter(nome='CRTom', tamanho=[1, 6], raiz='//Reinf/evtTotal/infoTotal/RTom/infoCRTom', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRTom = TagDecimal(nome='vlrCRTom', raiz='//Reinf/evtTotal/infoTotal/RTom/infoCRTom', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.vlrCRTomSusp = TagDecimal(nome='vlrCRTomSusp', raiz='//Reinf/evtTotal/infoTotal/RTom/infoCRTom', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<infoCRTom>'
+        xml += self.CRTom.xml
+        xml += self.vlrCRTom.xml
+        xml += self.vlrCRTomSusp.xml
+        xml += '</infoCRTom>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.CRTom.xml = arquivo
+            self.vlrCRTom.xml = arquivo
+            self.vlrCRTomSusp.xml = arquivo
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
+class RTom(XMLNFe):
+    def __init__(self):
+        super(RTom, self).__init__()
+        self.cnpjPrestador = TagCaracter(nome='cnpjPrestado', tamanho=[1, 14], raiz='//Reinf/evtTotal/infoTotal/RTom', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrTotalBaseRet = TagDecimal(nome='vlrTotalBaseRet', raiz='//Reinf/evtTotal/infoTotal/RTom', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.infoCRTom = []
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<RTom>'
+        xml += self.cnpjPrestador.xml
+        xml += self.vlrTotalBaseRet.xml
+        if len(self.infoCRTom) >= 1:
+            for r in self.infoCRTom:
+                xml += r.xml
+        xml += '</RTom>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.cnpjPrestador.xml = arquivo
+            self.vlrTotalBaseRet.xml = arquivo
+            self.infoCRTom = self.le_grupo('//Reinf/evtTotal/infoTotal/RTom/infoCRTom', InfoCRTom, namespace=NAMESPACE_EFDREINF, sigla_ns='res')
+        return True
+
+    xml = property(get_xml, set_xml)
+
+
 class InfoTotal(XMLNFe):
     def __init__(self):
         super(InfoTotal, self).__init__()
-        self.nrRecArqBase = TagCaracter(nome='nrRecArqBase', raiz='//Reinf/evtTotal/infoTotal', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrRecArqBase = TagCaracter(nome='nrRecArqBase', raiz='//Reinf/evtTotal/infoTotal', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.RTom = RTom()
+        self.RPrest = RPrest()
+        self.RRecRepAD = []
+        self.RComl = []
+        self.RCPRB = []
+        self.RRecEspetDesp = RRecEspetDesp()
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<infoTotal>'
         xml += self.nrRecArqBase.xml
+        xml += self.RTom.xml
+        xml += self.RPrest.xml
+        if len(self.RRecRepAD) >= 1:
+            for r in self.RRecRepAD:
+                xml += r.xml
+        if len(self.RComl) >= 1:
+            for r in self.RComl:
+                xml += r.xml
+        if len(self.RCPRB) >= 1:
+            for r in self.RCPRB:
+                xml += r.xml
+        xml += self.RRecEspetDesp.xml
         xml += '</infoTotal>'
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.nrRecArqBase.xml = arquivo
+            self.RTom.xml = arquivo
+            self.RPrest.xml = arquivo
+            self.RRecRepAD = self.le_grupo('//Reinf/evtTotal/infoTotal/RRecRepAD', RRecRepAD, namespace=NAMESPACE_EFDREINF, sigla_ns='res')
+            self.RComl = self.le_grupo('//Reinf/evtTotal/infoTotal/RComl', RComl, namespace=NAMESPACE_EFDREINF, sigla_ns='res')
+            self.RCPRB = self.le_grupo('//Reinf/evtTotal/infoTotal/RCPRB', RCPRB, namespace=NAMESPACE_EFDREINF, sigla_ns='res')
+            self.RRecEspetDesp.xml = arquivo
         return True
 
     xml = property(get_xml, set_xml)
@@ -86,14 +315,16 @@ class InfoTotal(XMLNFe):
 class InfoRecEv(XMLNFe):
     def __init__(self):
         super(InfoRecEv, self).__init__()
-        self.dhProcess = TagCaracter(nome='dhProcess', raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.tpEv      = TagCaracter(nome='tpEv', raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.idEv      = TagCaracter(nome='idEv', raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.hash      = TagCaracter(nome='hash', raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrProtEntr = TagCaracter(nome='nrProtEntr', tamanho=[0, 49], raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.dhProcess  = TagDataHora(nome='dhProcess', raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.tpEv       = TagCaracter(nome='tpEv', tamanho=[1, 6], raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.idEv       = TagCaracter(nome='idEv', tamanho=[1, 36], raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.hash       = TagCaracter(nome='hash', tamanho=[1, 60], raiz='//Reinf/evtTotal/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
         xml += '<infoRecEv>'
+        xml += self.nrProtEntr.xml
         xml += self.dhProcess.xml
         xml += self.tpEv.xml
         xml += self.idEv.xml
@@ -103,6 +334,7 @@ class InfoRecEv(XMLNFe):
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
+            self.nrProtEntr.xml = arquivo
             self.dhProcess.xml = arquivo
             self.tpEv.xml = arquivo
             self.idEv.xml = arquivo
@@ -144,7 +376,7 @@ class Ocorrencias(XMLNFe):
 class IdeStatus(XMLNFe):
     def __init__(self):
         super(IdeStatus, self).__init__()
-        self.cdRetorno   = TagInteiro(nome='cdRetorno', tamanho=[1, 1, 1], raiz='//Reinf/evtTotal/ideRecRetorno/ideStatus', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.cdRetorno   = TagCaracter(nome='cdRetorno', tamanho=[1, 6], raiz='//Reinf/evtTotal/ideRecRetorno/ideStatus', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.descRetorno = TagCaracter(nome='descRetorno', tamanho=[1, 255], raiz='//Reinf/evtTotal/ideRecRetorno/ideStatus', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.regOcorrs = []
 
@@ -218,7 +450,7 @@ class IdeContri(XMLNFe):
 class IdeEvento(XMLNFe):
     def __init__(self):
         super(IdeEvento, self).__init__()
-        self.perApur = TagCaracter(nome='perApur', tamanho=[7, 10], raiz='//Reinf/evtTotal/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, valor=2)
+        self.perApur = TagCaracter(nome='perApur', tamanho=[1, 7], raiz='//Reinf/evtTotal/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
