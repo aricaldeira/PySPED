@@ -956,6 +956,9 @@ class TagDecimal(TagCaracter):
             else:
                 novo_valor = Decimal('0.00')
 
+        if not isinstance(novo_valor, (int, Decimal)):
+            novo_valor = novo_valor.replace(',', '.')
+
         if isinstance(novo_valor, (int, Decimal)) and self._valida(novo_valor):
             self._valor_decimal = Decimal(novo_valor)
             self._valor_string = self._formata(self._valor_decimal)
@@ -1011,6 +1014,12 @@ class TagDecimal(TagCaracter):
         else:
             formato = '%.2f'
             return locale.format(formato, self._valor_decimal, grouping=True)
+
+
+class TagDecimalVirgula(TagDecimal):
+
+    def _formata(self, valor):
+        return super(TagDecimalVirgula, self)._formata(valor).replace('.', ',')
 
 
 class XMLNFe(NohXML):
