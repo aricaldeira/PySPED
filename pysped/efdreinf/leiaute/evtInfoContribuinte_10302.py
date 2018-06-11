@@ -69,6 +69,7 @@ class Contato(XMLNFe):
         self.nmCtt = TagCaracter(nome='nmCtt', tamanho=[1, 70], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.cpfCtt = TagCaracter(nome='cpfCtt', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.foneFixo = TagCaracter(nome='foneFixo', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.foneCel = TagCaracter(nome='foneCel', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
         self.email = TagCaracter(nome='email', tamanho=[1, 11], raiz='//Reinf/evtInfoContri/infoContri/infoCadastro/contato', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
 
     def get_xml(self):
@@ -77,6 +78,7 @@ class Contato(XMLNFe):
         xml += self.nmCtt.xml
         xml += self.cpfCtt.xml
         xml += self.foneFixo.xml
+        xml += self.foneCel.xml
         xml += self.email.xml
         xml += '</contato>'
         return xml
@@ -86,6 +88,7 @@ class Contato(XMLNFe):
             self.nmCtt.xml = arquivo
             self.cpfCtt.xml = arquivo
             self.foneFixo.xml = arquivo
+            self.foneCel.xml = arquivo
             self.email.xml = arquivo
         return True
 
