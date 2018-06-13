@@ -45,7 +45,7 @@ from pysped.xml_sped import NAMESPACE_NFE, TagCaracter, TagDecimal, XMLNFe
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import consrecinfe_110
 import os
-from nfe_200 import NFe
+from .nfe_200 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)

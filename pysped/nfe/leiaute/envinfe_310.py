@@ -45,7 +45,7 @@ from pysped.xml_sped import *
 from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_3 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import envinfe_200
 import os
-from nfe_310 import NFe
+from .nfe_310 import NFe
 
 
 DIRNAME = os.path.dirname(__file__)
@@ -77,7 +77,7 @@ class EnviNFe(envinfe_200.EnviNFe):
             self.versao.xml    = arquivo
             self.idLote.xml    = arquivo
             self.indSinc.xml    = arquivo
-            self.NFe = self.le_grupo('//enviLote/NFe', NFe)
+            self.NFe = self.le_grupo('//NFe', NFe)
 
         return self.xml
 

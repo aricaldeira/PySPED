@@ -39,61 +39,6 @@
 # <http://www.gnu.org/licenses/>
 #
 
-from .leiaute import (CTe_104,
-                      CancCTe_104,
-                      ConsReciCTe_104,
-                      ConsSitCTe_104,
-                      ConsStatServCTe_104,
-                      Dup_104,
-                      EnviCTe_104,
-                      InfNF_104,
-                      InfNFe_104,
-                      InfOutros_104,
-                      InfQ_104,
-                      InutCTe_104,
-                      ObsCont_104,
-                      ObsFisco_104,
-                      Pass_104,
-                      ProcCTe_104,
-                      ProcCancCTe_104,
-                      ProcInutCTe_104,
-                      ProtCTe_104,
-                      RetCancCTe_104,
-                      RetConsReciCTe_104,
-                      RetConsSitCTe_104,
-                      RetConsStatServCTe_104,
-                      RetEnviCTe_104,
-                      RetInutCTe_104,
-                      SOAPEnvio_104,
-                      SOAPRetorno_104)
+import sys
 
-
-# Pyflakes
-
-CTe_104
-CancCTe_104
-ConsReciCTe_104
-ConsSitCTe_104
-ConsStatServCTe_104
-Dup_104
-EnviCTe_104
-InfNF_104
-InfNFe_104
-InfOutros_104
-InfQ_104
-InutCTe_104
-ObsCont_104
-ObsFisco_104
-Pass_104
-ProcCTe_104
-ProcCancCTe_104
-ProcInutCTe_104
-ProtCTe_104
-RetCancCTe_104
-RetConsReciCTe_104
-RetConsSitCTe_104
-RetConsStatServCTe_104
-RetEnviCTe_104
-RetInutCTe_104
-SOAPEnvio_104
-SOAPRetorno_104
+from .processador_cte import ProcessadorCTe

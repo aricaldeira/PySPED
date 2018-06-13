@@ -1,0 +1,15 @@
+<nfse:PedidoCancelamentoNFe xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:nfse="http://www.prefeitura.sp.gov.br/nfe">
+    <Cabecalho Versao="1">
+        <CPFCNPJRemetente>
+            <CNPJ>${ NFe.infNFe.emit.CNPJ.valor }</CNPJ>
+        </CPFCNPJRemetente>
+        <transacao>true</transacao>
+    </Cabecalho>
+    <Detalhe>
+        <ChaveNFe>
+            <InscricaoPrestador>${ NFe.infNFe.emit.IM.valor }</InscricaoPrestador>
+            <NumeroNFe>${ NFe.infNFe.ide.nNF.valor }</NumeroNFe>
+        </ChaveNFe>
+        <AssinaturaCancelamento>${ NFe.assinatura_servico }</AssinaturaCancelamento>
+    </Detalhe>
+</nfse:PedidoCancelamentoNFe>

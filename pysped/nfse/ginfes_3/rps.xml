@@ -1,0 +1,70 @@
+            <RPS xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+                <InfRps Id="R${ NFe.infNFe.ide.nRPS.valor }">
+                    <IdentificacaoRps>
+                        <Numero>${ NFe.infNFe.ide.nRPS.valor }</Numero>
+                        <Serie>${ NFe.infNFe.ide.serie_rps.valor or '1' }</Serie>
+                        <Tipo>1</Tipo>
+                    </IdentificacaoRps>
+                    <DataEmissao>${ NFe.infNFe.ide.dhEmi.formato_iso }</DataEmissao>
+                    <NaturezaOperacao>${ NFe.infNFe.ide.natureza_nfse }</NaturezaOperacao>
+                    <RegimeEspecialTributacao py:if="NFe.infNFe.total.ISSQNTot.cRegTrib.valor">${ NFe.infNFe.total.ISSQNTot.cRegTrib.valor }</RegimeEspecialTributacao>
+                    <OptanteSimplesNacional py:if="NFe.infNFe.emit.CRT.valor == '3'">1</OptanteSimplesNacional>
+                    <OptanteSimplesNacional py:if="NFe.infNFe.emit.CRT.valor != '3'">2</OptanteSimplesNacional>
+                    <IncentivadorCultural py:if="NFe.infNFe.det[0].imposto.ISSQN.indIncentivo.valor == 1">1</IncentivadorCultural>
+                    <IncentivadorCultural py:if="NFe.infNFe.det[0].imposto.ISSQN.indIncentivo.valor != 1">2</IncentivadorCultural>
+                    <Status>1</Status>
+                    <Servico>
+                        <Valores>
+                            <ValorServicos>${ NFe.infNFe.total.ISSQNTot.vServ.valor }</ValorServicos>
+                            <ValorDeducoes py:if="NFe.infNFe.total.ISSQNTot.vDeducao.valor != 0">${ NFe.infNFe.total.ISSQNTot.vDeducao.valor }</ValorDeducoes>
+                            <ValorPis py:if="NFe.infNFe.total.retTrib.vRetPIS.valor != 0">${ NFe.infNFe.total.retTrib.vRetPIS.valor }</ValorPis>
+                            <ValorCofins py:if="NFe.infNFe.total.retTrib.vRetCOFINS.valor != 0">${ NFe.infNFe.total.retTrib.vRetCOFINS.valor }</ValorCofins>
+                            <ValorInss py:if="NFe.infNFe.total.retTrib.vRetPrev.valor != 0">${ NFe.infNFe.total.retTrib.vRetPrev.valor }</ValorInss>
+                            <ValorIr py:if="NFe.infNFe.total.retTrib.vIRRF.valor != 0">${ NFe.infNFe.total.retTrib.vIRRF.valor }</ValorIr>
+                            <ValorCsll py:if="NFe.infNFe.total.retTrib.vRetCSLL.valor != 0">${ NFe.infNFe.total.retTrib.vRetCSLL.valor }</ValorCsll>
+                            <IssRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor == 0">2</IssRetido>
+                            <IssRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor != 0">1</IssRetido>
+                            <ValorIss>${ NFe.infNFe.total.ISSQNTot.vISS.valor }</ValorIss>
+                            <ValorIssRetido py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor != 0">${ NFe.infNFe.total.ISSQNTot.vISSRet.valor }</ValorIssRetido>
+                            <OutrasRetencoes py:if="NFe.infNFe.total.ISSQNTot.vOutro.valor != 0">${ NFe.infNFe.total.ISSQNTot.vOutro.valor }</OutrasRetencoes>
+                            <BaseCalculo>${ NFe.infNFe.total.ISSQNTot.vServ.valor }</BaseCalculo>
+                            <Aliquota>${ NFe.infNFe.total.ISSQNTot.pISS.valor / 100 }</Aliquota>
+                            <ValorLiquidoNfse>${ NFe.infNFe.cobr.fat.vLiq.valor }</ValorLiquidoNfse>
+                            <DescontoIncondicionado py:if="NFe.infNFe.total.ISSQNTot.vDescIncond.valor != 0">${ NFe.infNFe.total.ISSQNTot.vDescIncond.valor }</DescontoIncondicionado>
+                            <DescontoCondicionado py:if="NFe.infNFe.total.ISSQNTot.vDescCond.valor != 0">${ NFe.infNFe.total.ISSQNTot.vDescCond.valor }</DescontoCondicionado>
+                        </Valores>
+                        <ItemListaServico>${ NFe.infNFe.det[0].imposto.ISSQN.cListServ.valor }</ItemListaServico>
+                        <CodigoTributacaoMunicipio>${ NFe.infNFe.det[0].imposto.ISSQN.cServico.valor }</CodigoTributacaoMunicipio>
+                        <Discriminacao py:if="not NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }</Discriminacao>
+                        <Discriminacao py:if="NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }| ${ NFe.infNFe.infAdic.infCpl.valor }</Discriminacao>
+                        <CodigoMunicipio>${ NFe.infNFe.emit.enderEmit.cMun.valor }</CodigoMunicipio>
+                    </Servico>
+                    <Prestador>
+                        <Cnpj>${ NFe.infNFe.emit.CNPJ.valor }</Cnpj>
+                        <InscricaoMunicipal>${ NFe.infNFe.emit.IM.valor }</InscricaoMunicipal>
+                    </Prestador>
+                    <Tomador>
+                        <IdentificacaoTomador>
+                            <CnpjCpf>
+                                <Cnpj py:if="NFe.infNFe.dest.CNPJ.valor">${ NFe.infNFe.dest.CNPJ.valor }</Cnpj>
+                                <Cpf py:if="NFe.infNFe.dest.CPF.valor">${ NFe.infNFe.dest.CPF.valor }</Cpf>
+                            </CnpjCpf>
+                            <InscricaoMunicipal py:if="NFe.infNFe.dest.IM.valor">${ NFe.infNFe.dest.IM.valor }</InscricaoMunicipal>
+                        </IdentificacaoTomador>
+                        <RazaoSocial>${ NFe.infNFe.dest.xNome.valor }</RazaoSocial>
+                        <Endereco>
+                            <Endereco>${ NFe.infNFe.dest.enderDest.xLgr.valor }</Endereco>
+                            <Numero>${ NFe.infNFe.dest.enderDest.nro.valor }</Numero>
+                            <Complemento>${ NFe.infNFe.dest.enderDest.xCpl.valor }</Complemento>
+                            <Bairro>${ NFe.infNFe.dest.enderDest.xBairro.valor }</Bairro>
+                            <CodigoMunicipio>${ NFe.infNFe.dest.enderDest.cMun.valor }</CodigoMunicipio>
+                            <Uf>${ NFe.infNFe.dest.enderDest.UF.valor }</Uf>
+                            <Cep>${ NFe.infNFe.dest.enderDest.CEP.valor }</Cep>
+                        </Endereco>
+                        <Contato>
+                            <Telefone>${ NFe.infNFe.dest.enderDest.fone.valor }</Telefone>
+                            <Email>${ NFe.infNFe.dest.email.valor }</Email>
+                        </Contato>
+                    </Tomador>
+                </InfRps>
+            </RPS>

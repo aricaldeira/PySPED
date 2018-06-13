@@ -45,7 +45,7 @@ from pysped.xml_sped import (ABERTURA, NAMESPACE_CTE, TagCaracter, TagDataHora,
                              TagDecimal, TagInteiro, XMLNFe, tira_abertura)
 from pysped.cte.leiaute import ESQUEMA_ATUAL_VERSAO_104 as ESQUEMA_ATUAL
 import os
-from cte_104 import CTe
+from .cte_104 import CTe
 
 
 DIRNAME = os.path.dirname(__file__)
