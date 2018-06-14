@@ -148,7 +148,7 @@ class SOAPConsulta(XMLNFe):
         xml +=         '<sped:ConsultaInformacoesConsolidadas>'
         xml +=             '<sped:tipoInscricaoContribuinte>%s</sped:tipoInscricaoContribuinte>' % self.tipoInscricaoContribuinte
         xml +=             '<sped:numeroInscricaoContribuinte>%s</sped:numeroInscricaoContribuinte>' % self.numeroInscricaoContribuinte
-        xml +=             '<sped:numeroProtocoloFechamento>%s</sped:numeroProtocoloFechamento>' % self.numeroProtocoloFechamento
+        xml +=             '<sped:numeroReciboFechamento>%s</sped:numeroReciboFechamento>' % self.numeroProtocoloFechamento
         xml +=         '</sped:ConsultaInformacoesConsolidadas>'
         xml +=     '</soapenv:Body>'
         xml += '</soapenv:Envelope>'
