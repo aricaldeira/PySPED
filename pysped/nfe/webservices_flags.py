@@ -69,6 +69,22 @@ WS_DFE_DISTRIBUICAO = 12
 NFE_AMBIENTE_PRODUCAO = 1
 NFE_AMBIENTE_HOMOLOGACAO = 2
 
+WS_DICT = {
+    WS_NFE_AUTORIZACAO: 'Envio de lote',
+    WS_NFE_CONSULTA_AUTORIZACAO: 'Consulta recibo',
+    WS_NFE_CANCELAMENTO: 'Cancelamento',
+    WS_NFE_INUTILIZACAO: 'Inutilização',
+    WS_NFE_CONSULTA: 'Consulta NF-e',
+    WS_NFE_SITUACAO: 'Servidor funcionando',
+    WS_NFE_CONSULTA_CADASTRO: 'Consulta cadastro',
+    WS_DPEC_RECEPCAO: 'Envio DPEC',
+    WS_DPEC_CONSULTA: 'Consulta DPEC',
+    WS_NFE_RECEPCAO_EVENTO: 'Envio de evento',
+    WS_NFE_DOWNLOAD: 'Download de NF-e',
+    WS_NFE_CONSULTA_DESTINADAS: 'Consulta DF-e',
+    WS_DFE_DISTRIBUICAO: 'Distribuição DF-e',
+}
+
 UF_CODIGO = {
     'AC': 12,
     'AL': 27,
