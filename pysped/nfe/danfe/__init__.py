@@ -39,6 +39,10 @@
 # <http://www.gnu.org/licenses/>
 #
 
+import sys
+
 from pysped.nfe.danfe.danfe import DANFE
 from pysped.nfe.danfe.danfce import DANFCE
-from pysped.nfe.danfe.daede import DAEDE
+
+if sys.version_info.major == 2:
+    from .processador_nfe import DAEDE
