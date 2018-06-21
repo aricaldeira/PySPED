@@ -715,6 +715,7 @@ class ProcessadorNFe(object):
         #
         if nfe:
            nfe.procNFe = self.montar_processo_uma_nota(nfe, protnfe_recibo=resposta.protNFe)
+           processo.procNFe = self.montar_processo_uma_nota(nfe, protnfe_recibo=resposta.protNFe)
 
         return processo
 
@@ -780,7 +781,7 @@ class ProcessadorNFe(object):
             #
             # Se o serviço não estiver em operação
             #
-            if proc_servico.resposta.cStat.valor != '107':
+            if ('unavailable' in proc_servico.resposta.original.decode('utf-8').lower()) or proc_servico.resposta.cStat.valor != '107':
                 #
                 # Interrompe todo o processo
                 #
@@ -792,7 +793,7 @@ class ProcessadorNFe(object):
         for nfe in lista_nfes:
             nfe.monta_chave()
             self.caminho = caminho_original
-            proc_consulta = self.consultar_nota(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave)
+            proc_consulta = self.consultar_nota(ambiente=nfe.infNFe.ide.tpAmb.valor, chave_nfe=nfe.chave, nfe=nfe)
             yield proc_consulta
 
             #
@@ -803,7 +804,8 @@ class ProcessadorNFe(object):
                 #or
                 #((self.versao in ['2.00', '3.10']) and (proc_consulta.resposta.cStat.valor in ('217', '999',)))
             #):
-            if (
+            if ('unavailable' in proc_consulta.resposta.original.decode('utf-8').lower()) or \
+            (
                  ((self.versao == '1.10') and (proc_consulta.resposta.infProt.cStat.valor in ('217', '999',)))
                  or
                 ((self.versao in ['2.00', '3.10', '4.00']) and (proc_consulta.resposta.cStat.valor in ('100', '150', '110', '301', '302')))
@@ -828,7 +830,7 @@ class ProcessadorNFe(object):
         #
         # Deu errado?
         #
-        if ret_envi_nfe.cStat.valor != '103':
+        if ('unavailable' in proc_envio.resposta.original.decode('utf-8').lower()) or ret_envi_nfe.cStat.valor != '103':
             #
             # Interrompe o processo
             #
@@ -843,6 +845,10 @@ class ProcessadorNFe(object):
         # Consulta o recibo do lote, para ver o que aconteceu
         #
         proc_recibo = self.consultar_recibo(ambiente=ret_envi_nfe.tpAmb.valor, numero_recibo=ret_envi_nfe.infRec.nRec.valor)
+
+        if ('unavailable' in proc_recibo.resposta.original.decode('utf-8').lower()):
+            yield proc_recibo
+            return
 
         #
         # Tenta receber o resultado do processamento do lote, caso ainda
