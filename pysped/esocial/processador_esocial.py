@@ -120,8 +120,10 @@ class ProcessadorESocial(ProcessadorNFe):
             self.certificado.assina_xmlnfe(evento)
             evento.validar()
 
+        print(envio.xml)
         envio.envioLoteEventos.eventos = lista_eventos
         envio.validar()
+        print(resposta.xml)
 
         if self.salvar_arquivos:
             for n in lista_eventos:
@@ -135,7 +137,7 @@ class ProcessadorESocial(ProcessadorNFe):
             arq.write(envio.xml)
             arq.close()
 
-        self._conectar_servico(WS_ESOCIAL_ENVIO, envio, resposta)
+        # self._conectar_servico(WS_ESOCIAL_ENVIO, envio, resposta)
 
         #resposta.validar()
         if self.salvar_arquivos:

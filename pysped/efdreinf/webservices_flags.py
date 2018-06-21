@@ -3,7 +3,7 @@
 # PySPED - Python libraries to deal with Brazil's SPED Project
 #
 # Copyright (C) 2010-2012
-# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+# Copyright (C) Wagner Pereira <wagner.pereira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -39,34 +39,13 @@
 # <http://www.gnu.org/licenses/>
 #
 
+from __future__ import division, print_function, unicode_literals
 
-from .base import ABERTURA, NAMESPACE_MDFE, NAMESPACE_NFE, NAMESPACE_SIG, \
-    TagCaracter, TagData, TagDataHora, TagDecimal, TagHora, TagInteiro, \
-    TagDataHoraUTC, TagDecimalVirgula, \
-    XMLNFe, tira_abertura, tirar_acentos, por_acentos, TagBoolean, somente_ascii, \
-    NAMESPACE_CTE
+from ..nfe.webservices_flags import UF_CODIGO, CODIGO_UF
 
 
-from .assinatura import Signature
+WS_EFDREINF_ENVIO = 0
+WS_EFDREINF_CONSULTA = 1
 
-# Pyflakes
-
-ABERTURA
-NAMESPACE_CTE
-NAMESPACE_NFE
-NAMESPACE_SIG
-Signature
-TagBoolean
-TagCaracter
-TagData
-TagDataHora
-TagDataHoraUTC
-TagDecimal
-TagDecimalVirgula
-TagHora
-TagInteiro
-XMLNFe
-por_acentos
-somente_ascii
-tira_abertura
-tirar_acentos
+EFDREINF_AMBIENTE_PRODUCAO = 1
+EFDREINF_AMBIENTE_HOMOLOGACAO = 2

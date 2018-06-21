@@ -39,34 +39,4 @@
 # <http://www.gnu.org/licenses/>
 #
 
-
-from .base import ABERTURA, NAMESPACE_MDFE, NAMESPACE_NFE, NAMESPACE_SIG, \
-    TagCaracter, TagData, TagDataHora, TagDecimal, TagHora, TagInteiro, \
-    TagDataHoraUTC, TagDecimalVirgula, \
-    XMLNFe, tira_abertura, tirar_acentos, por_acentos, TagBoolean, somente_ascii, \
-    NAMESPACE_CTE
-
-
-from .assinatura import Signature
-
-# Pyflakes
-
-ABERTURA
-NAMESPACE_CTE
-NAMESPACE_NFE
-NAMESPACE_SIG
-Signature
-TagBoolean
-TagCaracter
-TagData
-TagDataHora
-TagDataHoraUTC
-TagDecimal
-TagDecimalVirgula
-TagHora
-TagInteiro
-XMLNFe
-por_acentos
-somente_ascii
-tira_abertura
-tirar_acentos
+from .processador_efdreinf import ProcessadorEFDReinf

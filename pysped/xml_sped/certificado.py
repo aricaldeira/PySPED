@@ -323,7 +323,7 @@ class Certificado(object):
             raise ValueError('O documento nao e do tipo esperado: XMLNFe')
 
         # Realiza a assinatura
-        xml = self.assina_xml(doc.xml)
+        xml = self.assina_xml(doc.xml, metodo=doc.Signature.metodo)
 
         # Devolve os valores para a instância doc
         doc.Signature.xml = xml
@@ -387,6 +387,16 @@ class Certificado(object):
         elif '</evtInfoEmpregador>' in xml:
             doctype = '<!DOCTYPE eSocial [<!ATTLIST evtInfoEmpregador Id ID #IMPLIED>]>'
 
+        #
+        # EFD/Reinf
+        #
+        elif '</evtInfoContri>' in xml:
+            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtInfoContri Id ID #IMPLIED>]>'
+        elif '</evtServTom>' in xml:
+            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtServTom Id ID #IMPLIED>]>'
+        elif '</evtFechaEvPer>' in xml:
+            doctype = '<!DOCTYPE Reinf [<!ATTLIST evtFechaEvPer Id ID #IMPLIED>]>'
+
         else:
             raise ValueError('Tipo de arquivo desconhecido para assinatura/validacao')
 
@@ -431,7 +441,7 @@ class Certificado(object):
 
         return xml
 
-    def assina_xml(self, xml):
+    def assina_xml(self, xml, metodo='sha1'):
         xml = self._prepara_doc_xml(xml)
 
         assinatura = Signature()
@@ -452,10 +462,16 @@ class Certificado(object):
         #
         doc_xml = etree.fromstring(xml.encode('utf-8'))
 
+        signature_algorithm = 'rsa-sha1'
+        digest_algorithm = 'sha1'
+        if metodo == 'sha256':
+            signature_algorithm = 'rsa-sha256'
+            digest_algorithm = 'sha256'
+
         assinador = signxml.XMLSigner(
             method=signxml.methods.enveloped,
-            signature_algorithm='rsa-sha1',
-            digest_algorithm='sha1',
+            signature_algorithm=signature_algorithm,
+            digest_algorithm=digest_algorithm,
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
         )
         assinador.namespaces = {None: assinador.namespaces['ds']}
@@ -528,7 +544,7 @@ class Certificado(object):
         #
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
-        assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha1')
+        assinatura = crypto.sign(pkcs12.get_privatekey(), texto, 'sha256')
 
         return base64.encode(assinatura)
 
@@ -539,7 +555,7 @@ class Certificado(object):
         pkcs12 = crypto.load_pkcs12(open(self.arquivo, 'rb').read(), self.senha)
 
         try:
-            crypto.verify(pkcs12.get_certificate(), assinatura, texto, 'sha1')
+            crypto.verify(pkcs12.get_certificate(), assinatura, texto, 'sha256')
         except:
             return False
 

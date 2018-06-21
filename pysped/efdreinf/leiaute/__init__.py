@@ -3,7 +3,7 @@
 # PySPED - Python libraries to deal with Brazil's SPED Project
 #
 # Copyright (C) 2010-2012
-# Copyright (C) Aristides Caldeira <aristides.caldeira at tauga.com.br>
+# Copyright (C) Wagner Pereira <wagner.pereira at tauga.com.br>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Library General Public License as
@@ -39,34 +39,30 @@
 # <http://www.gnu.org/licenses/>
 #
 
+from __future__ import division, print_function, unicode_literals
 
-from .base import ABERTURA, NAMESPACE_MDFE, NAMESPACE_NFE, NAMESPACE_SIG, \
-    TagCaracter, TagData, TagDataHora, TagDecimal, TagHora, TagInteiro, \
-    TagDataHoraUTC, TagDecimalVirgula, \
-    XMLNFe, tira_abertura, tirar_acentos, por_acentos, TagBoolean, somente_ascii, \
-    NAMESPACE_CTE
+#
+# Versão 1.03.02
+#
+ESQUEMA_ATUAL_VERSAO_1 = 'v1.03.02'
 
 
-from .assinatura import Signature
+from .soap_10100 import SOAPEnvio as SOAPEnvio_10100
+from .soap_10100 import SOAPRetorno as SOAPRetorno_10100
+from .soap_10100 import SOAPConsulta as SOAPConsulta_10100
 
-# Pyflakes
+from .envioLoteEvento_10302 import LoteEventoEFDReinf as LoteEventoEFDReinf_v1_03_02
 
-ABERTURA
-NAMESPACE_CTE
-NAMESPACE_NFE
-NAMESPACE_SIG
-Signature
-TagBoolean
-TagCaracter
-TagData
-TagDataHora
-TagDataHoraUTC
-TagDecimal
-TagDecimalVirgula
-TagHora
-TagInteiro
-XMLNFe
-por_acentos
-somente_ascii
-tira_abertura
-tirar_acentos
+from .retornoTotalizadorContribuinte_10302 import RetornoTotalizadorContribuinte as RetornoTotalizadorContribuite_v1_03_02
+
+from .retornoLoteEventos_10302 import RetornoLoteEventos as RetornoLoteEventosEFDReinf_v1_03_02
+from .retornoTotalizadorEvento_10302 import RetornoTotalizadorEvento as RetornoTotalizadorEventoEFDReinf_v1_03_02  # R-5001
+from .retornoTotalizadorContribuinte_10302 import RetornoTotalizadorContribuinte as RetornoTotalizadorContribuinteEFDReinf_v1_03_02 # R-5011
+
+from .evtInfoContribuinte_10302 import R1000 as R1000_1
+
+from .evtTomadorServicos_10302 import R2010 as R2010_1
+from .evtTomadorServicos_10302 import NFS as NFS_1
+from .evtTomadorServicos_10302 import InfoTpServ as InfoTpServ_1
+
+from .evtFechamento_10302 import R2099 as R2099_1
