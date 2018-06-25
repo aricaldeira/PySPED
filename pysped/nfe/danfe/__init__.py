@@ -45,4 +45,4 @@ from pysped.nfe.danfe.danfe import DANFE
 from pysped.nfe.danfe.danfce import DANFCE
 
 if sys.version_info.major == 2:
-    from .processador_nfe import DAEDE
+    from .daede import DAEDE
