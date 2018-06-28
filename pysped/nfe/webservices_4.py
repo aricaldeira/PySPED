@@ -263,7 +263,7 @@ UFCE = {
         WS_NFE_CONSULTA            : 'nfe4/services/NFeConsultaProtocolo4',
         WS_NFE_SITUACAO            : 'nfe4/services/NFeStatusServico4',
         WS_NFE_CONSULTA_CADASTRO   : 'nfe2/services/CadConsultaCadastro2',
-        WS_NFE_RECEPCAO_EVENTO     : 'nfe2/services/RecepcaoEvento',
+        WS_NFE_RECEPCAO_EVENTO     : 'nfe4/services/NFeRecepcaoEvento4',
         WS_NFE_AUTORIZACAO         : 'nfe4/services/NFeAutorizacao4',
         WS_NFE_CONSULTA_AUTORIZACAO: 'nfe4/services/NFeRetAutorizacao4',
     },
@@ -273,7 +273,7 @@ UFCE = {
         WS_NFE_CONSULTA            : 'nfe4/services/NFeConsultaProtocolo4',
         WS_NFE_SITUACAO            : 'nfe4/services/NFeStatusServico4',
         WS_NFE_CONSULTA_CADASTRO   : 'nfe2/services/CadConsultaCadastro2',
-        WS_NFE_RECEPCAO_EVENTO     : 'nfe2/services/RecepcaoEvento',
+        WS_NFE_RECEPCAO_EVENTO     : 'nfe4/services/NFeRecepcaoEvento4',
         WS_NFE_AUTORIZACAO         : 'nfe4/services/NFeAutorizacao4',
         WS_NFE_CONSULTA_AUTORIZACAO: 'nfe4/services/NFeRetAutorizacao4',
     }
