@@ -126,9 +126,14 @@ class SOAPEnvio(XMLNFe):
         xml = XMLNFe.get_xml(self)
         xml += ABERTURA
         xml += '<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">'
-        xml +=     '<soap:Header>'
-        xml +=             self.nfeCabecMsg.xml
-        xml +=     '</soap:Header>'
+
+        if self.versao < '4.00':
+            xml +=     '<soap:Header>'
+            xml +=             self.nfeCabecMsg.xml
+            xml +=     '</soap:Header>'
+        else:
+            xml +=     '<soap:Header />'
+
         xml +=     '<soap:Body>'
         xml +=             self.nfeDadosMsg.xml
         xml +=     '</soap:Body>'
@@ -141,6 +146,11 @@ class SOAPEnvio(XMLNFe):
     xml = property(get_xml, set_xml)
 
     def get_header(self):
+        if self.soap_action_webservice_e_metodo:
+            self._header[b'content-type'] = b'application/soap+xml; charset=utf-8; action="http://www.portalfiscal.inf.br/nfe/wsdl/' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8') + b'"'
+        else:
+            self._header[b'content-type'] = b'application/soap+xml; charset=utf-8; action="http://www.portalfiscal.inf.br/nfe/wsdl/' + self.webservice.encode('utf-8') + b'"'
+
         header = self._header
         return header
 
