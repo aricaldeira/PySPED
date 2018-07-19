@@ -2477,7 +2477,7 @@ class Fat(XMLNFe):
         super(Fat, self).__init__()
         self.nFat  = TagCaracter(nome='nFat', codigo='Y03', tamanho=[1, 60],                        raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
         self.vOrig = TagDecimal(nome='vOrig', codigo='Y04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
-        self.vDesc = TagDecimal(nome='vDesc', codigo='Y05', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
+        self.vDesc = TagDecimal(nome='vDesc', codigo='Y05', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=True)
         self.vLiq  = TagDecimal(nome='vLiq' , codigo='Y06', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
 
     def get_xml(self):
@@ -4255,7 +4255,7 @@ class NFe(XMLNFe):
 
     @property
     def endereco_emitente_formatado_linha_4(self):
-        return self.site
+        return self.site or self.infNFe.emit.email.valor or ''
 
     def _formata_fone(self, fone):
         if not len(fone.strip()):
