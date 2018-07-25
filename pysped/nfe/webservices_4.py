@@ -73,14 +73,6 @@ METODO_WS = {
         'webservice': 'NFeRetAutorizacao4',
         'metodo'    : 'NfeRetAutorizacao',
     },
-    #WS_NFE_DOWNLOAD: {
-        #'webservice': 'NfeDownloadNF',
-        #'metodo'    : 'nfeDownloadNF',
-    #},
-    #WS_NFE_CONSULTA_DESTINADAS: {
-        #'webservice': 'NfeConsultaDest',
-        #'metodo'    : 'nfeConsultaNFDest',
-    #},
     WS_DFE_DISTRIBUICAO: {
         'webservice': 'NFeDistribuicaoDFe',
         'metodo'    : 'nfeDistDFeInteresse'
@@ -195,16 +187,12 @@ AN = {
     NFE_AMBIENTE_PRODUCAO: {
         'servidor'                : 'www.nfe.fazenda.gov.br',
         'servidor%s' % WS_DFE_DISTRIBUICAO: 'www1.nfe.fazenda.gov.br',
-        WS_NFE_RECEPCAO_EVENTO    : 'RecepcaoEvento/RecepcaoEvento.asmx',
-        #WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
-        #WS_NFE_DOWNLOAD           : 'NfeDownloadNF/NfeDownloadNF.asmx',
+        WS_NFE_RECEPCAO_EVENTO    : 'NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
         WS_DFE_DISTRIBUICAO       : 'NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
     },
     NFE_AMBIENTE_HOMOLOGACAO: {
         'servidor'                : 'hom.nfe.fazenda.gov.br',
-        WS_NFE_RECEPCAO_EVENTO    : 'RecepcaoEvento/RecepcaoEvento.asmx',
-        #WS_NFE_CONSULTA_DESTINADAS: 'NFeConsultaDest/NFeConsultaDest.asmx',
-        #WS_NFE_DOWNLOAD           : 'NfeDownloadNF/NfeDownloadNF.asmx',
+        WS_NFE_RECEPCAO_EVENTO    : 'NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx',
         WS_DFE_DISTRIBUICAO       : 'NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx',
     },
 }
