@@ -1,0 +1,16 @@
+<ns1:ReqCancelamentoNFSe xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:ns1="http://localhost:8080/WsNFe2/lote" xmlns:tipos="http://localhost:8080/WsNFe2/tp" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://localhost:8080/WsNFe2/lote http://localhost:8080/WsNFe2/xsd/ReqCancelamentoNFSe.xsd">
+    <Cabecalho>
+        <CodCidade>${ NFe.infNFe.emit.enderEmit.cMunSIAFI.valor }</CodCidade>
+        <CPFCNPJRemetente>${ NFe.infNFe.emit.CNPJ.valor }</CPFCNPJRemetente>
+        <transacao>true</transacao>
+        <Versao>1</Versao>
+    </Cabecalho>
+    <Lote Id="Lote:${ NFe.infNFe.ide.nLote.valor }">
+        <Nota Id="Nota:${ NFe.infNFe.ide.nNF.valor }">
+            <InscricaoMunicipalPrestador>${ NFe.infNFe.emit.IM.valor }</InscricaoMunicipalPrestador>
+            <NumeroNota>${ NFe.infNFe.ide.nNF.valor }</NumeroNota>
+            <CodigoVerificacao>${ NFe.codigo_verificacao }</CodigoVerificacao>
+            <MotivoCancelamento>${ NFe.motivo_cancelamento }</MotivoCancelamento>
+        </Nota>
+    </Lote>
+</ns1:ReqCancelamentoNFSe>

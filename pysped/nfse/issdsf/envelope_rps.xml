@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap12:Header />
+    <soap12:Body>
+        <nfse:testeEnviar xmlns:nfse="http://proces.wsnfe2.dsfnet.com.br" soap12:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+            <mensagemXml xsi:type="xsd:string">
+                <![CDATA[${ body }]]>
+            </mensagemXml>
+        </nfse:testeEnviar>
+    </soap12:Body>
+</soap12:Envelope>

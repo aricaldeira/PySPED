@@ -51,6 +51,7 @@ from uuid import uuid4
 from builtins import str
 from io import open
 import json
+import hashlib
 
 
 if sys.version_info.major == 2:
@@ -224,16 +225,11 @@ class ProcessadorNFSe(object):
         xml = xml.replace('<?xml version="1.0" encoding="utf-8" ?>', '')
         return xml
 
-    #
-    # Envio de RPS síncrono
-    #
-    def assina_xml_rps(self, nfe):
+    def assina_xml_municipio(self, nfe):
         self.configuracao_municipio(nfe)
 
-        if not (self.configuracao.envio_rps and self.configuracao.envio_rps.assina):
-            return nfe.xml_rps
-
-        configuracao = self.configuracao.envio_rps.assinatura
+        if not (self.configuracao.envio_rps and self.configuracao.envio_rps.assina_municipio):
+            return
 
         #
         # São Paulo - SP tem uma assinatura específica
@@ -242,8 +238,36 @@ class ProcessadorNFSe(object):
             assinatura = self.assinatura_nfse_sp(nfe)
             assinatura = self.certificado.assina_texto(assinatura.upper())
             nfe.assinatura_servico = assinatura
+        #
+        # ISSDSF tem uma assinatura específica:
+        # Sorocaba, Campinas, Teresina, Belém, Campo Grande, Uberlândia, São Luís, Nova Iguaçu
+        #
+        elif str(nfe.infNFe.emit.enderEmit.cMun.valor) in ('3552205', '3509502'):
+            assinatura = self.assinatura_nfse_issdsf(nfe)
+            assinatura = hashlib.sha1(assinatura.encode('utf-8')).hexdigest()
+            nfe.assinatura_servico = assinatura
+
+    def assina_xml_rps(self, nfe):
+        self.configuracao_municipio(nfe)
+
+        if not (self.configuracao.envio_rps and self.configuracao.envio_rps.assina):
+            return nfe.xml_rps
+
+        configuracao = self.configuracao.envio_rps.assinatura
+
 
         conteudo = pybrasil.base.tira_acentos(nfe.xml_rps)
+        conteudo = self.certificado.assina_xml(conteudo, **configuracao)
+
+        return conteudo
+
+    def assina_xml_lote(self, nfe, conteudo):
+        self.configuracao_municipio(nfe)
+
+        if not (self.configuracao.envio_rps and self.configuracao.envio_rps.assina_lote):
+            return conteudo
+
+        configuracao = self.configuracao.envio_rps.assinatura_lote
         conteudo = self.certificado.assina_xml(conteudo, **configuracao)
 
         return conteudo
@@ -284,9 +308,46 @@ class ProcessadorNFSe(object):
 
         return assinatura
 
+    def assinatura_nfse_issdsf(self, NFe):
+        assinatura = NFe.infNFe.emit.IM.valor.zfill(11)[:11]
+        assinatura += 'NF   '
+        assinatura += str(NFe.infNFe.ide.nRPS.valor).zfill(12)[:12]
+        assinatura += NFe.infNFe.ide.dhEmi.formato_iso[:10].replace('-', '')
+
+        if NFe.infNFe.emit.CRT.valor == 1:
+            assinatura += 'H '
+        else:
+            if NFe.infNFe.ide.natureza_nfse == '0':
+                assinatura += 'T '
+            if NFe.infNFe.ide.natureza_nfse == '1':
+                assinatura += 'E '
+            if NFe.infNFe.ide.natureza_nfse == '2':
+                assinatura += 'C '
+            if NFe.infNFe.ide.natureza_nfse == '3':
+                assinatura += 'F '
+            if NFe.infNFe.ide.natureza_nfse == '4':
+                assinatura += 'K '
+
+        assinatura += 'N'
+        assinatura += 'S' if NFe.infNFe.total.ISSQNTot.vISSRet.valor > 0 else 'N'
+        assinatura += str(int(NFe.infNFe.total.ISSQNTot.vServ.valor * 100)).zfill(15)
+        assinatura += str(int(NFe.infNFe.total.ISSQNTot.vDeducao.valor * 100)).zfill(15)
+        assinatura += NFe.infNFe.det[0].imposto.ISSQN.cServico.valor.zfill(10)[:10]
+
+        if NFe.infNFe.dest.CPF.valor:
+            assinatura += NFe.infNFe.dest.CPF.valor.zfill(14)[:14]
+        elif NFe.infNFe.dest.CNPJ.valor:
+            assinatura += NFe.infNFe.dest.CNPJ.valor.zfill(14)[:14]
+        else:
+            assinatura += ''.zfill(14)
+
+        return assinatura
+
     def envia_rps(self, nfe):
         self.configuracao_municipio(nfe)
+        self.assina_xml_municipio(nfe)
         conteudo = self.assina_xml_rps(nfe)
+        conteudo = self.assina_xml_lote(nfe, conteudo)
 
         configuracao = self.configuracao['envio_rps']
 

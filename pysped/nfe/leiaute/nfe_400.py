@@ -49,10 +49,21 @@ from pysped.nfe.leiaute import ESQUEMA_ATUAL_VERSAO_4 as ESQUEMA_ATUAL
 from pysped.nfe.leiaute import nfe_310
 from pysped.nfe.webservices_nfce_4 import ESTADO_QRCODE, ESTADO_CONSULTA_NFCE
 from pysped.nfe.webservices_flags import CODIGO_UF
+import os
 import binascii
 import hashlib
+import qrcode
+import sys
+import unicodedata
 
-import os
+PYBRASIL = False
+try:
+    from pybrasil.valor.decimal import Decimal
+
+    PYBRASIL = True
+except:
+    from decimal import Decimal
+
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -1577,3 +1588,83 @@ class NFSe(NFe):
         self.infNFe.ide.indFinal.valor = '1'  #  Consumidor final
         self.infNFe.transp.modFrete.valor = 9  #  Sem frete
         self.infNFe.dest.modelo = '99'
+        self.assinatura_servico = ''
+        self.codigo_verificacao = ''
+        self.cancelada = False
+        self.motivo_cancelamento = ''
+
+        #
+        # Marca as tags de ISS e retenções como obrigatórias
+        #
+        self.infNFe.total.ISSQNTot.vServ.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vBC.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vISS.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vPIS.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vCOFINS.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vDeducao.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vOutro.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vDescIncond.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vDescCond.obrigatorio = True
+        self.infNFe.total.ISSQNTot.vISSRet.obrigatorio = True
+        self.infNFe.total.ISSQNTot.cRegTrib.obrigatorio = True
+
+        self.infNFe.total.retTrib.vRetPIS.obrigatorio = True
+        self.infNFe.total.retTrib.vRetCOFINS.obrigatorio = True
+        self.infNFe.total.retTrib.vRetCSLL.obrigatorio = True
+        self.infNFe.total.retTrib.vBCIRRF.obrigatorio = True
+        self.infNFe.total.retTrib.vIRRF.obrigatorio = True
+        self.infNFe.total.retTrib.vBCRetPrev.obrigatorio = True
+        self.infNFe.total.retTrib.vRetPrev.obrigatorio = True
+
+    @property
+    def nome_cidade(self):
+        nome_cidade = self.infNFe.emit.enderEmit.UF.valor
+        nome_cidade += '-'
+        nome_cidade += self.infNFe.emit.enderEmit.xMun.valor
+        nome_cidade = nome_cidade.replace(' ', '_').lower()
+
+        nome_cidade = nome_cidade.replace('°','o')
+
+        if sys.version_info.major == 2:
+            nome_cidade = unicodedata.normalize(b'NFKD', nome_cidade).encode('ascii', 'ignore').encode('utf-8')
+        else:
+            nome_cidade = unicodedata.normalize('NFKD', nome_cidade).encode('ascii', 'ignore').decode('utf-8')
+
+        return nome_cidade
+
+    @property
+    def caminho_templates(self):
+        return os.path.join(DIRNAME, '../../nfse/', self.nome_cidade)
+
+    @property
+    def configuracao_json(self):
+        return os.path.join(DIRNAME, '../../nfse/', self.nome_cidade, self.nome_cidade + '.json')
+
+    def render_template(self, template, variaveis={}):
+        from genshi.template.loader import TemplateLoader
+        from genshi.template import MarkupTemplate
+
+        loader = TemplateLoader(search_path=self.caminho_templates, auto_reload=True, allow_exec=True,
+                                default_class=MarkupTemplate)
+
+        tmpl = loader.load(template)
+        variaveis['NFe'] = self
+
+        if PYBRASIL:
+            variaveis['Decimal'] = Decimal
+            variaveis['D'] = Decimal
+
+        else:
+            variaveis['Decimal'] = Decimal
+            variaveis['D'] = Decimal
+
+        stream = tmpl.generate(**variaveis)
+        return stream.render()
+
+    @property
+    def xml_rps(self):
+        return self.render_template('envio_rps.xml')
+
+    @property
+    def xml_cancelamento(self):
+        return self.render_template('envio_cancelamento.xml')

@@ -61,7 +61,8 @@ class DANFSE(DANFE):
         self.imprime_descricao_servico = True
         self.imprime_item_servico      = True
         self.imprime_codigo_cnae       = True
-        self.imprime_codigo_servico    = True
+        self.imprime_codigo_servico    = False
+        self.imprime_codigo_servico_federal = True
         self.imprime_construcao_civil  = False
 
     def reset(self):
@@ -100,6 +101,7 @@ class DANFSE(DANFE):
 
     @property
     def logo_prefeitura(self):
+        import ipdb; ipdb
         if self.NFe is None:
             return ''
 
@@ -109,7 +111,7 @@ class DANFSE(DANFE):
         if self.NFe.nome_cidade in CACHE_LOGO:
             return CACHE_LOGO[self.NFe.nome_cidade]
 
-        caminho_logo = os.path.join(DIRNAME, '../../nfse/logo_prefeitura/', self.NFe.nome_cidade + '.jpeg')
+        caminho_logo = os.path.join(DIRNAME, 'logo_prefeitura', self.NFe.nome_cidade + '.jpeg')
 
         if not os.path.exists(caminho_logo):
             return ''

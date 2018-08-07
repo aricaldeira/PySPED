@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NFe xmlns:py="http://genshi.edgewall.org/" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <Assinatura>${ NFe.assinatura_servico }</Assinatura>
+    <InscricaoMunicipalPrestador>${ NFe.infNFe.emit.IM.valor }</InscricaoMunicipalPrestador>
+    <RazaoSocialPrestador>${ NFe.infNFe.emit.xNome.valor }</RazaoSocialPrestador>
+    <TipoRPS>RPS</TipoRPS>
+    <SerieRPS>${ NFe.infNFe.ide.serie_rps.valor or 'NF' }</SerieRPS>
+    <NumeroRPS>${ NFe.infNFe.ide.nRPS.valor }</NumeroRPS>
+    <DataEmissaoRPS>${ NFe.infNFe.ide.dhEmi.formato_iso[:19] }</DataEmissaoRPS>
+    <SituacaoRPS>N</SituacaoRPS>
+    <SeriePrestacao>${ NFe.infNFe.ide.serie.valor or '99' }</SeriePrestacao>
+    <InscricaoMunicipalTomador>${ NFe.infNFe.dest.IM.valor }</InscricaoMunicipalTomador>
+    <CPFCNPJTomador py:if="NFe.infNFe.dest.CNPJ.valor or NFe.infNFe.dest.CPF.valor">${ NFe.infNFe.dest.CNPJ.valor or NFe.infNFe.dest.CPF.valor }</CPFCNPJTomador>
+    <RazaoSocialTomador py:if="NFe.infNFe.dest.CNPJ.valor or NFe.infNFe.dest.CPF.valor">${ NFe.infNFe.dest.xNome.valor }</RazaoSocialTomador>
+    <DocTomadorEstrangeiro py:if="NFe.infNFe.dest.idEstrangeiro.valor">${ NFe.infNFe.dest.idEstrangeiro.valor }</DocTomadorEstrangeiro>
+    <TipoLogradouroTomador>Rua</TipoLogradouroTomador>
+    <LogradouroTomador>${ NFe.infNFe.dest.enderDest.xLgr.valor }</LogradouroTomador>
+    <NumeroEnderecoTomador>${ NFe.infNFe.dest.enderDest.nro.valor }</NumeroEnderecoTomador>
+    <ComplementoEnderecoTomador>${ NFe.infNFe.dest.enderDest.xCpl.valor }</ComplementoEnderecoTomador>
+    <TipoBairroTomador>Bairro</TipoBairroTomador>
+    <BairroTomador>${ NFe.infNFe.dest.enderDest.xBairro.valor }</BairroTomador>
+    <CidadeTomador>${ NFe.infNFe.dest.enderDest.cMunSIAFI.valor }</CidadeTomador>
+    <CidadeTomadorDescricao>${ NFe.infNFe.dest.enderDest.xMun.valor }</CidadeTomadorDescricao>
+    <CEPTomador>${ NFe.infNFe.dest.enderDest.CEP.valor }</CEPTomador>
+    <EmailTomador py:if="NFe.infNFe.dest.email.valor">${ NFe.infNFe.dest.email.valor }</EmailTomador>
+    <CodigoAtividade>${ NFe.infNFe.emit.CNAE.valor }</CodigoAtividade>
+    <AliquotaAtividade>${ NFe.infNFe.total.ISSQNTot.pISS.valor }</AliquotaAtividade>
+    <TipoRecolhimento py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor == 0">A</TipoRecolhimento>
+    <TipoRecolhimento py:if="NFe.infNFe.total.ISSQNTot.vISSRet.valor != 0">R</TipoRecolhimento>
+    <MunicipioPrestacao>${ NFe.infNFe.ide.cMunFGSIAFI.valor }</MunicipioPrestacao>
+    <MunicipioPrestacaoDescricao>${ NFe.infNFe.ide.xMunFG.valor }</MunicipioPrestacaoDescricao>
+    <Operacao>A</Operacao>
+    <Tributacao py:if="NFe.infNFe.emit.CRT.valor == '1'">H</Tributacao>
+    <Tributacao py:if="NFe.infNFe.emit.CRT.valor != '1' and NFe.infNFe.ide.natureza_nfse == '0'">T</Tributacao>
+    <Tributacao py:if="NFe.infNFe.emit.CRT.valor != '1' and NFe.infNFe.ide.natureza_nfse == '1'">E</Tributacao>
+    <Tributacao py:if="NFe.infNFe.emit.CRT.valor != '1' and NFe.infNFe.ide.natureza_nfse == '2'">C</Tributacao>
+    <Tributacao py:if="NFe.infNFe.emit.CRT.valor != '1' and NFe.infNFe.ide.natureza_nfse == '3'">F</Tributacao>
+    <Tributacao py:if="NFe.infNFe.emit.CRT.valor != '1' and NFe.infNFe.ide.natureza_nfse == '4'">K</Tributacao>
+    <ValorPIS>${ NFe.infNFe.total.retTrib.vRetPIS.valor }</ValorPIS>
+    <ValorCOFINS>${ NFe.infNFe.total.retTrib.vRetCOFINS.valor }</ValorCOFINS>
+    <ValorINSS>${ NFe.infNFe.total.retTrib.vRetPrev.valor }</ValorINSS>
+    <ValorIR>${ NFe.infNFe.total.retTrib.vIRRF.valor }</ValorIR>
+    <ValorCSLL>${ NFe.infNFe.total.retTrib.vRetCSLL.valor }</ValorCSLL>
+    <AliquotaPIS>${ NFe.infNFe.total.retTrib.pRetPIS.valor }00</AliquotaPIS>
+    <AliquotaCOFINS>${ NFe.infNFe.total.retTrib.pRetCOFINS.valor }00</AliquotaCOFINS>
+    <AliquotaINSS>${ NFe.infNFe.total.retTrib.pRetPrev.valor }00</AliquotaINSS>
+    <AliquotaIR>${ NFe.infNFe.total.retTrib.pIRRF.valor }00</AliquotaIR>
+    <AliquotaCSLL>${ NFe.infNFe.total.retTrib.pRetCSLL.valor }00</AliquotaCSLL>
+    <DescricaoRPS py:if="not NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }</DescricaoRPS>
+    <DescricaoRPS py:if="NFe.infNFe.infAdic.infCpl.valor">${ NFe.infNFe.descServico.valor }| ${ NFe.infNFe.infAdic.infCpl.valor }</DescricaoRPS>
+    <DDDPrestador />
+    <TelefonePrestador />
+    <DDDTomador />
+    <TelefoneTomador />
+    <Itens>
+        <Item py:for="det in NFe.infNFe.det">
+            <DiscriminacaoServico>${ det.prod.xProd.valor }</DiscriminacaoServico>
+            <Quantidade>${ det.prod.qCom.valor }</Quantidade>
+            <ValorUnitario>${ det.prod.vUnCom.valor }</ValorUnitario>
+            <ValorTotal>${ det.prod.vProd.valor }</ValorTotal>
+            <Tributavel>S</Tributavel>
+        </Item>
+    </Itens>
+</NFe>

@@ -2477,7 +2477,7 @@ class Fat(XMLNFe):
         super(Fat, self).__init__()
         self.nFat  = TagCaracter(nome='nFat', codigo='Y03', tamanho=[1, 60],                        raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
         self.vOrig = TagDecimal(nome='vOrig', codigo='Y04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
-        self.vDesc = TagDecimal(nome='vDesc', codigo='Y05', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=True)
+        self.vDesc = TagDecimal(nome='vDesc', codigo='Y05', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
         self.vLiq  = TagDecimal(nome='vLiq' , codigo='Y06', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=False)
 
     def get_xml(self):
@@ -3326,6 +3326,7 @@ class EnderDest(XMLNFe):
         self.xPais   = TagCaracter(nome='xPais'  , codigo='E15', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.fone    = TagInteiro(nome='fone'    , codigo='E16', tamanho=[ 1, 10]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
         self.celular = TagInteiro(nome='celular' ,               tamanho=[ 1, 10]   , raiz='//NFe/infNFe/dest/enderDest', obrigatorio=False)
+        self.cMunSIAFI = TagCaracter(nome='cMunSIAFI', tamanho=[ 1,  20], raiz='//NFe/infNFe/dest/enderDest')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -3528,6 +3529,7 @@ class EnderEmit(XMLNFe):
         self.xPais   = TagCaracter(nome='xPais'  , codigo='C15', tamanho=[ 1, 60]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.fone    = TagInteiro(nome='fone'    , codigo='C16', tamanho=[ 1, 10]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
         self.celular = TagInteiro(nome='celular' ,               tamanho=[ 1, 10]   , raiz='//NFe/infNFe/emit/enderEmit', obrigatorio=False)
+        self.cMunSIAFI = TagCaracter(nome='cMunSIAFI', tamanho=[ 1,  20], raiz='//NFe/infNFe/emit/enderEmit')
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -3759,6 +3761,8 @@ class Ide(XMLNFe):
         self.dSaiEnt = TagData(nome='dSaiEnt'    , codigo='B10',                      raiz='//NFe/infNFe/ide', obrigatorio=False)
         self.tpNF    = TagInteiro(nome='tpNF'    , codigo='B11', tamanho=[ 1,  1, 1], raiz='//NFe/infNFe/ide', valor=1)
         self.cMunFG  = TagInteiro(nome='cMunFG'  , codigo='B12', tamanho=[ 7,  7, 7], raiz='//NFe/infNFe/ide')
+        self.cMunFGSIAFI = TagCaracter(nome='cMunFGSIAFI', tamanho=[ 1,  20], raiz='//NFe/infNFe/ide')
+        self.xMunFG  = TagCaracter(nome='xMunFG' ,               tamanho=[ 2, 60]   , raiz='//NFe/infNFe/ide')
         self.NFref   = []
         self.tpImp   = TagInteiro(nome='tpImp'   , codigo='B21', tamanho=[ 1,  1, 1], raiz='//NFe/infNFe/ide', valor=1)
         self.tpEmis  = TagInteiro(nome='tpEmis'  , codigo='B22', tamanho=[ 1,  1, 1], raiz='//NFe/infNFe/ide', valor=1)

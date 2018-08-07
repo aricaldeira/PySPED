@@ -1,0 +1,103 @@
+{
+    "envio_rps": {
+        "conexao": {
+            "servidor": "issdigital.sorocaba.sp.gov.br",
+            "porta": 443,
+            "url": "WsNFe2/LoteRps.jws",
+            "metodo": "enviarSincrono",
+            "header": {
+                "Content-Type": "text/xml; charset=utf-8",
+                "SOAPAction": ""
+            },
+            "forca_tls": false,
+            "forca_http": false,
+            "forca_cadeia_conexao": false,
+            "sem_certificado": false
+        },
+        "assina_municipio": true,
+        "assina": false,
+        "assinatura": {
+            "URI": "",
+            "atributo": "Id",
+            "tag": "RPS",
+            "namespaces": {
+                "nfse": "http://localhost:8080/WsNFe2/lote",
+                "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "xsd": "http://www.w3.org/2001/XMLSchema",
+                "soap": "http://schemas.xmlsoap.org/soap/envelope/",
+                "sig": "http://www.w3.org/2000/09/xmldsig#"
+            }
+         },
+        "assina_lote": true,
+        "assinatura_lote": {
+            "URI": "",
+            "atributo": "Id",
+            "tag": "Lote",
+            "namespaces": {
+                "nfse": "http://localhost:8080/WsNFe2/lote",
+                "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "xsd": "http://www.w3.org/2001/XMLSchema",
+                "soap": "http://schemas.xmlsoap.org/soap/envelope/",
+                "sig": "http://www.w3.org/2000/09/xmldsig#"
+            },
+            "numero_assinatura": 1
+         },
+        "escapa_envio": false,
+        "escapa_resposta": true,
+        "tag_resposta": "RetornoEnvioLoteRPS",
+        "tag_erro": "Erro",
+        "tag_erro_codigo": "Codigo",
+        "tag_erro_descricao": "Descricao",
+        "tag_alerta": "Alerta",
+        "tag_alerta_codigo": "Codigo",
+        "tag_alerta_descricao": "Descricao",
+        "tag_sucesso": "ChaveNFe",
+        "tag_sucesso_codigo_verificacao": "CodigoVerificacao",
+        "tag_sucesso_numero_nfse": "NumeroNFe",
+        "tag_sucesso_data_nfse": ""
+    },
+    "envio_cancelamento": {
+        "conexao": {
+            "servidor": "issdigital.sorocaba.sp.gov.br",
+            "porta": 443,
+            "url": "WsNFe2/LoteRps.jws",
+            "metodo": "cancelar",
+            "header": {
+                "Content-Type": "text/xml; charset=utf-8",
+                "SOAPAction": ""
+            },
+            "forca_tls": false,
+            "forca_http": false,
+            "forca_cadeia_conexao": false,
+            "sem_certificado": false
+        },
+        "assina": true,
+        "assinatura": {
+            "URI": "",
+            "atributo": "Id",
+            "tag": "Detalhe",
+            "namespaces": {
+                "nfse": "http://www.prefeitura.sp.gov.br/nfe",
+                "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+                "xsd": "http://www.w3.org/2001/XMLSchema",
+                "soap": "http://schemas.xmlsoap.org/soap/envelope/",
+                "sig": "http://www.w3.org/2000/09/xmldsig#"
+            }
+         },
+        "escapa_envio": false,
+        "escapa_resposta": true,
+        "tag_resposta": "RetornoCancelamentoNFe",
+        "tag_erro": "Erro",
+        "tag_erro_codigo": "Codigo",
+        "tag_erro_codigo_ja_cancelado": "1301",
+        "tag_erro_descricao": "Descricao",
+        "tag_alerta": "Alerta",
+        "tag_alerta_codigo": "Codigo",
+        "tag_alerta_codigo_ja_cancelado": "1301",
+        "tag_alerta_descricao": "Descricao",
+        "tag_sucesso": "",
+        "tag_sucesso_codigo_verificacao": "",
+        "tag_sucesso_numero_nfse": "",
+        "tag_sucesso_data_nfse": ""
+    }
+}

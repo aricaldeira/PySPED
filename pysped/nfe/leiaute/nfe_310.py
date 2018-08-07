@@ -2279,6 +2279,7 @@ class NFSe(NFe):
         self.assinatura_servico = ''
         self.codigo_verificacao = ''
         self.cancelada = False
+        self.motivo_cancelamento = ''
 
         #
         # Marca as tags de ISS e retenções como obrigatórias
@@ -2311,9 +2312,10 @@ class NFSe(NFe):
         nome_cidade = nome_cidade.replace(' ', '_').lower()
 
         nome_cidade = nome_cidade.replace('°','o')
+        nome_cidade = nome_cidade.replace('’','')
 
         if sys.version_info.major == 2:
-            nome_cidade = unicodedata.normalize(b'NFKD', nome_cidade).encode('ascii', 'ignore').encode('utf-8')
+            nome_cidade = unicodedata.normalize(b'NFKD', nome_cidade).encode('ascii', 'ignore').decode('utf-8')
         else:
             nome_cidade = unicodedata.normalize('NFKD', nome_cidade).encode('ascii', 'ignore').decode('utf-8')
 
