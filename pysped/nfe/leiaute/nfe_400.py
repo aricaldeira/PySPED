@@ -1087,11 +1087,38 @@ class Dup(nfe_310.Dup):
 class Fat(nfe_310.Fat):
     def __init__(self):
         super(Fat, self).__init__()
+        self.nFat  = TagCaracter(nome='nFat', codigo='Y03', tamanho=[1, 60],                        raiz='//NFe/infNFe/cobr/fat', obrigatorio=True)
+        self.vOrig = TagDecimal(nome='vOrig', codigo='Y04', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=True)
+        self.vDesc = TagDecimal(nome='vDesc', codigo='Y05', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=True)
+        self.vLiq  = TagDecimal(nome='vLiq' , codigo='Y06', tamanho=[1, 15, 1], decimais=[0, 2, 2], raiz='//NFe/infNFe/cobr/fat', obrigatorio=True)
+
+    def get_xml(self):
+        if not (self.nFat.valor or self.vOrig.valor or self.vDesc.valor or self.vLiq.valor):
+            return ''
+
+        xml = XMLNFe.get_xml(self)
+        xml += '<fat>'
+        xml += self.nFat.xml
+        xml += self.vOrig.xml
+        xml += self.vDesc.xml
+        xml += self.vLiq.xml
+        xml += '</fat>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.nFat.xml  = arquivo
+            self.vOrig.xml = arquivo
+            self.vDesc.xml = arquivo
+            self.vLiq.xml  = arquivo
+
+    xml = property(get_xml, set_xml)
 
 
 class Cobr(nfe_310.Cobr):
     def __init__(self):
         super(Cobr, self).__init__()
+        self.fat = Fat()
 
 
 class Lacres(nfe_310.Lacres):
