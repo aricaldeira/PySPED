@@ -382,16 +382,14 @@ class IdeStatus(XMLNFe):
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
-        xml += '<ideRecRetorno>'
+        xml += '<ideStatus>'
         xml += self.cdRetorno.xml
         xml += self.descRetorno.xml
         if len(self.regOcorrs) >= 1:
-            xml += '<regOcorrs>'
             for o in self.regOcorrs:
                 xml += o.xml
-            xml += '</regOcorrs>'
 
-        xml += '</ideRecRetorno>'
+        xml += '</ideStatus>'
         return xml
 
     def set_xml(self, arquivo):

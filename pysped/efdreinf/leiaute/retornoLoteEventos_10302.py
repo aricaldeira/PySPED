@@ -217,8 +217,11 @@ class RetornoLoteEventos(XMLNFe):
         self.Id = TagCaracter(nome='retornoLoteEventos', propriedade='id', raiz='//Reinf', namespace=NAMESPACE_LOTE_EFDREINF, namespace_obrigatorio=False)
         self.ideTransmissor = IdeTransmissor()
         self.retornoStatus = RetornoStatus()
-        # self.retornoEventos = RetornoEventos()
+        self.cdRetorno = ''
+        self.descRetorno = ''
+        self.ocorrencias = []
         self.retornoEventos = []
+        self.eventos = []
         # self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         # self.arquivo_esquema = 'RetornoLoteEventos.xsd'
 
@@ -243,6 +246,10 @@ class RetornoLoteEventos(XMLNFe):
             self.ideTransmissor.xml = arquivo
             self.retornoStatus.xml = arquivo
             self.retornoEventos = self.le_grupo('//Reinf/retornoLoteEventos/retornoEventos/evento', RetornoTotalizadorEvento, namespace=NAMESPACE_LOTE_EFDREINF, sigla_ns='res')
+            self.eventos = self.retornoEventos
+            self.cdRetorno = self.retornoStatus.cdRetorno.valor
+            self.descRetorno = self.retornoStatus.descRetorno.valor
+            self.ocorrencias = self.retornoStatus.dadosRegistroOcorrenciaLote.ocorrencias
         return True
 
     xml = property(get_xml, set_xml)

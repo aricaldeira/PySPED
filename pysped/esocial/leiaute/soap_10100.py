@@ -117,3 +117,46 @@ class SOAPRetorno(XMLNFe):
             self.resposta.xml = arquivo
 
     xml = property(get_xml, set_xml)
+
+
+class SOAPConsulta(XMLNFe):
+    def __init__(self):
+        super(SOAPConsulta, self).__init__()
+        self.webservice = ''
+        self.metodo = ''
+        self.cUF    = None
+        self.envio  = None
+        self._header = {
+            b'Content-Type': b'text/xml; charset=UTF-8',
+            b'Accept-Encoding': b'gzip,deflate',
+            b'Connection': b'Keep-Alive',
+            b'User-Agent': b'Apache-HttpClient/4.1.1 (java 1.5)',
+        }
+
+    def get_xml(self):
+        self._header[b'SOAPAction'] =  b'http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/consulta/retornoProcessamento/v1_1_0/' + self.webservice.encode('utf-8') + b'/' + self.metodo.encode('utf-8')
+
+        xml = XMLNFe.get_xml(self)
+        #xml += ABERTURA
+        xml += '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://www.esocial.gov.br/servicos/empregador/lote/eventos/envio/consulta/retornoProcessamento/v1_1_0">'
+        xml +=     '<soapenv:Header/>'
+        xml +=     '<soapenv:Body>'
+        xml +=         '<v1:ConsultarLoteEventos>'
+        xml +=             '<v1:consulta>'
+        xml +=                 self.envio.xml
+        xml +=             '</v1:consulta>'
+        xml +=         '</v1:ConsultarLoteEventos>'
+        xml +=     '</soapenv:Body>'
+        xml += '</soapenv:Envelope>'
+        return xml
+
+    def set_xml(self):
+        pass
+
+    xml = property(get_xml, set_xml)
+
+    def get_header(self):
+        header = self._header
+        return header
+
+    header = property(get_header)
