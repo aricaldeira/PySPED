@@ -57,8 +57,9 @@ class Contato(XMLNFe):
         super(Contato, self).__init__()
         self.nmCtt = TagCaracter(nome='nmCtt', tamanho=[ 1, 70]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
         self.cpfCtt = TagCaracter(nome='cpfCtt', tamanho=[ 1, 11]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
-        self.foneFixo = TagCaracter(nome='foneFixo', tamanho=[ 1, 11]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False, obrigatorio=False)
-        self.email = TagCaracter(nome='email', tamanho=[ 1, 11]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False, obrigatorio=False)
+        self.foneFixo = TagCaracter(nome='foneFixo', tamanho=[1, 13]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
+        self.foneCel = TagCaracter(nome='foneCel', tamanho=[0, 13]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False, obrigatorio=False)
+        self.email = TagCaracter(nome='email', tamanho=[0, 60]   , raiz='//eSocial/evtInfoEmpregador/infoEmpregador/infoCadastro/contato', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False, obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -66,6 +67,7 @@ class Contato(XMLNFe):
         xml += self.nmCtt.xml
         xml += self.cpfCtt.xml
         xml += self.foneFixo.xml
+        xml += self.foneCel.xml
         xml += self.email.xml
         xml += '</contato>'
         return xml
@@ -75,6 +77,7 @@ class Contato(XMLNFe):
             self.nmCtt.xml = arquivo
             self.cpfCtt.xml = arquivo
             self.foneFixo.xml = arquivo
+            self.foneCel.xml = arquivo
             self.email.xml = arquivo
 
     xml = property(get_xml, set_xml)
@@ -110,11 +113,11 @@ class InfoCadastro(XMLNFe):
         xml += self.indEtt.xml
         xml += self.nrRegEtt.xml
         xml += self.contato.xml
-        xml += '<infoComplementares />'
-        #xml += '<situacaoPJ>'
-        #xml += self.indSitPJ.xml
-        #xml += '</situacaoPJ>'
-        #xml += '</infoComplementares>'
+        xml += '<infoComplementares>'
+        xml += '<situacaoPJ>'
+        xml += self.indSitPJ.xml
+        xml += '</situacaoPJ>'
+        xml += '</infoComplementares>'
         xml += '</infoCadastro>'
         return xml
 
@@ -132,6 +135,28 @@ class InfoCadastro(XMLNFe):
             self.nrRegEtt.xml = arquivo
             self.contato.xml = arquivo
             self.indSitPJ.xml = arquivo
+
+    xml = property(get_xml, set_xml)
+
+
+class NovaValidade(XMLNFe):
+    def __init__(self):
+        super(NovaValidade, self).__init__()
+        self.iniValid  = TagCaracter(nome='iniValid', raiz='//eSocial/evtInfoEmpregador/infoEmpregador/novaValidade', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
+        self.fimValid  = TagCaracter(nome='fimValid', raiz='//eSocial/evtInfoEmpregador/infoEmpregador/novaValidade', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False, obrigatorio=False)
+
+    def get_xml(self):
+        xml = XMLNFe.get_xml(self)
+        xml += '<novaValidade>'
+        xml += self.iniValid.xml
+        xml += self.fimValid.xml
+        xml += '</novaValidade>'
+        return xml
+
+    def set_xml(self, arquivo):
+        if self._le_xml(arquivo):
+            self.iniValid.xml = arquivo
+            self.fimValid.xml = arquivo
 
     xml = property(get_xml, set_xml)
 
@@ -163,7 +188,7 @@ class InfoEmpregador(XMLNFe):
         super(InfoEmpregador, self).__init__()
         self.idePeriodo = IdePeriodo()
         self.infoCadastro = InfoCadastro()
-        self.novaValidade = IdePeriodo()
+        self.novaValidade = NovaValidade()
         self.operacao = 'I'
 
     def get_xml(self):
@@ -180,7 +205,6 @@ class InfoEmpregador(XMLNFe):
             xml += self.infoCadastro.xml
             xml += self.novaValidade.xml
             xml += '</alteracao>'
-
         elif self.operacao == 'E':
             xml += '<exclusao>'
             xml += self.idePeriodo.xml
@@ -278,8 +302,11 @@ class S1000(XMLNFe):
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'evtInfoEmpregador.xsd'
         self.id_evento = ''
-        self.Signature = Signature()
+        self.tpInsc = ''
+        self.nrInsc = ''
+        # self.Signature = Signature()
         self.evento = self.evtInfoEmpregador
+        self.xml_assinado = ''
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -290,17 +317,20 @@ class S1000(XMLNFe):
         #
         # Define a URI a ser assinada
         #
-        self.Signature.URI = '#' + self.evtInfoEmpregador.Id.valor
-        xml += self.Signature.xml
+        # self.Signature.URI = '#' + self.evtInfoEmpregador.Id.valor
+        # xml += self.Signature.xml
         xml += '</eSocial>'
+
+        # Define o método de assinatura
+        # self.Signature.metodo = 'sha256'
         return xml
 
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.evtInfoEmpregador.xml = arquivo
-            self.Signature.xml = self._le_noh('//eSocial/sig:Signature')
+            # self.Signature.xml = self._le_noh('//eSocial/sig:Signature')
 
-    def gera_id_evento(self, data_hora):
+    def gera_id_evento(self, data_hora, sequencia=False):
         #A identificação única do evento (Id) é composta por 36 caracteres, conforme o que segue: IDTNNNNNNNNNNNNNNAAAAMMDDHHMMSSQQQQQ
         #ID - Texto Fixo "ID";
         #T - Tipo de Inscrição do Empregador (1 - CNPJ; 2 - CPF);
@@ -316,11 +346,14 @@ class S1000(XMLNFe):
         #OBS.: No caso de pessoas jurídicas, o CNPJ informado deverá conter 8 ou 14 posições de
         #acordo com o enquadramento do contribuinte para preenchimento do campo {ideEmpregador/nrInsc} do evento S-1000, completando-se com zeros à direita, se necessário.
 
+        if not sequencia:
+            sequencia=1
+
         id_evento = 'ID'
-        id_evento += self.evtInfoEmpregador.ideEmpregador.tpInsc.valor
-        id_evento += str(self.evtInfoEmpregador.ideEmpregador.nrInsc.valor).zfill(14)
+        id_evento += self.tpInsc
+        id_evento += self.nrInsc[0:8] + '000000'
         id_evento += data_hora
-        id_evento += str(1).zfill(5)
+        id_evento += str(sequencia).zfill(5)
 
         # Define o Id
         #

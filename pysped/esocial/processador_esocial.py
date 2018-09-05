@@ -51,15 +51,20 @@ from ..nfe.processador_nfe import ProcessadorNFe, ProcessoNFe as ProcessoESocial
 
 from .webservices_flags import *
 from . import webservices_3
-from .leiaute import SOAPEnvio_10100, SOAPRetorno_10100
+from .leiaute import SOAPEnvio_10100, SOAPRetorno_10100, SOAPConsulta_10100
 from .leiaute import LoteEventosEsocial_10101
 from .leiaute import RetornoLoteEventosEsocial_10100
 from .leiaute import ConsultaLoteEventosEsocial_10000
+from .leiaute import RetornoProcessamentoLoteEsocial_10000
+import pybrasil
 
 
 class ProcessadorESocial(ProcessadorNFe):
     def __init__(self):
         super(ProcessadorESocial, self).__init__()
+        self.tpInsc = ''
+        self.nrInsc = ''
+        self.certificado = pybrasil.certificado.Certificado()
 
     def _configura_servico(self, servico, envio, resposta, ambiente=None, somente_ambiente_nacional=False):
         if ambiente is None:
@@ -68,12 +73,18 @@ class ProcessadorESocial(ProcessadorNFe):
         webservices = webservices_3
         metodo_ws = webservices.METODO_WS
 
-        self._soap_envio   = SOAPEnvio_10100()
+        # Se for Consulta deve usar o SOAPConsulta ao invés do SOAPEnvio
+        if servico == WS_ESOCIAL_CONSULTA:
+            self._soap_envio = SOAPConsulta_10100()
+            servidor = 'consulta'
+        else:
+            self._soap_envio = SOAPEnvio_10100()
+            servidor = 'envio'
         self._soap_retorno = SOAPRetorno_10100()
 
         ws_a_usar = webservices.SVESOCIAL
 
-        self._servidor = ws_a_usar[ambiente]['servidor']
+        self._servidor = ws_a_usar[ambiente][servidor]
         self._url      = ws_a_usar[ambiente][servico]
 
         self._soap_envio.webservice = metodo_ws[servico]['webservice']
@@ -84,17 +95,17 @@ class ProcessadorESocial(ProcessadorNFe):
         self._soap_retorno.metodo     = self._soap_envio.metodo
         self._soap_retorno.resposta   = resposta
 
-    def monta_caminho_esocial(self, ambiente, id_evento):
-        caminho = self.caminho
+    def monta_caminho_esocial(self, ambiente, registro, id_evento, cnpj):
+        caminho = os.path.join(self.caminho, 'esocial/')
+        caminho = os.path.join(caminho, cnpj + '/')
 
         if ambiente == 1:
             caminho = os.path.join(caminho, 'producao/')
         else:
             caminho = os.path.join(caminho, 'homologacao/')
 
-        #ID2035418760001332018050212504900001
-        data = '20' + id_evento[19:21] + '-' + id_evento[21:23]
-        caminho = os.path.join(caminho, data + '/')
+        if registro:
+            caminho = os.path.join(caminho, registro + '/')
         caminho = os.path.join(caminho, id_evento + '/')
         try:
             os.makedirs(caminho)
@@ -103,74 +114,96 @@ class ProcessadorESocial(ProcessadorNFe):
 
         return caminho
 
-    def enviar_lote(self, lista_eventos=[]):
+    def enviar_lote(self, lista_eventos=[], grupo='1'):
         envio = LoteEventosEsocial_10101()
         resposta = RetornoLoteEventosEsocial_10100()
 
         processo = ProcessoESocial(webservice=WS_ESOCIAL_ENVIO, envio=envio, resposta=resposta)
 
-        envio.envioLoteEventos.ideEmpregador.tpInsc.valor  = lista_eventos[0].evento.ideEmpregador.tpInsc.valor
-        envio.envioLoteEventos.ideEmpregador.nrInsc.valor  = lista_eventos[0].evento.ideEmpregador.nrInsc.valor
-        envio.envioLoteEventos.ideTransmissor.tpInsc.valor = lista_eventos[0].evento.ideEmpregador.tpInsc.valor
-        envio.envioLoteEventos.ideTransmissor.nrInsc.valor = lista_eventos[0].evento.ideEmpregador.nrInsc.valor
+        # Popula o grupo de Eventos conforme tabela
+        # 1-Eventos de Tabela
+        # 2-Eventos não Periódicos
+        # 3-Eventos Periódicos
+        envio.envioLoteEventos.grupo.valor = grupo
 
-        self.ambiente = lista_eventos[0].evtInfoEmpregador.ideEvento.tpAmb.valor
+        envio.envioLoteEventos.ideEmpregador.tpInsc.valor  = self.tpInsc
+        envio.envioLoteEventos.ideEmpregador.nrInsc.valor  = self.nrInsc[0:8]
+        envio.envioLoteEventos.ideTransmissor.tpInsc.valor = self.tpInsc
+        envio.envioLoteEventos.ideTransmissor.nrInsc.valor = self.nrInsc
+
+        # namespaces = {
+        #     'evtInfoEmpregador': 'http://www.esocial.gov.br/schema/evt/evtInfoEmpregador/v02_04_02',
+        # }
 
         for evento in lista_eventos:
-            self.certificado.assina_xmlnfe(evento)
-            evento.validar()
+            evento.xml_assinado = self.certificado.assina_xml(evento.xml, assinar_raiz=True, metodo='sha256')
 
-        print(envio.xml)
         envio.envioLoteEventos.eventos = lista_eventos
         envio.validar()
-        print(resposta.xml)
 
+        # Salva os registros enviados pelo Lote
         if self.salvar_arquivos:
             for n in lista_eventos:
                 id_evento = n.id_evento
-                self.caminho = self.monta_caminho_esocial(ambiente=self.ambiente, id_evento=id_evento)
-                arq = open(self.caminho + id_evento + '.xml', 'w', encoding='utf-8')
-                arq.write(n.xml)
-                arq.close
+                caminho = self.monta_caminho_esocial(
+                    ambiente=self.ambiente, registro=False, id_evento=id_evento, cnpj=self.nrInsc,
+                )
+                arq = open(caminho + id_evento + '-envio.xml', 'w', encoding='utf-8')
+                arq.write(n.xml_assinado)
+                arq.close()
 
-            arq = open(self.caminho + id_evento + '-env-lot.xml', 'w')
+            # arq = open(caminho + id_evento + '-env-lot.xml', 'w')
+            # arq.write(envio.xml)
+            # arq.close()
+
+        self._conectar_servico(WS_ESOCIAL_ENVIO, envio, resposta)
+
+        # Salva o XML de envio do próprio Lote
+        if self.salvar_arquivos and processo.resposta.protocoloEnvio:
+            caminho = self.monta_caminho_esocial(
+                ambiente=self.ambiente, registro='Lotes', id_evento=processo.resposta.protocoloEnvio, cnpj=self.nrInsc,
+            )
+            arq = open(caminho + processo.resposta.protocoloEnvio + '-envio.xml', 'w')
             arq.write(envio.xml)
-            arq.close()
-
-        # self._conectar_servico(WS_ESOCIAL_ENVIO, envio, resposta)
-
-        #resposta.validar()
-        if self.salvar_arquivos:
-            nome_arq = self.caminho + id_evento + '-rec'
-
-            if resposta.retornoEnvioLoteEventos.status.cdResposta.valor != '201':
-                nome_arq += '-rej.xml'
-            else:
-                nome_arq += '.xml'
-
-            arq = open(nome_arq, 'w', encoding='utf-8')
-            arq.write(resposta.xml)
             arq.close()
 
         return processo
 
     def consultar_lote(self, protocolo):
         envio = ConsultaLoteEventosEsocial_10000()
-        resposta = RetornoLoteEventosEsocial_10100()
+        resposta = RetornoProcessamentoLoteEsocial_10000()
 
-        processo = ProcessoESocial(webservice=WS_ESOCIAL_ENVIO, envio=envio, resposta=resposta)
+        processo = ProcessoESocial(webservice=WS_ESOCIAL_CONSULTA, envio=envio, resposta=resposta)
 
         envio.consultaLoteEventos.protocoloEnvio.valor = protocolo
 
         envio.validar()
+        # if self.salvar_arquivos:
+        #     arq = open(caminho + protocolo + '-consulta.xml', 'w')
+        #     arq.write(envio.xml)
+        #     arq.close()
+
+        self._conectar_servico(WS_ESOCIAL_CONSULTA, envio, resposta)
+
+        caminho = self.monta_caminho_esocial(
+            ambiente=self.ambiente, registro='Lotes', id_evento=protocolo, cnpj=self.nrInsc,
+        )
         if self.salvar_arquivos:
-            arq = open(self.caminho + '/' + protocolo + '/consulta.xml', 'w')
-            arq.write(envio.xml)
+            arq = open(caminho + protocolo + '-resposta.xml', 'w')
+            arq.write(resposta.xml)
             arq.close()
 
-        self._conectar_servico(WS_ESOCIAL_ENVIO, envio, resposta)
-
-        if self.salvar_arquivos:
-            arq = open(self.caminho + '/' + protocolo + '/resposta.xml', 'w')
-            arq.write(envio.xml)
+        # Grava os retornos de cada registro do lote
+        for evento in processo.resposta.lista_eventos:
+            caminho = self.monta_caminho_esocial(
+                ambiente=self.ambiente, registro=False, id_evento=evento.Id.valor, cnpj=self.nrInsc,
+            )
+            if evento.codigo_retorno in ['201', '202']:
+                msg = '-sucesso.xml'
+            else:
+                msg = '-erro.xml'
+            arq = open(caminho + evento.Id.valor + msg, 'w')
+            arq.write(evento.xml)
             arq.close()
+
+        return processo
