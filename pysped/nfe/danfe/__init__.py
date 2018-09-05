@@ -41,8 +41,11 @@
 
 import sys
 
-from pysped.nfe.danfe.danfe import DANFE
-from pysped.nfe.danfe.danfce import DANFCE
-
 if sys.version_info.major == 2:
-    from .daede import DAEDE
+    from pysped.nfe.danfe.danfe_geraldo import DANFE
+else:
+    from pysped.nfe.danfe.danfe import DANFE
+
+from pysped.nfe.danfe.daede import DAEDE
+from pysped.nfe.danfe.danfce import DANFCE
+from pysped.nfe.danfe.daede import DAEDE

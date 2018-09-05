@@ -223,6 +223,12 @@ class RetornoLoteEventosEsocial(XMLNFe):
     def __init__(self):
         super(RetornoLoteEventosEsocial, self).__init__()
         self.retornoEnvioLoteEventos = RetornoEnvioLoteEventos()
+        self.cdResposta = ''
+        self.descResposta = ''
+        self.dhRecepcao = ''
+        self.versaoAplicativoRecepcao = ''
+        self.protocoloEnvio = ''
+        self.ocorrencias = []
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'RetornoEnvioLoteEventos-v1_1_0.xsd'
 
@@ -237,5 +243,11 @@ class RetornoLoteEventosEsocial(XMLNFe):
     def set_xml(self, arquivo):
         if self._le_xml(arquivo):
             self.retornoEnvioLoteEventos.xml = arquivo
+            self.cdResposta = self.retornoEnvioLoteEventos.status.cdResposta.valor
+            self.descResposta = self.retornoEnvioLoteEventos.status.descResposta.valor
+            self.dhRecepcao = self.retornoEnvioLoteEventos.dadosRecepcaoLote.dhRecepcao.valor
+            self.versaoAplicativoRecepcao = self.retornoEnvioLoteEventos.dadosRecepcaoLote.versaoAplicativoRecepcao.valor
+            self.protocoloEnvio = self.retornoEnvioLoteEventos.dadosRecepcaoLote.protocoloEnvio.valor
+            self.ocorrencias = self.retornoEnvioLoteEventos.status.ocorrencias
 
     xml = property(get_xml, set_xml)

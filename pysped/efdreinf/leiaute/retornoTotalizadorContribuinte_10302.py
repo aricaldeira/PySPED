@@ -67,8 +67,8 @@ class RCPRB(XMLNFe):
     def __init__(self):
         super(RCPRB, self).__init__()
         self.CRCPRB = TagCaracter(nome='CRCPRB', tamanho=[1, 6], raiz='//Reinf/evtTotalContrib/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrCRCPRB = TagDecimal(nome='vlrCRCPRB', raiz='//Reinf/evtTotal/infoTotalContrib/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.vlrCRCPRBSusp = TagDecimal(nome='vlrCRCPRBSusp', raiz='//Reinf/evtTotalContrib/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.vlrCRCPRB = TagDecimalVirgula(nome='vlrCRCPRB', raiz='//Reinf/evtTotal/infoTotalContrib/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.vlrCRCPRBSusp = TagDecimalVirgula(nome='vlrCRCPRBSusp', raiz='//Reinf/evtTotalContrib/infoTotal/RCPRB', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -242,8 +242,8 @@ class RTom(XMLNFe):
 class InfoTotalContrib(XMLNFe):
     def __init__(self):
         super(InfoTotalContrib, self).__init__()
-        self.nrRecArqBase = TagCaracter(nome='nrRecArqBase', raiz='//Reinf/evtTotalContrib/infoTotalContrib', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
-        self.indExistInfo = TagCaracter(nome='indExistInfo', raiz='//Reinf/evtTotalContrib/infoTotalContrib', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.nrRecArqBase = TagCaracter(nome='nrRecArqBase', tamanho=[1, 52], raiz='//Reinf/evtTotalContrib/infoTotalContrib', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.indExistInfo = TagCaracter(nome='indExistInfo', tamanho=[1, 1], raiz='//Reinf/evtTotalContrib/infoTotalContrib', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.RTom = []
         self.RPrest = []
         self.RRecRepAD = []
@@ -267,7 +267,6 @@ class InfoTotalContrib(XMLNFe):
         if len(self.RComl) >= 1:
             for r in self.RComl:
                 xml += r.xml
-
         if len(self.RCPRB) >= 1:
             for r in self.RCPRB:
                 xml += r.xml
@@ -291,7 +290,7 @@ class InfoTotalContrib(XMLNFe):
 class InfoRecEv(XMLNFe):
     def __init__(self):
         super(InfoRecEv, self).__init__()
-        self.nrProtEntr = TagCaracter(nome='nrProtEntr', tamanho=[0, 49], raiz='//Reinf/evtTotalContrib/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, obrigatorio=False)
+        self.nrProtEntr = TagCaracter(nome='nrProtEntr', tamanho=[1, 49], raiz='//Reinf/evtTotalContrib/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.dhProcess  = TagDataHora(nome='dhProcess', raiz='//Reinf/evtTotalContrib/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.tpEv       = TagCaracter(nome='tpEv', tamanho=[1, 6], raiz='//Reinf/evtTotalContrib/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
         self.idEv       = TagCaracter(nome='idEv', tamanho=[1, 36], raiz='//Reinf/evtTotalContrib/infoRecEv', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
@@ -323,10 +322,10 @@ class InfoRecEv(XMLNFe):
 class Ocorrencias(XMLNFe):
     def __init__(self):
         super(Ocorrencias, self).__init__()
-        self.tpOcorr         = TagCaracter(nome='tpOcorr'       , raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.localErroAviso  = TagCaracter(nome='localErroAviso', raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.codResp         = TagCaracter(nome='codResp'       , raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
-        self.dscResp         = TagCaracter(nome='dscResp'       , raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.tpOcorr         = TagCaracter(nome='tpOcorr'       , tamanho=[1, 1], raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.localErroAviso  = TagCaracter(nome='localErroAviso', tamanho=[1, 100], raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.codResp         = TagCaracter(nome='codResp'       , tamanho=[1, 6], raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.dscResp         = TagCaracter(nome='dscResp'       , tamanho=[1, 999], raiz='//regOcorrs', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -362,10 +361,10 @@ class IdeStatus(XMLNFe):
         xml += self.cdRetorno.xml
         xml += self.descRetorno.xml
         if len(self.regOcorrs) >= 1:
-            xml += '<regOcorrs>'
+            # xml += '<regOcorrs>'
             for o in self.regOcorrs:
                 xml += o.xml
-            xml += '</regOcorrs>'
+            # xml += '</regOcorrs>'
 
         xml += '</ideStatus>'
         return xml
@@ -403,7 +402,7 @@ class IdeRecRetorno(XMLNFe):
 class IdeContri(XMLNFe):
     def __init__(self):
         super(IdeContri, self).__init__()
-        self.tpInsc = TagCaracter(nome='tpInsc', valor='1', raiz='//Reinf/evtTotalContrib/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.tpInsc = TagCaracter(nome='tpInsc', tamanho=[1, 1], raiz='//Reinf/evtTotalContrib/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False, valor='1')
         self.nrInsc = TagCaracter(nome='nrInsc', tamanho=[8, 14], raiz='//Reinf/evtTotalContrib/ideContri', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
@@ -426,7 +425,7 @@ class IdeContri(XMLNFe):
 class IdeEvento(XMLNFe):
     def __init__(self):
         super(IdeEvento, self).__init__()
-        self.perApur = TagCaracter(nome='perApur', tamanho=[1, 7], raiz='//Reinf/evtTotalContrib/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
+        self.perApur = TagCaracter(nome='perApur', tamanho=[1, 10], raiz='//Reinf/evtTotalContrib/ideEvento', namespace=NAMESPACE_EFDREINF, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)
@@ -483,6 +482,9 @@ class RetornoTotalizadorContribuinte(XMLNFe):
         self.evtTotalContrib = EvtTotalContrib()
         self.caminho_esquema = os.path.join(DIRNAME, 'schema/', ESQUEMA_ATUAL + '/')
         self.arquivo_esquema = 'retornoTotalizadorContribuinte.xsd'
+        self.cdResposta = ''
+        self.descResposta = ''
+        self.ocorrencias = []
         self.id_evento = ''
         self.Signature = Signature()
         self.evento = self.evtTotalContrib
@@ -508,6 +510,9 @@ class RetornoTotalizadorContribuinte(XMLNFe):
         if self._le_xml(arquivo):
             self.evtTotalContrib.xml = arquivo
             self.Signature.xml = self._le_noh('//Reinf/evtTotalContrib/sig:Signature')
+            self.cdResposta = self.evtTotalContrib.ideRecRetorno.ideStatus.cdRetorno.valor
+            self.descResposta = self.evtTotalContrib.ideRecRetorno.ideStatus.descRetorno.valor
+            self.ocorrencias = self.evtTotalContrib.ideRecRetorno.ideStatus.regOcorrs
         return True
 
     # def gera_id_evento(self, data_hora):

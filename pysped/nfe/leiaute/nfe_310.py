@@ -870,7 +870,7 @@ class Imposto(nfe_200.Imposto):
         xml += self.vTotTrib.xml
 
         # Enviar ICMS, IPI e II somente quando não for serviço
-        if not self.ISSQN.cSitTrib.valor:
+        if not self.ISSQN.indISS.valor:
             xml += self.ICMS.xml
             xml += self.IPI.xml
             xml += self.II.xml

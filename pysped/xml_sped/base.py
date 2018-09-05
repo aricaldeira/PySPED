@@ -330,6 +330,8 @@ class TagCaracter(NohXML):
                     for c in novo_valor:
                         if c <= 'ÿ':
                             valor_corrigido += c
+                        elif c in ['\u200b', '\u201c', '\u201d', '–']:
+                            valor_corrigido += c
                         else:
                             valor_corrigido += tira_acentos_ascii(c)
 

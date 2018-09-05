@@ -682,68 +682,48 @@ class RemetenteRetrato(BandaDANFE):
         # Tamanhos equilaventes, em centímetros, a 3,8 x 2,5, em 128 dpi
         # estranhamente, colocar os tamanhos em centímetros encolhe a imagem
         #
-        img.width = 191
+        img.width = 335
         img.height = 116
         img.filename = arquivo_imagem
         elements.append(img)
 
         fld = Campo()
-        fld.nome  = 'fld_rem_nome'
-        fld.attribute_name = u'NFe.infNFe.emit.xNome.valor'
-        fld.top   = 0.2*cm
-        fld.left  = 4*cm
-        fld.width = 4*cm
-        fld.height = 1.4*cm
-        fld.style = EMIT_NOME
-        elements.append(fld)
-
-        fld = Campo()
-        fld.nome  = 'fld_rem_endereco_3'
-        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
-        fld.top   = 2.05*cm
-        fld.left  = 4*cm
-        fld.width = 4*cm
-        fld.height = 0.45*cm
-        fld.style = EMIT_DADOS
-        elements.append(fld)
-
-#        fld = Campo()
-#        fld.nome  = 'fld_rem_endereco_4'
-#        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_4'
-#        fld.top   = 2.05*cm
-#        fld.left  = 4*cm
-#        fld.width = 4*cm
-#        fld.height = 0.45*cm
-#        fld.style = EMIT_DADOS
-#        elements.append(fld)
-
-        fld = Campo()
-        fld.nome  = 'fld_rem_endereco_1'
+        fld.nome = 'fld_rem_endereco_1'
         fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_1'
-        fld.top   = 2.5*cm
-        fld.left  = 0*cm
-        fld.width = 8*cm
-        fld.height = 0.7*cm
+        fld.top = 2.5 * cm
+        fld.left = 0 * cm
+        fld.width = 8 * cm
+        fld.height = 0.7 * cm
         fld.style = EMIT_DADOS
         elements.append(fld)
 
         fld = Campo()
-        fld.nome  = 'fld_rem_endereco_2'
+        fld.nome = 'fld_rem_endereco_3'
+        fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_3'
+        fld.top = 2.8 * cm
+        fld.left = 0 * cm
+        fld.width = 8 * cm
+        fld.height = 0.7 * cm
+        fld.style = EMIT_DADOS
+        elements.append(fld)
+
+        fld = Campo()
+        fld.nome = 'fld_rem_endereco_2'
         fld.attribute_name = u'NFe.endereco_emitente_formatado_linha_2'
-        fld.top   = 3.2*cm
-        fld.left  = 0*cm
-        fld.width = 8*cm
-        fld.height = 0.7*cm
+        fld.top = 3.2 * cm
+        fld.left = 0 * cm
+        fld.width = 8 * cm
+        fld.height = 0.7 * cm
         fld.style = EMIT_DADOS
         elements.append(fld)
 
         fld = Campo()
-        fld.nome  = 'fld_regime_tributario'
+        fld.nome = 'fld_regime_tributario'
         fld.attribute_name = 'NFe.crt_descricao'
-        fld.top   = 3.6*cm
-        fld.left  = 0*cm
-        fld.width = 8*cm
-        fld.height = 0.4*cm
+        fld.top = 3.6 * cm
+        fld.left = 0 * cm
+        fld.width = 8 * cm
+        fld.height = 0.4 * cm
         fld.style = DADO_PRODUTO_CENTRALIZADO
         elements.append(fld)
 

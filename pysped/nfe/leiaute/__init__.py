@@ -363,6 +363,7 @@ from .nfe_400 import ObsFisco as ObsFisco_400
 from .nfe_400 import ProcRef as ProcRef_400
 from .nfe_400 import AutXML as AutXML_400
 from .nfe_400 import Rastro as Rastro_400
+from .nfe_400 import Fat as Fat_400
 
 #
 # Envio de lote de NF-e

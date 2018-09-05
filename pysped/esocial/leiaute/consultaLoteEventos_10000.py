@@ -49,13 +49,13 @@ from pysped.esocial.leiaute import ESQUEMA_ATUAL_VERSAO_2 as ESQUEMA_ATUAL
 
 DIRNAME = os.path.dirname(__file__)
 
-NAMESPACE_ESOCIAL = 'http://www.esocial.gov.br/schema/lote/eventos/envio/v1_1_1'
+NAMESPACE_ESOCIAL = 'http://www.esocial.gov.br/schema/lote/eventos/envio/consulta/retornoProcessamento/v1_0_0'
 
 
 class ConsultaLoteEventos(XMLNFe):
     def __init__(self):
         super(ConsultaLoteEventos, self).__init__()
-        self.protocoloEnvio = TagCaracter(nome='protocoloEnvio', raiz='//envioLoteEventos', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
+        self.protocoloEnvio = TagCaracter(nome='protocoloEnvio', raiz='//consultaLoteEventos', namespace=NAMESPACE_ESOCIAL, namespace_obrigatorio=False)
 
     def get_xml(self):
         xml = XMLNFe.get_xml(self)

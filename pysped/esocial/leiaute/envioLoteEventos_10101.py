@@ -113,7 +113,10 @@ class EnvioLoteEventos(XMLNFe):
 
         for e in self.eventos:
             xml += '<evento Id="' + e.id_evento + '">'
-            xml += e.xml
+            if e.xml_assinado:
+                xml += e.xml_assinado
+            else:
+                xml += e.xml
             xml += '</evento>'
 
         xml += '</eventos>'
